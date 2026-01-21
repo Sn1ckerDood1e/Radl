@@ -17,11 +17,11 @@ RowOps v1 transforms an existing administrative app into an operational platform
 **Plans:** 5 plans
 
 Plans:
-- [ ] 01-01-PLAN.md - Extract claims helper and refactor API routes for consistent auth
-- [ ] 01-02-PLAN.md - Add rate limiting to damage reports and join endpoints
-- [ ] 01-03-PLAN.md - Create Season and AthleteEligibility data models with CRUD API
-- [ ] 01-04-PLAN.md - Create eligibility management API for coaches and athletes
-- [ ] 01-05-PLAN.md - Add error boundaries and verify all security requirements
+- [x] 01-01-PLAN.md - Extract claims helper and refactor API routes for consistent auth
+- [x] 01-02-PLAN.md - Add rate limiting to damage reports and join endpoints
+- [x] 01-03-PLAN.md - Create Season and AthleteEligibility data models with CRUD API
+- [x] 01-04-PLAN.md - Create eligibility management API for coaches and athletes
+- [x] 01-05-PLAN.md - Add error boundaries and verify all security requirements
 
 **Requirements:**
 | REQ-ID | Description |
@@ -145,13 +145,13 @@ Plans:
 
 | Phase | Status | Requirements | Completed |
 |-------|--------|--------------|-----------|
-| 1 - Security & Foundation | Planned | 6 | 0 |
+| 1 - Security & Foundation | Complete | 6 | 6 |
 | 2 - Practice Scheduling | Not Started | 6 | 0 |
 | 3 - Lineup Management | Not Started | 6 | 0 |
 | 4 - PWA Infrastructure | Not Started | 5 | 0 |
 | 5 - Regatta Mode | Not Started | 8 | 0 |
 
-**Total:** 0/31 requirements completed (0%)
+**Total:** 6/31 requirements completed (19%)
 
 ---
 
