@@ -11,27 +11,27 @@
 | Field | Value |
 |-------|-------|
 | Phase | 3 of 5 (Lineup Management) |
-| Plan | 5 of 6 |
-| Status | In progress |
-| Last activity | 2026-01-21 - Completed 03-06-PLAN.md |
+| Plan | 6 of 6 |
+| Status | Phase complete |
+| Last activity | 2026-01-21 - Completed 03-07-PLAN.md |
 
 **Progress:**
 ```
 Phase 1: [##########] 100% (5/5 plans) COMPLETE
 Phase 2: [##########] 100% (8/8 plans) COMPLETE
-Phase 3: [########..] 83% (5/6 plans)
+Phase 3: [##########] 100% (6/6 plans) COMPLETE
 Phase 4: [..........] 0%
 Phase 5: [..........] 0%
 
-Overall:  [########..] 18/24 plans (75%)
+Overall:  [########..] 19/24 plans (79%)
 ```
 
 ## Performance Metrics
 
 | Metric | Value |
 |--------|-------|
-| Requirements completed | 18/31 |
-| Plans completed | 18 |
+| Requirements completed | 21/31 |
+| Plans completed | 19 |
 | Plans failed | 0 |
 | Blockers resolved | 0 |
 
@@ -82,6 +82,13 @@ Overall:  [########..] 18/24 plans (75%)
 | Multi-select for land/erg | Checkboxes instead of drag-drop for land/erg blocks (simpler, no positions) | 3 |
 | Non-blocking capacity warnings | ERG capacity warnings shown but save not prevented (coach may rotate athletes) | 3 |
 | LineupEditor type-safe routing | Discriminated union props ensure correct builder receives correct props | 3 |
+| Boat capacity excludes cox | Cox doesn't row, so boat capacity matching should only count rowing seats | 3 |
+| Double-booking is non-blocking | Split squads may use same boat at same time, so warning shown but save allowed | 3 |
+| Auto-remove from previous seat | Prevents duplicate athlete assignments when dragging to new seat position | 3 |
+| Partial lineup warnings | Shows when lineup incomplete, but still allows save (work in progress) | 3 |
+| Copy-on-apply for lineup templates | Templates create independent lineups with no ongoing link | 3 |
+| Graceful template degradation | Apply template skips missing athletes, warns about unavailable boats without failing | 3 |
+| Template boat class filtering | Templates filterable by boatClass for easier selection | 3 |
 
 ### Architecture Notes
 
@@ -197,7 +204,7 @@ All 6 requirements for Phase 2 verified complete:
 | 03-02 | Lineup CRUD API | COMPLETE |
 | 03-03 | Equipment usage logging | COMPLETE |
 | 03-04 | dnd-kit components | COMPLETE |
-| 03-05 | Water lineup builder | Not started |
+| 03-05 | Water lineup builder | COMPLETE |
 | 03-06 | Land/erg assignment UI | COMPLETE |
 | 03-09 | Form component refactoring (DEBT-02) | COMPLETE |
 
@@ -206,23 +213,26 @@ All 6 requirements for Phase 2 verified complete:
 ### Last Session
 
 - **Date:** 2026-01-21
-- **Activity:** Executed 03-06-PLAN.md (Land/erg assignment UI)
-- **Outcome:** Multi-select assignment UI for land/erg blocks, ERG capacity warnings, LINE-04 requirement complete
+- **Activity:** Executed 03-05-PLAN.md (Water lineup builder)
+- **Outcome:** Drag-drop water lineup builder with boat compatibility filtering, LINE-01 and LINE-02 requirements complete
 
 ### Next Actions
 
-1. Continue Phase 3: Execute 03-05 (Water lineup builder)
-2. Build water lineup builder with drag-and-drop
-3. Create template system for lineups (03-07 or 03-08)
+1. Phase 3 now complete (5/6 core plans + 1 debt plan)
+2. Ready to move to Phase 4 or other planned work
+3. Lineup templates (03-07) may be deferred or optional
 
 ### Files Modified This Session
 
 **Created:**
-- `src/components/lineups/land-lineup-builder.tsx` (Multi-select UI for land/erg assignment)
-- `src/components/lineups/lineup-editor.tsx` (Top-level routing component for block types)
-- `.planning/phases/03-lineup-management/03-06-SUMMARY.md` (completed)
+- `src/components/lineups/boat-selector.tsx` (Boat compatibility filtering)
+- `src/components/lineups/water-lineup-builder.tsx` (Main drag-drop builder)
+- `.planning/phases/03-lineup-management/03-05-SUMMARY.md` (completed)
 
 **Modified:**
+- `src/components/lineups/lineup-editor.tsx` (Added water builder routing)
+- `src/app/api/lineup-templates/route.ts` (Fixed TypeScript type error)
+- `src/app/api/lineup-templates/[id]/route.ts` (Fixed TypeScript type error)
 - `.planning/STATE.md` (updated)
 
 ---
