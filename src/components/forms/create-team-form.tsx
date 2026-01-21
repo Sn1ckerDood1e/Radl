@@ -6,12 +6,20 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createTeamSchema, type CreateTeamInput } from '@/lib/validations/team';
 import { createClient } from '@/lib/supabase/client';
+import { LogoUploadField } from './logo-upload-field';
+import { ColorPickerFields } from './color-picker-fields';
 
+/**
+ * Form for creating a new team.
+ * Handles team name, slug, colors, and optional logo upload.
+ * After successful creation, refreshes session and redirects to team dashboard.
+ */
 export function CreateTeamForm() {
   const router = useRouter();
+
+  // --- Form State ---
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [logoFile, setLogoFile] = useState<File | null>(null);
-  const [logoPreview, setLogoPreview] = useState<string | null>(null);
   const [submitError, setSubmitError] = useState<string | null>(null);
 
   const {
@@ -26,23 +34,9 @@ export function CreateTeamForm() {
     },
   });
 
-  const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      // Validate file type
-      if (!['image/png', 'image/jpeg'].includes(file.type)) {
-        setSubmitError('Logo must be a PNG or JPG file');
-        return;
-      }
-      // Validate file size (max 2MB)
-      if (file.size > 2 * 1024 * 1024) {
-        setSubmitError('Logo must be less than 2MB');
-        return;
-      }
-      setLogoFile(file);
-      setLogoPreview(URL.createObjectURL(file));
-      setSubmitError(null);
-    }
+  const handleLogoChange = (file: File | null) => {
+    setLogoFile(file);
+    setSubmitError(null);
   };
 
   const onSubmit = async (data: CreateTeamInput) => {
@@ -66,7 +60,7 @@ export function CreateTeamForm() {
       const teamId = result.team.id;
       const teamSlug = result.team.slug;
 
-      // 2. Upload logo if provided
+      // 2. Upload logo to Supabase Storage if provided
       if (logoFile) {
         const supabase = createClient();
         const fileExt = logoFile.name.split('.').pop();
@@ -136,77 +130,11 @@ export function CreateTeamForm() {
         )}
       </div>
 
-      {/* Primary Color */}
-      <div>
-        <label htmlFor="primaryColor" className="block text-sm font-medium text-gray-700">
-          Primary Color
-        </label>
-        <div className="mt-1 flex items-center gap-3">
-          <input
-            type="color"
-            id="primaryColor"
-            {...register('primaryColor')}
-            className="h-10 w-20 rounded border border-gray-300 cursor-pointer"
-          />
-          <span className="text-sm text-gray-500">
-            Main team color (e.g., for headers)
-          </span>
-        </div>
-        {errors.primaryColor && (
-          <p className="mt-1 text-sm text-red-600">{errors.primaryColor.message}</p>
-        )}
-      </div>
-
-      {/* Secondary Color */}
-      <div>
-        <label htmlFor="secondaryColor" className="block text-sm font-medium text-gray-700">
-          Secondary Color
-        </label>
-        <div className="mt-1 flex items-center gap-3">
-          <input
-            type="color"
-            id="secondaryColor"
-            {...register('secondaryColor')}
-            className="h-10 w-20 rounded border border-gray-300 cursor-pointer"
-          />
-          <span className="text-sm text-gray-500">
-            Accent color (e.g., for highlights)
-          </span>
-        </div>
-        {errors.secondaryColor && (
-          <p className="mt-1 text-sm text-red-600">{errors.secondaryColor.message}</p>
-        )}
-      </div>
+      {/* Color Pickers */}
+      <ColorPickerFields register={register} errors={errors} />
 
       {/* Logo Upload */}
-      <div>
-        <label htmlFor="logo" className="block text-sm font-medium text-gray-700">
-          Team Logo (optional)
-        </label>
-        <div className="mt-1 flex items-center gap-4">
-          {logoPreview ? (
-            <img
-              src={logoPreview}
-              alt="Logo preview"
-              className="h-16 w-16 object-cover rounded-md border border-gray-300"
-            />
-          ) : (
-            <div className="h-16 w-16 flex items-center justify-center rounded-md border border-dashed border-gray-300 bg-gray-50">
-              <span className="text-xs text-gray-400">No logo</span>
-            </div>
-          )}
-          <input
-            type="file"
-            id="logo"
-            accept="image/png,image/jpeg"
-            onChange={handleLogoChange}
-            className="block text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
-          />
-        </div>
-        <p className="mt-1 text-xs text-gray-500">
-          PNG or JPG, max 2MB
-        </p>
-      </div>
+      <LogoUploadField onChange={handleLogoChange} />
 
       {/* Submit Button */}
       <div>
