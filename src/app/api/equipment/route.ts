@@ -3,24 +3,42 @@ import { prisma } from '@/lib/prisma';
 import { createEquipmentSchema } from '@/lib/validations/equipment';
 import { getClaimsForApiRoute } from '@/lib/auth/claims';
 import { unauthorizedResponse, forbiddenResponse, serverErrorResponse } from '@/lib/errors';
+import { computeMultipleEquipmentReadiness } from '@/lib/equipment/readiness';
 
-// GET: List equipment for current team
+// GET: List equipment for current team with readiness status
 export async function GET(request: NextRequest) {
   try {
     const { user, claims, error } = await getClaimsForApiRoute();
     if (error || !user) return unauthorizedResponse();
     if (!claims?.team_id) return forbiddenResponse('No team associated with user');
 
-    // Get equipment for the team, ordered by type then name
+    const { searchParams } = new URL(request.url);
+    const availableOnly = searchParams.get('available') === 'true';
+
+    // Get equipment for the team with open damage reports for readiness computation
     const equipment = await prisma.equipment.findMany({
       where: { teamId: claims.team_id },
+      include: {
+        damageReports: {
+          where: { status: 'OPEN' },
+          select: { id: true, description: true, location: true },
+        },
+      },
       orderBy: [
         { type: 'asc' },
         { name: 'asc' },
       ],
     });
 
-    return NextResponse.json({ equipment });
+    // Compute readiness status for all equipment
+    const equipmentWithReadiness = computeMultipleEquipmentReadiness(equipment);
+
+    // Optionally filter to available only
+    const result = availableOnly
+      ? equipmentWithReadiness.filter(e => e.isAvailable)
+      : equipmentWithReadiness;
+
+    return NextResponse.json({ equipment: result });
   } catch (error) {
     return serverErrorResponse(error, 'equipment:GET');
   }
