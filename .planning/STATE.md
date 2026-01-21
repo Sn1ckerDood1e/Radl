@@ -58,6 +58,8 @@ Overall:  [####...... ] 9/31 requirements (29%)
 | DateTime for practice times | Practice uses full DateTime for startTime/endTime, templates use HH:MM strings | 2 |
 | Position-based block ordering | Blocks use position Int rather than time slots for flexible ordering | 2 |
 | DRAFT/PUBLISHED practice status | DRAFT visible only to coaches, PUBLISHED to all team members | 2 |
+| Hard delete practices | Practices are time-bound, no archiving needed unlike seasons | 2 |
+| Block reorder requires all blocks | Prevents accidental position conflicts and orphaned blocks | 2 |
 | Availability computed at query time | Not stored, derived from manualUnavailable + open damage reports | 2 |
 | Manual note auto-cleared | When marking equipment available, note is set to null | 2 |
 
@@ -95,6 +97,8 @@ Overall:  [####...... ] 9/31 requirements (29%)
 | Position-based ordering | `position Int` field with `[parentId, position]` index | PracticeBlock, TemplateBlock |
 | Template pattern | Template models mirror instance models with default values | PracticeTemplate, BlockTemplate |
 | Computed properties | Derive status from related records at query time | src/lib/equipment/readiness.ts |
+| Nested Prisma create | Parent with children in single create call | src/app/api/practices/route.ts |
+| Atomic position reorder | Use $transaction for position updates | src/app/api/practices/[id]/blocks/reorder/route.ts |
 
 ### Todos
 
@@ -122,7 +126,7 @@ All 6 requirements for Phase 1 verified complete:
 | Plan | Description | Status |
 |------|-------------|--------|
 | 02-01 | Data models for Practice, Blocks, Templates | COMPLETE |
-| 02-02 | Practice CRUD API | COMPLETE |
+| 02-02 | Practice CRUD API | COMPLETE (filled) |
 | 02-03 | Equipment Readiness API | COMPLETE |
 | 02-04 | Damage reporting integration | Pending |
 | 02-05 | Template system API | Pending |
@@ -133,8 +137,8 @@ All 6 requirements for Phase 1 verified complete:
 ### Last Session
 
 - **Date:** 2026-01-21
-- **Activity:** Executed 02-03-PLAN.md (Equipment Readiness API)
-- **Outcome:** Equipment API returns isAvailable and unavailableReasons; coach can set manual unavailability
+- **Activity:** Executed 02-02-PLAN.md (Practice CRUD API - backfilled)
+- **Outcome:** Practice CRUD API with block management, publish workflow, role-based visibility
 
 ### Next Actions
 
@@ -143,12 +147,13 @@ All 6 requirements for Phase 1 verified complete:
 
 ### Files Modified This Session
 
-- `src/lib/equipment/readiness.ts` (created - readiness computation helper)
-- `src/app/api/equipment/route.ts` (updated - GET includes readiness, ?available=true filter)
-- `src/app/api/equipment/[id]/route.ts` (updated - GET/PATCH with readiness)
-- `src/lib/validations/equipment.ts` (updated - manualUnavailable fields)
-- `.planning/phases/02-practice-scheduling/02-03-SUMMARY.md` (created)
+- `src/app/api/practices/route.ts` (created - GET list, POST create)
+- `src/app/api/practices/[id]/route.ts` (created - GET/PATCH/DELETE)
+- `src/app/api/practices/[id]/publish/route.ts` (created - POST publish)
+- `src/app/api/practices/[id]/blocks/route.ts` (created - POST add, DELETE remove)
+- `src/app/api/practices/[id]/blocks/reorder/route.ts` (created - POST reorder)
+- `.planning/phases/02-practice-scheduling/02-02-SUMMARY.md` (created)
 
 ---
 
-*Last updated: 2026-01-21*
+*Last updated: 2026-01-21 (02-02 backfill)*
