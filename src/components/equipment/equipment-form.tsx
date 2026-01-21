@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createEquipmentFormSchema, type CreateEquipmentFormInput } from '@/lib/validations/equipment';
+import { ShellFields } from './shell-fields';
 
 interface EquipmentFormProps {
   teamSlug: string;
@@ -17,26 +18,16 @@ const equipmentTypes = [
   { value: 'OTHER', label: 'Other' },
 ] as const;
 
-const boatClasses = [
-  { value: 'SINGLE_1X', label: 'Single (1x)' },
-  { value: 'DOUBLE_2X', label: 'Double (2x)' },
-  { value: 'PAIR_2_MINUS', label: 'Pair (2-)' },
-  { value: 'COXED_PAIR_2_PLUS', label: 'Coxed Pair (2+)' },
-  { value: 'FOUR_4_MINUS', label: 'Four (4-)' },
-  { value: 'COXED_FOUR_4_PLUS', label: 'Coxed Four (4+)' },
-  { value: 'QUAD_4X', label: 'Quad (4x)' },
-  { value: 'EIGHT_8_PLUS', label: 'Eight (8+)' },
-  { value: 'OTHER', label: 'Other' },
-] as const;
-
-const weightCategories = [
-  { value: 'LIGHTWEIGHT', label: 'Lightweight' },
-  { value: 'MIDWEIGHT', label: 'Midweight' },
-  { value: 'HEAVYWEIGHT', label: 'Heavyweight' },
-] as const;
-
+/**
+ * Form for creating new equipment.
+ * Handles all equipment types with conditional rendering for shell-specific fields.
+ *
+ * @param teamSlug - Current team's slug for navigation after successful creation
+ */
 export function EquipmentForm({ teamSlug }: EquipmentFormProps) {
   const router = useRouter();
+
+  // --- Form State ---
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
 
@@ -61,8 +52,9 @@ export function EquipmentForm({ teamSlug }: EquipmentFormProps) {
     setSubmitError(null);
 
     try {
-      // Clean up data before sending to API
-      // Remove empty strings and NaN values, and remove shell-specific fields for non-shells
+      // Clean up data before sending to API:
+      // - Remove empty strings and NaN values
+      // - Exclude shell-specific fields for non-shell equipment types
       const cleanData: Record<string, unknown> = {
         type: data.type,
         name: data.name,
@@ -168,51 +160,12 @@ export function EquipmentForm({ teamSlug }: EquipmentFormProps) {
 
       {/* Shell-specific fields */}
       {isShell && (
-        <>
-          {/* Boat Class */}
-          <div>
-            <label htmlFor="boatClass" className={labelClassName}>
-              Boat Class <span className="text-red-400">*</span>
-            </label>
-            <select
-              id="boatClass"
-              {...register('boatClass')}
-              className={inputClassName}
-            >
-              <option value="">Select boat class</option>
-              {boatClasses.map((bc) => (
-                <option key={bc.value} value={bc.value}>
-                  {bc.label}
-                </option>
-              ))}
-            </select>
-            {errors.boatClass && (
-              <p className="mt-1 text-sm text-red-400">{errors.boatClass.message}</p>
-            )}
-          </div>
-
-          {/* Weight Category */}
-          <div>
-            <label htmlFor="weightCategory" className={labelClassName}>
-              Weight Category
-            </label>
-            <select
-              id="weightCategory"
-              {...register('weightCategory')}
-              className={inputClassName}
-            >
-              <option value="">Not specified</option>
-              {weightCategories.map((wc) => (
-                <option key={wc.value} value={wc.value}>
-                  {wc.label}
-                </option>
-              ))}
-            </select>
-            {errors.weightCategory && (
-              <p className="mt-1 text-sm text-red-400">{errors.weightCategory.message}</p>
-            )}
-          </div>
-        </>
+        <ShellFields
+          register={register}
+          errors={errors}
+          inputClassName={inputClassName}
+          labelClassName={labelClassName}
+        />
       )}
 
       {/* Manufacturer */}
