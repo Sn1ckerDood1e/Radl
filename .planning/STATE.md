@@ -11,27 +11,27 @@
 | Field | Value |
 |-------|-------|
 | Phase | 3 of 5 (Lineup Management) |
-| Plan | 2 of 4 |
+| Plan | 3 of 6 |
 | Status | In progress |
-| Last activity | 2026-01-21 - Completed 03-02-PLAN.md |
+| Last activity | 2026-01-21 - Completed 03-09-PLAN.md (DEBT-02) |
 
 **Progress:**
 ```
 Phase 1: [##########] 100% (5/5 plans) COMPLETE
 Phase 2: [##########] 100% (8/8 plans) COMPLETE
-Phase 3: [#####.....] 50% (2/4 plans)
+Phase 3: [#####.....] 50% (3/6 plans)
 Phase 4: [..........] 0%
 Phase 5: [..........] 0%
 
-Overall:  [#######... ] 15/22 plans (68%)
+Overall:  [#######... ] 16/24 plans (67%)
 ```
 
 ## Performance Metrics
 
 | Metric | Value |
 |--------|-------|
-| Requirements completed | 15/31 |
-| Plans completed | 15 |
+| Requirements completed | 16/31 |
+| Plans completed | 16 |
 | Plans failed | 0 |
 | Blockers resolved | 0 |
 
@@ -74,6 +74,9 @@ Overall:  [#######... ] 15/22 plans (68%)
 | Block-specific lineup endpoints | PUT with replace-all pattern for simpler client integration | 3 |
 | Separate water vs land endpoints | /lineup for WATER blocks, /assignments for LAND/ERG blocks | 3 |
 | Athlete validation via joins | Team membership checked via athleteProfile.teamMember.teamId join | 3 |
+| Component extraction pattern | Extract based on semantic cohesion, not arbitrary line counts | 3 |
+| Custom hooks for stateful logic | CSV parsing, form submission logic moved to hooks for reusability | 3 |
+| Utility modules for pure functions | Date/time formatting extracted to shared utilities | 3 |
 
 ### Architecture Notes
 
@@ -95,7 +98,7 @@ Overall:  [#######... ] 15/22 plans (68%)
 | Item | Status | Phase |
 |------|--------|-------|
 | DEBT-01: Claims helper utility | **COMPLETE** | 1 |
-| DEBT-02: Refactor oversized forms | Pending | 3 |
+| DEBT-02: Refactor oversized forms | **COMPLETE** | 3 |
 | DEBT-03: Query caching | Pending | 4 |
 
 ### Patterns Established
@@ -126,6 +129,9 @@ Overall:  [#######... ] 15/22 plans (68%)
 | Position-side configuration | ROWING_POSITIONS maps BoatClass to seat configs with position/label/side | src/lib/lineup/position-labels.ts |
 | Drag wrapper pattern | Presentation component wrapped by hook-based draggable component (AthleteCard + DraggableAthlete) | src/components/lineups/ |
 | DragOverlay safety | Components for DragOverlay must have zero hooks (AthleteCard is pure presentation) | src/components/lineups/athlete-card.tsx |
+| CSV parsing hook | useCSVParser encapsulates file parsing, validation, state management | src/hooks/use-csv-parser.ts |
+| Date-time utilities | Shared formatters for HTML inputs and API payloads | src/lib/utils/date-time-helpers.ts |
+| Form sub-components | Extract self-contained UI sections (ShellFields, LogoUploadField, ColorPickerFields) | src/components/forms/, src/components/equipment/ |
 
 ### Todos
 
@@ -185,15 +191,15 @@ All 6 requirements for Phase 2 verified complete:
 | 03-03 | Lineup editor UI | Not started |
 | 03-04 | Template system for lineups | Not started |
 | 03-08 | Template application flow | Not started |
-| 03-09 | Equipment assignment integration | Not started |
+| 03-09 | Form component refactoring (DEBT-02) | COMPLETE |
 
 ## Session Continuity
 
 ### Last Session
 
 - **Date:** 2026-01-21
-- **Activity:** Executed 03-02-PLAN.md (Lineup CRUD API)
-- **Outcome:** Complete REST API for lineup management with water/land separation
+- **Activity:** Executed 03-09-PLAN.md (Form component refactoring - DEBT-02)
+- **Outcome:** Refactored 5 forms, extracted 6 components, created custom hooks and utilities
 
 ### Next Actions
 
@@ -203,13 +209,23 @@ All 6 requirements for Phase 2 verified complete:
 
 ### Files Modified This Session
 
-- `src/app/api/lineups/route.ts` (created - Lineup CRUD endpoints)
-- `src/app/api/lineups/[id]/route.ts` (created - Individual lineup operations)
-- `src/app/api/practices/[id]/blocks/[blockId]/lineup/route.ts` (created - Block-specific lineup)
-- `src/app/api/practices/[id]/blocks/[blockId]/assignments/route.ts` (created - Land/erg assignments)
-- `.planning/phases/03-lineup-management/03-02-SUMMARY.md` (created)
+**Created:**
+- `src/components/equipment/shell-fields.tsx` (Shell-specific form fields)
+- `src/hooks/use-csv-parser.ts` (CSV parsing hook)
+- `src/components/forms/csv-preview-table.tsx` (CSV preview table)
+- `src/lib/utils/date-time-helpers.ts` (Date/time utilities)
+- `src/components/forms/logo-upload-field.tsx` (Logo upload component)
+- `src/components/forms/color-picker-fields.tsx` (Color picker component)
+- `.planning/phases/03-lineup-management/03-09-SUMMARY.md` (created)
+
+**Modified:**
+- `src/components/equipment/equipment-form.tsx` (325 → 278 lines)
+- `src/components/forms/csv-import-form.tsx` (287 → 181 lines)
+- `src/components/practices/practice-form.tsx` (300 → 303 lines)
+- `src/components/forms/create-team-form.tsx` (223 → 151 lines)
+- `src/components/forms/invite-member-form.tsx` (185 → 196 lines)
 - `.planning/STATE.md` (updated)
 
 ---
 
-*Last updated: 2026-01-21 (Phase 3 in progress - 2/4 plans complete)*
+*Last updated: 2026-01-21 (Phase 3 in progress - 3/6 plans complete)*
