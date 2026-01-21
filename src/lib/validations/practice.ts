@@ -54,6 +54,28 @@ export const updatePracticeSchema = z.object({
   { message: 'End time must be after start time', path: ['endTime'] }
 );
 
+// Form block schema - allows null values that will be cleaned before API call
+export const createBlockFormSchema = z.object({
+  type: blockTypeSchema,
+  durationMinutes: z.number().int().min(5).max(480).nullable().optional(),
+  category: z.string().max(50).nullable().optional(),
+  notes: z.string().max(500).nullable().optional(),
+});
+
+// Form schema - allows empty strings, converts date/time strings
+export const createPracticeFormSchema = z.object({
+  seasonId: z.string().uuid(),
+  name: z.string().min(1, 'Name is required').max(100),
+  date: z.string().min(1, 'Date is required'), // YYYY-MM-DD
+  startTime: z.string().min(1, 'Start time is required'), // HH:MM
+  endTime: z.string().min(1, 'End time is required'), // HH:MM
+  notes: z.string().max(1000).optional().or(z.literal('')),
+  blocks: z.array(createBlockFormSchema).min(1, 'At least one block required'),
+}).refine(
+  (data) => data.startTime < data.endTime,
+  { message: 'End time must be after start time', path: ['endTime'] }
+);
+
 // Type exports
 export type BlockType = z.infer<typeof blockTypeSchema>;
 export type PracticeStatus = z.infer<typeof practiceStatusSchema>;
@@ -62,3 +84,5 @@ export type UpdateBlockInput = z.infer<typeof updateBlockSchema>;
 export type CreatePracticeInput = z.infer<typeof createPracticeSchema>;
 export type UpdatePracticeInput = z.infer<typeof updatePracticeSchema>;
 export type ReorderBlocksInput = z.infer<typeof reorderBlocksSchema>;
+export type CreateBlockFormInput = z.infer<typeof createBlockFormSchema>;
+export type CreatePracticeFormInput = z.infer<typeof createPracticeFormSchema>;
