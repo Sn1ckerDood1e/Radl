@@ -84,24 +84,24 @@
 
 | REQ-ID | Phase | Status |
 |--------|-------|--------|
-| SEC-01 | 1 | Pending |
-| SEC-02 | 1 | Pending |
-| SEC-03 | 1 | Pending |
-| SEASON-01 | 1 | Pending |
-| SEASON-02 | 1 | Pending |
-| DEBT-01 | 1 | Pending |
-| PRAC-01 | 2 | Pending |
-| PRAC-02 | 2 | Pending |
-| PRAC-03 | 2 | Pending |
-| PRAC-04 | 2 | Pending |
-| EQUIP-02 | 2 | Pending |
-| EQUIP-03 | 2 | Pending |
-| LINE-01 | 3 | Pending |
-| LINE-02 | 3 | Pending |
-| LINE-03 | 3 | Pending |
-| LINE-04 | 3 | Pending |
-| EQUIP-01 | 3 | Pending |
-| DEBT-02 | 3 | Pending |
+| SEC-01 | 1 | Complete |
+| SEC-02 | 1 | Complete |
+| SEC-03 | 1 | Complete |
+| SEASON-01 | 1 | Complete |
+| SEASON-02 | 1 | Complete |
+| DEBT-01 | 1 | Complete |
+| PRAC-01 | 2 | Complete |
+| PRAC-02 | 2 | Complete |
+| PRAC-03 | 2 | Complete |
+| PRAC-04 | 2 | Complete |
+| EQUIP-02 | 2 | Complete |
+| EQUIP-03 | 2 | Complete |
+| LINE-01 | 3 | Complete |
+| LINE-02 | 3 | Complete |
+| LINE-03 | 3 | Complete |
+| LINE-04 | 3 | Complete |
+| EQUIP-01 | 3 | Complete |
+| DEBT-02 | 3 | Complete |
 | PWA-01 | 4 | Pending |
 | PWA-02 | 4 | Pending |
 | PWA-03 | 4 | Pending |
@@ -118,4 +118,4 @@
 
 ---
 
-*Last updated: 2026-01-20*
+*Last updated: 2026-01-21*

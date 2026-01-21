@@ -87,15 +87,15 @@ Plans:
 **Plans:** 9 plans
 
 Plans:
-- [ ] 03-01-PLAN.md - Data models for Lineup, SeatAssignment, templates, and usage logging
-- [ ] 03-02-PLAN.md - Lineup CRUD API with seat management
-- [ ] 03-03-PLAN.md - Equipment usage logging (auto-generate on boat assignment)
-- [ ] 03-04-PLAN.md - Install dnd-kit and create drag-drop foundation components
-- [ ] 03-05-PLAN.md - Water lineup builder with drag-drop seat assignment
-- [ ] 03-06-PLAN.md - Land/erg assignment UI with multi-select
-- [ ] 03-07-PLAN.md - Lineup template system (save/apply templates)
-- [ ] 03-08-PLAN.md - Integrate lineup editor into practice UI and template pages
-- [ ] 03-09-PLAN.md - Refactor oversized form components (DEBT-02)
+- [x] 03-01-PLAN.md - Data models for Lineup, SeatAssignment, templates, and usage logging
+- [x] 03-02-PLAN.md - Lineup CRUD API with seat management
+- [x] 03-03-PLAN.md - Equipment usage logging (auto-generate on boat assignment)
+- [x] 03-04-PLAN.md - Install dnd-kit and create drag-drop foundation components
+- [x] 03-05-PLAN.md - Water lineup builder with drag-drop seat assignment
+- [x] 03-06-PLAN.md - Land/erg assignment UI with multi-select
+- [x] 03-07-PLAN.md - Lineup template system (save/apply templates)
+- [x] 03-08-PLAN.md - Integrate lineup editor into practice UI and template pages
+- [x] 03-09-PLAN.md - Refactor oversized form components (DEBT-02)
 
 **Requirements:**
 | REQ-ID | Description |
@@ -172,11 +172,11 @@ Plans:
 |-------|--------|--------------|-----------|
 | 1 - Security & Foundation | Complete | 6 | 6 |
 | 2 - Practice Scheduling | Complete | 6 | 6 |
-| 3 - Lineup Management | Planned | 6 | 0 |
+| 3 - Lineup Management | Complete | 6 | 6 |
 | 4 - PWA Infrastructure | Not Started | 5 | 0 |
 | 5 - Regatta Mode | Not Started | 8 | 0 |
 
-**Total:** 12/31 requirements completed (39%)
+**Total:** 18/31 requirements completed (58%)
 
 ---
 
@@ -198,3 +198,4 @@ Phases that may need deeper research during planning:
 *Phase 2 planned: 2026-01-21*
 *Phase 2 complete: 2026-01-21*
 *Phase 3 planned: 2026-01-21*
+*Phase 3 complete: 2026-01-21*
