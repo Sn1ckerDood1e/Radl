@@ -32,6 +32,7 @@ model Team {
   practices         Practice[]
   practiceTemplates PracticeTemplate[]
   blockTemplates    BlockTemplate[]
+  lineupTemplates   LineupTemplate[]
   regattas          Regatta[]
 }
 
@@ -157,6 +158,13 @@ enum BlockType {
   ERG
 }
 
+// Seat side enum (for sweep boats)
+enum SeatSide {
+  PORT
+  STARBOARD
+  NONE // For scull boats and coxswain
+}
+
 // Equipment model for tracking team assets (shells, oars, launches, etc.)
 model Equipment {
   id                    String          @id @default(uuid())
@@ -178,8 +186,11 @@ model Equipment {
   createdAt             DateTime        @default(now())
   updatedAt             DateTime        @updatedAt
 
-  team          Team           @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  team          Team                 @relation(fields: [teamId], references: [id], onDelete: Cascade)
   damageReports DamageReport[]
+  usageLogs     EquipmentUsageLog[]
+  lineups       Lineup[]
+  templateBoats LineupTemplate[]
 
   @@index([teamId])
   @@index([teamId, type])
@@ -221,8 +232,11 @@ model AthleteProfile {
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 
-  teamMember  TeamMember           @relation(fields: [teamMemberId], references: [id], onDelete: Cascade)
-  eligibility AthleteEligibility[]
+  teamMember       TeamMember           @relation(fields: [teamMemberId], references: [id], onDelete: Cascade)
+  eligibility      AthleteEligibility[]
+  seatAssignments  SeatAssignment[]
+  templateSeats    TemplateSeat[]
+  landAssignments  LandAssignment[]
 
   @@index([teamMemberId])
 }
@@ -312,9 +326,10 @@ model Practice {
   createdAt DateTime       @default(now())
   updatedAt DateTime       @updatedAt
 
-  team   Team            @relation(fields: [teamId], references: [id], onDelete: Cascade)
-  season Season          @relation(fields: [seasonId], references: [id], onDelete: Cascade)
-  blocks PracticeBlock[]
+  team      Team                 @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  season    Season               @relation(fields: [seasonId], references: [id], onDelete: Cascade)
+  blocks    PracticeBlock[]
+  usageLogs EquipmentUsageLog[]
 
   @@index([teamId])
   @@index([teamId, seasonId])
@@ -331,7 +346,9 @@ model PracticeBlock {
   category        String?   // e.g., "steady-state", "intervals", "technique"
   notes           String?   // Block-specific notes
 
-  practice Practice @relation(fields: [practiceId], references: [id], onDelete: Cascade)
+  practice        Practice         @relation(fields: [practiceId], references: [id], onDelete: Cascade)
+  lineup          Lineup?
+  landAssignments LandAssignment[]
 
   @@index([practiceId, position])
 }
@@ -382,6 +399,104 @@ model BlockTemplate {
   team Team @relation(fields: [teamId], references: [id], onDelete: Cascade)
 
   @@index([teamId, type])
+}
+
+// Lineup model for water blocks - assigns athletes to boat positions
+model Lineup {
+  id        String   @id @default(uuid())
+  blockId   String   @unique // One lineup per block
+  boatId    String?  // Optional, nullable until boat assigned
+  notes     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  block     PracticeBlock        @relation(fields: [blockId], references: [id], onDelete: Cascade)
+  boat      Equipment?           @relation(fields: [boatId], references: [id])
+  seats     SeatAssignment[]
+  usageLogs EquipmentUsageLog[]
+
+  @@index([blockId])
+}
+
+// Seat assignment for linking athletes to positions within lineups
+model SeatAssignment {
+  id         String   @id @default(uuid())
+  lineupId   String
+  athleteId  String
+  position   Int      // 1-based: 1=Bow, 2-7=Middle, 8=Stroke, 9=Cox
+  side       SeatSide
+
+  lineup  Lineup         @relation(fields: [lineupId], references: [id], onDelete: Cascade)
+  athlete AthleteProfile @relation(fields: [athleteId], references: [id])
+
+  @@unique([lineupId, position]) // One athlete per position
+  @@unique([lineupId, athleteId]) // Athlete can't be in multiple seats
+  @@index([lineupId])
+}
+
+// Lineup template for reusable configurations
+model LineupTemplate {
+  id             String     @id @default(uuid())
+  teamId         String
+  name           String     // e.g., "Varsity 1V Standard"
+  boatClass      BoatClass  // Target boat size
+  defaultBoatId  String?    // Optional default boat
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+
+  team        Team           @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  seats       TemplateSeat[]
+  defaultBoat Equipment?     @relation(fields: [defaultBoatId], references: [id])
+
+  @@index([teamId])
+  @@index([teamId, boatClass])
+}
+
+// Template seat for default athlete positions
+model TemplateSeat {
+  id         String   @id @default(uuid())
+  templateId String
+  athleteId  String?  // Optional default athlete
+  position   Int
+  side       SeatSide
+
+  template LineupTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
+  athlete  AthleteProfile? @relation(fields: [athleteId], references: [id])
+
+  @@unique([templateId, position])
+  @@index([templateId])
+}
+
+// Equipment usage log for tracking boat assignments
+model EquipmentUsageLog {
+  id          String   @id @default(uuid())
+  equipmentId String
+  teamId      String   // Denormalized for queries
+  practiceId  String
+  lineupId    String?  // Optional, for tracking which lineup used it
+  usageDate   DateTime // The practice date
+  createdAt   DateTime @default(now())
+
+  equipment Equipment @relation(fields: [equipmentId], references: [id])
+  practice  Practice  @relation(fields: [practiceId], references: [id])
+  lineup    Lineup?   @relation(fields: [lineupId], references: [id])
+
+  @@index([equipmentId])
+  @@index([teamId])
+  @@index([practiceId])
+}
+
+// Land assignment for erg/land blocks - group-based
+model LandAssignment {
+  id        String @id @default(uuid())
+  blockId   String
+  athleteId String
+
+  block   PracticeBlock  @relation(fields: [blockId], references: [id], onDelete: Cascade)
+  athlete AthleteProfile @relation(fields: [athleteId], references: [id])
+
+  @@unique([blockId, athleteId]) // Athlete assigned once per block
+  @@index([blockId])
 }
 
 // Regatta model (placeholder for Phase 5)
