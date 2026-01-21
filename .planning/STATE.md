@@ -4,34 +4,34 @@
 
 **Core Value:** Coaches can plan practices with lineups and equipment, and athletes know where to be and what boat they're in.
 
-**Current Focus:** Phase 2 - Practice Scheduling (Plans 01-04 complete)
+**Current Focus:** Phase 2 - Practice Scheduling (Plans 01-05 complete)
 
 ## Current Position
 
 | Field | Value |
 |-------|-------|
 | Phase | 2 of 5 (Practice Scheduling) |
-| Plan | 4 of 6 complete |
+| Plan | 5 of 6 complete |
 | Status | In progress |
-| Last activity | 2026-01-21 - Completed 02-04-PLAN.md |
+| Last activity | 2026-01-21 - Completed 02-05-PLAN.md |
 
 **Progress:**
 ```
 Phase 1: [##########] 100% (5/5 plans) COMPLETE
-Phase 2: [######....] 67% (4/6 plans)
+Phase 2: [########..] 83% (5/6 plans)
 Phase 3: [..........] 0%
 Phase 4: [..........] 0%
 Phase 5: [..........] 0%
 
-Overall:  [#####..... ] 10/31 requirements (32%)
+Overall:  [#####..... ] 11/31 requirements (35%)
 ```
 
 ## Performance Metrics
 
 | Metric | Value |
 |--------|-------|
-| Requirements completed | 10/31 |
-| Plans completed | 9 |
+| Requirements completed | 11/31 |
+| Plans completed | 10 |
 | Plans failed | 0 |
 | Blockers resolved | 0 |
 
@@ -104,6 +104,8 @@ Overall:  [#####..... ] 10/31 requirements (32%)
 | Atomic position reorder | Use $transaction for position updates | src/app/api/practices/[id]/blocks/reorder/route.ts |
 | Copy-on-apply | Template.apply copies data, no ongoing link | src/app/api/practice-templates/apply/route.ts |
 | Replace-all blocks | PATCH with blocks array deletes all and recreates | src/app/api/practice-templates/[id]/route.ts |
+| Block editor pattern | Nested component managing array state with tempId for unsaved items | src/components/practices/block-editor.tsx |
+| View/edit toggle | Client component with isEditing state for detail pages | src/app/(dashboard)/[teamSlug]/practices/[id]/practice-detail-client.tsx |
 
 ### Todos
 
@@ -134,7 +136,7 @@ All 6 requirements for Phase 1 verified complete:
 | 02-02 | Practice CRUD API | COMPLETE |
 | 02-03 | Equipment Readiness API | COMPLETE |
 | 02-04 | Template system API | COMPLETE |
-| 02-05 | Damage reporting integration | Pending |
+| 02-05 | Practice management UI | COMPLETE |
 | 02-06 | Calendar UI | Pending |
 
 ## Session Continuity
@@ -142,23 +144,26 @@ All 6 requirements for Phase 1 verified complete:
 ### Last Session
 
 - **Date:** 2026-01-21
-- **Activity:** Executed 02-04-PLAN.md (Template system API)
-- **Outcome:** Practice and block template CRUD with copy-on-apply pattern
+- **Activity:** Executed 02-05-PLAN.md (Practice management UI)
+- **Outcome:** Practice list, create, and detail pages with block editor components
 
 ### Next Actions
 
 1. Continue Phase 2: Practice Scheduling
-2. Plan 02-05: Damage reporting integration (Wave 3)
+2. Plan 02-06: Calendar UI (final plan for Phase 2)
 
 ### Files Modified This Session
 
-- `src/app/api/practice-templates/route.ts` (created - GET list, POST create)
-- `src/app/api/practice-templates/[id]/route.ts` (created - GET/PATCH/DELETE)
-- `src/app/api/practice-templates/apply/route.ts` (created - POST apply)
-- `src/app/api/block-templates/route.ts` (created - GET list, POST create)
-- `src/app/api/block-templates/[id]/route.ts` (created - GET/PATCH/DELETE)
-- `.planning/phases/02-practice-scheduling/02-04-SUMMARY.md` (created)
+- `src/components/practices/block-card.tsx` (created - Block display component)
+- `src/components/practices/block-editor.tsx` (created - Block sequence management)
+- `src/components/practices/practice-form.tsx` (created - Create/edit form)
+- `src/app/(dashboard)/[teamSlug]/practices/page.tsx` (created - Practice list)
+- `src/app/(dashboard)/[teamSlug]/practices/new/page.tsx` (created - Create practice)
+- `src/app/(dashboard)/[teamSlug]/practices/[id]/page.tsx` (created - Practice detail)
+- `src/app/(dashboard)/[teamSlug]/practices/[id]/practice-detail-client.tsx` (created - View/edit client)
+- `src/lib/validations/practice.ts` (modified - Added form schema)
+- `.planning/phases/02-practice-scheduling/02-05-SUMMARY.md` (created)
 
 ---
 
-*Last updated: 2026-01-21 (02-04 complete)*
+*Last updated: 2026-01-21 (02-05 complete)*
