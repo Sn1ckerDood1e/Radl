@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import { BlockEditor } from './block-editor';
+import { EquipmentAvailabilityPanel } from './equipment-availability-panel';
 import { createPracticeFormSchema, type CreatePracticeFormInput, type BlockType } from '@/lib/validations/practice';
 
 interface Block {
@@ -262,6 +263,17 @@ export function PracticeForm({ teamSlug, seasonId, practice, onSuccess }: Practi
         {errors.blocks && (
           <p className="mt-2 text-sm text-red-400">{errors.blocks.message}</p>
         )}
+      </div>
+
+      {/* Equipment Availability Section */}
+      <div>
+        <label className={labelClassName}>
+          Equipment Status
+        </label>
+        <p className="text-xs text-zinc-500 mt-1 mb-3">
+          Review equipment availability before planning your practice
+        </p>
+        <EquipmentAvailabilityPanel />
       </div>
 
       {/* Submit Buttons */}
