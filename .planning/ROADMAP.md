@@ -2,7 +2,7 @@
 
 ## Overview
 
-RowOps v1 transforms an existing administrative app into an operational platform where coaches can plan practices with lineups and equipment, and athletes know where to be and what boat they're in. The roadmap follows research-recommended sequencing: security fixes first, then scheduling, lineups, PWA infrastructure, and finally regatta mode which requires all prior capabilities.
+ RowOps v1 transforms an existing administrative app into an operational platform where coaches can plan practices with lineups and equipment, and athletes know where to be and what boat they're in. The roadmap follows research-recommended sequencing: security fixes first, then scheduling, lineups, PWA infrastructure, and finally regatta mode which requires all prior capabilities.
 
 **Core Value:** Coaches can plan practices with lineups and equipment, and athletes know where to be and what boat they're in.
 
@@ -122,6 +122,17 @@ Plans:
 
 **Dependencies:** Phase 3 (lineups/schedules must exist to be cached)
 
+**Plans:** 7 plans
+
+Plans:
+- [ ] 04-01-PLAN.md - PWA foundation with Serwist service worker integration
+- [ ] 04-02-PLAN.md - IndexedDB schema and React hooks using Dexie.js
+- [ ] 04-03-PLAN.md - Offline data sync for schedules and lineups
+- [ ] 04-04-PLAN.md - Push notification infrastructure with VAPID
+- [ ] 04-05-PLAN.md - Background sync queue for offline mutations
+- [ ] 04-06-PLAN.md - Notification triggers for lineup and practice events
+- [ ] 04-07-PLAN.md - Install UX and offline failure handling
+
 **Requirements:**
 | REQ-ID | Description |
 |--------|-------------|
@@ -173,7 +184,7 @@ Plans:
 | 1 - Security & Foundation | Complete | 6 | 6 |
 | 2 - Practice Scheduling | Complete | 6 | 6 |
 | 3 - Lineup Management | Complete | 6 | 6 |
-| 4 - PWA Infrastructure | Not Started | 5 | 0 |
+| 4 - PWA Infrastructure | Planned | 5 | 0 |
 | 5 - Regatta Mode | Not Started | 8 | 0 |
 
 **Total:** 18/31 requirements completed (58%)
@@ -199,3 +210,4 @@ Phases that may need deeper research during planning:
 *Phase 2 complete: 2026-01-21*
 *Phase 3 planned: 2026-01-21*
 *Phase 3 complete: 2026-01-21*
+*Phase 4 planned: 2026-01-21*
