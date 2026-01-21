@@ -11,13 +11,13 @@
 | Field | Value |
 |-------|-------|
 | Phase | 1 of 5 (Security & Foundation) |
-| Plan | 2 of 5 complete |
+| Plan | 4 of 5 complete |
 | Status | In progress |
-| Last activity | 2026-01-21 - Completed 01-02-PLAN.md |
+| Last activity | 2026-01-21 - Completed 01-04-PLAN.md |
 
 **Progress:**
 ```
-Phase 1: [####......] 40% (2/5 plans)
+Phase 1: [########..] 80% (4/5 plans)
 Phase 2: [..........] 0%
 Phase 3: [..........] 0%
 Phase 4: [..........] 0%
@@ -31,7 +31,7 @@ Overall:  [..........] 0/31 requirements
 | Metric | Value |
 |--------|-------|
 | Requirements completed | 0/31 |
-| Plans completed | 2 |
+| Plans completed | 4 |
 | Plans failed | 0 |
 | Blockers resolved | 0 |
 
@@ -49,6 +49,10 @@ Overall:  [..........] 0/31 requirements
 | Error refs only on 500s | Auth/permission errors (401/403/404) don't need refs since they're expected states | 1 |
 | Rate limit before auth | For anonymous endpoints, rate limit check runs before auth to prevent brute-force even without valid credentials | 1 |
 | Graceful rate limit fallback | When Upstash env vars not configured, rate limiting disabled (not broken) for development-friendly behavior | 1 |
+| Soft delete seasons by archiving | Preserve historical data and relationships (practices, regattas, eligibility) | 1 |
+| Multiple active seasons allowed | Teams may run overlapping programs (Fall Racing, Novice Training) | 1 |
+| Athletes see missing requirements | Clear visibility into what's blocking eligibility improves athlete experience | 1 |
+| Upsert on eligibility PATCH | Creates record if not exists, simplifying coach workflow | 1 |
 
 ### Architecture Notes
 
@@ -75,6 +79,8 @@ Overall:  [..........] 0/31 requirements
 | Team guard | `if (!claims?.team_id) return forbiddenResponse('No team associated with user');` | Team-scoped routes |
 | Role guard | `if (claims.user_role !== 'COACH') return forbiddenResponse('Only coaches can...');` | Coach-only routes |
 | Rate-limit-first | `const clientIp = getClientIp(request); const rateLimit = await checkRateLimit(clientIp, 'action');` | Anonymous/sensitive endpoints |
+| Soft-delete-archive | `status: 'ARCHIVED'` instead of hard delete | Season, Equipment |
+| Role-based-visibility | Different data returned based on user_role (coach sees all, athlete sees self) | Eligibility endpoints |
 
 ### Todos
 
@@ -89,23 +95,20 @@ Overall:  [..........] 0/31 requirements
 ### Last Session
 
 - **Date:** 2026-01-21
-- **Activity:** Executed 01-02-PLAN.md (Rate limiting for sensitive endpoints)
-- **Outcome:** Rate limiting at 10/hour per IP for damage-reports and join endpoints
+- **Activity:** Executed 01-04-PLAN.md (Eligibility Management API)
+- **Outcome:** Eligibility API endpoints with role-based visibility
 
 ### Next Actions
 
-1. Execute 01-03-PLAN.md (Tenant isolation audit)
-2. Phase 1 remaining: tenant isolation audit, season model, eligibility
+1. Execute 01-05-PLAN.md (remaining Phase 1 plan)
+2. Phase 1 remaining: 1 plan
 
 ### Files Modified This Session
 
-- `src/lib/rate-limit/index.ts` (created)
-- `.env.example` (created)
-- `src/app/api/equipment/[id]/damage-reports/route.ts` (modified)
-- `src/app/api/join/route.ts` (modified)
-- `.gitignore` (modified)
-- `package.json` (modified)
-- `.planning/phases/01-security-foundation/01-02-SUMMARY.md` (created)
+- `src/lib/validations/eligibility.ts` (created)
+- `src/app/api/seasons/[id]/eligibility/route.ts` (created)
+- `src/app/api/seasons/[id]/eligibility/[athleteId]/route.ts` (created)
+- `.planning/phases/01-security-foundation/01-04-SUMMARY.md` (created)
 
 ---
 
