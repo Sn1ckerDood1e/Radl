@@ -11,27 +11,27 @@
 | Field | Value |
 |-------|-------|
 | Phase | 3 of 5 (Lineup Management) |
-| Plan | 3 of 6 |
+| Plan | 4 of 6 |
 | Status | In progress |
-| Last activity | 2026-01-21 - Completed 03-09-PLAN.md (DEBT-02) |
+| Last activity | 2026-01-21 - Completed 03-03-PLAN.md |
 
 **Progress:**
 ```
 Phase 1: [##########] 100% (5/5 plans) COMPLETE
 Phase 2: [##########] 100% (8/8 plans) COMPLETE
-Phase 3: [#####.....] 50% (3/6 plans)
+Phase 3: [######....] 67% (4/6 plans)
 Phase 4: [..........] 0%
 Phase 5: [..........] 0%
 
-Overall:  [#######... ] 16/24 plans (67%)
+Overall:  [#######...] 17/24 plans (71%)
 ```
 
 ## Performance Metrics
 
 | Metric | Value |
 |--------|-------|
-| Requirements completed | 16/31 |
-| Plans completed | 16 |
+| Requirements completed | 17/31 |
+| Plans completed | 17 |
 | Plans failed | 0 |
 | Blockers resolved | 0 |
 
@@ -77,6 +77,8 @@ Overall:  [#######... ] 16/24 plans (67%)
 | Component extraction pattern | Extract based on semantic cohesion, not arbitrary line counts | 3 |
 | Custom hooks for stateful logic | CSV parsing, form submission logic moved to hooks for reusability | 3 |
 | Utility modules for pure functions | Date/time formatting extracted to shared utilities | 3 |
+| Idempotent usage logging | createUsageLog checks for existing log by equipmentId + practiceId | 3 |
+| Usage logs as supplementary data | Usage log operations wrapped in try-catch, failures don't block main operations | 3 |
 
 ### Architecture Notes
 
@@ -132,6 +134,8 @@ Overall:  [#######... ] 16/24 plans (67%)
 | CSV parsing hook | useCSVParser encapsulates file parsing, validation, state management | src/hooks/use-csv-parser.ts |
 | Date-time utilities | Shared formatters for HTML inputs and API payloads | src/lib/utils/date-time-helpers.ts |
 | Form sub-components | Extract self-contained UI sections (ShellFields, LogoUploadField, ColorPickerFields) | src/components/forms/, src/components/equipment/ |
+| Automatic resource usage tracking | createUsageLog called after boat assignment, deleteUsageLogForLineup on cleanup | src/lib/equipment/usage-logger.ts, lineup API routes |
+| Supplementary data pattern | Usage log failures don't block primary operations, wrapped in try-catch with warnings | All lineup API routes |
 
 ### Todos
 
@@ -188,9 +192,9 @@ All 6 requirements for Phase 2 verified complete:
 |------|-------------|--------|
 | 03-01 | Lineup data models and validation schemas | COMPLETE |
 | 03-02 | Lineup CRUD API | COMPLETE |
-| 03-03 | Lineup editor UI | Not started |
-| 03-04 | Template system for lineups | Not started |
-| 03-08 | Template application flow | Not started |
+| 03-03 | Equipment usage logging | COMPLETE |
+| 03-04 | Lineup editor UI | Not started |
+| 03-05 | Template system for lineups | Not started |
 | 03-09 | Form component refactoring (DEBT-02) | COMPLETE |
 
 ## Session Continuity
@@ -198,34 +202,29 @@ All 6 requirements for Phase 2 verified complete:
 ### Last Session
 
 - **Date:** 2026-01-21
-- **Activity:** Executed 03-09-PLAN.md (Form component refactoring - DEBT-02)
-- **Outcome:** Refactored 5 forms, extracted 6 components, created custom hooks and utilities
+- **Activity:** Executed 03-03-PLAN.md (Equipment usage logging)
+- **Outcome:** Auto-logging for boat assignments, usage query APIs, EQUIP-01 requirement complete
 
 ### Next Actions
 
-1. Continue Phase 3: Execute 03-03 (Lineup editor UI)
+1. Continue Phase 3: Execute 03-04 (Lineup editor UI)
 2. Build lineup editor with drag-and-drop integration
 3. Create template system for lineups
 
 ### Files Modified This Session
 
 **Created:**
-- `src/components/equipment/shell-fields.tsx` (Shell-specific form fields)
-- `src/hooks/use-csv-parser.ts` (CSV parsing hook)
-- `src/components/forms/csv-preview-table.tsx` (CSV preview table)
-- `src/lib/utils/date-time-helpers.ts` (Date/time utilities)
-- `src/components/forms/logo-upload-field.tsx` (Logo upload component)
-- `src/components/forms/color-picker-fields.tsx` (Color picker component)
-- `.planning/phases/03-lineup-management/03-09-SUMMARY.md` (created)
+- `src/lib/equipment/usage-logger.ts` (Usage logging helper functions)
+- `src/app/api/equipment-usage/route.ts` (Team-wide usage log listing)
+- `src/app/api/equipment/[id]/usage/route.ts` (Equipment-specific usage history)
+- `.planning/phases/03-lineup-management/03-03-SUMMARY.md` (completed)
 
 **Modified:**
-- `src/components/equipment/equipment-form.tsx` (325 → 278 lines)
-- `src/components/forms/csv-import-form.tsx` (287 → 181 lines)
-- `src/components/practices/practice-form.tsx` (300 → 303 lines)
-- `src/components/forms/create-team-form.tsx` (223 → 151 lines)
-- `src/components/forms/invite-member-form.tsx` (185 → 196 lines)
+- `src/app/api/lineups/route.ts` (Added usage log creation on POST)
+- `src/app/api/lineups/[id]/route.ts` (Added boat change tracking for usage logs)
+- `src/app/api/practices/[id]/blocks/[blockId]/lineup/route.ts` (Added usage log handling for PUT)
 - `.planning/STATE.md` (updated)
 
 ---
 
-*Last updated: 2026-01-21 (Phase 3 in progress - 3/6 plans complete)*
+*Last updated: 2026-01-21 (Phase 3 in progress - 4/6 plans complete)*
