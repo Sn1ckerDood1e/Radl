@@ -57,8 +57,8 @@ Plans:
 - [x] 02-04-PLAN.md - Template system API (practice and block templates)
 - [x] 02-05-PLAN.md - Practice management UI with block editor
 - [x] 02-06-PLAN.md - Unified calendar view with equipment availability
-- [ ] 02-07-PLAN.md - Template system UI (gap closure)
-- [ ] 02-08-PLAN.md - Equipment availability in practice form (gap closure)
+- [x] 02-07-PLAN.md - Template system UI (gap closure)
+- [x] 02-08-PLAN.md - Equipment availability in practice form (gap closure)
 
 **Requirements:**
 | REQ-ID | Description |
@@ -158,12 +158,12 @@ Plans:
 | Phase | Status | Requirements | Completed |
 |-------|--------|--------------|-----------|
 | 1 - Security & Foundation | Complete | 6 | 6 |
-| 2 - Practice Scheduling | Gap Closure | 6 | 4 |
+| 2 - Practice Scheduling | Complete | 6 | 6 |
 | 3 - Lineup Management | Not Started | 6 | 0 |
 | 4 - PWA Infrastructure | Not Started | 5 | 0 |
 | 5 - Regatta Mode | Not Started | 8 | 0 |
 
-**Total:** 10/31 requirements completed (32%)
+**Total:** 12/31 requirements completed (39%)
 
 ---
 
@@ -183,4 +183,4 @@ Phases that may need deeper research during planning:
 *Coverage: 31/31 requirements mapped*
 *Phase 1 planned: 2026-01-20*
 *Phase 2 planned: 2026-01-21*
-*Phase 2 gap closure: 2026-01-21*
+*Phase 2 complete: 2026-01-21*
