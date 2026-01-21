@@ -3,6 +3,7 @@ import { prisma } from '@/lib/prisma';
 import { getClaimsForApiRoute } from '@/lib/auth/claims';
 import { unauthorizedResponse, forbiddenResponse, notFoundResponse, serverErrorResponse } from '@/lib/errors';
 import { updateLineupSchema } from '@/lib/validations/lineup';
+import { createUsageLog, deleteUsageLogForLineup } from '@/lib/equipment/usage-logger';
 
 interface RouteParams {
   params: Promise<{ id: string }>;
@@ -85,6 +86,13 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
           },
         },
       },
+      include: {
+        block: {
+          include: {
+            practice: true,
+          },
+        },
+      },
     });
 
     if (!existingLineup) return notFoundResponse('Lineup');
@@ -126,6 +134,10 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
         );
       }
     }
+
+    // Handle boat assignment changes for usage logging
+    const oldBoatId = existingLineup.boatId;
+    const newBoatId = data.boatId !== undefined ? data.boatId : oldBoatId;
 
     // Use transaction for atomic update
     const lineup = await prisma.$transaction(async (tx) => {
@@ -182,6 +194,38 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
       });
     });
 
+    // Handle usage log changes after transaction completes
+    try {
+      // Boat changed from null to value: create usage log
+      if (!oldBoatId && newBoatId) {
+        await createUsageLog({
+          equipmentId: newBoatId,
+          teamId: claims.team_id,
+          practiceId: existingLineup.block.practice.id,
+          lineupId: id,
+          usageDate: existingLineup.block.practice.date,
+        });
+      }
+      // Boat changed from value to null: delete usage log
+      else if (oldBoatId && !newBoatId) {
+        await deleteUsageLogForLineup(id);
+      }
+      // Boat changed to different boat: delete old, create new
+      else if (oldBoatId && newBoatId && oldBoatId !== newBoatId) {
+        await deleteUsageLogForLineup(id);
+        await createUsageLog({
+          equipmentId: newBoatId,
+          teamId: claims.team_id,
+          practiceId: existingLineup.block.practice.id,
+          lineupId: id,
+          usageDate: existingLineup.block.practice.date,
+        });
+      }
+    } catch (error) {
+      // Log warning but don't fail the request - usage logs are supplementary
+      console.warn('Failed to update usage log:', error);
+    }
+
     return NextResponse.json({ lineup });
   } catch (error) {
     return serverErrorResponse(error, 'lineups/[id]:PATCH');
@@ -210,6 +254,14 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
     });
 
     if (!lineup) return notFoundResponse('Lineup');
+
+    // Delete usage logs before deleting lineup
+    try {
+      await deleteUsageLogForLineup(id);
+    } catch (error) {
+      // Log warning but continue with lineup deletion
+      console.warn('Failed to delete usage log:', error);
+    }
 
     // Delete lineup (seats cascade via Prisma schema)
     await prisma.lineup.delete({

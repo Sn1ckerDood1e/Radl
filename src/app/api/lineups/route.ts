@@ -3,6 +3,7 @@ import { prisma } from '@/lib/prisma';
 import { getClaimsForApiRoute } from '@/lib/auth/claims';
 import { unauthorizedResponse, forbiddenResponse, notFoundResponse, serverErrorResponse } from '@/lib/errors';
 import { createLineupSchema } from '@/lib/validations/lineup';
+import { createUsageLog } from '@/lib/equipment/usage-logger';
 
 // POST: Create new lineup for a water block
 export async function POST(request: NextRequest) {
@@ -130,6 +131,22 @@ export async function POST(request: NextRequest) {
         block: true,
       },
     });
+
+    // Create usage log if boat was assigned
+    if (boatId) {
+      try {
+        await createUsageLog({
+          equipmentId: boatId,
+          teamId: claims.team_id,
+          practiceId: block.practice.id,
+          lineupId: lineup.id,
+          usageDate: block.practice.date,
+        });
+      } catch (error) {
+        // Log warning but don't fail the request - usage logs are supplementary
+        console.warn('Failed to create usage log:', error);
+      }
+    }
 
     return NextResponse.json({ lineup }, { status: 201 });
   } catch (error) {

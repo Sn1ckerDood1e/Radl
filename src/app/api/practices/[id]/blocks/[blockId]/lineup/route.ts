@@ -3,6 +3,7 @@ import { prisma } from '@/lib/prisma';
 import { getClaimsForApiRoute } from '@/lib/auth/claims';
 import { unauthorizedResponse, forbiddenResponse, notFoundResponse, serverErrorResponse } from '@/lib/errors';
 import { createLineupSchema } from '@/lib/validations/lineup';
+import { createUsageLog, deleteUsageLogForLineup } from '@/lib/equipment/usage-logger';
 
 interface RouteParams {
   params: Promise<{ id: string; blockId: string }>;
@@ -162,7 +163,10 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
         where: { blockId },
       });
 
-      // If exists, delete it
+      // Track old boat for usage log cleanup
+      const oldBoatId = existing?.boatId;
+
+      // If exists, delete it (and its usage logs will be handled after)
       if (existing) {
         await tx.lineup.delete({
           where: { blockId },
@@ -170,7 +174,7 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
       }
 
       // Create new lineup with seats
-      return await tx.lineup.create({
+      const newLineup = await tx.lineup.create({
         data: {
           blockId,
           boatId: boatId || null,
@@ -198,9 +202,40 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
           boat: true,
         },
       });
+
+      return { lineup: newLineup, oldBoatId };
     });
 
-    return NextResponse.json({ lineup }, { status: 200 });
+    // Handle usage log changes after transaction completes
+    try {
+      // If old lineup had a boat, delete its usage log
+      if (lineup.oldBoatId) {
+        // Note: deleteUsageLogForLineup uses lineupId, but old lineup is deleted
+        // We need to delete by equipment + practice instead
+        await prisma.equipmentUsageLog.deleteMany({
+          where: {
+            equipmentId: lineup.oldBoatId,
+            practiceId,
+          },
+        });
+      }
+
+      // If new lineup has a boat, create usage log
+      if (boatId) {
+        await createUsageLog({
+          equipmentId: boatId,
+          teamId: claims.team_id,
+          practiceId,
+          lineupId: lineup.lineup.id,
+          usageDate: practice.date,
+        });
+      }
+    } catch (error) {
+      // Log warning but don't fail the request - usage logs are supplementary
+      console.warn('Failed to update usage log:', error);
+    }
+
+    return NextResponse.json({ lineup: lineup.lineup }, { status: 200 });
   } catch (error) {
     return serverErrorResponse(error, 'practices/[id]/blocks/[blockId]/lineup:PUT');
   }
