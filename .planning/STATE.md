@@ -4,34 +4,34 @@
 
 **Core Value:** Coaches can plan practices with lineups and equipment, and athletes know where to be and what boat they're in.
 
-**Current Focus:** Phase 2 - Practice Scheduling (Plans 01-05 complete)
+**Current Focus:** Phase 2 - Practice Scheduling (Plans 01-08 complete, gap closure)
 
 ## Current Position
 
 | Field | Value |
 |-------|-------|
 | Phase | 2 of 5 (Practice Scheduling) |
-| Plan | 5 of 6 complete |
+| Plan | 8 of 8 complete (gap closure) |
 | Status | In progress |
-| Last activity | 2026-01-21 - Completed 02-05-PLAN.md |
+| Last activity | 2026-01-21 - Completed 02-08-PLAN.md |
 
 **Progress:**
 ```
 Phase 1: [##########] 100% (5/5 plans) COMPLETE
-Phase 2: [########..] 83% (5/6 plans)
+Phase 2: [##########] 100% (8/8 plans) COMPLETE
 Phase 3: [..........] 0%
 Phase 4: [..........] 0%
 Phase 5: [..........] 0%
 
-Overall:  [#####..... ] 11/31 requirements (35%)
+Overall:  [######.... ] 13/31 requirements (42%)
 ```
 
 ## Performance Metrics
 
 | Metric | Value |
 |--------|-------|
-| Requirements completed | 11/31 |
-| Plans completed | 10 |
+| Requirements completed | 13/31 |
+| Plans completed | 13 |
 | Plans failed | 0 |
 | Blockers resolved | 0 |
 
@@ -106,6 +106,7 @@ Overall:  [#####..... ] 11/31 requirements (35%)
 | Replace-all blocks | PATCH with blocks array deletes all and recreates | src/app/api/practice-templates/[id]/route.ts |
 | Block editor pattern | Nested component managing array state with tempId for unsaved items | src/components/practices/block-editor.tsx |
 | View/edit toggle | Client component with isEditing state for detail pages | src/app/(dashboard)/[teamSlug]/practices/[id]/practice-detail-client.tsx |
+| Lazy-load panel | Fetch data only when panel expanded, track hasFetched state | src/components/practices/equipment-availability-panel.tsx |
 
 ### Todos
 
@@ -137,33 +138,31 @@ All 6 requirements for Phase 1 verified complete:
 | 02-03 | Equipment Readiness API | COMPLETE |
 | 02-04 | Template system API | COMPLETE |
 | 02-05 | Practice management UI | COMPLETE |
-| 02-06 | Calendar UI | Pending |
+| 02-06 | Calendar UI | COMPLETE |
+| 02-07 | Practice visibility and navigation | COMPLETE |
+| 02-08 | Equipment availability panel | COMPLETE |
+
+**Phase 2 Complete** - All gap closure plans executed.
 
 ## Session Continuity
 
 ### Last Session
 
 - **Date:** 2026-01-21
-- **Activity:** Executed 02-05-PLAN.md (Practice management UI)
-- **Outcome:** Practice list, create, and detail pages with block editor components
+- **Activity:** Executed 02-08-PLAN.md (Equipment availability panel)
+- **Outcome:** Collapsible equipment availability panel integrated into practice form
 
 ### Next Actions
 
-1. Continue Phase 2: Practice Scheduling
-2. Plan 02-06: Calendar UI (final plan for Phase 2)
+1. Begin Phase 3: Lineups
+2. Equipment assignment now possible with visibility foundation
 
 ### Files Modified This Session
 
-- `src/components/practices/block-card.tsx` (created - Block display component)
-- `src/components/practices/block-editor.tsx` (created - Block sequence management)
-- `src/components/practices/practice-form.tsx` (created - Create/edit form)
-- `src/app/(dashboard)/[teamSlug]/practices/page.tsx` (created - Practice list)
-- `src/app/(dashboard)/[teamSlug]/practices/new/page.tsx` (created - Create practice)
-- `src/app/(dashboard)/[teamSlug]/practices/[id]/page.tsx` (created - Practice detail)
-- `src/app/(dashboard)/[teamSlug]/practices/[id]/practice-detail-client.tsx` (created - View/edit client)
-- `src/lib/validations/practice.ts` (modified - Added form schema)
-- `.planning/phases/02-practice-scheduling/02-05-SUMMARY.md` (created)
+- `src/components/practices/equipment-availability-panel.tsx` (created - Collapsible equipment status panel)
+- `src/components/practices/practice-form.tsx` (modified - Added Equipment Status section)
+- `.planning/phases/02-practice-scheduling/02-08-SUMMARY.md` (created)
 
 ---
 
-*Last updated: 2026-01-21 (02-05 complete)*
+*Last updated: 2026-01-21 (02-08 complete, Phase 2 complete)*
