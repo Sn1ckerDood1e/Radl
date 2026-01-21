@@ -107,6 +107,8 @@ Overall:  [######.... ] 13/31 requirements (42%)
 | Block editor pattern | Nested component managing array state with tempId for unsaved items | src/components/practices/block-editor.tsx |
 | View/edit toggle | Client component with isEditing state for detail pages | src/app/(dashboard)/[teamSlug]/practices/[id]/practice-detail-client.tsx |
 | Lazy-load panel | Fetch data only when panel expanded, track hasFetched state | src/components/practices/equipment-availability-panel.tsx |
+| Template UI pattern | List/detail/form pages mirroring practice UI structure | src/app/(dashboard)/[teamSlug]/practice-templates/ |
+| Apply template flow | Select template -> pick date -> POST to apply endpoint | src/components/templates/apply-template-section.tsx |
 
 ### Todos
 
@@ -149,20 +151,27 @@ All 6 requirements for Phase 1 verified complete:
 ### Last Session
 
 - **Date:** 2026-01-21
-- **Activity:** Executed 02-08-PLAN.md (Equipment availability panel)
-- **Outcome:** Collapsible equipment availability panel integrated into practice form
+- **Activity:** Executed 02-07-PLAN.md (Practice Templates UI)
+- **Outcome:** Template management UI with list/create/edit pages, Save as Template, Apply Template
 
 ### Next Actions
 
-1. Begin Phase 3: Lineups
-2. Equipment assignment now possible with visibility foundation
+1. Continue Phase 2 gap closure if needed
+2. Begin Phase 3: Lineups
 
 ### Files Modified This Session
 
-- `src/components/practices/equipment-availability-panel.tsx` (created - Collapsible equipment status panel)
-- `src/components/practices/practice-form.tsx` (modified - Added Equipment Status section)
-- `.planning/phases/02-practice-scheduling/02-08-SUMMARY.md` (created)
+- `src/components/templates/template-card.tsx` (created - Card component with time/block display)
+- `src/components/templates/template-form.tsx` (created - Create/edit form with BlockEditor)
+- `src/components/templates/apply-template-section.tsx` (created - Client component for apply flow)
+- `src/app/(dashboard)/[teamSlug]/practice-templates/page.tsx` (created - Template list)
+- `src/app/(dashboard)/[teamSlug]/practice-templates/new/page.tsx` (created - Create template)
+- `src/app/(dashboard)/[teamSlug]/practice-templates/[id]/page.tsx` (created - Template detail)
+- `src/app/(dashboard)/[teamSlug]/practice-templates/[id]/template-detail-client.tsx` (created - View/edit toggle)
+- `src/app/(dashboard)/[teamSlug]/practices/[id]/practice-detail-client.tsx` (modified - Save as Template button)
+- `src/app/(dashboard)/[teamSlug]/practices/new/page.tsx` (modified - Template selector)
+- `.planning/phases/02-practice-scheduling/02-07-SUMMARY.md` (created)
 
 ---
 
-*Last updated: 2026-01-21 (02-08 complete, Phase 2 complete)*
+*Last updated: 2026-01-21 (02-07 complete)*
