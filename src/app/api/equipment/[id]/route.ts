@@ -3,12 +3,13 @@ import { prisma } from '@/lib/prisma';
 import { updateEquipmentSchema } from '@/lib/validations/equipment';
 import { getClaimsForApiRoute } from '@/lib/auth/claims';
 import { unauthorizedResponse, forbiddenResponse, notFoundResponse, serverErrorResponse } from '@/lib/errors';
+import { computeEquipmentReadiness } from '@/lib/equipment/readiness';
 
 interface RouteParams {
   params: Promise<{ id: string }>;
 }
 
-// GET: Get single equipment with damage reports
+// GET: Get single equipment with damage reports and readiness status
 export async function GET(request: NextRequest, { params }: RouteParams) {
   try {
     const { id } = await params;
@@ -18,6 +19,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
     if (!claims?.team_id) return forbiddenResponse('No team associated with user');
 
     // Find equipment by id AND teamId for RLS compliance
+    // Include open damage reports for readiness computation
     const equipment = await prisma.equipment.findFirst({
       where: {
         id,
@@ -25,14 +27,29 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       },
       include: {
         damageReports: {
-          orderBy: { createdAt: 'desc' },
+          where: { status: 'OPEN' },
+          select: { id: true, description: true, location: true },
         },
       },
     });
 
     if (!equipment) return notFoundResponse('Equipment');
 
-    return NextResponse.json({ equipment });
+    // Compute readiness status
+    const equipmentWithReadiness = computeEquipmentReadiness(equipment);
+
+    // Also fetch full damage report history for the detail view
+    const fullDamageReports = await prisma.damageReport.findMany({
+      where: { equipmentId: id },
+      orderBy: { createdAt: 'desc' },
+    });
+
+    return NextResponse.json({
+      equipment: {
+        ...equipmentWithReadiness,
+        damageReports: fullDamageReports,
+      },
+    });
   } catch (error) {
     return serverErrorResponse(error, 'equipment/[id]:GET');
   }
@@ -59,38 +76,50 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
       );
     }
 
-    const data = validationResult.data;
+    // Build update data, clearing note when marking available
+    const updateData = { ...validationResult.data };
+    if (updateData.manualUnavailable === false) {
+      updateData.manualUnavailableNote = null;
+    }
 
-    // Update equipment WHERE id AND teamId match
-    const equipment = await prisma.equipment.updateMany({
-      where: {
-        id,
-        teamId: claims.team_id,
-      },
-      data: {
-        type: data.type,
-        name: data.name,
-        manufacturer: data.manufacturer,
-        serialNumber: data.serialNumber,
-        yearAcquired: data.yearAcquired,
-        purchasePrice: data.purchasePrice,
-        status: data.status,
-        notes: data.notes,
-        boatClass: data.boatClass,
-        weightCategory: data.weightCategory,
-      },
+    // Verify equipment exists and belongs to team
+    const existing = await prisma.equipment.findFirst({
+      where: { id, teamId: claims.team_id },
     });
 
-    if (equipment.count === 0) return notFoundResponse('Equipment');
+    if (!existing) return notFoundResponse('Equipment');
 
-    // Fetch the updated equipment to return
-    const updatedEquipment = await prisma.equipment.findUnique({
+    // Update equipment with readiness fields included
+    const updatedEquipment = await prisma.equipment.update({
       where: { id },
+      data: {
+        type: updateData.type,
+        name: updateData.name,
+        manufacturer: updateData.manufacturer,
+        serialNumber: updateData.serialNumber,
+        yearAcquired: updateData.yearAcquired,
+        purchasePrice: updateData.purchasePrice,
+        status: updateData.status,
+        notes: updateData.notes,
+        boatClass: updateData.boatClass,
+        weightCategory: updateData.weightCategory,
+        manualUnavailable: updateData.manualUnavailable,
+        manualUnavailableNote: updateData.manualUnavailableNote,
+      },
+      include: {
+        damageReports: {
+          where: { status: 'OPEN' },
+          select: { id: true, description: true, location: true },
+        },
+      },
     });
+
+    // Compute readiness status for response
+    const equipmentWithReadiness = computeEquipmentReadiness(updatedEquipment);
 
     return NextResponse.json({
       success: true,
-      equipment: updatedEquipment,
+      equipment: equipmentWithReadiness,
     });
   } catch (error) {
     return serverErrorResponse(error, 'equipment/[id]:PATCH');
