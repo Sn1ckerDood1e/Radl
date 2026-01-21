@@ -4,34 +4,34 @@
 
 **Core Value:** Coaches can plan practices with lineups and equipment, and athletes know where to be and what boat they're in.
 
-**Current Focus:** Phase 2 - Practice Scheduling (Plans 01-03 complete)
+**Current Focus:** Phase 2 - Practice Scheduling (Plans 01-04 complete)
 
 ## Current Position
 
 | Field | Value |
 |-------|-------|
 | Phase | 2 of 5 (Practice Scheduling) |
-| Plan | 3 of 6 complete |
+| Plan | 4 of 6 complete |
 | Status | In progress |
-| Last activity | 2026-01-21 - Completed 02-03-PLAN.md |
+| Last activity | 2026-01-21 - Completed 02-04-PLAN.md |
 
 **Progress:**
 ```
 Phase 1: [##########] 100% (5/5 plans) COMPLETE
-Phase 2: [#####.....] 50% (3/6 plans)
+Phase 2: [######....] 67% (4/6 plans)
 Phase 3: [..........] 0%
 Phase 4: [..........] 0%
 Phase 5: [..........] 0%
 
-Overall:  [####...... ] 9/31 requirements (29%)
+Overall:  [#####..... ] 10/31 requirements (32%)
 ```
 
 ## Performance Metrics
 
 | Metric | Value |
 |--------|-------|
-| Requirements completed | 9/31 |
-| Plans completed | 8 |
+| Requirements completed | 10/31 |
+| Plans completed | 9 |
 | Plans failed | 0 |
 | Blockers resolved | 0 |
 
@@ -62,6 +62,8 @@ Overall:  [####...... ] 9/31 requirements (29%)
 | Block reorder requires all blocks | Prevents accidental position conflicts and orphaned blocks | 2 |
 | Availability computed at query time | Not stored, derived from manualUnavailable + open damage reports | 2 |
 | Manual note auto-cleared | When marking equipment available, note is set to null | 2 |
+| Copy-on-apply pattern | Applying template creates independent practice, no ongoing link | 2 |
+| Replace-all pattern for template blocks | PATCH with blocks array deletes all and recreates | 2 |
 
 ### Architecture Notes
 
@@ -73,6 +75,7 @@ Overall:  [####...... ] 9/31 requirements (29%)
 - **External API:** Regatta Central v4 (OAuth2, per-team keys)
 - **Error handling:** Route-level error.tsx + global-error.tsx with reference IDs
 - **Practice models:** Practice, PracticeBlock, PracticeTemplate, TemplateBlock, BlockTemplate
+- **Date handling:** date-fns for time manipulation in template application
 
 ### Tech Debt Tracker
 
@@ -99,6 +102,8 @@ Overall:  [####...... ] 9/31 requirements (29%)
 | Computed properties | Derive status from related records at query time | src/lib/equipment/readiness.ts |
 | Nested Prisma create | Parent with children in single create call | src/app/api/practices/route.ts |
 | Atomic position reorder | Use $transaction for position updates | src/app/api/practices/[id]/blocks/reorder/route.ts |
+| Copy-on-apply | Template.apply copies data, no ongoing link | src/app/api/practice-templates/apply/route.ts |
+| Replace-all blocks | PATCH with blocks array deletes all and recreates | src/app/api/practice-templates/[id]/route.ts |
 
 ### Todos
 
@@ -126,10 +131,10 @@ All 6 requirements for Phase 1 verified complete:
 | Plan | Description | Status |
 |------|-------------|--------|
 | 02-01 | Data models for Practice, Blocks, Templates | COMPLETE |
-| 02-02 | Practice CRUD API | COMPLETE (filled) |
+| 02-02 | Practice CRUD API | COMPLETE |
 | 02-03 | Equipment Readiness API | COMPLETE |
-| 02-04 | Damage reporting integration | Pending |
-| 02-05 | Template system API | Pending |
+| 02-04 | Template system API | COMPLETE |
+| 02-05 | Damage reporting integration | Pending |
 | 02-06 | Calendar UI | Pending |
 
 ## Session Continuity
@@ -137,23 +142,23 @@ All 6 requirements for Phase 1 verified complete:
 ### Last Session
 
 - **Date:** 2026-01-21
-- **Activity:** Executed 02-02-PLAN.md (Practice CRUD API - backfilled)
-- **Outcome:** Practice CRUD API with block management, publish workflow, role-based visibility
+- **Activity:** Executed 02-04-PLAN.md (Template system API)
+- **Outcome:** Practice and block template CRUD with copy-on-apply pattern
 
 ### Next Actions
 
 1. Continue Phase 2: Practice Scheduling
-2. Plan 02-04: Damage reporting integration
+2. Plan 02-05: Damage reporting integration (Wave 3)
 
 ### Files Modified This Session
 
-- `src/app/api/practices/route.ts` (created - GET list, POST create)
-- `src/app/api/practices/[id]/route.ts` (created - GET/PATCH/DELETE)
-- `src/app/api/practices/[id]/publish/route.ts` (created - POST publish)
-- `src/app/api/practices/[id]/blocks/route.ts` (created - POST add, DELETE remove)
-- `src/app/api/practices/[id]/blocks/reorder/route.ts` (created - POST reorder)
-- `.planning/phases/02-practice-scheduling/02-02-SUMMARY.md` (created)
+- `src/app/api/practice-templates/route.ts` (created - GET list, POST create)
+- `src/app/api/practice-templates/[id]/route.ts` (created - GET/PATCH/DELETE)
+- `src/app/api/practice-templates/apply/route.ts` (created - POST apply)
+- `src/app/api/block-templates/route.ts` (created - GET list, POST create)
+- `src/app/api/block-templates/[id]/route.ts` (created - GET/PATCH/DELETE)
+- `.planning/phases/02-practice-scheduling/02-04-SUMMARY.md` (created)
 
 ---
 
-*Last updated: 2026-01-21 (02-02 backfill)*
+*Last updated: 2026-01-21 (02-04 complete)*
