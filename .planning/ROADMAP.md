@@ -48,6 +48,16 @@ Plans:
 
 **Dependencies:** Phase 1 (seasons model required for practice grouping)
 
+**Plans:** 6 plans
+
+Plans:
+- [ ] 02-01-PLAN.md - Data models for Practice, PracticeBlock, templates, and equipment readiness
+- [ ] 02-02-PLAN.md - Practice CRUD API with block management
+- [ ] 02-03-PLAN.md - Equipment readiness state (derived availability)
+- [ ] 02-04-PLAN.md - Template system API (practice and block templates)
+- [ ] 02-05-PLAN.md - Practice management UI with block editor
+- [ ] 02-06-PLAN.md - Unified calendar view with equipment availability
+
 **Requirements:**
 | REQ-ID | Description |
 |--------|-------------|
@@ -146,7 +156,7 @@ Plans:
 | Phase | Status | Requirements | Completed |
 |-------|--------|--------------|-----------|
 | 1 - Security & Foundation | Complete | 6 | 6 |
-| 2 - Practice Scheduling | Not Started | 6 | 0 |
+| 2 - Practice Scheduling | Planned | 6 | 0 |
 | 3 - Lineup Management | Not Started | 6 | 0 |
 | 4 - PWA Infrastructure | Not Started | 5 | 0 |
 | 5 - Regatta Mode | Not Started | 8 | 0 |
@@ -170,3 +180,4 @@ Phases that may need deeper research during planning:
 *Depth: standard (5 phases)*
 *Coverage: 31/31 requirements mapped*
 *Phase 1 planned: 2026-01-20*
+*Phase 2 planned: 2026-01-21*
