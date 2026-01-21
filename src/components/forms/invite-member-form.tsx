@@ -15,10 +15,20 @@ interface InviteMemberFormProps {
   onSuccess?: () => void;
 }
 
+/**
+ * Form for inviting new team members (athletes or parents).
+ * When inviting parents, allows linking to an existing athlete.
+ *
+ * @param teamSlug - Current team's slug for fetching athletes
+ * @param onSuccess - Called after successful invitation
+ */
 export function InviteMemberForm({ teamSlug, onSuccess }: InviteMemberFormProps) {
+  // --- Form State ---
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [submitSuccess, setSubmitSuccess] = useState<string | null>(null);
+
+  // --- Athletes Data (for parent linking) ---
   const [athletes, setAthletes] = useState<Athlete[]>([]);
   const [loadingAthletes, setLoadingAthletes] = useState(false);
 
@@ -37,7 +47,8 @@ export function InviteMemberForm({ teamSlug, onSuccess }: InviteMemberFormProps)
 
   const selectedRole = watch('role');
 
-  // Fetch athletes when role changes to PARENT
+  // --- Effects ---
+  // Fetch athletes when role changes to PARENT (needed for parent-athlete linking)
   useEffect(() => {
     if (selectedRole === 'PARENT') {
       setLoadingAthletes(true);
