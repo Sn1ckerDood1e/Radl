@@ -6,12 +6,12 @@ import { PracticeForm } from '@/components/practices/practice-form';
 
 interface NewPracticePageProps {
   params: Promise<{ teamSlug: string }>;
-  searchParams: Promise<{ seasonId?: string }>;
+  searchParams: Promise<{ seasonId?: string; templateId?: string }>;
 }
 
 export default async function NewPracticePage({ params, searchParams }: NewPracticePageProps) {
   const { teamSlug } = await params;
-  const { seasonId: seasonIdParam } = await searchParams;
+  const { seasonId: seasonIdParam, templateId: templateIdParam } = await searchParams;
 
   // Verify user is a coach
   const { claims } = await requireRole(['COACH']);
@@ -53,6 +53,19 @@ export default async function NewPracticePage({ params, searchParams }: NewPract
     ? seasonIdParam
     : seasons[0].id;
 
+  // Get available templates for this team
+  const templates = await prisma.practiceTemplate.findMany({
+    where: {
+      teamId: team.id,
+    },
+    include: {
+      blocks: {
+        orderBy: { position: 'asc' },
+      },
+    },
+    orderBy: { name: 'asc' },
+  });
+
   return (
     <div className="max-w-2xl mx-auto">
       {/* Breadcrumb */}
@@ -85,6 +98,30 @@ export default async function NewPracticePage({ params, searchParams }: NewPract
             seasons={seasons}
             selectedId={selectedSeasonId}
             teamSlug={teamSlug}
+          />
+        </div>
+      )}
+
+      {/* Template selector if templates exist */}
+      {templates.length > 0 && (
+        <div className="mb-6 p-4 bg-zinc-900 rounded-lg border border-zinc-800">
+          <label className="block text-sm font-medium text-zinc-300 mb-2">
+            Start from template
+          </label>
+          <p className="text-xs text-zinc-500 mb-3">
+            Apply a template to quickly create a practice with a predefined structure
+          </p>
+          <ApplyTemplateSection
+            templates={templates.map(t => ({
+              id: t.id,
+              name: t.name,
+              defaultStartTime: t.defaultStartTime,
+              defaultEndTime: t.defaultEndTime,
+              blockCount: t.blocks.length,
+            }))}
+            seasonId={selectedSeasonId}
+            teamSlug={teamSlug}
+            selectedTemplateId={templateIdParam}
           />
         </div>
       )}
@@ -125,3 +162,6 @@ function SeasonSelector({
     </div>
   );
 }
+
+// Client component for applying templates
+import { ApplyTemplateSection } from '@/components/templates/apply-template-section';

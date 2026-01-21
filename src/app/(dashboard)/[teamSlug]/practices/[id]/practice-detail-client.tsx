@@ -58,6 +58,7 @@ export function PracticeDetailClient({ practice, teamSlug, isCoach }: PracticeDe
   const [isEditing, setIsEditing] = useState(false);
   const [isPublishing, setIsPublishing] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isSavingTemplate, setIsSavingTemplate] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -102,6 +103,42 @@ export function PracticeDetailClient({ practice, teamSlug, isCoach }: PracticeDe
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
       setIsDeleting(false);
+    }
+  };
+
+  const handleSaveAsTemplate = async () => {
+    setIsSavingTemplate(true);
+    setError(null);
+
+    try {
+      // Convert practice to template format
+      const templateData = {
+        name: `${practice.name} Template`,
+        defaultStartTime: new Date(practice.startTime).toTimeString().slice(0, 5),
+        defaultEndTime: new Date(practice.endTime).toTimeString().slice(0, 5),
+        blocks: practice.blocks.map(b => ({
+          type: b.type,
+          durationMinutes: b.durationMinutes,
+          category: b.category,
+          notes: b.notes,
+        })),
+      };
+
+      const response = await fetch('/api/practice-templates', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(templateData),
+      });
+
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || 'Failed to save template');
+
+      // Redirect to template detail
+      router.push(`/${teamSlug}/practice-templates/${result.template.id}`);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An error occurred');
+    } finally {
+      setIsSavingTemplate(false);
     }
   };
 
@@ -182,6 +219,13 @@ export function PracticeDetailClient({ practice, teamSlug, isCoach }: PracticeDe
                 {isPublishing ? 'Publishing...' : 'Publish'}
               </button>
             )}
+            <button
+              onClick={handleSaveAsTemplate}
+              disabled={isSavingTemplate}
+              className="px-4 py-2 rounded-lg text-sm font-medium text-zinc-300 bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isSavingTemplate ? 'Saving...' : 'Save as Template'}
+            </button>
             <button
               onClick={() => setIsEditing(true)}
               className="px-4 py-2 rounded-lg text-sm font-medium text-zinc-300 bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 transition-colors"
