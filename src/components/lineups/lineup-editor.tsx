@@ -1,7 +1,9 @@
 'use client';
 
 import { LandLineupBuilder } from './land-lineup-builder';
+import { WaterLineupBuilder } from './water-lineup-builder';
 import { BoatClass } from '@/generated/prisma';
+import { getSeatsForBoatClass } from '@/lib/lineup/position-labels';
 
 // Define types for different block scenarios
 type BlockType = 'WATER' | 'LAND' | 'ERG';
@@ -22,21 +24,29 @@ interface Boat {
 // Props for WATER blocks
 interface WaterLineupProps {
   blockType: 'WATER';
+  blockId: string;
   athletes: Athlete[];
   boats: Boat[];
-  boatClass?: BoatClass;
+  boatClass: BoatClass; // Required for water blocks
   initialLineup?: {
     id?: string;
     boatId: string | null;
     seats: Array<{
       position: number;
       athleteId: string;
+      side: 'PORT' | 'STARBOARD' | 'NONE';
     }>;
   };
   onSaveLineup: (lineup: {
     boatId: string | null;
-    seats: Array<{ position: number; athleteId: string }>;
+    seats: Array<{
+      position: number;
+      athleteId: string | null;
+      label: string;
+      side: 'PORT' | 'STARBOARD' | 'NONE';
+    }>;
   }) => Promise<void>;
+  existingLineups?: Array<{ boatId: string; practiceId: string; practiceName: string }>;
 }
 
 // Props for LAND/ERG blocks
@@ -70,17 +80,32 @@ export function LineupEditor(props: LineupEditorProps) {
     );
   }
 
-  // Route to WATER builder (not implemented yet - placeholder)
+  // Route to WATER builder
   if (blockType === 'WATER') {
+    // Convert lineup data to seats format if exists
+    const initialSeats = props.initialLineup?.seats.map(s => {
+      // Get seat configuration from boat class to get label
+      const seatConfig = getSeatsForBoatClass(props.boatClass).find(sc => sc.position === s.position);
+
+      return {
+        position: s.position,
+        label: seatConfig?.label || s.position.toString(),
+        side: s.side,
+        athleteId: s.athleteId,
+      };
+    });
+
     return (
-      <div className="flex flex-col items-center justify-center h-64 border border-zinc-800 rounded-lg bg-zinc-900/50">
-        <p className="text-zinc-400 text-sm">
-          Water lineup builder coming soon (Plan 03-05)
-        </p>
-        <p className="text-zinc-600 text-xs mt-2">
-          Will include drag-and-drop seat assignment
-        </p>
-      </div>
+      <WaterLineupBuilder
+        blockId={props.blockId}
+        boatClass={props.boatClass}
+        athletes={athletes}
+        boats={props.boats}
+        initialSeats={initialSeats}
+        initialBoatId={props.initialLineup?.boatId || null}
+        onSave={props.onSaveLineup}
+        existingLineups={props.existingLineups}
+      />
     );
   }
 
