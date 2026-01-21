@@ -2,17 +2,14 @@ import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { requireTeam } from '@/lib/auth/authorize';
 import { prisma } from '@/lib/prisma';
-import { UnifiedCalendar } from '@/components/calendar/unified-calendar';
-import { CreateSeasonForm } from '@/components/seasons/create-season-form';
+import { EquipmentListClient } from './equipment-list-client';
 
-interface SchedulePageProps {
+interface EquipmentPageProps {
   params: Promise<{ teamSlug: string }>;
-  searchParams: Promise<{ seasonId?: string }>;
 }
 
-export default async function SchedulePage({ params, searchParams }: SchedulePageProps) {
+export default async function EquipmentPage({ params }: EquipmentPageProps) {
   const { teamSlug } = await params;
-  const { seasonId } = await searchParams;
 
   // Verify user has a team
   const { claims } = await requireTeam();
@@ -35,20 +32,16 @@ export default async function SchedulePage({ params, searchParams }: SchedulePag
     redirect('/create-team');
   }
 
-  const isCoach = claims.user_role === 'COACH';
-
-  // Get active seasons for this team
-  const seasons = await prisma.season.findMany({
-    where: {
-      teamId: team.id,
-      status: 'ACTIVE',
-    },
-    select: {
-      id: true,
-      name: true,
-    },
-    orderBy: { startDate: 'desc' },
+  // Get all equipment for the team
+  const equipment = await prisma.equipment.findMany({
+    where: { teamId: team.id },
+    orderBy: [
+      { type: 'asc' },
+      { name: 'asc' },
+    ],
   });
+
+  const isCoach = claims.user_role === 'COACH';
 
   return (
     <div className="max-w-6xl mx-auto">
@@ -63,43 +56,36 @@ export default async function SchedulePage({ params, searchParams }: SchedulePag
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
               </svg>
             </Link>
-            <h1 className="text-2xl font-bold text-white">Schedule</h1>
+            <h1 className="text-2xl font-bold text-white">Equipment</h1>
           </div>
           <p className="text-zinc-400">
-            {isCoach ? 'View and manage team schedule' : 'View upcoming practices and regattas'}
+            Manage {team.name}&apos;s shells, oars, and launches
           </p>
         </div>
-        {isCoach && seasons.length > 0 && (
+        {isCoach && (
           <Link
-            href={`/${teamSlug}/practices/new`}
+            href={`/${teamSlug}/equipment/new`}
             className="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-500 transition-colors"
           >
             <svg className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
             </svg>
-            New Practice
+            Add Equipment
           </Link>
         )}
       </div>
 
-      {/* Season creation if no active seasons */}
-      {isCoach && seasons.length === 0 && (
-        <div className="mb-6">
-          <div className="p-4 bg-amber-500/10 border border-amber-500/30 rounded-lg mb-4">
-            <p className="text-amber-400 text-sm">
-              Create a season first to start adding practices and viewing the schedule.
-            </p>
-          </div>
-          <CreateSeasonForm teamSlug={teamSlug} />
-        </div>
-      )}
-
-      {/* Calendar */}
-      <UnifiedCalendar
+      <EquipmentListClient
+        equipment={equipment.map(e => ({
+          id: e.id,
+          type: e.type,
+          name: e.name,
+          manufacturer: e.manufacturer,
+          status: e.status,
+          boatClass: e.boatClass,
+        }))}
         teamSlug={teamSlug}
         isCoach={isCoach}
-        seasons={seasons}
-        initialSeasonId={seasonId}
       />
     </div>
   );

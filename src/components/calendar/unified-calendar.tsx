@@ -168,50 +168,70 @@ export function UnifiedCalendar({
               root: 'w-full',
               months: 'w-full',
               month: 'w-full',
-              month_caption: 'hidden', // We use our own header
-              nav: 'hidden', // We use our own navigation
+              month_caption: 'hidden',
+              nav: 'hidden',
               weekdays: 'grid grid-cols-7 mb-2',
               weekday: 'text-center text-xs font-medium text-zinc-500 py-2',
               weeks: 'w-full',
               week: 'grid grid-cols-7',
-              day: 'p-0 text-center',
-              day_button: `
-                w-full h-10 flex items-center justify-center rounded-lg text-sm
-                text-zinc-300 hover:bg-zinc-800 transition-colors
-                disabled:text-zinc-600 disabled:hover:bg-transparent
-              `,
-              selected: 'bg-emerald-600 text-white hover:bg-emerald-500',
-              today: 'ring-1 ring-emerald-500/50',
-              outside: 'text-zinc-600',
+              day: 'p-1 text-center',
+              day_button: 'calendar-day-btn',
+              selected: 'calendar-selected',
+              today: 'calendar-today',
+              outside: 'calendar-outside',
             }}
           />
-          {/* Custom styles for event indicators */}
           <style jsx global>{`
-            .has-event .rdp-day_button::after {
+            .calendar-day-btn {
+              width: 100%;
+              height: 44px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              border-radius: 8px;
+              font-size: 14px;
+              color: #d4d4d8;
+              transition: background-color 0.15s;
+              position: relative;
+            }
+            .calendar-day-btn:hover {
+              background-color: #3f3f46;
+            }
+            .calendar-day-btn:disabled {
+              color: #52525b;
+            }
+            .calendar-day-btn:disabled:hover {
+              background-color: transparent;
+            }
+            .calendar-outside .calendar-day-btn {
+              color: #52525b;
+            }
+            .calendar-today .calendar-day-btn {
+              background-color: #18181b;
+              border: 2px solid #10b981;
+              font-weight: 600;
+            }
+            .calendar-selected .calendar-day-btn {
+              background-color: #10b981 !important;
+              color: white !important;
+              font-weight: 600;
+            }
+            .calendar-selected .calendar-day-btn:hover {
+              background-color: #059669 !important;
+            }
+            .has-event .calendar-day-btn::after {
               content: '';
-              display: block;
               position: absolute;
-              bottom: 2px;
+              bottom: 4px;
               left: 50%;
               transform: translateX(-50%);
-              width: 4px;
-              height: 4px;
+              width: 6px;
+              height: 6px;
               border-radius: 50%;
               background-color: #10b981;
             }
-            .has-event .rdp-day_button {
-              position: relative;
-            }
-            .selected-day .rdp-day_button {
-              background-color: #10b981 !important;
-              color: white !important;
-            }
-            .selected-day .rdp-day_button:hover {
-              background-color: #059669 !important;
-            }
-            .today-day .rdp-day_button {
-              ring: 1px;
-              ring-color: rgba(16, 185, 129, 0.5);
+            .calendar-selected.has-event .calendar-day-btn::after {
+              background-color: white;
             }
           `}</style>
         </div>

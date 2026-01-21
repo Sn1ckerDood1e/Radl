@@ -1,0 +1,117 @@
+@import "tailwindcss";
+
+:root {
+  /* Default to dark theme */
+  --background: #0a0a0a;
+  --foreground: #ededed;
+
+  /* Team colors (set dynamically) */
+  --team-primary: #10b981;
+  --team-secondary: #6ee7b7;
+
+  /* Zinc palette for dark */
+  --surface-1: #18181b;
+  --surface-2: #27272a;
+  --surface-3: #3f3f46;
+  --border: #3f3f46;
+  --border-subtle: #27272a;
+  --text-primary: #fafafa;
+  --text-secondary: #a1a1aa;
+  --text-muted: #71717a;
+}
+
+.light {
+  --background: #fafafa;
+  --foreground: #18181b;
+
+  /* Zinc palette for light */
+  --surface-1: #ffffff;
+  --surface-2: #f4f4f5;
+  --surface-3: #e4e4e7;
+  --border: #d4d4d8;
+  --border-subtle: #e4e4e7;
+  --text-primary: #18181b;
+  --text-secondary: #52525b;
+  --text-muted: #71717a;
+}
+
+.dark {
+  --background: #0a0a0a;
+  --foreground: #ededed;
+
+  --surface-1: #18181b;
+  --surface-2: #27272a;
+  --surface-3: #3f3f46;
+  --border: #3f3f46;
+  --border-subtle: #27272a;
+  --text-primary: #fafafa;
+  --text-secondary: #a1a1aa;
+  --text-muted: #71717a;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Team color utilities */
+.team-primary-bg {
+  background-color: var(--team-primary);
+}
+
+.team-primary-text {
+  color: var(--team-primary);
+}
+
+.team-primary-border {
+  border-color: var(--team-primary);
+}
+
+.team-secondary-bg {
+  background-color: var(--team-secondary);
+}
+
+.team-secondary-text {
+  color: var(--team-secondary);
+}
+
+/* Theme-aware component styles */
+.theme-surface {
+  background-color: var(--surface-1);
+}
+
+.theme-surface-2 {
+  background-color: var(--surface-2);
+}
+
+.theme-surface-3 {
+  background-color: var(--surface-3);
+}
+
+.theme-border {
+  border-color: var(--border);
+}
+
+.theme-border-subtle {
+  border-color: var(--border-subtle);
+}
+
+.theme-text {
+  color: var(--text-primary);
+}
+
+.theme-text-secondary {
+  color: var(--text-secondary);
+}
+
+.theme-text-muted {
+  color: var(--text-muted);
+}
