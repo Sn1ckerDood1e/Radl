@@ -4,34 +4,34 @@
 
 **Core Value:** Coaches can plan practices with lineups and equipment, and athletes know where to be and what boat they're in.
 
-**Current Focus:** Phase 1 Complete - Ready for Phase 2
+**Current Focus:** Phase 2 - Practice Scheduling (Plan 01 complete)
 
 ## Current Position
 
 | Field | Value |
 |-------|-------|
-| Phase | 1 of 5 (Security & Foundation) |
-| Plan | 5 of 5 complete |
-| Status | Phase 1 COMPLETE |
-| Last activity | 2026-01-21 - Completed 01-05-PLAN.md |
+| Phase | 2 of 5 (Practice Scheduling) |
+| Plan | 1 of 6 complete |
+| Status | In progress |
+| Last activity | 2026-01-21 - Completed 02-01-PLAN.md |
 
 **Progress:**
 ```
 Phase 1: [##########] 100% (5/5 plans) COMPLETE
-Phase 2: [..........] 0%
+Phase 2: [##........] 17% (1/6 plans)
 Phase 3: [..........] 0%
 Phase 4: [..........] 0%
 Phase 5: [..........] 0%
 
-Overall:  [##........ ] 6/31 requirements (19%)
+Overall:  [###....... ] 7/31 requirements (23%)
 ```
 
 ## Performance Metrics
 
 | Metric | Value |
 |--------|-------|
-| Requirements completed | 6/31 |
-| Plans completed | 5 |
+| Requirements completed | 7/31 |
+| Plans completed | 6 |
 | Plans failed | 0 |
 | Blockers resolved | 0 |
 
@@ -55,6 +55,9 @@ Overall:  [##........ ] 6/31 requirements (19%)
 | Upsert on eligibility PATCH | Creates record if not exists, simplifying coach workflow | 1 |
 | Global error uses inline styles | CSS unavailable when layout crashes, so inline styles required | 1 |
 | Error reference IDs for users | Displaying digest helps support workflows without exposing stack traces | 1 |
+| DateTime for practice times | Practice uses full DateTime for startTime/endTime, templates use HH:MM strings | 2 |
+| Position-based block ordering | Blocks use position Int rather than time slots for flexible ordering | 2 |
+| DRAFT/PUBLISHED practice status | DRAFT visible only to coaches, PUBLISHED to all team members | 2 |
 
 ### Architecture Notes
 
@@ -65,6 +68,7 @@ Overall:  [##........ ] 6/31 requirements (19%)
 - **PWA stack:** Serwist (service worker), Dexie.js (IndexedDB), web-push (notifications)
 - **External API:** Regatta Central v4 (OAuth2, per-team keys)
 - **Error handling:** Route-level error.tsx + global-error.tsx with reference IDs
+- **Practice models:** Practice, PracticeBlock, PracticeTemplate, TemplateBlock, BlockTemplate
 
 ### Tech Debt Tracker
 
@@ -86,6 +90,8 @@ Overall:  [##........ ] 6/31 requirements (19%)
 | Role-based-visibility | Different data returned based on user_role (coach sees all, athlete sees self) | Eligibility endpoints |
 | Route error boundary | `'use client'` + useEffect logging + friendly UI with reset | src/app/error.tsx |
 | Global error boundary | Inline styles, html/body wrapper, minimal recovery UI | src/app/global-error.tsx |
+| Position-based ordering | `position Int` field with `[parentId, position]` index | PracticeBlock, TemplateBlock |
+| Template pattern | Template models mirror instance models with default values | PracticeTemplate, BlockTemplate |
 
 ### Todos
 
@@ -108,24 +114,36 @@ All 6 requirements for Phase 1 verified complete:
 | SEASON-02 | Implement season-scoped eligibility | COMPLETE |
 | DEBT-01 | Extract claims helper utility | COMPLETE |
 
+## Phase 2 Progress
+
+| Plan | Description | Status |
+|------|-------------|--------|
+| 02-01 | Data models for Practice, Blocks, Templates | COMPLETE |
+| 02-02 | Practice CRUD API | Pending |
+| 02-03 | Block management API | Pending |
+| 02-04 | Damage reporting integration | Pending |
+| 02-05 | Template system API | Pending |
+| 02-06 | Calendar UI | Pending |
+
 ## Session Continuity
 
 ### Last Session
 
 - **Date:** 2026-01-21
-- **Activity:** Executed 01-05-PLAN.md (Error Boundaries & Verification)
-- **Outcome:** Phase 1 complete - error boundaries created, all security requirements verified
+- **Activity:** Executed 02-01-PLAN.md (Practice Data Models)
+- **Outcome:** Prisma schema extended with Practice, PracticeBlock, templates; Zod validations created
 
 ### Next Actions
 
-1. Begin Phase 2: Practice Scheduling
-2. Plan 02-01: Practice model and time blocks
+1. Continue Phase 2: Practice Scheduling
+2. Plan 02-02: Practice CRUD API
 
 ### Files Modified This Session
 
-- `src/app/error.tsx` (created)
-- `src/app/global-error.tsx` (created)
-- `.planning/phases/01-security-foundation/01-05-SUMMARY.md` (created)
+- `prisma/schema.prisma` (created - Practice, PracticeBlock, PracticeTemplate, TemplateBlock, BlockTemplate, Regatta models)
+- `src/lib/validations/practice.ts` (created)
+- `src/lib/validations/template.ts` (created)
+- `.planning/phases/02-practice-scheduling/02-01-SUMMARY.md` (created)
 
 ---
 
