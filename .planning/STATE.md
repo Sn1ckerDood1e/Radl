@@ -4,34 +4,34 @@
 
 **Core Value:** Coaches can plan practices with lineups and equipment, and athletes know where to be and what boat they're in.
 
-**Current Focus:** Phase 2 - Practice Scheduling (Plan 01 complete)
+**Current Focus:** Phase 2 - Practice Scheduling (Plans 01-03 complete)
 
 ## Current Position
 
 | Field | Value |
 |-------|-------|
 | Phase | 2 of 5 (Practice Scheduling) |
-| Plan | 1 of 6 complete |
+| Plan | 3 of 6 complete |
 | Status | In progress |
-| Last activity | 2026-01-21 - Completed 02-01-PLAN.md |
+| Last activity | 2026-01-21 - Completed 02-03-PLAN.md |
 
 **Progress:**
 ```
 Phase 1: [##########] 100% (5/5 plans) COMPLETE
-Phase 2: [##........] 17% (1/6 plans)
+Phase 2: [#####.....] 50% (3/6 plans)
 Phase 3: [..........] 0%
 Phase 4: [..........] 0%
 Phase 5: [..........] 0%
 
-Overall:  [###....... ] 7/31 requirements (23%)
+Overall:  [####...... ] 9/31 requirements (29%)
 ```
 
 ## Performance Metrics
 
 | Metric | Value |
 |--------|-------|
-| Requirements completed | 7/31 |
-| Plans completed | 6 |
+| Requirements completed | 9/31 |
+| Plans completed | 8 |
 | Plans failed | 0 |
 | Blockers resolved | 0 |
 
@@ -58,6 +58,8 @@ Overall:  [###....... ] 7/31 requirements (23%)
 | DateTime for practice times | Practice uses full DateTime for startTime/endTime, templates use HH:MM strings | 2 |
 | Position-based block ordering | Blocks use position Int rather than time slots for flexible ordering | 2 |
 | DRAFT/PUBLISHED practice status | DRAFT visible only to coaches, PUBLISHED to all team members | 2 |
+| Availability computed at query time | Not stored, derived from manualUnavailable + open damage reports | 2 |
+| Manual note auto-cleared | When marking equipment available, note is set to null | 2 |
 
 ### Architecture Notes
 
@@ -92,6 +94,7 @@ Overall:  [###....... ] 7/31 requirements (23%)
 | Global error boundary | Inline styles, html/body wrapper, minimal recovery UI | src/app/global-error.tsx |
 | Position-based ordering | `position Int` field with `[parentId, position]` index | PracticeBlock, TemplateBlock |
 | Template pattern | Template models mirror instance models with default values | PracticeTemplate, BlockTemplate |
+| Computed properties | Derive status from related records at query time | src/lib/equipment/readiness.ts |
 
 ### Todos
 
@@ -119,8 +122,8 @@ All 6 requirements for Phase 1 verified complete:
 | Plan | Description | Status |
 |------|-------------|--------|
 | 02-01 | Data models for Practice, Blocks, Templates | COMPLETE |
-| 02-02 | Practice CRUD API | Pending |
-| 02-03 | Block management API | Pending |
+| 02-02 | Practice CRUD API | COMPLETE |
+| 02-03 | Equipment Readiness API | COMPLETE |
 | 02-04 | Damage reporting integration | Pending |
 | 02-05 | Template system API | Pending |
 | 02-06 | Calendar UI | Pending |
@@ -130,20 +133,21 @@ All 6 requirements for Phase 1 verified complete:
 ### Last Session
 
 - **Date:** 2026-01-21
-- **Activity:** Executed 02-01-PLAN.md (Practice Data Models)
-- **Outcome:** Prisma schema extended with Practice, PracticeBlock, templates; Zod validations created
+- **Activity:** Executed 02-03-PLAN.md (Equipment Readiness API)
+- **Outcome:** Equipment API returns isAvailable and unavailableReasons; coach can set manual unavailability
 
 ### Next Actions
 
 1. Continue Phase 2: Practice Scheduling
-2. Plan 02-02: Practice CRUD API
+2. Plan 02-04: Damage reporting integration
 
 ### Files Modified This Session
 
-- `prisma/schema.prisma` (created - Practice, PracticeBlock, PracticeTemplate, TemplateBlock, BlockTemplate, Regatta models)
-- `src/lib/validations/practice.ts` (created)
-- `src/lib/validations/template.ts` (created)
-- `.planning/phases/02-practice-scheduling/02-01-SUMMARY.md` (created)
+- `src/lib/equipment/readiness.ts` (created - readiness computation helper)
+- `src/app/api/equipment/route.ts` (updated - GET includes readiness, ?available=true filter)
+- `src/app/api/equipment/[id]/route.ts` (updated - GET/PATCH with readiness)
+- `src/lib/validations/equipment.ts` (updated - manualUnavailable fields)
+- `.planning/phases/02-practice-scheduling/02-03-SUMMARY.md` (created)
 
 ---
 
