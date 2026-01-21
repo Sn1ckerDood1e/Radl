@@ -1,0 +1,404 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// Multi-tenant team model
+model Team {
+  id             String   @id @default(uuid())
+  name           String
+  slug           String   @unique
+  primaryColor   String
+  secondaryColor String
+  logoUrl        String?
+  joinCode       String   @unique // 8-char code for joining
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  members           TeamMember[]
+  invitations       Invitation[]
+  equipment         Equipment[]
+  settings          TeamSettings?
+  seasons           Season[]
+  practices         Practice[]
+  practiceTemplates PracticeTemplate[]
+  blockTemplates    BlockTemplate[]
+  regattas          Regatta[]
+}
+
+// Team membership linking users to teams with roles
+model TeamMember {
+  id        String   @id @default(uuid())
+  teamId    String
+  userId    String // References Supabase auth.users
+  role      Role
+  createdAt DateTime @default(now())
+
+  team           Team            @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  athleteProfile AthleteProfile?
+
+  @@unique([teamId, userId])
+  @@index([userId]) // For RLS query performance
+  @@index([teamId]) // For RLS query performance
+}
+
+// Invitation model for email invites and team code joins
+model Invitation {
+  id         String           @id @default(uuid())
+  teamId     String
+  email      String? // For email invites (nullable for code-based joins)
+  userId     String? // User ID who is requesting to join (for team code joins)
+  role       Role
+  status     InvitationStatus @default(PENDING)
+  invitedBy  String // User ID who created the invite
+  athleteId  String? // For parent invites, links to the athlete
+  createdAt  DateTime         @default(now())
+  acceptedAt DateTime?
+
+  team Team @relation(fields: [teamId], references: [id], onDelete: Cascade)
+
+  @@index([teamId]) // For listing team invitations
+  @@index([email]) // For looking up invitations by email
+  @@index([userId]) // For looking up invitations by user
+}
+
+// Role enum for team members
+enum Role {
+  COACH
+  ATHLETE
+  PARENT
+}
+
+// Invitation status enum
+enum InvitationStatus {
+  PENDING
+  ACCEPTED
+  REVOKED
+}
+
+// Equipment type enum
+enum EquipmentType {
+  SHELL
+  OAR
+  LAUNCH
+  OTHER
+}
+
+// Equipment status enum
+enum EquipmentStatus {
+  ACTIVE
+  INACTIVE
+  RETIRED // For equipment no longer in use but kept for historical records/insurance
+}
+
+// Boat class enum (for shells)
+enum BoatClass {
+  SINGLE_1X
+  DOUBLE_2X
+  PAIR_2_MINUS
+  COXED_PAIR_2_PLUS
+  FOUR_4_MINUS
+  COXED_FOUR_4_PLUS
+  QUAD_4X
+  EIGHT_8_PLUS
+  OTHER
+}
+
+// Weight category enum (for shells)
+enum WeightCategory {
+  LIGHTWEIGHT
+  MIDWEIGHT
+  HEAVYWEIGHT
+}
+
+// Damage report status enum
+enum DamageReportStatus {
+  OPEN
+  RESOLVED
+}
+
+// Side preference enum (for rowers)
+enum Side {
+  PORT
+  STARBOARD
+  BOTH
+}
+
+// Notification type enum
+enum NotificationType {
+  DAMAGE_REPORT
+}
+
+// Season status enum
+enum SeasonStatus {
+  ACTIVE
+  ARCHIVED
+}
+
+// Practice status enum
+enum PracticeStatus {
+  DRAFT     // Only visible to coaches
+  PUBLISHED // Visible to all team members
+}
+
+// Block type enum
+enum BlockType {
+  WATER
+  LAND
+  ERG
+}
+
+// Equipment model for tracking team assets (shells, oars, launches, etc.)
+model Equipment {
+  id                    String          @id @default(uuid())
+  teamId                String
+  type                  EquipmentType
+  name                  String // e.g., "Varsity 8+", "Oar Set A"
+  manufacturer          String?
+  serialNumber          String?
+  yearAcquired          Int?
+  purchasePrice         Decimal? // For insurance purposes
+  status                EquipmentStatus @default(ACTIVE)
+  notes                 String? // For rigging info, etc.
+  // Shell-specific fields
+  boatClass             BoatClass?
+  weightCategory        WeightCategory?
+  // Manual unavailability for practice scheduling
+  manualUnavailable     Boolean         @default(false)
+  manualUnavailableNote String?
+  createdAt             DateTime        @default(now())
+  updatedAt             DateTime        @updatedAt
+
+  team          Team           @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  damageReports DamageReport[]
+
+  @@index([teamId])
+  @@index([teamId, type])
+}
+
+// Damage report model for tracking equipment damage
+model DamageReport {
+  id          String             @id @default(uuid())
+  equipmentId String
+  teamId      String // Denormalized for easier RLS
+  reportedBy  String // userId who reported
+  location    String // Where on equipment
+  description String // What's wrong
+  photoUrl    String? // Supabase Storage URL
+  status      DamageReportStatus @default(OPEN)
+  resolvedAt  DateTime?
+  resolvedBy  String?
+  createdAt   DateTime           @default(now())
+
+  equipment Equipment @relation(fields: [equipmentId], references: [id], onDelete: Cascade)
+
+  @@index([equipmentId])
+  @@index([teamId])
+  @@index([teamId, status])
+}
+
+// Athlete profile model for rowing-specific data
+model AthleteProfile {
+  id             String   @id @default(uuid())
+  teamMemberId   String   @unique
+  displayName    String? // User's display name, set from invite or user input
+  sidePreference Side?
+  canBow         Boolean  @default(false)
+  canCox         Boolean  @default(false)
+  phone          String? // Personal phone
+  emergencyName  String? // Emergency contact name
+  emergencyPhone String? // Emergency contact phone
+  photoUrl       String? // Supabase Storage URL
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  teamMember  TeamMember           @relation(fields: [teamMemberId], references: [id], onDelete: Cascade)
+  eligibility AthleteEligibility[]
+
+  @@index([teamMemberId])
+}
+
+// Notification model for alerts (damage reports, etc.)
+model Notification {
+  id        String           @id @default(uuid())
+  teamId    String
+  userId    String // Recipient
+  type      NotificationType
+  title     String
+  message   String
+  linkUrl   String? // Where to navigate
+  read      Boolean          @default(false)
+  createdAt DateTime         @default(now())
+
+  @@index([userId, read])
+  @@index([teamId])
+}
+
+// Team settings model for configurable team preferences
+model TeamSettings {
+  id                  String   @id @default(uuid())
+  teamId              String   @unique
+  damageNotifyUserIds String[] // Array of userIds to notify on damage reports
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  team Team @relation(fields: [teamId], references: [id], onDelete: Cascade)
+
+  @@index([teamId])
+}
+
+// Season container for practices, regattas, and eligibility
+model Season {
+  id        String       @id @default(uuid())
+  teamId    String
+  name      String       // e.g., "Fall 2026", "Novice Training"
+  startDate DateTime?
+  endDate   DateTime?
+  status    SeasonStatus @default(ACTIVE)
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+
+  team               Team                 @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  athleteEligibility AthleteEligibility[]
+  practices          Practice[]
+  regattas           Regatta[]
+
+  @@index([teamId])
+  @@index([teamId, status])
+}
+
+// Per-season eligibility tracking for athletes
+model AthleteEligibility {
+  id             String  @id @default(uuid())
+  seasonId       String
+  athleteId      String  // References AthleteProfile.id
+
+  isEligible     Boolean @default(false)  // Manual override flag
+  waiverSigned   Boolean @default(false)
+  swimTestPassed Boolean @default(false)
+  customFields   Json    @default("{}")   // Team-defined requirements
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  season  Season         @relation(fields: [seasonId], references: [id], onDelete: Cascade)
+  athlete AthleteProfile @relation(fields: [athleteId], references: [id], onDelete: Cascade)
+
+  @@unique([seasonId, athleteId])
+  @@index([seasonId])
+  @@index([athleteId])
+}
+
+// Practice model for scheduled training sessions
+model Practice {
+  id        String         @id @default(uuid())
+  teamId    String
+  seasonId  String
+  name      String         // e.g., "Tuesday Steady State"
+  date      DateTime       // The practice date
+  startTime DateTime       // Full datetime for start
+  endTime   DateTime       // Full datetime for end
+  status    PracticeStatus @default(DRAFT)
+  notes     String?        // Optional coach notes
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+
+  team   Team            @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  season Season          @relation(fields: [seasonId], references: [id], onDelete: Cascade)
+  blocks PracticeBlock[]
+
+  @@index([teamId])
+  @@index([teamId, seasonId])
+  @@index([teamId, date])
+}
+
+// Practice block for ordered segments within a practice
+model PracticeBlock {
+  id              String    @id @default(uuid())
+  practiceId      String
+  position        Int       // 0, 1, 2... for ordering
+  type            BlockType
+  durationMinutes Int?      // Optional, blocks are ordered not time-slotted
+  category        String?   // e.g., "steady-state", "intervals", "technique"
+  notes           String?   // Block-specific notes
+
+  practice Practice @relation(fields: [practiceId], references: [id], onDelete: Cascade)
+
+  @@index([practiceId, position])
+}
+
+// Practice template for reusable practice structures
+model PracticeTemplate {
+  id               String   @id @default(uuid())
+  teamId           String
+  name             String
+  defaultStartTime String   // Time only, e.g., "06:00"
+  defaultEndTime   String   // Time only, e.g., "08:00"
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  team   Team            @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  blocks TemplateBlock[]
+
+  @@index([teamId])
+}
+
+// Template block for practice templates
+model TemplateBlock {
+  id              String    @id @default(uuid())
+  templateId      String
+  position        Int
+  type            BlockType
+  durationMinutes Int?
+  category        String?
+  notes           String?
+
+  template PracticeTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
+
+  @@index([templateId, position])
+}
+
+// Standalone reusable block for quick insertion
+model BlockTemplate {
+  id              String    @id @default(uuid())
+  teamId          String
+  name            String    // e.g., "5k Erg Test", "Steady State 30min"
+  type            BlockType
+  durationMinutes Int?
+  category        String?
+  notes           String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  team Team @relation(fields: [teamId], references: [id], onDelete: Cascade)
+
+  @@index([teamId, type])
+}
+
+// Regatta model (placeholder for Phase 5)
+model Regatta {
+  id        String    @id @default(uuid())
+  teamId    String
+  seasonId  String
+  name      String
+  location  String?
+  startDate DateTime
+  endDate   DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  team   Team   @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  season Season @relation(fields: [seasonId], references: [id], onDelete: Cascade)
+
+  @@index([teamId])
+  @@index([teamId, seasonId])
+}
