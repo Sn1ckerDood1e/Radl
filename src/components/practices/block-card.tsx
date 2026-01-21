@@ -40,7 +40,7 @@ export function BlockCard({
   canMoveDown = true,
   dragHandleProps,
 }: BlockCardProps) {
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(true); // Start expanded so users can see edit fields
   const config = blockTypeConfig[block.type];
 
   const inputClassName = "mt-1 block w-full rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-2 text-zinc-100 placeholder-zinc-500 shadow-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 text-sm";

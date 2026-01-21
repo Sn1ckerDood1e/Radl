@@ -98,9 +98,9 @@ export function UnifiedCalendar({
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-6">
       {/* Calendar section */}
-      <div className="lg:col-span-2">
+      <div className="min-w-0">
         {/* Season selector */}
         {seasons.length > 1 && (
           <div className="mb-4">
@@ -238,7 +238,7 @@ export function UnifiedCalendar({
       </div>
 
       {/* Selected day events */}
-      <div className="lg:col-span-1">
+      <div>
         <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-4 sticky top-4">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-semibold text-white">

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
@@ -70,6 +70,7 @@ export function PracticeForm({ teamSlug, seasonId, practice, onSuccess }: Practi
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<CreatePracticeFormInput>({
     resolver: zodResolver(createPracticeFormSchema),
@@ -83,6 +84,16 @@ export function PracticeForm({ teamSlug, seasonId, practice, onSuccess }: Practi
       blocks: practice?.blocks || [],
     },
   });
+
+  // Sync blocks state with react-hook-form
+  useEffect(() => {
+    setValue('blocks', blocks.map(b => ({
+      type: b.type,
+      durationMinutes: b.durationMinutes,
+      category: b.category,
+      notes: b.notes,
+    })), { shouldValidate: false });
+  }, [blocks, setValue]);
 
   const onSubmit = async (data: CreatePracticeFormInput) => {
     // Validate blocks before submission
@@ -140,7 +151,7 @@ export function PracticeForm({ teamSlug, seasonId, practice, onSuccess }: Practi
     }
   };
 
-  const inputClassName = "mt-1 block w-full rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-2 text-zinc-100 placeholder-zinc-500 shadow-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500";
+  const inputClassName = "mt-1 block w-full rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-2 text-zinc-100 placeholder-zinc-500 shadow-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 [color-scheme:dark]";
   const labelClassName = "block text-sm font-medium text-zinc-300";
 
   return (
