@@ -15,6 +15,7 @@
     "@supabase/supabase-js": "^2.90.1",
     "@upstash/ratelimit": "^2.0.8",
     "@upstash/redis": "^1.36.1",
+    "date-fns": "^4.1.0",
     "jwt-decode": "^4.0.0",
     "lucide-react": "^0.562.0",
     "nanoid": "^5.1.6",
