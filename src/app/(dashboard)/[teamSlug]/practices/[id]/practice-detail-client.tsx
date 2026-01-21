@@ -4,7 +4,25 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { PracticeForm } from '@/components/practices/practice-form';
+import { LineupEditor } from '@/components/lineups/lineup-editor';
+import { LineupTemplatePicker } from '@/components/lineups/lineup-template-picker';
+import { SaveAsTemplateButton } from '@/components/lineups/save-as-template-button';
 import type { BlockType, PracticeStatus } from '@/lib/validations/practice';
+import type { BoatClass, Side, SeatSide } from '@/generated/prisma';
+import { Pencil, X } from 'lucide-react';
+
+interface Athlete {
+  id: string;
+  displayName: string | null;
+  sidePreference?: Side | null;
+}
+
+interface Boat {
+  id: string;
+  name: string;
+  boatClass: BoatClass | null;
+  available: boolean;
+}
 
 interface Practice {
   id: string;
@@ -21,6 +39,20 @@ interface Practice {
     durationMinutes: number | null;
     category: string | null;
     notes: string | null;
+    lineup: {
+      id: string;
+      boatId: string | null;
+      seats: Array<{
+        position: number;
+        side: SeatSide;
+        athleteId: string;
+        athlete: Athlete | null;
+      }>;
+    } | null;
+    landAssignments: Array<{
+      athleteId: string;
+      athlete: Athlete | null;
+    }>;
   }>;
   season: { id: string; name: string } | null;
 }
@@ -29,6 +61,9 @@ interface PracticeDetailClientProps {
   practice: Practice;
   teamSlug: string;
   isCoach: boolean;
+  athletes: Athlete[];
+  boats: Boat[];
+  ergCount: number;
 }
 
 const blockTypeConfig: Record<BlockType, { label: string; bgColor: string; borderColor: string; textColor: string }> = {
@@ -53,7 +88,24 @@ function formatTime(dateStr: string): string {
   });
 }
 
-export function PracticeDetailClient({ practice, teamSlug, isCoach }: PracticeDetailClientProps) {
+function getBoatClassFromSeats(seats: Array<{ position: number; side: SeatSide }>): BoatClass {
+  const hasCox = seats.some(s => s.side === 'NONE');
+  const rowingSeats = seats.filter(s => s.side !== 'NONE').length;
+
+  if (hasCox) {
+    if (rowingSeats === 8) return 'EIGHT_8_PLUS';
+    if (rowingSeats === 4) return 'COXED_FOUR_4_PLUS';
+    if (rowingSeats === 2) return 'COXED_PAIR_2_PLUS';
+  } else {
+    if (rowingSeats === 4) return 'FOUR_4_MINUS';
+    if (rowingSeats === 2) return 'PAIR_2_MINUS';
+    if (rowingSeats === 1) return 'SINGLE_1X';
+  }
+
+  return 'EIGHT_8_PLUS'; // Default fallback
+}
+
+export function PracticeDetailClient({ practice, teamSlug, isCoach, athletes, boats, ergCount }: PracticeDetailClientProps) {
   const router = useRouter();
   const [isEditing, setIsEditing] = useState(false);
   const [isPublishing, setIsPublishing] = useState(false);
@@ -61,6 +113,8 @@ export function PracticeDetailClient({ practice, teamSlug, isCoach }: PracticeDe
   const [isSavingTemplate, setIsSavingTemplate] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [editingLineupBlockId, setEditingLineupBlockId] = useState<string | null>(null);
+  const [savingLineupBlockId, setSavingLineupBlockId] = useState<string | null>(null);
 
   const handlePublish = async () => {
     setIsPublishing(true);
@@ -139,6 +193,74 @@ export function PracticeDetailClient({ practice, teamSlug, isCoach }: PracticeDe
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
       setIsSavingTemplate(false);
+    }
+  };
+
+  const handleSaveWaterLineup = async (
+    blockId: string,
+    lineup: {
+      boatId: string | null;
+      seats: Array<{
+        position: number;
+        athleteId: string | null;
+        label: string;
+        side: 'PORT' | 'STARBOARD' | 'NONE';
+      }>;
+    }
+  ) => {
+    setSavingLineupBlockId(blockId);
+    setError(null);
+
+    try {
+      const response = await fetch(`/api/practices/${practice.id}/blocks/${blockId}/lineup`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          boatId: lineup.boatId,
+          seats: lineup.seats.map(s => ({
+            position: s.position,
+            side: s.side,
+            athleteId: s.athleteId,
+          })),
+        }),
+      });
+
+      if (!response.ok) {
+        const result = await response.json();
+        throw new Error(result.error || 'Failed to save lineup');
+      }
+
+      router.refresh();
+      setEditingLineupBlockId(null);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An error occurred');
+    } finally {
+      setSavingLineupBlockId(null);
+    }
+  };
+
+  const handleSaveLandAssignments = async (blockId: string, athleteIds: string[]) => {
+    setSavingLineupBlockId(blockId);
+    setError(null);
+
+    try {
+      const response = await fetch(`/api/practices/${practice.id}/blocks/${blockId}/assignments`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ athleteIds }),
+      });
+
+      if (!response.ok) {
+        const result = await response.json();
+        throw new Error(result.error || 'Failed to save assignments');
+      }
+
+      router.refresh();
+      setEditingLineupBlockId(null);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An error occurred');
+    } finally {
+      setSavingLineupBlockId(null);
     }
   };
 
@@ -291,25 +413,128 @@ export function PracticeDetailClient({ practice, teamSlug, isCoach }: PracticeDe
           <div className="space-y-3">
             {practice.blocks.map((block, index) => {
               const config = blockTypeConfig[block.type];
+              const isEditingThis = editingLineupBlockId === block.id;
+
               return (
                 <div
                   key={block.id}
                   className={`p-4 rounded-lg ${config.bgColor} border ${config.borderColor}`}
                 >
-                  <div className="flex items-center gap-3">
-                    <span className="text-sm font-medium text-zinc-500">{index + 1}</span>
-                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${config.bgColor} ${config.textColor} border ${config.borderColor}`}>
-                      {config.label}
-                    </span>
-                    {block.durationMinutes && (
-                      <span className="text-sm text-zinc-400">{block.durationMinutes} min</span>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <span className="text-sm font-medium text-zinc-500">{index + 1}</span>
+                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${config.bgColor} ${config.textColor} border ${config.borderColor}`}>
+                        {config.label}
+                      </span>
+                      {block.durationMinutes && (
+                        <span className="text-sm text-zinc-400">{block.durationMinutes} min</span>
+                      )}
+                      {block.category && (
+                        <span className="text-sm text-zinc-500">{block.category}</span>
+                      )}
+                    </div>
+
+                    {isCoach && !isEditingThis && (
+                      <button
+                        onClick={() => setEditingLineupBlockId(block.id)}
+                        className="flex items-center gap-2 px-3 py-1.5 text-xs font-medium text-zinc-400 hover:text-zinc-300 bg-zinc-800/50 hover:bg-zinc-700/50 rounded transition-colors"
+                      >
+                        <Pencil className="h-3 w-3" />
+                        {block.type === 'WATER' ? (block.lineup ? 'Edit Lineup' : 'Create Lineup') : 'Manage Assignments'}
+                      </button>
                     )}
-                    {block.category && (
-                      <span className="text-sm text-zinc-500">{block.category}</span>
+
+                    {isEditingThis && (
+                      <button
+                        onClick={() => setEditingLineupBlockId(null)}
+                        className="flex items-center gap-2 px-3 py-1.5 text-xs font-medium text-zinc-400 hover:text-zinc-300 transition-colors"
+                      >
+                        <X className="h-3 w-3" />
+                        Close
+                      </button>
                     )}
                   </div>
+
                   {block.notes && (
                     <p className="mt-2 text-sm text-zinc-400">{block.notes}</p>
+                  )}
+
+                  {/* Lineup preview (view mode) */}
+                  {!isEditingThis && block.type === 'WATER' && block.lineup && (
+                    <div className="mt-3 pt-3 border-t border-zinc-700/50">
+                      <p className="text-sm text-zinc-400">
+                        {block.lineup.boatId && boats.find(b => b.id === block.lineup!.boatId)?.name}
+                        {' - '}
+                        {block.lineup.seats.filter(s => s.athleteId).length} / {block.lineup.seats.length} seats assigned
+                      </p>
+                    </div>
+                  )}
+
+                  {!isEditingThis && (block.type === 'LAND' || block.type === 'ERG') && block.landAssignments.length > 0 && (
+                    <div className="mt-3 pt-3 border-t border-zinc-700/50">
+                      <p className="text-sm text-zinc-400">
+                        {block.landAssignments.length} athlete{block.landAssignments.length !== 1 ? 's' : ''} assigned
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Lineup editor (edit mode) */}
+                  {isEditingThis && isCoach && (
+                    <div className="mt-4 pt-4 border-t border-zinc-700/50">
+                      {block.type === 'WATER' ? (
+                        <>
+                          {/* Template actions for water blocks */}
+                          <div className="mb-4 flex gap-2">
+                            <LineupTemplatePicker
+                              blockId={block.id}
+                              boatClass={block.lineup?.seats[0]?.side ? getBoatClassFromSeats(block.lineup.seats).toString() : undefined}
+                              onApplied={() => router.refresh()}
+                            />
+                            {block.lineup && block.lineup.seats.some(s => s.athleteId) && (
+                              <SaveAsTemplateButton
+                                boatClass={getBoatClassFromSeats(block.lineup.seats).toString()}
+                                seats={block.lineup.seats.filter(s => s.athleteId).map(s => ({
+                                  id: `${block.lineup!.id}-${s.position}`,
+                                  position: s.position,
+                                  side: s.side,
+                                  athleteId: s.athleteId,
+                                }))}
+                                defaultBoatId={block.lineup.boatId}
+                                onSaved={() => router.refresh()}
+                              />
+                            )}
+                          </div>
+
+                          <LineupEditor
+                            blockType="WATER"
+                            blockId={block.id}
+                            athletes={athletes}
+                            boats={boats}
+                            boatClass={block.lineup?.seats[0]?.side ? getBoatClassFromSeats(block.lineup.seats) : 'EIGHT_8_PLUS'}
+                            initialLineup={block.lineup ? {
+                              id: block.lineup.id,
+                              boatId: block.lineup.boatId,
+                              seats: block.lineup.seats.map(s => ({
+                                position: s.position,
+                                athleteId: s.athleteId,
+                                side: s.side as 'PORT' | 'STARBOARD' | 'NONE',
+                              })),
+                            } : undefined}
+                            onSaveLineup={(lineup) => handleSaveWaterLineup(block.id, lineup)}
+                            isSaving={savingLineupBlockId === block.id}
+                          />
+                        </>
+                      ) : (
+                        <LineupEditor
+                          blockType={block.type}
+                          athletes={athletes}
+                          ergCount={block.type === 'ERG' ? ergCount : undefined}
+                          initialAssignedIds={block.landAssignments.map(a => a.athleteId)}
+                          onSaveAssignments={(athleteIds) => handleSaveLandAssignments(block.id, athleteIds)}
+                          isSaving={savingLineupBlockId === block.id}
+                        />
+                      )}
+                    </div>
                   )}
                 </div>
               );

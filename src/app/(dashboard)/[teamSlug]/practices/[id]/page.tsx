@@ -42,6 +42,27 @@ export default async function PracticeDetailPage({ params }: PracticeDetailPageP
     },
     include: {
       blocks: {
+        include: {
+          lineup: {
+            include: {
+              seats: {
+                include: {
+                  athlete: {
+                    select: { id: true, displayName: true, sidePreference: true },
+                  },
+                },
+                orderBy: { position: 'asc' },
+              },
+            },
+          },
+          landAssignments: {
+            include: {
+              athlete: {
+                select: { id: true, displayName: true },
+              },
+            },
+          },
+        },
         orderBy: { position: 'asc' },
       },
       season: {
@@ -58,6 +79,37 @@ export default async function PracticeDetailPage({ params }: PracticeDetailPageP
   if (!isCoach && practice.status !== 'PUBLISHED') {
     notFound();
   }
+
+  // Fetch additional data for lineup editor (coaches only)
+  const athletes = isCoach
+    ? await prisma.athleteProfile.findMany({
+        where: {
+          teamMember: { teamId: team.id },
+        },
+        select: { id: true, displayName: true, sidePreference: true },
+        orderBy: { displayName: 'asc' },
+      })
+    : [];
+
+  const boats = isCoach
+    ? await prisma.equipment.findMany({
+        where: {
+          teamId: team.id,
+          type: 'SHELL',
+          status: 'ACTIVE',
+        },
+        include: {
+          damageReports: {
+            where: { status: 'OPEN' },
+          },
+        },
+        orderBy: { name: 'asc' },
+      })
+    : [];
+
+  // ERG count - for now, we don't track individual ergs in equipment
+  // This would be a team setting or hardcoded based on facility
+  const ergCount = 20; // Default erg capacity
 
   return (
     <div className="max-w-3xl mx-auto">
@@ -90,11 +142,37 @@ export default async function PracticeDetailPage({ params }: PracticeDetailPageP
             durationMinutes: b.durationMinutes,
             category: b.category,
             notes: b.notes,
+            lineup: b.lineup ? {
+              id: b.lineup.id,
+              boatId: b.lineup.boatId,
+              seats: b.lineup.seats.map(s => ({
+                position: s.position,
+                side: s.side,
+                athleteId: s.athleteId,
+                athlete: s.athlete,
+              })),
+            } : null,
+            landAssignments: b.landAssignments.map(a => ({
+              athleteId: a.athleteId,
+              athlete: a.athlete,
+            })),
           })),
           season: practice.season,
         }}
         teamSlug={teamSlug}
         isCoach={isCoach}
+        athletes={athletes.map(a => ({
+          id: a.id,
+          displayName: a.displayName,
+          sidePreference: a.sidePreference,
+        }))}
+        boats={boats.map(b => ({
+          id: b.id,
+          name: b.name,
+          boatClass: b.boatClass,
+          available: !b.manualUnavailable && b.damageReports.length === 0,
+        }))}
+        ergCount={ergCount}
       />
     </div>
   );
