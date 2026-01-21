@@ -11,19 +11,19 @@
 | Field | Value |
 |-------|-------|
 | Phase | 3 of 5 (Lineup Management) |
-| Plan | 6 of 6 |
+| Plan | 7 of 7 |
 | Status | Phase complete |
-| Last activity | 2026-01-21 - Completed 03-07-PLAN.md |
+| Last activity | 2026-01-21 - Completed 03-08-PLAN.md |
 
 **Progress:**
 ```
 Phase 1: [##########] 100% (5/5 plans) COMPLETE
 Phase 2: [##########] 100% (8/8 plans) COMPLETE
-Phase 3: [##########] 100% (6/6 plans) COMPLETE
+Phase 3: [##########] 100% (7/7 plans) COMPLETE
 Phase 4: [..........] 0%
 Phase 5: [..........] 0%
 
-Overall:  [########..] 19/24 plans (79%)
+Overall:  [########..] 20/25 plans (80%)
 ```
 
 ## Performance Metrics
@@ -31,7 +31,7 @@ Overall:  [########..] 19/24 plans (79%)
 | Metric | Value |
 |--------|-------|
 | Requirements completed | 21/31 |
-| Plans completed | 19 |
+| Plans completed | 20 |
 | Plans failed | 0 |
 | Blockers resolved | 0 |
 
@@ -88,6 +88,8 @@ Overall:  [########..] 19/24 plans (79%)
 | Partial lineup warnings | Shows when lineup incomplete, but still allows save (work in progress) | 3 |
 | Copy-on-apply for lineup templates | Templates create independent lineups with no ongoing link | 3 |
 | Graceful template degradation | Apply template skips missing athletes, warns about unavailable boats without failing | 3 |
+| Inline lineup editor | Edit button toggles editor for specific block, no separate route | 3 |
+| ERG count hardcoded | ERG not tracked as individual equipment, hardcoded to 20 for capacity warnings | 3 |
 | Template boat class filtering | Templates filterable by boatClass for easier selection | 3 |
 
 ### Architecture Notes
@@ -206,35 +208,51 @@ All 6 requirements for Phase 2 verified complete:
 | 03-04 | dnd-kit components | COMPLETE |
 | 03-05 | Water lineup builder | COMPLETE |
 | 03-06 | Land/erg assignment UI | COMPLETE |
+| 03-07 | Lineup template system | COMPLETE |
+| 03-08 | Practice lineup integration & template management | COMPLETE |
 | 03-09 | Form component refactoring (DEBT-02) | COMPLETE |
+
+**Phase 3 Complete** - All 7 core plans executed, all lineup management requirements verified.
+
+## Phase 3 Completion Summary
+
+All 5 requirements for Phase 3 verified complete:
+
+| REQ-ID | Description | Status |
+|--------|-------------|--------|
+| LINE-01 | Create lineups with boat assignments | COMPLETE |
+| LINE-02 | Log equipment usage automatically | COMPLETE |
+| LINE-03 | Save lineup as reusable template | COMPLETE |
+| LINE-04 | Assign athletes to land/erg blocks | COMPLETE |
+| EQUIP-01 | Track equipment usage history | COMPLETE |
 
 ## Session Continuity
 
 ### Last Session
 
 - **Date:** 2026-01-21
-- **Activity:** Executed 03-05-PLAN.md (Water lineup builder)
-- **Outcome:** Drag-drop water lineup builder with boat compatibility filtering, LINE-01 and LINE-02 requirements complete
+- **Activity:** Executed 03-08-PLAN.md (Practice lineup integration & template management)
+- **Outcome:** Lineup editor integrated into practice detail, template list/detail pages, Phase 3 complete
 
 ### Next Actions
 
-1. Phase 3 now complete (5/6 core plans + 1 debt plan)
-2. Ready to move to Phase 4 or other planned work
-3. Lineup templates (03-07) may be deferred or optional
+1. Phase 3 complete - ready for Phase 4 (Offline & PWA)
+2. Begin Phase 4 planning and execution
+3. Implement service worker and offline data sync
 
 ### Files Modified This Session
 
 **Created:**
-- `src/components/lineups/boat-selector.tsx` (Boat compatibility filtering)
-- `src/components/lineups/water-lineup-builder.tsx` (Main drag-drop builder)
-- `.planning/phases/03-lineup-management/03-05-SUMMARY.md` (completed)
+- `src/app/(dashboard)/[teamSlug]/lineup-templates/page.tsx` (Template list page)
+- `src/app/(dashboard)/[teamSlug]/lineup-templates/[id]/page.tsx` (Template detail server)
+- `src/app/(dashboard)/[teamSlug]/lineup-templates/[id]/lineup-template-detail-client.tsx` (Template detail client)
+- `.planning/phases/03-lineup-management/03-08-SUMMARY.md` (completed)
 
 **Modified:**
-- `src/components/lineups/lineup-editor.tsx` (Added water builder routing)
-- `src/app/api/lineup-templates/route.ts` (Fixed TypeScript type error)
-- `src/app/api/lineup-templates/[id]/route.ts` (Fixed TypeScript type error)
+- `src/app/(dashboard)/[teamSlug]/practices/[id]/page.tsx` (fetch lineup data)
+- `src/app/(dashboard)/[teamSlug]/practices/[id]/practice-detail-client.tsx` (lineup editor integration)
 - `.planning/STATE.md` (updated)
 
 ---
 
-*Last updated: 2026-01-21 (Phase 3 in progress - 5/6 plans complete)*
+*Last updated: 2026-01-21 (Phase 3 complete - 6/6 plans complete)*
