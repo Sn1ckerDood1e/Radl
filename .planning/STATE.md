@@ -11,19 +11,19 @@
 | Field | Value |
 |-------|-------|
 | Phase | 3 of 5 (Lineup Management) |
-| Plan | 1 of 4 |
+| Plan | 2 of 9 |
 | Status | In progress |
-| Last activity | 2026-01-21 - Completed 03-01-PLAN.md |
+| Last activity | 2026-01-21 - Completed 03-04-PLAN.md |
 
 **Progress:**
 ```
 Phase 1: [##########] 100% (5/5 plans) COMPLETE
 Phase 2: [##########] 100% (8/8 plans) COMPLETE
-Phase 3: [##........] 25% (1/4 plans)
+Phase 3: [##........] 22% (2/9 plans)
 Phase 4: [..........] 0%
 Phase 5: [..........] 0%
 
-Overall:  [######.... ] 14/31 requirements (45%)
+Overall:  [######.... ] 15/22 plans (68%)
 ```
 
 ## Performance Metrics
@@ -31,7 +31,7 @@ Overall:  [######.... ] 14/31 requirements (45%)
 | Metric | Value |
 |--------|-------|
 | Requirements completed | 14/31 |
-| Plans completed | 14 |
+| Plans completed | 15 |
 | Plans failed | 0 |
 | Blockers resolved | 0 |
 
@@ -69,6 +69,8 @@ Overall:  [######.... ] 14/31 requirements (45%)
 | Standard rowing positions | ROWING_POSITIONS constant defines port/starboard for all boat classes | 3 |
 | Separate land assignments | LandAssignment model for erg/land (no positions), Lineup for water (with positions) | 3 |
 | Equipment usage logging | EquipmentUsageLog with denormalized teamId for query performance | 3 |
+| AthleteCard has no hooks | Pure presentation component safe for DragOverlay (drag logic separated in wrapper) | 3 |
+| Side preference color coding | Port=blue, Starboard=green, Both=purple for visual consistency | 3 |
 
 ### Architecture Notes
 
@@ -83,6 +85,7 @@ Overall:  [######.... ] 14/31 requirements (45%)
 - **Lineup models:** Lineup, SeatAssignment, LineupTemplate, TemplateSeat, EquipmentUsageLog, LandAssignment
 - **Date handling:** date-fns for time manipulation in template application
 - **Rowing positions:** 1-based numbering (1=Bow, 8=Stroke, 9=Cox for 8+), SeatSide enum (PORT/STARBOARD/NONE)
+- **Drag-and-drop:** dnd-kit (@dnd-kit/core, @dnd-kit/sortable, @dnd-kit/utilities) for lineup editor
 
 ### Tech Debt Tracker
 
@@ -118,6 +121,8 @@ Overall:  [######.... ] 14/31 requirements (45%)
 | Apply template flow | Select template -> pick date -> POST to apply endpoint | src/components/templates/apply-template-section.tsx |
 | Duplicate prevention validation | Zod refinements checking for duplicate athleteIds and positions in seats array | src/lib/validations/lineup.ts |
 | Position-side configuration | ROWING_POSITIONS maps BoatClass to seat configs with position/label/side | src/lib/lineup/position-labels.ts |
+| Drag wrapper pattern | Presentation component wrapped by hook-based draggable component (AthleteCard + DraggableAthlete) | src/components/lineups/ |
+| DragOverlay safety | Components for DragOverlay must have zero hooks (AthleteCard is pure presentation) | src/components/lineups/athlete-card.tsx |
 
 ### Todos
 
@@ -175,30 +180,38 @@ All 6 requirements for Phase 2 verified complete:
 | 03-01 | Lineup data models and validation schemas | COMPLETE |
 | 03-02 | Lineup CRUD API | Not started |
 | 03-03 | Lineup editor UI | Not started |
-| 03-04 | Template system for lineups | Not started |
+| 03-04 | Drag-and-drop components | COMPLETE |
+| 03-05 | Water lineup builder UI | Not started |
+| 03-06 | Land assignment UI | Not started |
+| 03-07 | Lineup templates | Not started |
+| 03-08 | Template application flow | Not started |
+| 03-09 | Equipment assignment integration | Not started |
 
 ## Session Continuity
 
 ### Last Session
 
 - **Date:** 2026-01-21
-- **Activity:** Executed 03-01-PLAN.md (Lineup data foundation)
-- **Outcome:** Prisma models for lineups, seat assignments, templates, validation schemas, rowing position constants
+- **Activity:** Executed 03-04-PLAN.md (Drag-and-drop components)
+- **Outcome:** Installed dnd-kit, created athlete card components, draggable wrappers, roster panel, seat slots
 
 ### Next Actions
 
-1. Continue Phase 3: Execute 03-02 (Lineup API)
-2. API routes for lineup CRUD operations
-3. Template application for lineups
+1. Continue Phase 3: Execute 03-02 (Lineup CRUD API)
+2. Lineup management API routes
+3. Water lineup builder UI
 
 ### Files Modified This Session
 
-- `prisma/schema.prisma` (modified - Added 6 lineup models, SeatSide enum, updated relations)
-- `src/lib/lineup/position-labels.ts` (created - Rowing position constants and helpers)
-- `src/lib/validations/lineup.ts` (created - Zod validation schemas)
-- `.planning/phases/03-lineup-management/03-01-SUMMARY.md` (created)
+- `package.json` (modified - Added dnd-kit dependencies)
+- `package-lock.json` (modified)
+- `src/components/lineups/athlete-card.tsx` (created - Pure presentation component)
+- `src/components/lineups/draggable-athlete.tsx` (created - useSortable wrapper)
+- `src/components/lineups/athlete-roster-panel.tsx` (created - Filterable roster)
+- `src/components/lineups/seat-slot.tsx` (created - Droppable seat)
+- `.planning/phases/03-lineup-management/03-04-SUMMARY.md` (created)
 - `.planning/STATE.md` (updated)
 
 ---
 
-*Last updated: 2026-01-21 (Phase 3 in progress - 1/4 plans complete)*
+*Last updated: 2026-01-21 (Phase 3 in progress - 2/9 plans complete)*
