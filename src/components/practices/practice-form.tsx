@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import { BlockEditor } from './block-editor';
 import { EquipmentAvailabilityPanel } from './equipment-availability-panel';
 import { createPracticeFormSchema, type CreatePracticeFormInput, type BlockType } from '@/lib/validations/practice';
+import { formatDateForInput, formatTimeForInput, combineDateAndTime } from '@/lib/utils/date-time-helpers';
 
 interface Block {
   id?: string;
@@ -38,24 +39,24 @@ interface PracticeFormProps {
   onSuccess?: () => void;
 }
 
-function formatDateForInput(date: Date): string {
-  return date.toISOString().split('T')[0];
-}
-
-function formatTimeForInput(date: Date): string {
-  return date.toTimeString().slice(0, 5);
-}
-
-function combineDateAndTime(dateStr: string, timeStr: string): string {
-  // Create ISO datetime string for API
-  const date = new Date(dateStr + 'T' + timeStr + ':00');
-  return date.toISOString();
-}
-
+/**
+ * Form for creating or editing practices.
+ * Handles practice metadata, time blocks, and equipment availability.
+ *
+ * @param teamSlug - Current team's slug for navigation
+ * @param seasonId - Season to associate practice with
+ * @param practice - Existing practice data for edit mode (optional)
+ * @param onSuccess - Called after successful save (optional)
+ */
 export function PracticeForm({ teamSlug, seasonId, practice, onSuccess }: PracticeFormProps) {
   const router = useRouter();
+
+  // --- Form State ---
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+
+  // --- Practice Blocks State ---
+  // Blocks are managed separately and synced to react-hook-form
   const [blocks, setBlocks] = useState<Block[]>(
     practice?.blocks.map(b => ({
       id: b.id,
@@ -66,6 +67,7 @@ export function PracticeForm({ teamSlug, seasonId, practice, onSuccess }: Practi
     })) || []
   );
 
+  // --- Derived State ---
   const isEditMode = !!practice;
 
   const {
@@ -86,7 +88,8 @@ export function PracticeForm({ teamSlug, seasonId, practice, onSuccess }: Practi
     },
   });
 
-  // Sync blocks state with react-hook-form
+  // --- Effects ---
+  // Sync blocks state with react-hook-form whenever blocks change
   useEffect(() => {
     setValue('blocks', blocks.map(b => ({
       type: b.type,
