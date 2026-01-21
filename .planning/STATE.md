@@ -11,26 +11,26 @@
 | Field | Value |
 |-------|-------|
 | Phase | 3 of 5 (Lineup Management) |
-| Plan | 2 of 9 |
+| Plan | 2 of 4 |
 | Status | In progress |
-| Last activity | 2026-01-21 - Completed 03-04-PLAN.md |
+| Last activity | 2026-01-21 - Completed 03-02-PLAN.md |
 
 **Progress:**
 ```
 Phase 1: [##########] 100% (5/5 plans) COMPLETE
 Phase 2: [##########] 100% (8/8 plans) COMPLETE
-Phase 3: [##........] 22% (2/9 plans)
+Phase 3: [#####.....] 50% (2/4 plans)
 Phase 4: [..........] 0%
 Phase 5: [..........] 0%
 
-Overall:  [######.... ] 15/22 plans (68%)
+Overall:  [#######... ] 15/22 plans (68%)
 ```
 
 ## Performance Metrics
 
 | Metric | Value |
 |--------|-------|
-| Requirements completed | 14/31 |
+| Requirements completed | 15/31 |
 | Plans completed | 15 |
 | Plans failed | 0 |
 | Blockers resolved | 0 |
@@ -71,6 +71,9 @@ Overall:  [######.... ] 15/22 plans (68%)
 | Equipment usage logging | EquipmentUsageLog with denormalized teamId for query performance | 3 |
 | AthleteCard has no hooks | Pure presentation component safe for DragOverlay (drag logic separated in wrapper) | 3 |
 | Side preference color coding | Port=blue, Starboard=green, Both=purple for visual consistency | 3 |
+| Block-specific lineup endpoints | PUT with replace-all pattern for simpler client integration | 3 |
+| Separate water vs land endpoints | /lineup for WATER blocks, /assignments for LAND/ERG blocks | 3 |
+| Athlete validation via joins | Team membership checked via athleteProfile.teamMember.teamId join | 3 |
 
 ### Architecture Notes
 
@@ -178,12 +181,9 @@ All 6 requirements for Phase 2 verified complete:
 | Plan | Description | Status |
 |------|-------------|--------|
 | 03-01 | Lineup data models and validation schemas | COMPLETE |
-| 03-02 | Lineup CRUD API | Not started |
+| 03-02 | Lineup CRUD API | COMPLETE |
 | 03-03 | Lineup editor UI | Not started |
-| 03-04 | Drag-and-drop components | COMPLETE |
-| 03-05 | Water lineup builder UI | Not started |
-| 03-06 | Land assignment UI | Not started |
-| 03-07 | Lineup templates | Not started |
+| 03-04 | Template system for lineups | Not started |
 | 03-08 | Template application flow | Not started |
 | 03-09 | Equipment assignment integration | Not started |
 
@@ -192,26 +192,24 @@ All 6 requirements for Phase 2 verified complete:
 ### Last Session
 
 - **Date:** 2026-01-21
-- **Activity:** Executed 03-04-PLAN.md (Drag-and-drop components)
-- **Outcome:** Installed dnd-kit, created athlete card components, draggable wrappers, roster panel, seat slots
+- **Activity:** Executed 03-02-PLAN.md (Lineup CRUD API)
+- **Outcome:** Complete REST API for lineup management with water/land separation
 
 ### Next Actions
 
-1. Continue Phase 3: Execute 03-02 (Lineup CRUD API)
-2. Lineup management API routes
-3. Water lineup builder UI
+1. Continue Phase 3: Execute 03-03 (Lineup editor UI)
+2. Build lineup editor with drag-and-drop integration
+3. Create template system for lineups
 
 ### Files Modified This Session
 
-- `package.json` (modified - Added dnd-kit dependencies)
-- `package-lock.json` (modified)
-- `src/components/lineups/athlete-card.tsx` (created - Pure presentation component)
-- `src/components/lineups/draggable-athlete.tsx` (created - useSortable wrapper)
-- `src/components/lineups/athlete-roster-panel.tsx` (created - Filterable roster)
-- `src/components/lineups/seat-slot.tsx` (created - Droppable seat)
-- `.planning/phases/03-lineup-management/03-04-SUMMARY.md` (created)
+- `src/app/api/lineups/route.ts` (created - Lineup CRUD endpoints)
+- `src/app/api/lineups/[id]/route.ts` (created - Individual lineup operations)
+- `src/app/api/practices/[id]/blocks/[blockId]/lineup/route.ts` (created - Block-specific lineup)
+- `src/app/api/practices/[id]/blocks/[blockId]/assignments/route.ts` (created - Land/erg assignments)
+- `.planning/phases/03-lineup-management/03-02-SUMMARY.md` (created)
 - `.planning/STATE.md` (updated)
 
 ---
 
-*Last updated: 2026-01-21 (Phase 3 in progress - 2/9 plans complete)*
+*Last updated: 2026-01-21 (Phase 3 in progress - 2/4 plans complete)*
