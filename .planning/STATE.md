@@ -11,13 +11,13 @@
 | Field | Value |
 |-------|-------|
 | Phase | 1 of 5 (Security & Foundation) |
-| Plan | 1 of 5 complete |
+| Plan | 2 of 5 complete |
 | Status | In progress |
-| Last activity | 2026-01-21 - Completed 01-01-PLAN.md |
+| Last activity | 2026-01-21 - Completed 01-02-PLAN.md |
 
 **Progress:**
 ```
-Phase 1: [##........] 20% (1/5 plans)
+Phase 1: [####......] 40% (2/5 plans)
 Phase 2: [..........] 0%
 Phase 3: [..........] 0%
 Phase 4: [..........] 0%
@@ -31,7 +31,7 @@ Overall:  [..........] 0/31 requirements
 | Metric | Value |
 |--------|-------|
 | Requirements completed | 0/31 |
-| Plans completed | 1 |
+| Plans completed | 2 |
 | Plans failed | 0 |
 | Blockers resolved | 0 |
 
@@ -47,6 +47,8 @@ Overall:  [..........] 0/31 requirements
 | 5 phases (standard depth) | Research suggested 6 phases, consolidated push notifications into PWA phase for coherent delivery. | All |
 | Claims helper returns tuple | Returns { user, claims, error } for simpler destructuring at call sites | 1 |
 | Error refs only on 500s | Auth/permission errors (401/403/404) don't need refs since they're expected states | 1 |
+| Rate limit before auth | For anonymous endpoints, rate limit check runs before auth to prevent brute-force even without valid credentials | 1 |
+| Graceful rate limit fallback | When Upstash env vars not configured, rate limiting disabled (not broken) for development-friendly behavior | 1 |
 
 ### Architecture Notes
 
@@ -72,6 +74,7 @@ Overall:  [..........] 0/31 requirements
 | API auth pattern | `const { user, claims, error } = await getClaimsForApiRoute(); if (error \|\| !user) return unauthorizedResponse();` | All API routes |
 | Team guard | `if (!claims?.team_id) return forbiddenResponse('No team associated with user');` | Team-scoped routes |
 | Role guard | `if (claims.user_role !== 'COACH') return forbiddenResponse('Only coaches can...');` | Coach-only routes |
+| Rate-limit-first | `const clientIp = getClientIp(request); const rateLimit = await checkRateLimit(clientIp, 'action');` | Anonymous/sensitive endpoints |
 
 ### Todos
 
@@ -86,30 +89,23 @@ Overall:  [..........] 0/31 requirements
 ### Last Session
 
 - **Date:** 2026-01-21
-- **Activity:** Executed 01-01-PLAN.md (Claims helper refactor)
-- **Outcome:** Centralized claims helper, 10 API routes refactored, DEBT-01 complete
+- **Activity:** Executed 01-02-PLAN.md (Rate limiting for sensitive endpoints)
+- **Outcome:** Rate limiting at 10/hour per IP for damage-reports and join endpoints
 
 ### Next Actions
 
-1. Execute 01-02-PLAN.md (Rate limiting for sensitive endpoints)
-2. Phase 1 remaining: rate limiting, tenant isolation audit, season model, eligibility
+1. Execute 01-03-PLAN.md (Tenant isolation audit)
+2. Phase 1 remaining: tenant isolation audit, season model, eligibility
 
 ### Files Modified This Session
 
-- `src/lib/auth/claims.ts` (created)
-- `src/lib/errors/index.ts` (created)
-- `src/lib/auth/authorize.ts` (modified)
-- `src/app/api/equipment/route.ts` (modified)
-- `src/app/api/equipment/[id]/route.ts` (modified)
-- `src/app/api/equipment/[id]/damage-reports/[reportId]/route.ts` (modified)
-- `src/app/api/invitations/route.ts` (modified)
-- `src/app/api/invitations/[id]/route.ts` (modified)
-- `src/app/api/invitations/bulk/route.ts` (modified)
-- `src/app/api/athletes/route.ts` (modified)
-- `src/app/api/athletes/[id]/route.ts` (modified)
-- `src/app/api/team-settings/route.ts` (modified)
-- `src/app/api/notifications/route.ts` (modified)
-- `.planning/phases/01-security-foundation/01-01-SUMMARY.md` (created)
+- `src/lib/rate-limit/index.ts` (created)
+- `.env.example` (created)
+- `src/app/api/equipment/[id]/damage-reports/route.ts` (modified)
+- `src/app/api/join/route.ts` (modified)
+- `.gitignore` (modified)
+- `package.json` (modified)
+- `.planning/phases/01-security-foundation/01-02-SUMMARY.md` (created)
 
 ---
 
