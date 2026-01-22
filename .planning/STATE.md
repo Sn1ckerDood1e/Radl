@@ -11,19 +11,19 @@
 | Field | Value |
 |-------|-------|
 | Phase | 4 of 5 (PWA Infrastructure) |
-| Plan | 5 of 7 |
+| Plan | 6 of 7 |
 | Status | In progress |
-| Last activity | 2026-01-21 - Completed 04-05-PLAN.md |
+| Last activity | 2026-01-22 - Completed 04-06-PLAN.md |
 
 **Progress:**
 ```
 Phase 1: [##########] 100% (5/5 plans) COMPLETE
 Phase 2: [##########] 100% (8/8 plans) COMPLETE
 Phase 3: [##########] 100% (7/7 plans) COMPLETE
-Phase 4: [#######...] 71% (5/7 plans)
+Phase 4: [########..] 86% (6/7 plans)
 Phase 5: [..........] 0%
 
-Overall:  [#########.] 25/27 plans (93%)
+Overall:  [#########.] 26/27 plans (96%)
 ```
 
 ## Performance Metrics
@@ -31,7 +31,7 @@ Overall:  [#########.] 25/27 plans (93%)
 | Metric | Value |
 |--------|-------|
 | Requirements completed | 21/31 |
-| Plans completed | 25 |
+| Plans completed | 26 |
 | Plans failed | 0 |
 | Blockers resolved | 0 |
 
@@ -110,6 +110,9 @@ Overall:  [#########.] 25/27 plans (93%)
 | Optimistic update first | Apply local change before attempting online sync for responsive UI | 4 |
 | Network error detection | TypeError or fetch message triggers offline fallback | 4 |
 | SyncStatus conditional render | Only renders when pendingCount > 0 to avoid UI clutter | 4 |
+| Fire-and-forget notifications | Notifications never block API responses or cause failures | 4 |
+| Published-only notification guards | Draft practice changes don't trigger notifications to athletes | 4 |
+| Notify only new athletes | Avoid redundant notifications when lineup is modified | 4 |
 
 ### Architecture Notes
 
@@ -183,6 +186,8 @@ Overall:  [#########.] 25/27 plans (93%)
 | executeWithOfflineFallback | Try online action first, queue if offline or network error | src/lib/db/offline-mutations.ts |
 | useOfflineMutation hook | React hook for offline-capable mutations with loading/error state | src/hooks/use-offline-mutation.ts |
 | Animated sync indicator | Ping animation for pending sync items | src/components/pwa/sync-status.tsx |
+| Fire-and-forget notification trigger | Non-blocking notification dispatch via Supabase Edge Function | src/lib/push/triggers.ts |
+| NotificationSettings toggle | Permission-aware toggle with unsupported browser handling | src/components/pwa/notification-settings.tsx |
 
 ### Todos
 
@@ -270,36 +275,37 @@ All 5 requirements for Phase 3 verified complete:
 | 04-03 | Offline data sync | COMPLETE |
 | 04-04 | Push notification infrastructure | COMPLETE |
 | 04-05 | Offline mutation and sync status UI | COMPLETE |
-| 04-06 | Install prompt and manifest | Pending |
+| 04-06 | Notification triggers and settings UI | COMPLETE |
 | 04-07 | Offline-first schedule view | Pending |
 
 ## Session Continuity
 
 ### Last Session
 
-- **Date:** 2026-01-21
-- **Activity:** Executed 04-05-PLAN.md (Offline mutation and sync status)
-- **Outcome:** Offline mutation utilities, useOfflineMutation hook, SyncStatus component integrated in header
+- **Date:** 2026-01-22
+- **Activity:** Executed 04-06-PLAN.md (Notification triggers and settings UI)
+- **Outcome:** Fire-and-forget notification triggers, API route integration, NotificationSettings UI component
 
 ### Next Actions
 
-1. Continue Phase 4 with plan 04-06 (Install prompt and manifest)
-2. Create PWA manifest.json
-3. Add install prompt component
-4. Then plan 04-07 (Offline-first schedule view)
+1. Continue Phase 4 with plan 04-07 (Offline-first schedule view)
+2. Build offline-capable schedule page
+3. Then Phase 5 (Regatta Mode)
 
 ### Files Modified This Session
 
 **Created:**
-- `src/lib/db/offline-mutations.ts` (Offline mutation utilities)
-- `src/hooks/use-offline-mutation.ts` (React hook for offline mutations)
-- `src/components/pwa/sync-status.tsx` (Sync status UI component)
-- `.planning/phases/04-pwa-infrastructure/04-05-SUMMARY.md` (completed)
+- `src/lib/push/triggers.ts` (Notification trigger functions)
+- `src/components/pwa/notification-settings.tsx` (Toggle UI component)
+- `.planning/phases/04-pwa-infrastructure/04-06-SUMMARY.md` (completed)
 
 **Modified:**
-- `src/components/layout/dashboard-header.tsx` (Added SyncStatus)
+- `src/app/api/practices/[id]/route.ts` (Practice change/cancel notifications)
+- `src/app/api/lineups/[id]/route.ts` (Lineup assignment notifications)
+- `src/app/api/practices/[id]/blocks/[blockId]/lineup/route.ts` (Lineup assignment notifications)
+- `src/app/(dashboard)/[teamSlug]/settings/page.tsx` (Added NotificationSettings)
 - `.planning/STATE.md` (updated)
 
 ---
 
-*Last updated: 2026-01-21 (Phase 4 - 5/7 plans complete)*
+*Last updated: 2026-01-22 (Phase 4 - 6/7 plans complete)*
