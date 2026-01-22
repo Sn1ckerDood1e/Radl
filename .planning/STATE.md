@@ -96,6 +96,9 @@ Overall:  [#########.] 31/34 plans (91%)
 | DELETE-and-CREATE for entry lineup PUT | Simpler than diffing existing seats, ensures clean state | 5 |
 | Past notifications marked as sent | Prevents confusing scheduled state for notifications that can never fire | 5 |
 | PATCH resets sentAt to null | Allows re-scheduling if coach changes lead time after notification sent | 5 |
+| Entry endpoints nested under regatta | Clear ownership hierarchy, regattaId from URL params not body | 5 |
+| Notification reschedule resets sent flag | When scheduledTime changes, notificationSent=false to trigger new notification | 5 |
+| Season ownership validated before regatta | POST /api/regattas verifies seasonId belongs to team | 5 |
 | Template boat class filtering | Templates filterable by boatClass for easier selection | 3 |
 | cachedAt timestamp on every record | Enables staleness detection for cache invalidation | 4 |
 | syncStatus field (synced/pending/error) | Tracks sync state without separate tracking table | 4 |
@@ -208,6 +211,9 @@ Overall:  [#########.] 31/34 plans (91%)
 | Entry lineup API | GET/PUT/DELETE for race lineup assignments | src/app/api/regattas/[id]/entries/[entryId]/lineup/route.ts |
 | Notification config API | GET/PUT/PATCH/DELETE with scheduledFor calculation | src/app/api/regattas/[id]/entries/[entryId]/notification/route.ts |
 | Notification time calculation | scheduledFor = scheduledTime - (leadTimeMinutes * 60 * 1000) | notification route.ts |
+| Regatta API pattern | Team-scoped with season ownership validation | src/app/api/regattas/route.ts |
+| Entry access helper | verifyEntryAccess joins through regatta to team | src/app/api/regattas/[id]/entries/[entryId]/route.ts |
+| Nested resource pattern | /regattas/[id]/entries/[entryId] for clear ownership | src/app/api/regattas/ |
 
 ### Todos
 
