@@ -11,9 +11,9 @@
 | Field | Value |
 |-------|-------|
 | Phase | 5 of 5 (Regatta Mode) |
-| Plan | 0 of 7 |
-| Status | Phase planned, ready for execution |
-| Last activity | 2026-01-21 - Completed Phase 5 planning |
+| Plan | 1 of 7 |
+| Status | In progress |
+| Last activity | 2026-01-22 - Completed 05-01-PLAN.md |
 
 **Progress:**
 ```
@@ -21,9 +21,9 @@ Phase 1: [##########] 100% (5/5 plans) COMPLETE
 Phase 2: [##########] 100% (8/8 plans) COMPLETE
 Phase 3: [##########] 100% (7/7 plans) COMPLETE
 Phase 4: [##########] 100% (7/7 plans) COMPLETE
-Phase 5: [..........] 0% (0/7 plans) PLANNED
+Phase 5: [#.........] 14% (1/7 plans) IN PROGRESS
 
-Overall:  [########..] 27/34 plans (79%)
+Overall:  [########..] 28/34 plans (82%)
 ```
 
 ## Performance Metrics
@@ -90,6 +90,9 @@ Overall:  [########..] 27/34 plans (79%)
 | Graceful template degradation | Apply template skips missing athletes, warns about unavailable boats without failing | 3 |
 | Inline lineup editor | Edit button toggles editor for specific block, no separate route | 3 |
 | ERG count hardcoded | ERG not tracked as individual equipment, hardcoded to 20 for capacity warnings | 3 |
+| Unique constraint on teamId+rcRegattaId | Allows null rcRegattaId for manual regattas while ensuring uniqueness for RC imports | 5 |
+| EntryLineup separate from Entry | Lineup assignment is optional and can be added later | 5 |
+| NotificationConfig 1:1 with Entry | Each race entry can have its own notification settings | 5 |
 | Template boat class filtering | Templates filterable by boatClass for easier selection | 3 |
 | cachedAt timestamp on every record | Enables staleness detection for cache invalidation | 4 |
 | syncStatus field (synced/pending/error) | Tracks sync state without separate tracking table | 4 |
@@ -128,6 +131,7 @@ Overall:  [########..] 27/34 plans (79%)
 - **Error handling:** Route-level error.tsx + global-error.tsx with reference IDs
 - **Practice models:** Practice, PracticeBlock, PracticeTemplate, TemplateBlock, BlockTemplate
 - **Lineup models:** Lineup, SeatAssignment, LineupTemplate, TemplateSeat, EquipmentUsageLog, LandAssignment
+- **Regatta models:** Regatta, Entry, EntryLineup, EntrySeat, NotificationConfig, RegattaCentralConnection
 - **Offline models:** OfflineSchedule, OfflineLineup, SyncQueueItem, CacheMeta (Dexie/IndexedDB)
 - **Push models:** PushSubscription (team-scoped push notification subscriptions)
 - **Date handling:** date-fns for time manipulation in template application
@@ -195,6 +199,9 @@ Overall:  [########..] 27/34 plans (79%)
 | Install banner | Intercept beforeinstallprompt, store deferred prompt, trigger on user action | src/components/pwa/install-banner.tsx |
 | Offline context | Provider pattern with show/dismiss/retry error management | src/components/pwa/offline-indicator.tsx |
 | PWA integration | Client wrapper component for server component layouts | src/components/pwa/pwa-wrapper.tsx |
+| Entry-Regatta cascade | Entry belongs to Regatta with onDelete Cascade | prisma/schema.prisma |
+| EntryLineup pattern | Mirrors practice lineup (EntryLineup/EntrySeat like Lineup/SeatAssignment) | prisma/schema.prisma |
+| Encrypted OAuth tokens | RegattaCentralConnection stores AES-256 encrypted tokens per team | prisma/schema.prisma |
 
 ### Todos
 
@@ -303,27 +310,36 @@ All 4 requirements for Phase 4 verified complete:
 ### Last Session
 
 - **Date:** 2026-01-22
-- **Activity:** Executed 04-07-PLAN.md (Install UX and offline indicator)
-- **Outcome:** useOnlineStatus hook, OfflineProvider context, InstallBanner component, dashboard integration
+- **Activity:** Executed 05-01-PLAN.md (Regatta Data Models)
+- **Outcome:** Extended Prisma schema with regatta models, created Zod validation schemas
 
 ### Next Actions
 
-1. Execute Phase 5 (Regatta Mode) - 7 plans across 4 waves
-2. Deploy and verify PWA in production
+1. Execute 05-02-PLAN.md (Regatta CRUD API)
+2. Continue Phase 5 execution (6 remaining plans)
 
 ### Files Modified This Session
 
 **Created:**
-- `src/hooks/use-online-status.ts` (Online status tracking hook)
-- `src/components/pwa/offline-indicator.tsx` (Offline error context and UI)
-- `src/components/pwa/install-banner.tsx` (PWA install prompt)
-- `src/components/pwa/pwa-wrapper.tsx` (Client wrapper for layout)
-- `.planning/phases/04-pwa-infrastructure/04-07-SUMMARY.md` (completed)
+- `src/lib/validations/regatta.ts` (Zod validation schemas for regatta API)
+- `.planning/phases/05-regatta-mode/05-01-SUMMARY.md` (completed)
 
 **Modified:**
-- `src/app/(dashboard)/layout.tsx` (Added PWAWrapper)
+- `prisma/schema.prisma` (Added regatta data models)
 - `.planning/STATE.md` (updated)
+
+## Phase 5 Progress
+
+| Plan | Description | Status |
+|------|-------------|--------|
+| 05-01 | Regatta data models and validation schemas | COMPLETE |
+| 05-02 | Regatta CRUD API | PENDING |
+| 05-03 | Entry management API | PENDING |
+| 05-04 | Regatta Central import | PENDING |
+| 05-05 | Race notifications | PENDING |
+| 05-06 | Regatta UI | PENDING |
+| 05-07 | Regatta calendar integration | PENDING |
 
 ---
 
-*Last updated: 2026-01-22 (Phase 4 - COMPLETE - 7/7 plans)*
+*Last updated: 2026-01-22 (Phase 5 - IN PROGRESS - 1/7 plans)*
