@@ -11,19 +11,19 @@
 | Field | Value |
 |-------|-------|
 | Phase | 4 of 5 (PWA Infrastructure) |
-| Plan | 2 of 7 |
+| Plan | 3 of 7 |
 | Status | In progress |
-| Last activity | 2026-01-22 - Completed 04-01-PLAN.md |
+| Last activity | 2026-01-21 - Completed 04-03-PLAN.md |
 
 **Progress:**
 ```
 Phase 1: [##########] 100% (5/5 plans) COMPLETE
 Phase 2: [##########] 100% (8/8 plans) COMPLETE
 Phase 3: [##########] 100% (7/7 plans) COMPLETE
-Phase 4: [##........] 29% (2/7 plans)
+Phase 4: [####......] 43% (3/7 plans)
 Phase 5: [..........] 0%
 
-Overall:  [########..] 22/27 plans (81%)
+Overall:  [########..] 23/27 plans (85%)
 ```
 
 ## Performance Metrics
@@ -31,7 +31,7 @@ Overall:  [########..] 22/27 plans (81%)
 | Metric | Value |
 |--------|-------|
 | Requirements completed | 21/31 |
-| Plans completed | 22 |
+| Plans completed | 23 |
 | Plans failed | 0 |
 | Blockers resolved | 0 |
 
@@ -100,6 +100,9 @@ Overall:  [########..] 22/27 plans (81%)
 | Use @serwist/next defaultCache | Production-tested caching strategies, no need to reinvent | 4 |
 | Service worker registration production only | Avoid caching issues during development | 4 |
 | Build with --webpack flag | Serwist requires webpack, Turbopack doesn't work | 4 |
+| Cache during fetch | API responses automatically cached after successful fetch | 4 |
+| 24-hour stale threshold | Data older than 24 hours shows stale indicator | 4 |
+| Auto-refresh on reconnect | Device coming back online triggers automatic data refresh | 4 |
 
 ### Architecture Notes
 
@@ -163,6 +166,9 @@ Overall:  [########..] 22/27 plans (81%)
 | Sync queue item | operation, entity, entityId, payload, timestamp, retries | src/lib/db/sync-queue.ts |
 | PWA registration | Client component returns null, runs useEffect registration | src/components/pwa/register-sw.tsx |
 | Service worker source | Entry point at src/app/sw.ts, generated to public/sw.js | next.config.ts, src/app/sw.ts |
+| Cache manager | Transaction-based writes with metadata tracking | src/lib/db/cache-manager.ts |
+| Offline-aware hook | Combine API fetch with IndexedDB fallback and online/offline listeners | src/hooks/use-offline-data.ts |
+| Staleness indicator | Subtle amber color for offline/stale, zinc for normal freshness display | src/components/pwa/staleness-indicator.tsx |
 
 ### Todos
 
@@ -247,7 +253,7 @@ All 5 requirements for Phase 3 verified complete:
 |------|-------------|--------|
 | 04-01 | Service worker infrastructure | COMPLETE |
 | 04-02 | IndexedDB schema and hooks | COMPLETE |
-| 04-03 | Cache population | Pending |
+| 04-03 | Offline data sync | COMPLETE |
 | 04-04 | Offline UI indicators | Pending |
 | 04-05 | Install prompt and manifest | Pending |
 | 04-06 | Push notification infrastructure | Pending |
@@ -257,32 +263,32 @@ All 5 requirements for Phase 3 verified complete:
 
 ### Last Session
 
-- **Date:** 2026-01-22
-- **Activity:** Executed 04-01-PLAN.md (Service worker infrastructure)
-- **Outcome:** Serwist integration, PWA manifest, service worker registration component
+- **Date:** 2026-01-21
+- **Activity:** Executed 04-03-PLAN.md (Offline data sync)
+- **Outcome:** Cache manager, offline hooks, staleness indicator, schedule offline support
 
 ### Next Actions
 
-1. Continue Phase 4 with plan 04-03 (Cache population)
-2. Implement cache warming on schedule page load
-3. Add offline data sync logic
+1. Continue Phase 4 with plan 04-04 (Offline UI indicators)
+2. Add offline status banner and sync indicators
+3. Implement install prompt UI
 
 ### Files Modified This Session
 
 **Created:**
-- `src/app/sw.ts` (Service worker entry point)
-- `public/manifest.json` (PWA manifest)
-- `public/icons/icon-192x192.png` (Placeholder icon)
-- `public/icons/icon-512x512.png` (Placeholder icon)
-- `src/components/pwa/register-sw.tsx` (Registration component)
-- `.planning/phases/04-pwa-infrastructure/04-01-SUMMARY.md` (completed)
+- `src/lib/db/cache-manager.ts` (Cache operations for IndexedDB sync)
+- `src/hooks/use-offline-data.ts` (Offline-aware data hook)
+- `src/components/pwa/staleness-indicator.tsx` (Cache freshness indicator)
+- `.planning/phases/04-pwa-infrastructure/04-03-SUMMARY.md` (completed)
 
 **Modified:**
-- `next.config.ts` (Serwist withSerwist wrapper)
-- `src/app/layout.tsx` (manifest link, registration)
-- `.gitignore` (exclude generated sw.js)
+- `src/components/calendar/unified-calendar.tsx` (Offline data integration)
+- `src/app/(dashboard)/[teamSlug]/schedule/page.tsx` (Pass teamId)
+- `src/app/sw.ts` (webworker lib reference fix)
+- `src/lib/push/subscribe.ts` (type cast fix)
+- `tsconfig.json` (exclude supabase)
 - `.planning/STATE.md` (updated)
 
 ---
 
-*Last updated: 2026-01-22 (Phase 4 - 2/7 plans complete)*
+*Last updated: 2026-01-21 (Phase 4 - 3/7 plans complete)*
