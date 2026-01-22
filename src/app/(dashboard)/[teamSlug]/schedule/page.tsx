@@ -97,6 +97,7 @@ export default async function SchedulePage({ params, searchParams }: SchedulePag
       {/* Calendar */}
       <UnifiedCalendar
         teamSlug={teamSlug}
+        teamId={team.id}
         isCoach={isCoach}
         seasons={seasons}
         initialSeasonId={seasonId}

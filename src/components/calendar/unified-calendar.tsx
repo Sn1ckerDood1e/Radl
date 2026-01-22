@@ -6,17 +6,20 @@ import {
   format,
   startOfMonth,
   endOfMonth,
-  isSameDay,
   addMonths,
   subMonths,
 } from 'date-fns';
 import Link from 'next/link';
 import { PracticeCard } from './practice-card';
 import { RegattaCard } from './regatta-card';
+import { StalenessIndicator } from '@/components/pwa/staleness-indicator';
+import { useOfflineSchedules, useCacheFreshness } from '@/lib/db/hooks';
+import { cacheSchedules } from '@/lib/db/cache-manager';
 import type { ScheduleEvent } from '@/app/api/schedule/route';
 
 interface UnifiedCalendarProps {
   teamSlug: string;
+  teamId: string;
   isCoach: boolean;
   seasons: { id: string; name: string }[];
   initialSeasonId?: string;
@@ -28,6 +31,7 @@ interface UnifiedCalendarProps {
  */
 export function UnifiedCalendar({
   teamSlug,
+  teamId,
   isCoach,
   seasons,
   initialSeasonId,
@@ -37,6 +41,14 @@ export function UnifiedCalendar({
   const [events, setEvents] = useState<ScheduleEvent[]>([]);
   const [loading, setLoading] = useState(true);
   const [seasonId, setSeasonId] = useState(initialSeasonId || '');
+  const [isOffline, setIsOffline] = useState(false);
+
+  // Reactive offline data for fallback
+  const offlineSchedules = useOfflineSchedules(teamId);
+  const { isStale, lastUpdated } = useCacheFreshness(
+    `schedules:${teamId}`,
+    24 * 60 * 60 * 1000 // 24 hour stale threshold
+  );
 
   // Fetch events for current month view
   const fetchEvents = useCallback(async (month: Date) => {
@@ -57,28 +69,84 @@ export function UnifiedCalendar({
       const response = await fetch(`/api/schedule?${params.toString()}`);
       if (response.ok) {
         const data = await response.json();
-        setEvents(data.events || []);
+        const fetchedEvents = data.events || [];
+        setEvents(fetchedEvents);
+        setIsOffline(false);
+
+        // Cache practice events to IndexedDB for offline use
+        const practices = fetchedEvents
+          .filter((e: ScheduleEvent) => e.type === 'practice')
+          .map((e: ScheduleEvent) => ({
+            id: e.id,
+            name: e.name,
+            date: e.date,
+            startTime: e.startTime,
+            endTime: e.endTime || e.startTime,
+            status: e.status || 'PUBLISHED',
+            seasonId: '', // Not available in schedule API response
+          }));
+
+        if (practices.length > 0) {
+          await cacheSchedules(teamId, practices);
+        }
       }
     } catch (error) {
       console.error('Failed to fetch schedule:', error);
+      // Check if we're offline
+      if (typeof navigator !== 'undefined' && !navigator.onLine) {
+        setIsOffline(true);
+      }
     } finally {
       setLoading(false);
     }
-  }, [seasonId]);
+  }, [seasonId, teamId]);
 
   // Fetch events when month or season changes
   useEffect(() => {
     fetchEvents(currentMonth);
   }, [currentMonth, fetchEvents]);
 
+  // Listen for online/offline events
+  useEffect(() => {
+    const handleOnline = () => {
+      setIsOffline(false);
+      fetchEvents(currentMonth); // Refresh when back online
+    };
+
+    const handleOffline = () => {
+      setIsOffline(true);
+    };
+
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, [fetchEvents, currentMonth]);
+
+  // Use offline data as fallback when offline and no API events
+  const displayEvents: ScheduleEvent[] = isOffline && events.length === 0 && offlineSchedules.length > 0
+    ? offlineSchedules.map((s) => ({
+        id: s.id,
+        type: 'practice' as const,
+        name: s.name,
+        date: s.date,
+        startTime: s.startTime,
+        endTime: s.endTime,
+        status: s.status,
+      }))
+    : events;
+
   // Get events for a specific date
   const getEventsForDate = (date: Date): ScheduleEvent[] => {
     const dateStr = format(date, 'yyyy-MM-dd');
-    return events.filter((e) => e.date === dateStr);
+    return displayEvents.filter((e) => e.date === dateStr);
   };
 
   // Get dates that have events (for highlighting)
-  const eventDates = events.map((e) => new Date(e.date));
+  const eventDates = displayEvents.map((e) => new Date(e.date));
 
   // Events for selected date
   const selectedEvents = selectedDate ? getEventsForDate(selectedDate) : [];
@@ -134,9 +202,17 @@ export function UnifiedCalendar({
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
           </button>
-          <h2 className="text-lg font-semibold text-white">
-            {format(currentMonth, 'MMMM yyyy')}
-          </h2>
+          <div className="text-center">
+            <h2 className="text-lg font-semibold text-white">
+              {format(currentMonth, 'MMMM yyyy')}
+            </h2>
+            <StalenessIndicator
+              lastUpdated={lastUpdated}
+              isStale={isStale}
+              isOffline={isOffline}
+              className="justify-center"
+            />
+          </div>
           <button
             onClick={handleNextMonth}
             className="p-2 text-zinc-400 hover:text-white hover:bg-zinc-800 rounded-lg transition-colors"
@@ -257,7 +333,7 @@ export function UnifiedCalendar({
             )}
           </div>
 
-          {loading ? (
+          {loading && displayEvents.length === 0 ? (
             <div className="text-center py-8">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-500 mx-auto"></div>
               <p className="text-zinc-500 text-sm mt-2">Loading events...</p>
