@@ -4,26 +4,26 @@
 
 **Core Value:** Coaches can plan practices with lineups and equipment, and athletes know where to be and what boat they're in.
 
-**Current Focus:** Phase 3 - Lineup Management
+**Current Focus:** Phase 4 - PWA Infrastructure
 
 ## Current Position
 
 | Field | Value |
 |-------|-------|
-| Phase | 3 of 5 (Lineup Management) |
-| Plan | 7 of 7 |
-| Status | Phase complete |
-| Last activity | 2026-01-21 - Completed 03-08-PLAN.md |
+| Phase | 4 of 5 (PWA Infrastructure) |
+| Plan | 2 of 7 |
+| Status | In progress |
+| Last activity | 2026-01-21 - Completed 04-02-PLAN.md |
 
 **Progress:**
 ```
 Phase 1: [##########] 100% (5/5 plans) COMPLETE
 Phase 2: [##########] 100% (8/8 plans) COMPLETE
 Phase 3: [##########] 100% (7/7 plans) COMPLETE
-Phase 4: [..........] 0%
+Phase 4: [##........] 29% (2/7 plans)
 Phase 5: [..........] 0%
 
-Overall:  [########..] 20/25 plans (80%)
+Overall:  [########..] 22/27 plans (81%)
 ```
 
 ## Performance Metrics
@@ -31,7 +31,7 @@ Overall:  [########..] 20/25 plans (80%)
 | Metric | Value |
 |--------|-------|
 | Requirements completed | 21/31 |
-| Plans completed | 20 |
+| Plans completed | 22 |
 | Plans failed | 0 |
 | Blockers resolved | 0 |
 
@@ -91,6 +91,12 @@ Overall:  [########..] 20/25 plans (80%)
 | Inline lineup editor | Edit button toggles editor for specific block, no separate route | 3 |
 | ERG count hardcoded | ERG not tracked as individual equipment, hardcoded to 20 for capacity warnings | 3 |
 | Template boat class filtering | Templates filterable by boatClass for easier selection | 3 |
+| cachedAt timestamp on every record | Enables staleness detection for cache invalidation | 4 |
+| syncStatus field (synced/pending/error) | Tracks sync state without separate tracking table | 4 |
+| Compound indexes for offline queries | [teamId+date] and [practiceId+blockId] for efficient access patterns | 4 |
+| Max 3 retries for sync queue | Prevents infinite retry loops on persistent failures | 4 |
+| 4xx errors removed immediately | Client errors (bad data) won't succeed on retry | 4 |
+| Online listener auto-triggers sync | Automatic background sync when connectivity restored | 4 |
 
 ### Architecture Notes
 
@@ -103,6 +109,7 @@ Overall:  [########..] 20/25 plans (80%)
 - **Error handling:** Route-level error.tsx + global-error.tsx with reference IDs
 - **Practice models:** Practice, PracticeBlock, PracticeTemplate, TemplateBlock, BlockTemplate
 - **Lineup models:** Lineup, SeatAssignment, LineupTemplate, TemplateSeat, EquipmentUsageLog, LandAssignment
+- **Offline models:** OfflineSchedule, OfflineLineup, SyncQueueItem, CacheMeta (Dexie/IndexedDB)
 - **Date handling:** date-fns for time manipulation in template application
 - **Rowing positions:** 1-based numbering (1=Bow, 8=Stroke, 9=Cox for 8+), SeatSide enum (PORT/STARBOARD/NONE)
 - **Drag-and-drop:** dnd-kit (@dnd-kit/core, @dnd-kit/sortable, @dnd-kit/utilities) for lineup editor
@@ -148,6 +155,9 @@ Overall:  [########..] 20/25 plans (80%)
 | Form sub-components | Extract self-contained UI sections (ShellFields, LogoUploadField, ColorPickerFields) | src/components/forms/, src/components/equipment/ |
 | Automatic resource usage tracking | createUsageLog called after boat assignment, deleteUsageLogForLineup on cleanup | src/lib/equipment/usage-logger.ts, lineup API routes |
 | Supplementary data pattern | Usage log failures don't block primary operations, wrapped in try-catch with warnings | All lineup API routes |
+| Offline data interface | Interface with id, cachedAt, syncStatus fields | src/lib/db/schema.ts |
+| Reactive query hook | useLiveQuery with default value for loading state | src/lib/db/hooks.ts |
+| Sync queue item | operation, entity, entityId, payload, timestamp, retries | src/lib/db/sync-queue.ts |
 
 ### Todos
 
@@ -226,33 +236,44 @@ All 5 requirements for Phase 3 verified complete:
 | LINE-04 | Assign athletes to land/erg blocks | COMPLETE |
 | EQUIP-01 | Track equipment usage history | COMPLETE |
 
+## Phase 4 Progress
+
+| Plan | Description | Status |
+|------|-------------|--------|
+| 04-01 | Service worker infrastructure | COMPLETE |
+| 04-02 | IndexedDB schema and hooks | COMPLETE |
+| 04-03 | Cache population | Pending |
+| 04-04 | Offline UI indicators | Pending |
+| 04-05 | Install prompt and manifest | Pending |
+| 04-06 | Push notification infrastructure | Pending |
+| 04-07 | Offline-first schedule view | Pending |
+
 ## Session Continuity
 
 ### Last Session
 
 - **Date:** 2026-01-21
-- **Activity:** Executed 03-08-PLAN.md (Practice lineup integration & template management)
-- **Outcome:** Lineup editor integrated into practice detail, template list/detail pages, Phase 3 complete
+- **Activity:** Executed 04-02-PLAN.md (IndexedDB schema and React hooks)
+- **Outcome:** Dexie database schema, reactive hooks, and sync queue infrastructure created
 
 ### Next Actions
 
-1. Phase 3 complete - ready for Phase 4 (Offline & PWA)
-2. Begin Phase 4 planning and execution
-3. Implement service worker and offline data sync
+1. Continue Phase 4 with plan 04-03 (Cache population)
+2. Implement cache warming on schedule page load
+3. Add offline data sync logic
 
 ### Files Modified This Session
 
 **Created:**
-- `src/app/(dashboard)/[teamSlug]/lineup-templates/page.tsx` (Template list page)
-- `src/app/(dashboard)/[teamSlug]/lineup-templates/[id]/page.tsx` (Template detail server)
-- `src/app/(dashboard)/[teamSlug]/lineup-templates/[id]/lineup-template-detail-client.tsx` (Template detail client)
-- `.planning/phases/03-lineup-management/03-08-SUMMARY.md` (completed)
+- `src/lib/db/schema.ts` (Dexie database schema)
+- `src/lib/db/hooks.ts` (React hooks for offline queries)
+- `src/lib/db/sync-queue.ts` (Sync queue operations)
+- `.planning/phases/04-pwa-infrastructure/04-02-SUMMARY.md` (completed)
 
 **Modified:**
-- `src/app/(dashboard)/[teamSlug]/practices/[id]/page.tsx` (fetch lineup data)
-- `src/app/(dashboard)/[teamSlug]/practices/[id]/practice-detail-client.tsx` (lineup editor integration)
+- `package.json` (added dexie, dexie-react-hooks)
 - `.planning/STATE.md` (updated)
 
 ---
 
-*Last updated: 2026-01-21 (Phase 3 complete - 6/6 plans complete)*
+*Last updated: 2026-01-21 (Phase 4 - 2/7 plans complete)*
