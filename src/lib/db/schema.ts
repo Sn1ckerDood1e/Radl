@@ -53,21 +53,82 @@ export interface CacheMeta {
   expiresAt: number;
 }
 
+// Offline regatta data
+export interface OfflineRegatta {
+  id: string;
+  teamId: string;
+  name: string;
+  location?: string;
+  venue?: string;
+  timezone?: string;
+  startDate: string;       // ISO date string
+  endDate?: string;
+  source: 'REGATTA_CENTRAL' | 'MANUAL';
+  cachedAt: number;        // Timestamp when cached
+  syncStatus: 'synced' | 'pending' | 'error';
+}
+
+// Offline entry (race) data with denormalized lineup
+export interface OfflineEntry {
+  id: string;
+  regattaId: string;
+  eventName: string;
+  scheduledTime: string;   // ISO datetime string
+  meetingLocation?: string;
+  meetingTime?: string;
+  notes?: string;
+  status: 'SCHEDULED' | 'SCRATCHED' | 'COMPLETED';
+  heat?: string;
+  lane?: number;
+  placement?: number;
+  // Denormalized lineup for offline display
+  lineup?: {
+    boatId?: string;
+    boatName?: string;
+    seats: {
+      position: number;
+      athleteId: string;
+      athleteName: string;
+      side: 'PORT' | 'STARBOARD' | 'NONE';
+    }[];
+  };
+  // Notification config
+  notificationConfig?: {
+    leadTimeMinutes: number;
+    notificationSent: boolean;
+  };
+  cachedAt: number;
+  syncStatus: 'synced' | 'pending' | 'error';
+}
+
 export class AppDB extends Dexie {
   schedules!: Table<OfflineSchedule>;
   lineups!: Table<OfflineLineup>;
   syncQueue!: Table<SyncQueueItem>;
   cacheMeta!: Table<CacheMeta>;
+  // New tables for regatta mode
+  regattas!: Table<OfflineRegatta>;
+  entries!: Table<OfflineEntry>;
 
   constructor() {
     super('rowops-offline');
 
-    // Version 1: Initial schema
+    // Version 1: Initial schema (keep for migration)
     this.version(1).stores({
       schedules: 'id, teamId, date, cachedAt, [teamId+date]',
       lineups: 'id, practiceId, blockId, cachedAt, [practiceId+blockId]',
       syncQueue: '++id, timestamp, entity',
       cacheMeta: 'key',
+    });
+
+    // Version 2: Add regatta tables
+    this.version(2).stores({
+      schedules: 'id, teamId, date, cachedAt, [teamId+date]',
+      lineups: 'id, practiceId, blockId, cachedAt, [practiceId+blockId]',
+      syncQueue: '++id, timestamp, entity',
+      cacheMeta: 'key',
+      regattas: 'id, teamId, startDate, cachedAt, [teamId+startDate]',
+      entries: 'id, regattaId, scheduledTime, cachedAt, [regattaId+scheduledTime]',
     });
   }
 }
