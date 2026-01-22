@@ -11,9 +11,9 @@
 | Field | Value |
 |-------|-------|
 | Phase | 5 of 5 (Regatta Mode) |
-| Plan | 4 of 7 |
+| Plan | 6 of 7 |
 | Status | In progress |
-| Last activity | 2026-01-22 - Completed 05-04-PLAN.md |
+| Last activity | 2026-01-22 - Completed 05-06-PLAN.md |
 
 **Progress:**
 ```
@@ -21,17 +21,17 @@ Phase 1: [##########] 100% (5/5 plans) COMPLETE
 Phase 2: [##########] 100% (8/8 plans) COMPLETE
 Phase 3: [##########] 100% (7/7 plans) COMPLETE
 Phase 4: [##########] 100% (7/7 plans) COMPLETE
-Phase 5: [######....] 57% (4/7 plans) IN PROGRESS
+Phase 5: [########..] 86% (6/7 plans) IN PROGRESS
 
-Overall:  [#########.] 31/34 plans (91%)
+Overall:  [#########.] 33/34 plans (97%)
 ```
 
 ## Performance Metrics
 
 | Metric | Value |
 |--------|-------|
-| Requirements completed | 23/31 |
-| Plans completed | 31 |
+| Requirements completed | 24/31 |
+| Plans completed | 33 |
 | Plans failed | 0 |
 | Blockers resolved | 0 |
 
@@ -102,6 +102,8 @@ Overall:  [#########.] 31/34 plans (91%)
 | AES-256-CBC with random IV for tokens | Industry standard encryption, unique IV per token prevents pattern analysis | 5 |
 | 10-minute token refresh threshold | Proactive renewal ensures tokens never expire mid-request | 5 |
 | Upsert on RC import | Allows re-sync without duplicates, updates existing entries | 5 |
+| 5-minute cron interval | Balances notification timeliness with server resource usage | 5 |
+| Mark empty lineups as sent | Prevents infinite reprocessing of entries without assigned athletes | 5 |
 | Template boat class filtering | Templates filterable by boatClass for easier selection | 3 |
 | cachedAt timestamp on every record | Enables staleness detection for cache invalidation | 4 |
 | syncStatus field (synced/pending/error) | Tracks sync state without separate tracking table | 4 |
@@ -220,6 +222,9 @@ Overall:  [#########.] 31/34 plans (91%)
 | AES-256-CBC token encryption | iv:encryptedData hex format for secure OAuth token storage | src/lib/regatta-central/encryption.ts |
 | RC API client pattern | Team-scoped client with automatic token refresh (10-min threshold) | src/lib/regatta-central/client.ts |
 | RC import flow | Fetch regatta details + entries in parallel, upsert both | src/app/api/regatta-central/import/route.ts |
+| Cron-triggered Edge Function | pg_cron calls http_post to invoke Edge Function on schedule | supabase/functions/process-race-notifications/index.ts |
+| Scheduled notification processing | Query by scheduledFor range, mark as sent after dispatch | supabase/functions/process-race-notifications/index.ts |
+| Manual race reminder trigger | notifyRaceReminder for ad-hoc race notifications | src/lib/push/triggers.ts |
 
 ### Todos
 
@@ -328,22 +333,25 @@ All 4 requirements for Phase 4 verified complete:
 ### Last Session
 
 - **Date:** 2026-01-22
-- **Activity:** Executed 05-04-PLAN.md (Entry Lineup and Notification Config API)
-- **Outcome:** Created API endpoints for entry lineup assignment and notification configuration
+- **Activity:** Executed 05-06-PLAN.md (Race Notifications Dispatch)
+- **Outcome:** Created pg_cron-triggered Edge Function and manual race reminder trigger
 
 ### Next Actions
 
-1. Execute 05-05-PLAN.md (Race Notifications)
-2. Continue Phase 5 execution (3 remaining plans)
+1. Execute 05-05-PLAN.md (Regatta UI)
+2. Execute 05-07-PLAN.md (Regatta Calendar Integration)
+3. Complete Phase 5 (1 remaining plan)
 
 ### Files Modified This Session
 
 **Created:**
-- `src/app/api/regattas/[id]/entries/[entryId]/lineup/route.ts` (Entry lineup API)
-- `src/app/api/regattas/[id]/entries/[entryId]/notification/route.ts` (Notification config API)
-- `.planning/phases/05-regatta-mode/05-04-SUMMARY.md` (completed)
+- `supabase/functions/process-race-notifications/index.ts` (Cron-triggered notification processor)
+- `supabase/migrations/20260121_race_notifications_cron.sql` (pg_cron setup template)
+- `supabase/CRON_SETUP.md` (Setup documentation)
+- `.planning/phases/05-regatta-mode/05-06-SUMMARY.md` (completed)
 
 **Modified:**
+- `src/lib/push/triggers.ts` (added notifyRaceReminder)
 - `.planning/STATE.md` (updated)
 
 ## Phase 5 Progress
@@ -354,10 +362,10 @@ All 4 requirements for Phase 4 verified complete:
 | 05-02 | Regatta CRUD API | COMPLETE |
 | 05-03 | Regatta Central integration | COMPLETE |
 | 05-04 | Entry lineup and notification config API | COMPLETE |
-| 05-05 | Race notifications | PENDING |
-| 05-06 | Regatta UI | PENDING |
+| 05-05 | Regatta UI | PENDING |
+| 05-06 | Race notifications dispatch | COMPLETE |
 | 05-07 | Regatta calendar integration | PENDING |
 
 ---
 
-*Last updated: 2026-01-22 (Phase 5 - IN PROGRESS - 4/7 plans)*
+*Last updated: 2026-01-22 (Phase 5 - IN PROGRESS - 6/7 plans)*
