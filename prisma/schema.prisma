@@ -34,6 +34,7 @@ model Team {
   blockTemplates    BlockTemplate[]
   lineupTemplates   LineupTemplate[]
   regattas          Regatta[]
+  rcConnection      RegattaCentralConnection?
 }
 
 // Team membership linking users to teams with roles
@@ -134,6 +135,19 @@ enum Side {
   BOTH
 }
 
+// Regatta source enum (how regatta was created)
+enum RegattaSource {
+  REGATTA_CENTRAL
+  MANUAL
+}
+
+// Entry status enum (race entry state)
+enum EntryStatus {
+  SCHEDULED
+  SCRATCHED
+  COMPLETED
+}
+
 // Notification type enum
 enum NotificationType {
   DAMAGE_REPORT
@@ -195,6 +209,7 @@ model Equipment {
   usageLogs     EquipmentUsageLog[]
   lineups       Lineup[]
   templateBoats LineupTemplate[]
+  entryLineups  EntryLineup[]
 
   @@index([teamId])
   @@index([teamId, type])
@@ -241,6 +256,7 @@ model AthleteProfile {
   seatAssignments  SeatAssignment[]
   templateSeats    TemplateSeat[]
   landAssignments  LandAssignment[]
+  entrySeats       EntrySeat[]
 
   @@index([teamMemberId])
 }
@@ -503,23 +519,121 @@ model LandAssignment {
   @@index([blockId])
 }
 
-// Regatta model (placeholder for Phase 5)
+// Regatta model for race events
 model Regatta {
-  id        String    @id @default(uuid())
-  teamId    String
-  seasonId  String
-  name      String
-  location  String?
-  startDate DateTime
-  endDate   DateTime?
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  id          String        @id @default(uuid())
+  teamId      String
+  seasonId    String
+  name        String
+  location    String?
+  venue       String?       // Specific venue/course name
+  timezone    String?       // IANA timezone (e.g., 'America/New_York')
+  startDate   DateTime
+  endDate     DateTime?
+  source      RegattaSource @default(MANUAL)
+  rcRegattaId String?       // Regatta Central ID if imported
+  lastSyncAt  DateTime?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
 
-  team   Team   @relation(fields: [teamId], references: [id], onDelete: Cascade)
-  season Season @relation(fields: [seasonId], references: [id], onDelete: Cascade)
+  team    Team    @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  season  Season  @relation(fields: [seasonId], references: [id], onDelete: Cascade)
+  entries Entry[]
 
+  @@unique([teamId, rcRegattaId])
   @@index([teamId])
   @@index([teamId, seasonId])
+  @@index([teamId, startDate])
+}
+
+// Entry model for individual race entries within a regatta
+model Entry {
+  id              String      @id @default(uuid())
+  regattaId       String
+  eventName       String      // e.g., "Women's Varsity 8+"
+  eventCode       String?     // RC event code
+  rcEntryId       String?     // Regatta Central entry ID
+  scheduledTime   DateTime    // Race time (UTC)
+  meetingLocation String?     // Where to rig/meet (REG-06)
+  meetingTime     DateTime?   // When to meet
+  notes           String?     // Special instructions (REG-07)
+  status          EntryStatus @default(SCHEDULED)
+  heat            String?     // e.g., "Heat 1", "Final"
+  lane            Int?
+  placement       Int?        // Result after race
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  regatta            Regatta              @relation(fields: [regattaId], references: [id], onDelete: Cascade)
+  entryLineup        EntryLineup?
+  notificationConfig NotificationConfig?
+
+  @@unique([regattaId, rcEntryId])
+  @@index([regattaId])
+  @@index([regattaId, scheduledTime])
+}
+
+// EntryLineup model for race lineup assignments
+model EntryLineup {
+  id        String   @id @default(uuid())
+  entryId   String   @unique
+  boatId    String?
+  notes     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  entry Entry       @relation(fields: [entryId], references: [id], onDelete: Cascade)
+  boat  Equipment?  @relation(fields: [boatId], references: [id])
+  seats EntrySeat[]
+
+  @@index([entryId])
+}
+
+// EntrySeat model for athlete positions within race lineups
+model EntrySeat {
+  id            String   @id @default(uuid())
+  entryLineupId String
+  athleteId     String
+  position      Int      // 1=Bow, etc.
+  side          SeatSide
+
+  entryLineup EntryLineup    @relation(fields: [entryLineupId], references: [id], onDelete: Cascade)
+  athlete     AthleteProfile @relation(fields: [athleteId], references: [id])
+
+  @@unique([entryLineupId, position])
+  @@unique([entryLineupId, athleteId])
+  @@index([entryLineupId])
+}
+
+// NotificationConfig model for race notification scheduling
+model NotificationConfig {
+  id               String    @id @default(uuid())
+  entryId          String    @unique
+  leadTimeMinutes  Int       @default(60) // Default 1 hour before
+  notificationSent Boolean   @default(false)
+  scheduledFor     DateTime?
+  sentAt           DateTime?
+
+  entry Entry @relation(fields: [entryId], references: [id], onDelete: Cascade)
+
+  @@index([scheduledFor, notificationSent])
+}
+
+// RegattaCentralConnection model for OAuth tokens per team
+model RegattaCentralConnection {
+  id             String    @id @default(uuid())
+  teamId         String    @unique
+  rcClubId       String    // Regatta Central organization ID
+  encryptedToken String    // AES-256 encrypted access token
+  refreshToken   String    // AES-256 encrypted refresh token
+  expiresAt      DateTime
+  lastSyncAt     DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  team Team @relation(fields: [teamId], references: [id], onDelete: Cascade)
+
+  @@index([teamId])
 }
 
 // Push notification subscriptions for Web Push Protocol
