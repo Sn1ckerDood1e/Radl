@@ -11,19 +11,19 @@
 | Field | Value |
 |-------|-------|
 | Phase | 4 of 5 (PWA Infrastructure) |
-| Plan | 3 of 7 |
+| Plan | 4 of 7 |
 | Status | In progress |
-| Last activity | 2026-01-21 - Completed 04-03-PLAN.md |
+| Last activity | 2026-01-21 - Completed 04-04-PLAN.md |
 
 **Progress:**
 ```
 Phase 1: [##########] 100% (5/5 plans) COMPLETE
 Phase 2: [##########] 100% (8/8 plans) COMPLETE
 Phase 3: [##########] 100% (7/7 plans) COMPLETE
-Phase 4: [####......] 43% (3/7 plans)
+Phase 4: [######....] 57% (4/7 plans)
 Phase 5: [..........] 0%
 
-Overall:  [########..] 23/27 plans (85%)
+Overall:  [########..] 24/27 plans (89%)
 ```
 
 ## Performance Metrics
@@ -31,7 +31,7 @@ Overall:  [########..] 23/27 plans (85%)
 | Metric | Value |
 |--------|-------|
 | Requirements completed | 21/31 |
-| Plans completed | 23 |
+| Plans completed | 24 |
 | Plans failed | 0 |
 | Blockers resolved | 0 |
 
@@ -103,6 +103,10 @@ Overall:  [########..] 23/27 plans (85%)
 | Cache during fetch | API responses automatically cached after successful fetch | 4 |
 | 24-hour stale threshold | Data older than 24 hours shows stale indicator | 4 |
 | Auto-refresh on reconnect | Device coming back online triggers automatic data refresh | 4 |
+| VAPID keys required | Web Push Protocol requires VAPID for encrypted push messages | 4 |
+| Unique endpoint constraint | Browser push endpoints are unique, enables upsert pattern on re-subscribe | 4 |
+| Supabase Edge Function for dispatch | Push notifications sent via Edge Function, avoids web-push in Next.js | 4 |
+| 410 Gone auto-cleanup | Invalid push subscriptions automatically removed when push fails | 4 |
 
 ### Architecture Notes
 
@@ -116,6 +120,7 @@ Overall:  [########..] 23/27 plans (85%)
 - **Practice models:** Practice, PracticeBlock, PracticeTemplate, TemplateBlock, BlockTemplate
 - **Lineup models:** Lineup, SeatAssignment, LineupTemplate, TemplateSeat, EquipmentUsageLog, LandAssignment
 - **Offline models:** OfflineSchedule, OfflineLineup, SyncQueueItem, CacheMeta (Dexie/IndexedDB)
+- **Push models:** PushSubscription (team-scoped push notification subscriptions)
 - **Date handling:** date-fns for time manipulation in template application
 - **Rowing positions:** 1-based numbering (1=Bow, 8=Stroke, 9=Cox for 8+), SeatSide enum (PORT/STARBOARD/NONE)
 - **Drag-and-drop:** dnd-kit (@dnd-kit/core, @dnd-kit/sortable, @dnd-kit/utilities) for lineup editor
@@ -169,6 +174,9 @@ Overall:  [########..] 23/27 plans (85%)
 | Cache manager | Transaction-based writes with metadata tracking | src/lib/db/cache-manager.ts |
 | Offline-aware hook | Combine API fetch with IndexedDB fallback and online/offline listeners | src/hooks/use-offline-data.ts |
 | Staleness indicator | Subtle amber color for offline/stale, zinc for normal freshness display | src/components/pwa/staleness-indicator.tsx |
+| Push subscription flow | permission -> subscribe -> store on server | src/lib/push/subscribe.ts |
+| Push notification handlers | Service worker push/notificationclick events | src/app/sw.ts |
+| Edge Function dispatch | Supabase Edge Function sends notifications via web-push | supabase/functions/send-notification/index.ts |
 
 ### Todos
 
@@ -254,9 +262,9 @@ All 5 requirements for Phase 3 verified complete:
 | 04-01 | Service worker infrastructure | COMPLETE |
 | 04-02 | IndexedDB schema and hooks | COMPLETE |
 | 04-03 | Offline data sync | COMPLETE |
-| 04-04 | Offline UI indicators | Pending |
-| 04-05 | Install prompt and manifest | Pending |
-| 04-06 | Push notification infrastructure | Pending |
+| 04-04 | Push notification infrastructure | COMPLETE |
+| 04-05 | Offline UI indicators | Pending |
+| 04-06 | Install prompt and manifest | Pending |
 | 04-07 | Offline-first schedule view | Pending |
 
 ## Session Continuity
@@ -264,31 +272,31 @@ All 5 requirements for Phase 3 verified complete:
 ### Last Session
 
 - **Date:** 2026-01-21
-- **Activity:** Executed 04-03-PLAN.md (Offline data sync)
-- **Outcome:** Cache manager, offline hooks, staleness indicator, schedule offline support
+- **Activity:** Executed 04-04-PLAN.md (Push notification infrastructure)
+- **Outcome:** PushSubscription model, subscribe/unsubscribe API, client helpers, Supabase Edge Function, SW push handlers
 
 ### Next Actions
 
-1. Continue Phase 4 with plan 04-04 (Offline UI indicators)
+1. Continue Phase 4 with plan 04-05 (Offline UI indicators)
 2. Add offline status banner and sync indicators
 3. Implement install prompt UI
 
 ### Files Modified This Session
 
 **Created:**
-- `src/lib/db/cache-manager.ts` (Cache operations for IndexedDB sync)
-- `src/hooks/use-offline-data.ts` (Offline-aware data hook)
-- `src/components/pwa/staleness-indicator.tsx` (Cache freshness indicator)
-- `.planning/phases/04-pwa-infrastructure/04-03-SUMMARY.md` (completed)
+- `src/app/api/push/subscribe/route.ts` (Push subscription endpoint)
+- `src/app/api/push/unsubscribe/route.ts` (Push unsubscribe endpoint)
+- `src/lib/push/vapid.ts` (VAPID key configuration)
+- `src/lib/push/subscribe.ts` (Client subscription helpers)
+- `supabase/functions/send-notification/index.ts` (Edge Function for push dispatch)
+- `.planning/phases/04-pwa-infrastructure/04-04-SUMMARY.md` (completed)
 
 **Modified:**
-- `src/components/calendar/unified-calendar.tsx` (Offline data integration)
-- `src/app/(dashboard)/[teamSlug]/schedule/page.tsx` (Pass teamId)
-- `src/app/sw.ts` (webworker lib reference fix)
-- `src/lib/push/subscribe.ts` (type cast fix)
-- `tsconfig.json` (exclude supabase)
+- `prisma/schema.prisma` (PushSubscription model added)
+- `src/app/sw.ts` (push/notificationclick handlers)
+- `.env.example` (VAPID placeholders)
 - `.planning/STATE.md` (updated)
 
 ---
 
-*Last updated: 2026-01-21 (Phase 4 - 3/7 plans complete)*
+*Last updated: 2026-01-21 (Phase 4 - 4/7 plans complete)*
