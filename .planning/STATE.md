@@ -217,6 +217,8 @@ Overall:  [#########.] 33/34 plans (97%)
 | Notification config API | GET/PUT/PATCH/DELETE with scheduledFor calculation | src/app/api/regattas/[id]/entries/[entryId]/notification/route.ts |
 | Notification time calculation | scheduledFor = scheduledTime - (leadTimeMinutes * 60 * 1000) | notification route.ts |
 | Regatta API pattern | Team-scoped with season ownership validation | src/app/api/regattas/route.ts |
+| Venue timezone display | Use formatInTimeZone from date-fns-tz for race times | src/components/regatta/entry-card.tsx |
+| Timeline grouping | Group entries by date with sticky headers, highlight next entry | src/components/regatta/race-timeline.tsx |
 | Entry access helper | verifyEntryAccess joins through regatta to team | src/app/api/regattas/[id]/entries/[entryId]/route.ts |
 | Nested resource pattern | /regattas/[id]/entries/[entryId] for clear ownership | src/app/api/regattas/ |
 | AES-256-CBC token encryption | iv:encryptedData hex format for secure OAuth token storage | src/lib/regatta-central/encryption.ts |
@@ -333,25 +335,29 @@ All 4 requirements for Phase 4 verified complete:
 ### Last Session
 
 - **Date:** 2026-01-22
-- **Activity:** Executed 05-06-PLAN.md (Race Notifications Dispatch)
-- **Outcome:** Created pg_cron-triggered Edge Function and manual race reminder trigger
+- **Activity:** Executed 05-05-PLAN.md (Regatta UI)
+- **Outcome:** Created timeline view UI with date-fns-tz timezone support
 
 ### Next Actions
 
-1. Execute 05-05-PLAN.md (Regatta UI)
-2. Execute 05-07-PLAN.md (Regatta Calendar Integration)
-3. Complete Phase 5 (1 remaining plan)
+1. Execute 05-07-PLAN.md (Regatta Calendar Integration)
+2. Complete Phase 5 verification
+3. Mark Phase 5 complete
 
 ### Files Modified This Session
 
 **Created:**
-- `supabase/functions/process-race-notifications/index.ts` (Cron-triggered notification processor)
-- `supabase/migrations/20260121_race_notifications_cron.sql` (pg_cron setup template)
-- `supabase/CRON_SETUP.md` (Setup documentation)
-- `.planning/phases/05-regatta-mode/05-06-SUMMARY.md` (completed)
+- `src/components/regatta/entry-card.tsx` (Entry card component)
+- `src/components/regatta/race-timeline.tsx` (Timeline component)
+- `src/components/regatta/regatta-form.tsx` (Regatta create/edit form)
+- `src/app/(dashboard)/[teamSlug]/regattas/page.tsx` (Regatta list page)
+- `src/app/(dashboard)/[teamSlug]/regattas/new/page.tsx` (New regatta page)
+- `src/app/(dashboard)/[teamSlug]/regattas/[id]/page.tsx` (Regatta detail page)
+- `src/app/(dashboard)/[teamSlug]/regattas/[id]/regatta-detail-client.tsx` (Interactive client component)
+- `.planning/phases/05-regatta-mode/05-05-SUMMARY.md` (completed)
 
 **Modified:**
-- `src/lib/push/triggers.ts` (added notifyRaceReminder)
+- `package.json` (added date-fns-tz)
 - `.planning/STATE.md` (updated)
 
 ## Phase 5 Progress
@@ -362,10 +368,10 @@ All 4 requirements for Phase 4 verified complete:
 | 05-02 | Regatta CRUD API | COMPLETE |
 | 05-03 | Regatta Central integration | COMPLETE |
 | 05-04 | Entry lineup and notification config API | COMPLETE |
-| 05-05 | Regatta UI | PENDING |
+| 05-05 | Regatta UI | COMPLETE |
 | 05-06 | Race notifications dispatch | COMPLETE |
 | 05-07 | Regatta calendar integration | PENDING |
 
 ---
 
-*Last updated: 2026-01-22 (Phase 5 - IN PROGRESS - 6/7 plans)*
+*Last updated: 2026-01-22 (Phase 5 - IN PROGRESS - 6/7 plans complete, 1 remaining)*
