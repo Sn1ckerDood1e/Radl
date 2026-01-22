@@ -4,6 +4,8 @@
 
 A multi-tenant SaaS for rowing team operations — practice planning, equipment management, roster coordination, and race-day execution at regattas.
 
+**Current State:** v1.0 shipped with full operational capabilities. Coaches can plan practices with lineups and equipment, athletes receive push notifications and can view schedules offline at race venues.
+
 ## Core Value
 
 **The ONE thing that must work:** Coaches can plan practices with lineups and equipment, and athletes know where to be and what boat they're in.
@@ -16,165 +18,75 @@ A multi-tenant SaaS for rowing team operations — practice planning, equipment 
 | **Athlete** | View schedule, see assignments, receive notifications, acknowledge races | Personal schedule + assignments |
 | **Parent** | View child's schedule and race times | Read-only, invite/athlete-linked |
 
-## Problem Being Solved
+## Current Codebase
 
-Rowing teams juggle:
-- Complex equipment (shells, oars, launches) that must be available and undamaged
-- Rosters that change by season and eligibility
-- Practices with water/land/erg blocks requiring different assignment models
-- Race-day chaos at regattas with multiple events, scattered athletes, and unreliable connectivity
+**Tech Stack:**
+- Next.js 16 + React 19
+- Prisma 6 + PostgreSQL (Supabase)
+- Serwist (service worker) + Dexie.js (IndexedDB)
+- Supabase Edge Functions (push notifications)
+- dnd-kit (drag-and-drop)
+- date-fns-tz (timezone handling)
 
-Current state: The app has basic CRUD for equipment and roster, but it's **administrative, not operational**. Equipment isn't tied to practices. Roster doesn't show who can row today. No scheduling. No lineups. No regatta support.
+**LOC:** ~80,000 TypeScript
 
-## Target State
-
-### Milestone 1: Equipment & Roster Flows (Operational)
-
-**Equipment becomes operational:**
-- Usage logs auto-generated from practice assignments
-- Readiness state derived from: damage reports + maintenance flags + manual overrides
-- Availability enforced at assignment time (damaged/unavailable boats can't be assigned)
-
-**Roster becomes contextual:**
-- Three states: On team → Eligible (season-scoped) → Assigned (practice-scoped)
-- Practice view shows: assigned / unassigned / ineligible
-- Season container groups practices, regattas, templates
-- Athletes can be active/inactive per season (supports redshirting, alumni history)
-
-### Milestone 2: Scheduling & Lineups
-
-**Practice structure:**
-- Time (date, start/end, repeating via templates)
-- Blocks (warm-up, steady state, pieces, land work, erg)
-- Block metadata: single/interval, time/distance, tagged (water/land/erg)
-
-**Assignment model:**
-- Water blocks: Define lineup first (athletes + seats), then assign compatible available boat
-- Land/erg blocks: Group-based assignment (e.g., "Varsity Group A — 5k erg test")
-- Manual override allowed (pick specific boat first if desired)
-- Results stored per athlete (erg scores, attendance)
-
-**Templates:**
-- Reusable practice templates (e.g., "Tuesday Steady State")
-- Reusable lineup templates (e.g., "Varsity 1V standard")
-
-**Schedule view:**
-- Unified calendar: practices, regattas, races
-
-### Milestone 3: Regatta Mode
-
-**What it is:** Temporary operational state for race-day execution at competitions.
-
-**Regatta Central integration:**
-- Per-team API keys (OAuth2, encrypted at rest)
-- Search/select regattas
-- Pull team's entries and race schedule
-- Manual entry also supported
-
-**Race-day flow:**
-1. Coach sees timeline of team's races (from Regatta Central)
-2. For each entry, coach assigns lineup (fresh or from template)
-3. Coach sets: notification timing, meeting location for rigging/launch
-4. Coach adds notes (helper athletes, special instructions)
-5. Athletes receive push notifications before their race
-6. Same athlete can race in multiple events
-
-**Offline capability:**
-- Cached schedules and lineups
-- Read-only offline access
-- Queued outbound actions
-- Real-time updates are best-effort
-
-**What it is NOT:**
-- Results database
-- Registration/payment system
-- Public scoring tool
-- Full race management
-
-### Milestone 4: Issues & Fixes
-
-"Make the foundation safe and boring before adding more features."
-
-- Security: auth, permissions, data isolation
-- Tech debt from codebase analysis
-- Stability/correctness issues that block scaling
-
-## Constraints
-
-| Constraint | Detail |
-|------------|--------|
-| **Platform** | PWA (web + service workers), no native app for v1 |
-| **Offline** | Required for regatta mode (unreliable cellular at venues) |
-| **Multi-tenant** | Single deployed instance, tenant IDs enforce isolation |
-| **Notifications** | Push (service workers) + optional email, all configurable |
-| **External API** | Regatta Central v4, per-team API keys |
-
-## Domain Model
-
-**Boat types:** Standard rowing configs (1x, 2x, 2-, 4+, 4-, 4x, 8+, etc.) with fixed seat counts.
-
-**Coxswains:** Athletes with a special position flag, not a separate role.
-
-**Events:** Follow standard rowing nomenclature (e.g., "Varsity Men's 8+", "JV Women's 4+").
-
-**Seasons:** Container for practices, regattas, templates. Eligibility is season-scoped.
-
-## Data Retention
-
-| Data Type | Retention | Post-Season |
-|-----------|-----------|-------------|
-| Practice data | Archived after season | Read-only, deletable by admin |
-| Lineups | Always retained | Read-only, useful for history |
-| Equipment usage logs | Long-term | Never auto-deleted, exportable |
+**Architecture:**
+- Multi-tenant with JWT claims (team_id in all queries)
+- PWA with offline data sync and background mutations
+- Regatta Central integration (OAuth2, encrypted tokens)
 
 ## Requirements
 
-### Validated
+### Validated (v1.0)
 
-- [x] **AUTH-EXISTING**: Multi-tenant authentication with JWT claims — *existing*
-- [x] **EQUIP-CRUD**: Equipment create/read/update/delete — *existing*
-- [x] **EQUIP-DAMAGE**: Damage reporting with QR codes — *existing*
-- [x] **ROSTER-CRUD**: Team member management — *existing*
-- [x] **ROSTER-INVITE**: Invitations (email/CSV/team code) — *existing*
-- [x] **NOTIF-INAPP**: In-app notification bell — *existing*
+- [x] **SEC-01**: Fix JWT claims verification gaps — v1.0
+- [x] **SEC-02**: Add rate limiting to sensitive endpoints — v1.0
+- [x] **SEC-03**: Audit and verify multi-tenant data isolation — v1.0
+- [x] **SEASON-01**: Create season container model — v1.0
+- [x] **SEASON-02**: Implement season-scoped eligibility — v1.0
+- [x] **PRAC-01**: Create practices with time blocks — v1.0
+- [x] **PRAC-02**: Add block metadata — v1.0
+- [x] **PRAC-03**: Create reusable practice templates — v1.0
+- [x] **PRAC-04**: Build unified calendar view — v1.0
+- [x] **LINE-01**: Build lineup editor — v1.0
+- [x] **LINE-02**: Implement boat assignment — v1.0
+- [x] **LINE-03**: Create reusable lineup templates — v1.0
+- [x] **LINE-04**: Implement group-based assignment — v1.0
+- [x] **EQUIP-01**: Auto-generate usage logs — v1.0
+- [x] **EQUIP-02**: Implement readiness state — v1.0
+- [x] **EQUIP-03**: Enforce availability at assignment — v1.0
+- [x] **PWA-01**: Set up service worker with caching — v1.0
+- [x] **PWA-02**: Implement push notifications — v1.0
+- [x] **PWA-03**: Add IndexedDB offline storage — v1.0
+- [x] **PWA-04**: Implement background sync — v1.0
+- [x] **REG-01**: Integrate Regatta Central API — v1.0
+- [x] **REG-02**: Support manual regatta/race entry — v1.0
+- [x] **REG-03**: Build timeline view — v1.0
+- [x] **REG-04**: Enable lineup assignment per entry — v1.0
+- [x] **REG-05**: Implement race notifications — v1.0
+- [x] **REG-06**: Add meeting location field — v1.0
+- [x] **REG-07**: Add notes field — v1.0
+- [x] **REG-08**: Build offline capability — v1.0
+- [x] **DEBT-01**: Extract claims helper utility — v1.0
+- [x] **DEBT-02**: Refactor oversized form components — v1.0
+- [x] **DEBT-03**: Add query caching — v1.0
 
-### Active
+### Active (v2.0)
 
-#### Milestone 1: Equipment & Roster
-- [ ] **EQUIP-USAGE**: Auto-generate usage logs from practice assignments
-- [ ] **EQUIP-READY**: Readiness state (damage + maintenance + overrides)
-- [ ] **EQUIP-AVAIL**: Availability enforcement at assignment time
-- [ ] **ROSTER-ELIG**: Season-scoped eligibility
-- [ ] **ROSTER-ASSIGN**: Practice-scoped assignment status
-- [ ] **SEASON-MGMT**: Season container with practice/regatta grouping
+None yet — run `/gsd:new-milestone` to define v2.0 requirements.
 
-#### Milestone 2: Scheduling & Lineups
-- [ ] **PRAC-STRUCT**: Practice with time + blocks (water/land/erg)
-- [ ] **PRAC-BLOCKS**: Block types with interval/time/distance metadata
-- [ ] **ASSIGN-WATER**: Lineup-first assignment for water blocks
-- [ ] **ASSIGN-LAND**: Group-based assignment for land/erg blocks
-- [ ] **LINEUP-TMPL**: Reusable lineup templates
-- [ ] **PRAC-TMPL**: Reusable practice templates
-- [ ] **SCHED-VIEW**: Unified calendar (practices, regattas, races)
+**Candidates from v1.0 tech debt:**
+- RC import UI (APIs ready, need settings page)
+- Equipment usage display (data collected, no UI)
+- Additional notification triggers (join/damage)
 
-#### Milestone 3: Regatta Mode
-- [ ] **REG-CONNECT**: Regatta Central API integration (per-team keys)
-- [ ] **REG-MANUAL**: Manual regatta/race entry
-- [ ] **REG-TIMELINE**: Timeline view of team's races
-- [ ] **REG-LINEUP**: Lineup assignment per entry (fresh or template)
-- [ ] **REG-NOTIFY**: Push notifications with configurable timing
-- [ ] **REG-LOCATION**: Meeting location for rigging/launch
-- [ ] **REG-NOTES**: Notes field for helpers/instructions
-- [ ] **REG-OFFLINE**: Offline capability (cached schedules, queued actions)
-
-#### Milestone 4: Issues & Fixes
-- [ ] **SEC-AUTH**: Fix JWT claims verification gaps
-- [ ] **SEC-RATE**: Add rate limiting to sensitive endpoints
-- [ ] **SEC-ISOLATION**: Verify tenant data isolation
-- [ ] **DEBT-DRY**: Extract duplicated claims fetching pattern
-- [ ] **DEBT-FORMS**: Refactor oversized form components
-- [ ] **PERF-CACHE**: Add query caching for stable data
-- [ ] **PERF-N1**: Fix N+1 queries in roster loading
+**Candidates from v2 backlog:**
+- Season templates
+- Email notifications
+- Erg results tracking
+- Attendance analytics
+- Equipment lifecycle tracking
+- Parent portal
 
 ### Out of Scope
 
@@ -192,11 +104,24 @@ Current state: The app has basic CRUD for equipment and roster, but it's **admin
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| PWA over native | Coaches use laptop/tablet, athletes use phone browser. Service workers handle push + offline. | Pending |
-| Lineup-first assignment | Coaches think in people and seats, boats are constraints. Easier template reuse. | Pending |
-| Per-team Regatta Central keys | Each team connects own account. Keys encrypted at rest, scoped to tenant. | Pending |
-| Season-scoped eligibility | Supports redshirting, alumni history, roster changes without user deletion. | Pending |
-| Group-based land/erg | Individual overrides optional. Results stored per athlete. | Pending |
+| PWA over native | Coaches use laptop/tablet, athletes use phone browser. Service workers handle push + offline. | Good — works well |
+| Lineup-first assignment | Coaches think in people and seats, boats are constraints. Easier template reuse. | Good — natural flow |
+| Per-team Regatta Central keys | Each team connects own account. Keys encrypted at rest, scoped to tenant. | Good — proper isolation |
+| Season-scoped eligibility | Supports redshirting, alumni history, roster changes without user deletion. | Good — flexible |
+| Group-based land/erg | Individual overrides optional. Results stored per athlete. | Good — simple UX |
+| dnd-kit for drag-drop | Modern, accessible, well-maintained library | Good — smooth UX |
+| Serwist for service worker | Production-tested caching strategies | Good — reliable offline |
+| AES-256-CBC for RC tokens | Industry standard encryption | Good — secure |
+
+## Constraints
+
+| Constraint | Detail |
+|------------|--------|
+| **Platform** | PWA (web + service workers), no native app for v1 |
+| **Offline** | Required for regatta mode (unreliable cellular at venues) |
+| **Multi-tenant** | Single deployed instance, tenant IDs enforce isolation |
+| **Notifications** | Push (service workers) + optional email, all configurable |
+| **External API** | Regatta Central v4, per-team API keys |
 
 ---
-*Last updated: 2026-01-20 after initialization*
+*Last updated: 2026-01-22 after v1.0 milestone*
