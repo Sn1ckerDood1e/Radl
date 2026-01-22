@@ -11,9 +11,9 @@
 | Field | Value |
 |-------|-------|
 | Phase | 5 of 5 (Regatta Mode) |
-| Plan | 7 of 7 |
+| Plan | 8 of 8 (gap closure complete) |
 | Status | Phase complete |
-| Last activity | 2026-01-22 - Completed 05-07-PLAN.md |
+| Last activity | 2026-01-22 - Completed 05-08-PLAN.md (gap closure) |
 
 **Progress:**
 ```
@@ -21,9 +21,9 @@ Phase 1: [##########] 100% (5/5 plans) COMPLETE
 Phase 2: [##########] 100% (8/8 plans) COMPLETE
 Phase 3: [##########] 100% (7/7 plans) COMPLETE
 Phase 4: [##########] 100% (7/7 plans) COMPLETE
-Phase 5: [##########] 100% (7/7 plans) COMPLETE
+Phase 5: [##########] 100% (8/8 plans) COMPLETE (includes gap closure)
 
-Overall:  [##########] 34/34 plans (100%)
+Overall:  [##########] 35/35 plans (100%)
 ```
 
 ## Performance Metrics
@@ -31,7 +31,7 @@ Overall:  [##########] 34/34 plans (100%)
 | Metric | Value |
 |--------|-------|
 | Requirements completed | 31/31 |
-| Plans completed | 34 |
+| Plans completed | 35 |
 | Plans failed | 0 |
 | Blockers resolved | 0 |
 
@@ -133,6 +133,7 @@ Overall:  [##########] 34/34 plans (100%)
 | Denormalized lineup in OfflineEntry | Entries store lineup with athlete names to display without joins | 5 |
 | Dexie version 2 for regatta tables | Keep version 1 stores, add version 2 with regattas and entries tables | 5 |
 | Disable Add Entry when offline | Prevents mutation attempts that would fail | 5 |
+| Offline-first page pattern | Server passes identifiers, client fetches via offline-aware hook | 5 |
 
 ### Architecture Notes
 
@@ -232,6 +233,7 @@ Overall:  [##########] 34/34 plans (100%)
 | Manual race reminder trigger | notifyRaceReminder for ad-hoc race notifications | src/lib/push/triggers.ts |
 | Regatta cache manager | Transaction-based writes with metadata for regatta/entry caching | src/lib/db/regatta-cache.ts |
 | Offline regatta hook | API fetch with IndexedDB fallback for regatta data | src/hooks/use-offline-regatta.ts |
+| Offline-first page | Server validates access, client fetches data via offline-aware hook | src/app/(dashboard)/[teamSlug]/regattas/[id]/ |
 
 ### Todos
 
@@ -340,26 +342,23 @@ All 4 requirements for Phase 4 verified complete:
 ### Last Session
 
 - **Date:** 2026-01-22
-- **Activity:** Executed 05-07-PLAN.md (Regatta Offline Cache)
-- **Outcome:** Extended Dexie schema v2, created regatta cache manager and offline hook
+- **Activity:** Executed 05-08-PLAN.md (Gap Closure - Offline Regatta Wiring)
+- **Outcome:** Wired useOfflineRegatta hook to regatta detail UI, enabling offline viewing
 
 ### Next Actions
 
-1. Run Phase 5 verification checklist
-2. Mark Phase 5 complete
-3. Project complete - all 34 plans executed
+1. Run final Phase 5 verification checklist
+2. Mark project complete - all 35 plans executed (including gap closure)
+3. Optional: Create project completion summary
 
 ### Files Modified This Session
 
 **Created:**
-- `src/lib/db/regatta-cache.ts` (Regatta cache manager)
-- `src/hooks/use-offline-regatta.ts` (Offline regatta hook)
-- `.planning/phases/05-regatta-mode/05-07-SUMMARY.md` (completed)
+- `.planning/phases/05-regatta-mode/05-08-SUMMARY.md` (gap closure complete)
 
 **Modified:**
-- `src/lib/db/schema.ts` (Added OfflineRegatta, OfflineEntry, version 2)
-- `src/app/(dashboard)/[teamSlug]/regattas/[id]/regatta-detail-client.tsx` (Offline support)
-- `src/app/(dashboard)/[teamSlug]/regattas/[id]/page.tsx` (Pass initialCachedAt)
+- `src/app/(dashboard)/[teamSlug]/regattas/[id]/page.tsx` (Simplified to pass only regattaId)
+- `src/app/(dashboard)/[teamSlug]/regattas/[id]/regatta-detail-client.tsx` (Now uses useOfflineRegatta hook)
 - `.planning/STATE.md` (updated)
 
 ## Phase 5 Progress
@@ -373,8 +372,9 @@ All 4 requirements for Phase 4 verified complete:
 | 05-05 | Regatta UI | COMPLETE |
 | 05-06 | Race notifications dispatch | COMPLETE |
 | 05-07 | Regatta offline cache | COMPLETE |
+| 05-08 | Offline regatta wiring (gap closure) | COMPLETE |
 
-**Phase 5 Complete** - All 7 plans executed, regatta mode fully operational.
+**Phase 5 Complete** - All 8 plans executed (7 core + 1 gap closure), regatta mode fully operational.
 
 ## Phase 5 Completion Summary
 
@@ -393,4 +393,4 @@ All 7 requirements for Phase 5 verified complete:
 
 ---
 
-*Last updated: 2026-01-22 (Phase 5 - COMPLETE - 7/7 plans complete)*
+*Last updated: 2026-01-22 (Phase 5 - COMPLETE - 8/8 plans complete including gap closure)*
