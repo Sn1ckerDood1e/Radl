@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { NotificationBell } from '@/components/notifications/notification-bell';
+import { SyncStatus } from '@/components/pwa/sync-status';
 
 interface Team {
   slug: string;
@@ -58,8 +59,9 @@ export function DashboardHeader({ team }: DashboardHeaderProps) {
             </Link>
           </div>
 
-          {/* Right side - Notifications */}
+          {/* Right side - Sync Status + Notifications */}
           <div className="flex items-center gap-4">
+            <SyncStatus />
             {team && <NotificationBell teamSlug={team.slug} />}
           </div>
         </div>
