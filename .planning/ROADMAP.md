@@ -27,6 +27,12 @@ v1.1 is a polish release that fills UI gaps left in v1.0's rapid development. Fo
 4. Coach can trigger manual import and see import progress/results
 5. Coach can enable/disable auto-sync with immediate feedback
 
+**Plans:** 2 plans
+
+Plans:
+- [ ] 06-01-PLAN.md — Foundation: Sonner toasts, schema update, auto-sync API
+- [ ] 06-02-PLAN.md — RC settings components and settings page integration
+
 ---
 
 ## Phase 7: Equipment Usage Display
@@ -89,7 +95,7 @@ v1.1 is a polish release that fills UI gaps left in v1.0's rapid development. Fo
 
 | Phase | Name | Goal | Requirements | Status |
 |-------|------|------|--------------|--------|
-| 6 | RC Settings UI | Manage RC integration from app | RC-09, RC-10, RC-11, RC-12 | Pending |
+| 6 | RC Settings UI | Manage RC integration from app | RC-09, RC-10, RC-11, RC-12 | Planned |
 | 7 | Equipment Usage Display | Surface collected usage data | EQUIP-04, EQUIP-05 | Pending |
 | 8 | Notifications | Alerts for damage and lineups | NOTIF-01, NOTIF-02 | Pending |
 | 9 | Data Export | Export data for external use | EXPORT-01, EXPORT-02, EXPORT-03 | Pending |
