@@ -190,3 +190,46 @@ export function notifyDamageReported(
     tag: `damage-${reportId}`,
   });
 }
+
+/**
+ * Notify athletes about an upcoming race (manual trigger).
+ * Used for ad-hoc race reminders outside the automated schedule.
+ *
+ * @param teamId - Team ID for notification routing
+ * @param athleteUserIds - User IDs of athletes to notify
+ * @param eventName - Name of the event/race
+ * @param raceTime - Scheduled race time
+ * @param meetingLocation - Optional meeting location
+ * @param regattaId - Regatta ID for URL
+ * @param entryId - Entry ID for tag
+ */
+export function notifyRaceReminder(
+  teamId: string,
+  athleteUserIds: string[],
+  eventName: string,
+  raceTime: Date,
+  meetingLocation: string | null,
+  regattaId: string,
+  entryId: string
+): void {
+  if (athleteUserIds.length === 0) return;
+
+  const timeStr = raceTime.toLocaleTimeString('en-US', {
+    hour: 'numeric',
+    minute: '2-digit',
+  });
+
+  let body = `Race at ${timeStr}`;
+  if (meetingLocation) {
+    body = `Meet at ${meetingLocation} - Race at ${timeStr}`;
+  }
+
+  sendNotification({
+    teamId,
+    userIds: athleteUserIds,
+    title: `Race Reminder: ${eventName}`,
+    body,
+    url: `/regattas/${regattaId}`,
+    tag: `race-${entryId}`,
+  });
+}
