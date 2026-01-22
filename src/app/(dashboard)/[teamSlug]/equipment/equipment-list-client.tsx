@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import { EquipmentCard } from '@/components/equipment/equipment-card';
+import { ExportButton } from '@/components/ui/export-button';
+import { toCSV, downloadCSV } from '@/lib/export/csv';
 
 interface Equipment {
   id: string;
@@ -10,6 +12,10 @@ interface Equipment {
   manufacturer: string | null;
   status: 'ACTIVE' | 'INACTIVE' | 'RETIRED';
   boatClass: string | null;
+  weightCategory: string | null;
+  serialNumber: string | null;
+  yearAcquired: number | null;
+  notes: string | null;
 }
 
 interface EquipmentListClientProps {
@@ -69,6 +75,22 @@ export function EquipmentListClient({
 
   const typeOrder = ['SHELL', 'OAR', 'LAUNCH', 'OTHER'];
 
+  const handleExport = () => {
+    const csv = toCSV(equipment, [
+      { key: 'name', header: 'Name' },
+      { key: 'type', header: 'Type' },
+      { key: 'manufacturer', header: 'Manufacturer' },
+      { key: 'boatClass', header: 'Boat Class' },
+      { key: 'weightCategory', header: 'Weight Category' },
+      { key: 'status', header: 'Status' },
+      { key: 'serialNumber', header: 'Serial Number' },
+      { key: 'yearAcquired', header: 'Year Acquired' },
+      { key: 'notes', header: 'Notes' },
+    ]);
+    const date = new Date().toISOString().split('T')[0];
+    downloadCSV(csv, `equipment-${date}.csv`);
+  };
+
   if (equipment.length === 0) {
     return (
       <div className="text-center py-12">
@@ -125,10 +147,13 @@ export function EquipmentListClient({
           </select>
         </div>
 
-        {/* Count */}
-        <span className="text-sm text-zinc-400 ml-auto">
-          {filteredEquipment.length} item{filteredEquipment.length !== 1 ? 's' : ''}
-        </span>
+        {/* Count and Export */}
+        <div className="flex items-center gap-4 ml-auto">
+          <span className="text-sm text-zinc-400">
+            {filteredEquipment.length} item{filteredEquipment.length !== 1 ? 's' : ''}
+          </span>
+          <ExportButton onExport={handleExport} label="Export" />
+        </div>
       </div>
 
       {/* Grouped Equipment Sections */}

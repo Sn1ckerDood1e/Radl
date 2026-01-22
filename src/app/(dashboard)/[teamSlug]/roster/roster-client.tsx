@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import { AthleteCard } from '@/components/athletes/athlete-card';
+import { ExportButton } from '@/components/ui/export-button';
+import { toCSV, downloadCSV } from '@/lib/export/csv';
 
 type Role = 'COACH' | 'ATHLETE' | 'PARENT';
 
@@ -54,12 +56,37 @@ export function RosterClient({ members, teamSlug }: RosterClientProps) {
     { id: 'PARENT', label: 'Parents' },
   ];
 
+  const handleExport = () => {
+    const exportData = members.map(m => ({
+      name: m.profile?.displayName || 'Unknown',
+      role: m.role,
+      sidePreference: m.profile?.sidePreference || '',
+      canBow: m.profile?.canBow ? 'Yes' : 'No',
+      canCox: m.profile?.canCox ? 'Yes' : 'No',
+      phone: m.profile?.phone || '',
+      joinedAt: new Date(m.createdAt).toLocaleDateString(),
+    }));
+
+    const csv = toCSV(exportData, [
+      { key: 'name', header: 'Name' },
+      { key: 'role', header: 'Role' },
+      { key: 'sidePreference', header: 'Side Preference' },
+      { key: 'canBow', header: 'Can Bow' },
+      { key: 'canCox', header: 'Can Cox' },
+      { key: 'phone', header: 'Phone' },
+      { key: 'joinedAt', header: 'Joined' },
+    ]);
+    const date = new Date().toISOString().split('T')[0];
+    downloadCSV(csv, `roster-${date}.csv`);
+  };
+
   return (
     <div className="space-y-6">
-      {/* Filter tabs */}
+      {/* Filter tabs and export */}
       <div className="border-b border-zinc-800">
-        <nav className="-mb-px flex space-x-6 overflow-x-auto">
-          {tabs.map(tab => (
+        <div className="flex items-center justify-between">
+          <nav className="-mb-px flex space-x-6 overflow-x-auto">
+            {tabs.map(tab => (
             <button
               key={tab.id}
               onClick={() => setActiveFilter(tab.id)}
@@ -79,7 +106,9 @@ export function RosterClient({ members, teamSlug }: RosterClientProps) {
               </span>
             </button>
           ))}
-        </nav>
+          </nav>
+          <ExportButton onExport={handleExport} label="Export" />
+        </div>
       </div>
 
       {/* Member cards grid */}

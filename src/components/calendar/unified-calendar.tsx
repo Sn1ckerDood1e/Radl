@@ -15,6 +15,8 @@ import { RegattaCard } from './regatta-card';
 import { StalenessIndicator } from '@/components/pwa/staleness-indicator';
 import { useOfflineSchedules, useCacheFreshness } from '@/lib/db/hooks';
 import { cacheSchedules } from '@/lib/db/cache-manager';
+import { ExportButton } from '@/components/ui/export-button';
+import { toCSV, downloadCSV } from '@/lib/export/csv';
 import type { ScheduleEvent } from '@/app/api/schedule/route';
 
 interface UnifiedCalendarProps {
@@ -165,31 +167,61 @@ export function UnifiedCalendar({
     setSeasonId(newSeasonId);
   };
 
+  // Export schedule
+  const handleExport = () => {
+    const exportData = displayEvents.map(e => ({
+      date: e.date,
+      name: e.name,
+      type: e.type === 'practice' ? 'Practice' : 'Regatta',
+      startTime: e.startTime || '',
+      endTime: e.endTime || '',
+      location: e.location || '',
+      status: e.status || '',
+    }));
+
+    const csv = toCSV(exportData, [
+      { key: 'date', header: 'Date' },
+      { key: 'name', header: 'Name' },
+      { key: 'type', header: 'Type' },
+      { key: 'startTime', header: 'Start Time' },
+      { key: 'endTime', header: 'End Time' },
+      { key: 'location', header: 'Location' },
+      { key: 'status', header: 'Status' },
+    ]);
+    const monthStr = format(currentMonth, 'yyyy-MM');
+    downloadCSV(csv, `schedule-${monthStr}.csv`);
+  };
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-6">
       {/* Calendar section */}
       <div className="min-w-0">
-        {/* Season selector */}
-        {seasons.length > 1 && (
-          <div className="mb-4">
-            <label htmlFor="season-select" className="sr-only">
-              Select season
-            </label>
-            <select
-              id="season-select"
-              value={seasonId}
-              onChange={(e) => handleSeasonChange(e.target.value)}
-              className="w-full sm:w-auto px-3 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
-            >
-              <option value="">All seasons</option>
-              {seasons.map((season) => (
-                <option key={season.id} value={season.id}>
-                  {season.name}
-                </option>
-              ))}
-            </select>
-          </div>
-        )}
+        {/* Season selector and export */}
+        <div className="flex items-center justify-between mb-4">
+          {seasons.length > 1 ? (
+            <div>
+              <label htmlFor="season-select" className="sr-only">
+                Select season
+              </label>
+              <select
+                id="season-select"
+                value={seasonId}
+                onChange={(e) => handleSeasonChange(e.target.value)}
+                className="w-full sm:w-auto px-3 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+              >
+                <option value="">All seasons</option>
+                {seasons.map((season) => (
+                  <option key={season.id} value={season.id}>
+                    {season.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          ) : (
+            <div />
+          )}
+          <ExportButton onExport={handleExport} label="Export" />
+        </div>
 
         {/* Month navigation */}
         <div className="flex items-center justify-between mb-4">

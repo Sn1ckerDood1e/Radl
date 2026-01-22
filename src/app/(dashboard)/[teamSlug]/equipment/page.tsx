@@ -136,6 +136,10 @@ export default async function EquipmentPage({ params }: EquipmentPageProps) {
           manufacturer: e.manufacturer,
           status: e.status,
           boatClass: e.boatClass,
+          weightCategory: e.weightCategory,
+          serialNumber: e.serialNumber,
+          yearAcquired: e.yearAcquired,
+          notes: e.notes,
         }))}
         teamSlug={teamSlug}
         isCoach={isCoach}
