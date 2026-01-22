@@ -13,7 +13,7 @@
 | Phase | 4 of 5 (PWA Infrastructure) |
 | Plan | 2 of 7 |
 | Status | In progress |
-| Last activity | 2026-01-21 - Completed 04-02-PLAN.md |
+| Last activity | 2026-01-22 - Completed 04-01-PLAN.md |
 
 **Progress:**
 ```
@@ -97,6 +97,9 @@ Overall:  [########..] 22/27 plans (81%)
 | Max 3 retries for sync queue | Prevents infinite retry loops on persistent failures | 4 |
 | 4xx errors removed immediately | Client errors (bad data) won't succeed on retry | 4 |
 | Online listener auto-triggers sync | Automatic background sync when connectivity restored | 4 |
+| Use @serwist/next defaultCache | Production-tested caching strategies, no need to reinvent | 4 |
+| Service worker registration production only | Avoid caching issues during development | 4 |
+| Build with --webpack flag | Serwist requires webpack, Turbopack doesn't work | 4 |
 
 ### Architecture Notes
 
@@ -158,6 +161,8 @@ Overall:  [########..] 22/27 plans (81%)
 | Offline data interface | Interface with id, cachedAt, syncStatus fields | src/lib/db/schema.ts |
 | Reactive query hook | useLiveQuery with default value for loading state | src/lib/db/hooks.ts |
 | Sync queue item | operation, entity, entityId, payload, timestamp, retries | src/lib/db/sync-queue.ts |
+| PWA registration | Client component returns null, runs useEffect registration | src/components/pwa/register-sw.tsx |
+| Service worker source | Entry point at src/app/sw.ts, generated to public/sw.js | next.config.ts, src/app/sw.ts |
 
 ### Todos
 
@@ -252,9 +257,9 @@ All 5 requirements for Phase 3 verified complete:
 
 ### Last Session
 
-- **Date:** 2026-01-21
-- **Activity:** Executed 04-02-PLAN.md (IndexedDB schema and React hooks)
-- **Outcome:** Dexie database schema, reactive hooks, and sync queue infrastructure created
+- **Date:** 2026-01-22
+- **Activity:** Executed 04-01-PLAN.md (Service worker infrastructure)
+- **Outcome:** Serwist integration, PWA manifest, service worker registration component
 
 ### Next Actions
 
@@ -265,15 +270,19 @@ All 5 requirements for Phase 3 verified complete:
 ### Files Modified This Session
 
 **Created:**
-- `src/lib/db/schema.ts` (Dexie database schema)
-- `src/lib/db/hooks.ts` (React hooks for offline queries)
-- `src/lib/db/sync-queue.ts` (Sync queue operations)
-- `.planning/phases/04-pwa-infrastructure/04-02-SUMMARY.md` (completed)
+- `src/app/sw.ts` (Service worker entry point)
+- `public/manifest.json` (PWA manifest)
+- `public/icons/icon-192x192.png` (Placeholder icon)
+- `public/icons/icon-512x512.png` (Placeholder icon)
+- `src/components/pwa/register-sw.tsx` (Registration component)
+- `.planning/phases/04-pwa-infrastructure/04-01-SUMMARY.md` (completed)
 
 **Modified:**
-- `package.json` (added dexie, dexie-react-hooks)
+- `next.config.ts` (Serwist withSerwist wrapper)
+- `src/app/layout.tsx` (manifest link, registration)
+- `.gitignore` (exclude generated sw.js)
 - `.planning/STATE.md` (updated)
 
 ---
 
-*Last updated: 2026-01-21 (Phase 4 - 2/7 plans complete)*
+*Last updated: 2026-01-22 (Phase 4 - 2/7 plans complete)*
