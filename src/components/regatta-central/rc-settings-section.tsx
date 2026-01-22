@@ -237,7 +237,7 @@ export function RCSettingsSection() {
           <>
             <div className="h-2.5 w-2.5 rounded-full bg-emerald-500"></div>
             <span className="text-sm text-zinc-300">
-              Connected to Club #{status.rcClubId}
+              Connected (Org: {status.rcClubId})
             </span>
           </>
         ) : (
@@ -467,18 +467,18 @@ export function RCSettingsSection() {
 
           <div>
             <label className="block text-sm font-medium text-zinc-300 mb-1">
-              Club ID
+              Organization ID
             </label>
             <input
               type="text"
               value={rcClubId}
               onChange={(e) => setRcClubId(e.target.value)}
               className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-zinc-300 placeholder-zinc-600 focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
-              placeholder="Your RC organization ID"
+              placeholder="e.g., 12345"
               required
             />
             <p className="text-xs text-zinc-500 mt-1">
-              Find this in your Regatta Central account settings
+              Your Regatta Central org ID (not USRowing). Find it in the URL when viewing your club on regattacentral.com
             </p>
           </div>
 
