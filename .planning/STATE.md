@@ -11,9 +11,9 @@
 | Field | Value |
 |-------|-------|
 | Phase | 5 of 5 (Regatta Mode) |
-| Plan | 1 of 7 |
+| Plan | 4 of 7 |
 | Status | In progress |
-| Last activity | 2026-01-22 - Completed 05-01-PLAN.md |
+| Last activity | 2026-01-22 - Completed 05-04-PLAN.md |
 
 **Progress:**
 ```
@@ -21,9 +21,9 @@ Phase 1: [##########] 100% (5/5 plans) COMPLETE
 Phase 2: [##########] 100% (8/8 plans) COMPLETE
 Phase 3: [##########] 100% (7/7 plans) COMPLETE
 Phase 4: [##########] 100% (7/7 plans) COMPLETE
-Phase 5: [#.........] 14% (1/7 plans) IN PROGRESS
+Phase 5: [######....] 57% (4/7 plans) IN PROGRESS
 
-Overall:  [########..] 28/34 plans (82%)
+Overall:  [#########.] 31/34 plans (91%)
 ```
 
 ## Performance Metrics
@@ -31,7 +31,7 @@ Overall:  [########..] 28/34 plans (82%)
 | Metric | Value |
 |--------|-------|
 | Requirements completed | 23/31 |
-| Plans completed | 27 |
+| Plans completed | 31 |
 | Plans failed | 0 |
 | Blockers resolved | 0 |
 
@@ -93,6 +93,9 @@ Overall:  [########..] 28/34 plans (82%)
 | Unique constraint on teamId+rcRegattaId | Allows null rcRegattaId for manual regattas while ensuring uniqueness for RC imports | 5 |
 | EntryLineup separate from Entry | Lineup assignment is optional and can be added later | 5 |
 | NotificationConfig 1:1 with Entry | Each race entry can have its own notification settings | 5 |
+| DELETE-and-CREATE for entry lineup PUT | Simpler than diffing existing seats, ensures clean state | 5 |
+| Past notifications marked as sent | Prevents confusing scheduled state for notifications that can never fire | 5 |
+| PATCH resets sentAt to null | Allows re-scheduling if coach changes lead time after notification sent | 5 |
 | Template boat class filtering | Templates filterable by boatClass for easier selection | 3 |
 | cachedAt timestamp on every record | Enables staleness detection for cache invalidation | 4 |
 | syncStatus field (synced/pending/error) | Tracks sync state without separate tracking table | 4 |
@@ -202,6 +205,9 @@ Overall:  [########..] 28/34 plans (82%)
 | Entry-Regatta cascade | Entry belongs to Regatta with onDelete Cascade | prisma/schema.prisma |
 | EntryLineup pattern | Mirrors practice lineup (EntryLineup/EntrySeat like Lineup/SeatAssignment) | prisma/schema.prisma |
 | Encrypted OAuth tokens | RegattaCentralConnection stores AES-256 encrypted tokens per team | prisma/schema.prisma |
+| Entry lineup API | GET/PUT/DELETE for race lineup assignments | src/app/api/regattas/[id]/entries/[entryId]/lineup/route.ts |
+| Notification config API | GET/PUT/PATCH/DELETE with scheduledFor calculation | src/app/api/regattas/[id]/entries/[entryId]/notification/route.ts |
+| Notification time calculation | scheduledFor = scheduledTime - (leadTimeMinutes * 60 * 1000) | notification route.ts |
 
 ### Todos
 
@@ -310,22 +316,22 @@ All 4 requirements for Phase 4 verified complete:
 ### Last Session
 
 - **Date:** 2026-01-22
-- **Activity:** Executed 05-01-PLAN.md (Regatta Data Models)
-- **Outcome:** Extended Prisma schema with regatta models, created Zod validation schemas
+- **Activity:** Executed 05-04-PLAN.md (Entry Lineup and Notification Config API)
+- **Outcome:** Created API endpoints for entry lineup assignment and notification configuration
 
 ### Next Actions
 
-1. Execute 05-02-PLAN.md (Regatta CRUD API)
-2. Continue Phase 5 execution (6 remaining plans)
+1. Execute 05-05-PLAN.md (Race Notifications)
+2. Continue Phase 5 execution (3 remaining plans)
 
 ### Files Modified This Session
 
 **Created:**
-- `src/lib/validations/regatta.ts` (Zod validation schemas for regatta API)
-- `.planning/phases/05-regatta-mode/05-01-SUMMARY.md` (completed)
+- `src/app/api/regattas/[id]/entries/[entryId]/lineup/route.ts` (Entry lineup API)
+- `src/app/api/regattas/[id]/entries/[entryId]/notification/route.ts` (Notification config API)
+- `.planning/phases/05-regatta-mode/05-04-SUMMARY.md` (completed)
 
 **Modified:**
-- `prisma/schema.prisma` (Added regatta data models)
 - `.planning/STATE.md` (updated)
 
 ## Phase 5 Progress
@@ -333,13 +339,13 @@ All 4 requirements for Phase 4 verified complete:
 | Plan | Description | Status |
 |------|-------------|--------|
 | 05-01 | Regatta data models and validation schemas | COMPLETE |
-| 05-02 | Regatta CRUD API | PENDING |
-| 05-03 | Entry management API | PENDING |
-| 05-04 | Regatta Central import | PENDING |
+| 05-02 | Regatta CRUD API | COMPLETE |
+| 05-03 | Entry management API | COMPLETE |
+| 05-04 | Entry lineup and notification config API | COMPLETE |
 | 05-05 | Race notifications | PENDING |
 | 05-06 | Regatta UI | PENDING |
 | 05-07 | Regatta calendar integration | PENDING |
 
 ---
 
-*Last updated: 2026-01-22 (Phase 5 - IN PROGRESS - 1/7 plans)*
+*Last updated: 2026-01-22 (Phase 5 - IN PROGRESS - 4/7 plans)*
