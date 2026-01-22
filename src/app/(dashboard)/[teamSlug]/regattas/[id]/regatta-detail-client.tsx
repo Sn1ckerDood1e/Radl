@@ -1,10 +1,9 @@
 'use client';
 
-import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { RaceTimeline } from '@/components/regatta/race-timeline';
 import { StalenessIndicator } from '@/components/pwa/staleness-indicator';
-import { useOnlineStatus } from '@/hooks/use-online-status';
+import { useOfflineRegatta } from '@/hooks/use-offline-regatta';
 import { Plus, Settings, WifiOff, RefreshCw } from 'lucide-react';
 
 interface Entry {
@@ -30,63 +29,80 @@ interface Entry {
 
 interface RegattaDetailClientProps {
   teamSlug: string;
-  regatta: {
-    id: string;
-    name: string;
-    timezone: string;
-    source: string;
-    entries: Entry[];
-  };
-  athletes: {
-    id: string;
-    displayName: string | null;
-    sidePreference?: string | null;
-    canBow: boolean;
-    canCox: boolean;
-  }[];
-  boats: { id: string; name: string; boatClass: string | null }[];
+  regattaId: string;
+  regattaName: string;
+  timezone: string;
   isCoach: boolean;
-  initialCachedAt?: number;
 }
 
 export function RegattaDetailClient({
   teamSlug,
-  regatta,
+  regattaId,
+  regattaName,
+  timezone,
   isCoach,
-  initialCachedAt,
 }: RegattaDetailClientProps) {
   const router = useRouter();
-  const isOnline = useOnlineStatus();
-  const [isRefreshing, setIsRefreshing] = useState(false);
-  const [cachedAt] = useState(initialCachedAt);
 
-  // Calculate staleness (24 hours threshold)
-  const STALE_THRESHOLD_MS = 24 * 60 * 60 * 1000;
-  const isStale = cachedAt ? Date.now() - cachedAt > STALE_THRESHOLD_MS : false;
+  // Use offline-aware hook - fetches from API when online, falls back to IndexedDB cache when offline
+  const {
+    data: regatta,
+    isLoading,
+    isOffline,
+    isStale,
+    cachedAt,
+    error,
+    refresh,
+  } = useOfflineRegatta(regattaId);
+
   const lastUpdated = cachedAt ? new Date(cachedAt) : null;
 
   function handleEntryClick(entry: Entry) {
-    router.push(`/${teamSlug}/regattas/${regatta.id}/entries/${entry.id}`);
+    router.push(`/${teamSlug}/regattas/${regattaId}/entries/${entry.id}`);
   }
 
   async function handleRefresh() {
-    if (!isOnline || isRefreshing) return;
-    setIsRefreshing(true);
-    try {
-      router.refresh();
-    } finally {
-      // Small delay to show refresh state
-      setTimeout(() => setIsRefreshing(false), 500);
-    }
+    if (isOffline) return;
+    await refresh();
+  }
+
+  // Loading state
+  if (isLoading && !regatta) {
+    return (
+      <div className="flex justify-center py-8">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-500" />
+      </div>
+    );
+  }
+
+  // Error state (no cached data available)
+  if (error && !regatta) {
+    return (
+      <div className="text-center py-8 text-red-400">
+        <p>{error}</p>
+        {!isOffline && (
+          <button onClick={refresh} className="mt-4 text-emerald-400 hover:underline">
+            Try again
+          </button>
+        )}
+      </div>
+    );
   }
 
   return (
     <div>
       {/* Offline indicator */}
-      {!isOnline && (
+      {isOffline && (
         <div className="flex items-center gap-2 mb-4 px-3 py-2 bg-amber-900/30 border border-amber-700/50 rounded-lg text-amber-400 text-sm">
           <WifiOff className="h-4 w-4" />
           <span>You are offline. Showing cached data.</span>
+        </div>
+      )}
+
+      {/* Stale data warning (online but showing cached data due to API error) */}
+      {error && regatta && !isOffline && (
+        <div className="flex items-center gap-2 mb-4 px-3 py-2 bg-amber-900/30 border border-amber-700/50 rounded-lg text-amber-400 text-sm">
+          <span>{error}</span>
         </div>
       )}
 
@@ -97,23 +113,23 @@ export function RegattaDetailClient({
           <StalenessIndicator
             lastUpdated={lastUpdated}
             isStale={isStale}
-            isOffline={!isOnline}
+            isOffline={isOffline}
           />
         </div>
         <div className="flex gap-2">
-          {isOnline && (
+          {!isOffline && (
             <button
               onClick={handleRefresh}
-              disabled={isRefreshing}
+              disabled={isLoading}
               className="flex items-center gap-2 px-3 py-1.5 border border-zinc-700 text-zinc-300 rounded-lg hover:bg-zinc-800 text-sm disabled:opacity-50"
             >
-              <RefreshCw className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
+              <RefreshCw className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
               Refresh
             </button>
           )}
-          {isCoach && isOnline && (
+          {isCoach && !isOffline && (
             <button
-              onClick={() => router.push(`/${teamSlug}/regattas/${regatta.id}/entries/new`)}
+              onClick={() => router.push(`/${teamSlug}/regattas/${regattaId}/entries/new`)}
               className="flex items-center gap-2 px-3 py-1.5 bg-emerald-600 text-white rounded-lg hover:bg-emerald-500 text-sm"
             >
               <Plus className="h-4 w-4" />
@@ -122,7 +138,7 @@ export function RegattaDetailClient({
           )}
           {isCoach && (
             <button
-              onClick={() => router.push(`/${teamSlug}/regattas/${regatta.id}/edit`)}
+              onClick={() => router.push(`/${teamSlug}/regattas/${regattaId}/edit`)}
               className="flex items-center gap-2 px-3 py-1.5 border border-zinc-700 text-zinc-300 rounded-lg hover:bg-zinc-800 text-sm"
             >
               <Settings className="h-4 w-4" />
@@ -133,13 +149,27 @@ export function RegattaDetailClient({
       </div>
 
       {/* Timeline */}
-      <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-6">
-        <RaceTimeline
-          entries={regatta.entries}
-          timezone={regatta.timezone}
-          onEntryClick={handleEntryClick}
-        />
-      </div>
+      {regatta && (
+        <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-6">
+          <RaceTimeline
+            entries={regatta.entries}
+            timezone={timezone}
+            onEntryClick={handleEntryClick}
+          />
+        </div>
+      )}
+
+      {/* Empty state when no cached data */}
+      {!regatta && !isLoading && !error && (
+        <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-6 text-center text-zinc-400">
+          <p>No race schedule data available.</p>
+          {!isOffline && (
+            <button onClick={refresh} className="mt-4 text-emerald-400 hover:underline">
+              Load schedule
+            </button>
+          )}
+        </div>
+      )}
     </div>
   );
 }
