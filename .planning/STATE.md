@@ -4,29 +4,22 @@
 
 **Core Value:** Coaches can plan practices with lineups and equipment, and athletes know where to be and what boat they're in.
 
-**Current Focus:** Planning next milestone (v2.0)
+**Current Focus:** v1.1 Polish — RC import UI, equipment usage display, notifications, data export
 
 ## Current Position
 
 | Field | Value |
 |-------|-------|
-| Milestone | v1.0 complete, v2.0 pending |
+| Milestone | v1.1 (defining requirements) |
 | Phase | None active |
 | Plan | None active |
-| Status | Ready to plan next milestone |
-| Last activity | 2026-01-22 — v1.0 milestone complete |
+| Status | Defining requirements |
+| Last activity | 2026-01-21 — v1.1 milestone started |
 
 **Progress:**
 ```
 v1.0: [##########] 100% SHIPPED
-
-Phase 1: [##########] 100% (5/5 plans) COMPLETE
-Phase 2: [##########] 100% (8/8 plans) COMPLETE
-Phase 3: [##########] 100% (9/9 plans) COMPLETE
-Phase 4: [##########] 100% (7/7 plans) COMPLETE
-Phase 5: [##########] 100% (8/8 plans) COMPLETE
-
-Overall v1.0: 37/37 plans (100%)
+v1.1: [          ] 0% (defining requirements)
 ```
 
 ## v1.0 Summary
@@ -43,11 +36,9 @@ Overall v1.0: 37/37 plans (100%)
 
 ## Next Steps
 
-Run `/gsd:new-milestone` to start v2.0 planning. This will:
-1. Gather user priorities through questioning
-2. Research implementation approaches
-3. Define v2.0 requirements
-4. Create new roadmap
+1. Define v1.1 requirements (in progress)
+2. Create roadmap with phases
+3. Run `/gsd:plan-phase [N]` to start execution
 
 ## Accumulated Context
 
@@ -70,8 +61,8 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 | DEBT-01: Claims helper | COMPLETE | v1.0 |
 | DEBT-02: Form refactoring | COMPLETE | v1.0 |
 | DEBT-03: Query caching | COMPLETE | v1.0 |
-| RC import UI | Deferred | APIs exist, needs UI |
-| Equipment usage display | Deferred | Data collected, needs UI |
+| RC import UI | v1.1 ACTIVE | Settings page for connection management |
+| Equipment usage display | v1.1 ACTIVE | Detail pages + dashboard summary |
 
 ### Patterns Established
 
@@ -79,4 +70,4 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
 
 ---
 
-*Last updated: 2026-01-22 (v1.0 milestone complete)*
+*Last updated: 2026-01-21 (v1.1 milestone started)*

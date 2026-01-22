@@ -71,16 +71,29 @@ A multi-tenant SaaS for rowing team operations — practice planning, equipment 
 - [x] **DEBT-02**: Refactor oversized form components — v1.0
 - [x] **DEBT-03**: Add query caching — v1.0
 
-### Active (v2.0)
+### Active (v1.1)
 
-None yet — run `/gsd:new-milestone` to define v2.0 requirements.
+**Goal:** Polish v1.0 — complete UI gaps, surface collected data, add targeted notifications and data portability.
 
-**Candidates from v1.0 tech debt:**
-- RC import UI (APIs ready, need settings page)
-- Equipment usage display (data collected, no UI)
-- Additional notification triggers (join/damage)
+**RC Integration UI:**
+- [ ] **RC-09**: Build settings page for RC connection management
+- [ ] **RC-10**: Implement manual regatta import trigger
+- [ ] **RC-11**: Add auto-sync toggle
 
-**Candidates from v2 backlog:**
+**Equipment Usage Display:**
+- [ ] **EQUIP-04**: Show usage history on equipment detail pages
+- [ ] **EQUIP-05**: Add equipment usage summary to dashboard
+
+**Notifications:**
+- [ ] **NOTIF-01**: Send notification when equipment marked damaged
+- [ ] **NOTIF-02**: Send notification when lineup is published
+
+**Data Export:**
+- [ ] **EXPORT-01**: Export equipment inventory to CSV/Excel
+- [ ] **EXPORT-02**: Export roster to CSV/Excel
+- [ ] **EXPORT-03**: Export season schedule to CSV/Excel
+
+**Deferred to v2.0:**
 - Season templates
 - Email notifications
 - Erg results tracking
@@ -124,4 +137,4 @@ None yet — run `/gsd:new-milestone` to define v2.0 requirements.
 | **External API** | Regatta Central v4, per-team API keys |
 
 ---
-*Last updated: 2026-01-22 after v1.0 milestone*
+*Last updated: 2026-01-21 after v1.1 milestone started*
