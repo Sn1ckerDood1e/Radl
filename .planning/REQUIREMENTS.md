@@ -102,20 +102,20 @@
 | LINE-04 | 3 | Complete |
 | EQUIP-01 | 3 | Complete |
 | DEBT-02 | 3 | Complete |
-| PWA-01 | 4 | Pending |
-| PWA-02 | 4 | Pending |
-| PWA-03 | 4 | Pending |
-| PWA-04 | 4 | Pending |
-| DEBT-03 | 4 | Pending |
-| REG-01 | 5 | Pending |
-| REG-02 | 5 | Pending |
-| REG-03 | 5 | Pending |
-| REG-04 | 5 | Pending |
-| REG-05 | 5 | Pending |
-| REG-06 | 5 | Pending |
-| REG-07 | 5 | Pending |
-| REG-08 | 5 | Pending |
+| PWA-01 | 4 | Complete |
+| PWA-02 | 4 | Complete |
+| PWA-03 | 4 | Complete |
+| PWA-04 | 4 | Complete |
+| DEBT-03 | 4 | Complete |
+| REG-01 | 5 | Complete |
+| REG-02 | 5 | Complete |
+| REG-03 | 5 | Complete |
+| REG-04 | 5 | Complete |
+| REG-05 | 5 | Complete |
+| REG-06 | 5 | Complete |
+| REG-07 | 5 | Complete |
+| REG-08 | 5 | Complete |
 
 ---
 
-*Last updated: 2026-01-21*
+*Last updated: 2026-01-22*
