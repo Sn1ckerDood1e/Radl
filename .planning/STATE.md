@@ -99,6 +99,9 @@ Overall:  [#########.] 31/34 plans (91%)
 | Entry endpoints nested under regatta | Clear ownership hierarchy, regattaId from URL params not body | 5 |
 | Notification reschedule resets sent flag | When scheduledTime changes, notificationSent=false to trigger new notification | 5 |
 | Season ownership validated before regatta | POST /api/regattas verifies seasonId belongs to team | 5 |
+| AES-256-CBC with random IV for tokens | Industry standard encryption, unique IV per token prevents pattern analysis | 5 |
+| 10-minute token refresh threshold | Proactive renewal ensures tokens never expire mid-request | 5 |
+| Upsert on RC import | Allows re-sync without duplicates, updates existing entries | 5 |
 | Template boat class filtering | Templates filterable by boatClass for easier selection | 3 |
 | cachedAt timestamp on every record | Enables staleness detection for cache invalidation | 4 |
 | syncStatus field (synced/pending/error) | Tracks sync state without separate tracking table | 4 |
@@ -214,6 +217,9 @@ Overall:  [#########.] 31/34 plans (91%)
 | Regatta API pattern | Team-scoped with season ownership validation | src/app/api/regattas/route.ts |
 | Entry access helper | verifyEntryAccess joins through regatta to team | src/app/api/regattas/[id]/entries/[entryId]/route.ts |
 | Nested resource pattern | /regattas/[id]/entries/[entryId] for clear ownership | src/app/api/regattas/ |
+| AES-256-CBC token encryption | iv:encryptedData hex format for secure OAuth token storage | src/lib/regatta-central/encryption.ts |
+| RC API client pattern | Team-scoped client with automatic token refresh (10-min threshold) | src/lib/regatta-central/client.ts |
+| RC import flow | Fetch regatta details + entries in parallel, upsert both | src/app/api/regatta-central/import/route.ts |
 
 ### Todos
 
@@ -346,7 +352,7 @@ All 4 requirements for Phase 4 verified complete:
 |------|-------------|--------|
 | 05-01 | Regatta data models and validation schemas | COMPLETE |
 | 05-02 | Regatta CRUD API | COMPLETE |
-| 05-03 | Entry management API | COMPLETE |
+| 05-03 | Regatta Central integration | COMPLETE |
 | 05-04 | Entry lineup and notification config API | COMPLETE |
 | 05-05 | Race notifications | PENDING |
 | 05-06 | Regatta UI | PENDING |
