@@ -4,7 +4,7 @@
 
 A multi-tenant SaaS for rowing team operations — practice planning, equipment management, roster coordination, and race-day execution at regattas.
 
-**Current State:** v1.0 shipped with full operational capabilities. Coaches can plan practices with lineups and equipment, athletes receive push notifications and can view schedules offline at race venues.
+**Current State:** v1.1 shipped with polish features. Coaches can manage RC integration, view equipment usage, and export data. Push notifications deferred to future milestone.
 
 ## Core Value
 
@@ -27,80 +27,74 @@ A multi-tenant SaaS for rowing team operations — practice planning, equipment 
 - Supabase Edge Functions (push notifications)
 - dnd-kit (drag-and-drop)
 - date-fns-tz (timezone handling)
+- Sonner (toast notifications)
 
-**LOC:** ~80,000 TypeScript
+**LOC:** ~80,840 TypeScript
 
 **Architecture:**
 - Multi-tenant with JWT claims (team_id in all queries)
 - PWA with offline data sync and background mutations
 - Regatta Central integration (OAuth2, encrypted tokens)
+- CSV export for equipment, roster, schedule
 
 ## Requirements
 
-### Validated (v1.0)
+### Validated (v1.0 + v1.1)
 
-- [x] **SEC-01**: Fix JWT claims verification gaps — v1.0
-- [x] **SEC-02**: Add rate limiting to sensitive endpoints — v1.0
-- [x] **SEC-03**: Audit and verify multi-tenant data isolation — v1.0
-- [x] **SEASON-01**: Create season container model — v1.0
-- [x] **SEASON-02**: Implement season-scoped eligibility — v1.0
-- [x] **PRAC-01**: Create practices with time blocks — v1.0
-- [x] **PRAC-02**: Add block metadata — v1.0
-- [x] **PRAC-03**: Create reusable practice templates — v1.0
-- [x] **PRAC-04**: Build unified calendar view — v1.0
-- [x] **LINE-01**: Build lineup editor — v1.0
-- [x] **LINE-02**: Implement boat assignment — v1.0
-- [x] **LINE-03**: Create reusable lineup templates — v1.0
-- [x] **LINE-04**: Implement group-based assignment — v1.0
-- [x] **EQUIP-01**: Auto-generate usage logs — v1.0
-- [x] **EQUIP-02**: Implement readiness state — v1.0
-- [x] **EQUIP-03**: Enforce availability at assignment — v1.0
-- [x] **PWA-01**: Set up service worker with caching — v1.0
-- [x] **PWA-02**: Implement push notifications — v1.0
-- [x] **PWA-03**: Add IndexedDB offline storage — v1.0
-- [x] **PWA-04**: Implement background sync — v1.0
-- [x] **REG-01**: Integrate Regatta Central API — v1.0
-- [x] **REG-02**: Support manual regatta/race entry — v1.0
-- [x] **REG-03**: Build timeline view — v1.0
-- [x] **REG-04**: Enable lineup assignment per entry — v1.0
-- [x] **REG-05**: Implement race notifications — v1.0
-- [x] **REG-06**: Add meeting location field — v1.0
-- [x] **REG-07**: Add notes field — v1.0
-- [x] **REG-08**: Build offline capability — v1.0
-- [x] **DEBT-01**: Extract claims helper utility — v1.0
-- [x] **DEBT-02**: Refactor oversized form components — v1.0
-- [x] **DEBT-03**: Add query caching — v1.0
+**v1.0 — Core Platform:**
+- [x] **SEC-01**: Fix JWT claims verification gaps
+- [x] **SEC-02**: Add rate limiting to sensitive endpoints
+- [x] **SEC-03**: Audit and verify multi-tenant data isolation
+- [x] **SEASON-01**: Create season container model
+- [x] **SEASON-02**: Implement season-scoped eligibility
+- [x] **PRAC-01**: Create practices with time blocks
+- [x] **PRAC-02**: Add block metadata
+- [x] **PRAC-03**: Create reusable practice templates
+- [x] **PRAC-04**: Build unified calendar view
+- [x] **LINE-01**: Build lineup editor
+- [x] **LINE-02**: Implement boat assignment
+- [x] **LINE-03**: Create reusable lineup templates
+- [x] **LINE-04**: Implement group-based assignment
+- [x] **EQUIP-01**: Auto-generate usage logs
+- [x] **EQUIP-02**: Implement readiness state
+- [x] **EQUIP-03**: Enforce availability at assignment
+- [x] **PWA-01**: Set up service worker with caching
+- [x] **PWA-02**: Implement push notifications
+- [x] **PWA-03**: Add IndexedDB offline storage
+- [x] **PWA-04**: Implement background sync
+- [x] **REG-01**: Integrate Regatta Central API
+- [x] **REG-02**: Support manual regatta/race entry
+- [x] **REG-03**: Build timeline view
+- [x] **REG-04**: Enable lineup assignment per entry
+- [x] **REG-05**: Implement race notifications
+- [x] **REG-06**: Add meeting location field
+- [x] **REG-07**: Add notes field
+- [x] **REG-08**: Build offline capability
+- [x] **DEBT-01**: Extract claims helper utility
+- [x] **DEBT-02**: Refactor oversized form components
+- [x] **DEBT-03**: Add query caching
 
-### Active (v1.1)
+**v1.1 — Polish:**
+- [x] **RC-09**: Coach can view RC connection status in settings
+- [x] **RC-10**: Coach can connect/disconnect RC account via OAuth *(UI complete, needs credentials)*
+- [x] **RC-11**: Coach can trigger manual regatta import *(UI complete, needs credentials)*
+- [x] **RC-12**: Coach can toggle auto-sync on/off
+- [x] **EQUIP-04**: Coach can view usage history on equipment detail page
+- [x] **EQUIP-05**: Coach can see equipment usage summary on list page
+- [x] **EXPORT-01**: Export equipment inventory to CSV
+- [x] **EXPORT-02**: Export roster to CSV
+- [x] **EXPORT-03**: Export season schedule to CSV
 
-**Goal:** Polish v1.0 — complete UI gaps, surface collected data, add targeted notifications and data portability.
+### Deferred (Future Milestone)
 
-**RC Integration UI:**
-- [ ] **RC-09**: Coach can view RC connection status in settings
-- [ ] **RC-10**: Coach can connect/disconnect RC account via OAuth
-- [ ] **RC-11**: Coach can trigger manual regatta import
-- [ ] **RC-12**: Coach can toggle auto-sync on/off
-
-**Equipment Usage Display:**
-- [ ] **EQUIP-04**: Coach can view usage history on equipment detail page
-- [ ] **EQUIP-05**: Coach can see equipment usage summary on dashboard
-
-**Notifications:**
-- [ ] **NOTIF-01**: Coach receives notification when equipment is marked damaged
-- [ ] **NOTIF-02**: Athletes receive notification when lineup is published
-
-**Data Export:**
-- [ ] **EXPORT-01**: Export equipment inventory to CSV/Excel
-- [ ] **EXPORT-02**: Export roster to CSV/Excel
-- [ ] **EXPORT-03**: Export season schedule to CSV/Excel
-
-**Deferred to v2.0:**
-- Season templates
-- Email notifications
-- Erg results tracking
-- Attendance analytics
-- Equipment lifecycle tracking
-- Parent portal
+- **NOTIF-01**: Coach receives notification when equipment is marked damaged
+- **NOTIF-02**: Athletes receive notification when lineup is published
+- Season templates — reusable season structures
+- Email notifications — alternative to push
+- Erg results tracking — Concept2 integration
+- Attendance analytics — reporting and trends
+- Equipment lifecycle tracking — maintenance schedules
+- Parent portal — read-only access for parents
 
 ### Out of Scope
 
@@ -126,6 +120,7 @@ A multi-tenant SaaS for rowing team operations — practice planning, equipment 
 | dnd-kit for drag-drop | Modern, accessible, well-maintained library | Good — smooth UX |
 | Serwist for service worker | Production-tested caching strategies | Good — reliable offline |
 | AES-256-CBC for RC tokens | Industry standard encryption | Good — secure |
+| Sonner for toasts | Dark theme, bottom-right, rich colors | Good — consistent UX |
 
 ## Constraints
 
@@ -138,4 +133,4 @@ A multi-tenant SaaS for rowing team operations — practice planning, equipment 
 | **External API** | Regatta Central v4, per-team API keys |
 
 ---
-*Last updated: 2026-01-21 after v1.1 milestone started*
+*Last updated: 2026-01-22 after v1.1 milestone completed*

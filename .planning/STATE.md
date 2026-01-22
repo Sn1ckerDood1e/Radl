@@ -4,64 +4,45 @@
 
 **Core Value:** Coaches can plan practices with lineups and equipment, and athletes know where to be and what boat they're in.
 
-**Current Focus:** v1.1 Polish — RC settings UI, equipment usage display, notifications, data export
+**Current Focus:** Between milestones — v1.1 completed, run `/gsd:new-milestone` to start next
 
 ## Current Position
 
 | Field | Value |
 |-------|-------|
-| Milestone | v1.1 |
-| Phase | All phases built |
-| Status | Cautiously approved — deferred items noted |
-| Last activity | 2026-01-22 — Export functionality added |
+| Milestone | None (between milestones) |
+| Last Completed | v1.1 Polish |
+| Status | Ready for next milestone |
+| Last activity | 2026-01-22 — v1.1 milestone completed |
 
 **Progress:**
 ```
-v1.0: [##########] 100% SHIPPED
-v1.1: [########  ] 82% (4 phases, 11 requirements)
-      Phase 6: RC Settings UI — UI complete (RC credentials needed for testing)
-      Phase 7: Equipment Usage Display — COMPLETE
-      Phase 8: Notifications — DEFERRED (push notifications for damage/lineup)
-      Phase 9: Data Export — COMPLETE
+v1.0: [##########] 100% SHIPPED (2026-01-22)
+v1.1: [##########] 100% SHIPPED (2026-01-22) — 9/11 reqs, 2 deferred
 ```
 
-## v1.0 Summary
+## Shipped Milestones
+
+### v1.1 Polish (2026-01-22)
+
+**Delivered:**
+- RC Settings UI (status display, OAuth connect/disconnect, manual import, auto-sync toggle)
+- Equipment usage display (history on detail page, summary on list page)
+- Data export (equipment, roster, schedule to CSV)
+
+**Deferred:**
+- NOTIF-01: Push notification for equipment damage
+- NOTIF-02: Push notification for lineup published
+- RC connection testing (needs RC_CLIENT_ID and RC_CLIENT_SECRET)
+- QR code external scanning (needs production deployment)
+
+**Stats:** 4 phases, 13 commits, 80,840 LOC
+
+### v1.0 MVP (2026-01-22)
 
 **Delivered:** Operational rowing team platform with practice scheduling, lineup management, PWA offline support, and regatta mode.
 
-**Stats:**
-- 5 phases, 37 plans
-- 31 requirements implemented
-- 79,737 LOC TypeScript
-- 3 days (2026-01-20 → 2026-01-22)
-
-**Archived:** `.planning/milestones/v1.0-ROADMAP.md`, `.planning/milestones/v1.0-REQUIREMENTS.md`
-
-## v1.1 Scope
-
-**Goal:** Polish v1.0 — complete UI gaps, surface collected data, add notifications and data portability.
-
-**Phases:**
-| Phase | Name | Requirements | Status |
-|-------|------|--------------|--------|
-| 6 | RC Settings UI | 4 | UI Complete (needs RC credentials) |
-| 7 | Equipment Usage Display | 2 | Complete |
-| 8 | Notifications | 2 | Deferred |
-| 9 | Data Export | 3 | Complete |
-
-## Deferred Items
-
-| Item | Reason | Priority |
-|------|--------|----------|
-| RC connection testing | Needs RC_CLIENT_ID and RC_CLIENT_SECRET from Regatta Central API registration | When RC credentials obtained |
-| QR code external scanning | Localhost not accessible from mobile devices | When deployed to production |
-| Push notifications (Phase 8) | NOTIF-01 (damage alerts), NOTIF-02 (lineup published) | Future milestone |
-
-## Next Steps
-
-1. Obtain Regatta Central API credentials to test RC connection
-2. Deploy to production for QR code testing
-3. Plan Phase 8 (Notifications) for future milestone
+**Stats:** 5 phases, 37 plans, 31 requirements, 79,737 LOC, 3 days
 
 ## Accumulated Context
 
@@ -77,6 +58,7 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 - **PWA:** Serwist (service worker), Dexie.js (IndexedDB), web-push (notifications)
 - **External API:** Regatta Central v4 (OAuth2, per-team keys)
 - **Toast notifications:** Sonner (dark theme, bottom-right, rich colors)
+- **Data export:** CSV with proper escaping, immediate download
 
 ### Tech Debt Tracker
 
@@ -85,21 +67,21 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 | DEBT-01: Claims helper | COMPLETE | v1.0 |
 | DEBT-02: Form refactoring | COMPLETE | v1.0 |
 | DEBT-03: Query caching | COMPLETE | v1.0 |
-| RC import UI | v1.1 COMPLETE | Phase 6: Settings page built, needs credentials |
-| Equipment usage display | v1.1 COMPLETE | Phase 7: Detail page + list page summary |
-| Data export | v1.1 COMPLETE | Phase 9: Equipment, roster, schedule CSV export |
-| Push notifications | DEFERRED | Phase 8: Damage alerts, lineup published |
+| RC connection testing | DEFERRED | Needs RC_CLIENT_ID and RC_CLIENT_SECRET |
+| QR external scanning | DEFERRED | Needs production deployment |
+| Push notifications | DEFERRED | NOTIF-01, NOTIF-02 for future milestone |
 
 ### Patterns Established
 
 See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
 
-## Session Continuity
+## Next Steps
 
-**Last session:** 2026-01-22 05:12:11 UTC
-**Stopped at:** Completed 06-01-PLAN.md
-**Resume file:** None
+Run `/gsd:new-milestone` to:
+1. Define next milestone scope
+2. Create new REQUIREMENTS.md
+3. Create new ROADMAP.md with phases
 
 ---
 
-*Last updated: 2026-01-22 (Plan 06-01 complete)*
+*Last updated: 2026-01-22 (v1.1 milestone completed)*
