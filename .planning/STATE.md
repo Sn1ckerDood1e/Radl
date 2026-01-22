@@ -11,9 +11,9 @@
 | Field | Value |
 |-------|-------|
 | Phase | 5 of 5 (Regatta Mode) |
-| Plan | 6 of 7 |
-| Status | In progress |
-| Last activity | 2026-01-22 - Completed 05-06-PLAN.md |
+| Plan | 7 of 7 |
+| Status | Phase complete |
+| Last activity | 2026-01-22 - Completed 05-07-PLAN.md |
 
 **Progress:**
 ```
@@ -21,17 +21,17 @@ Phase 1: [##########] 100% (5/5 plans) COMPLETE
 Phase 2: [##########] 100% (8/8 plans) COMPLETE
 Phase 3: [##########] 100% (7/7 plans) COMPLETE
 Phase 4: [##########] 100% (7/7 plans) COMPLETE
-Phase 5: [########..] 86% (6/7 plans) IN PROGRESS
+Phase 5: [##########] 100% (7/7 plans) COMPLETE
 
-Overall:  [#########.] 33/34 plans (97%)
+Overall:  [##########] 34/34 plans (100%)
 ```
 
 ## Performance Metrics
 
 | Metric | Value |
 |--------|-------|
-| Requirements completed | 24/31 |
-| Plans completed | 33 |
+| Requirements completed | 31/31 |
+| Plans completed | 34 |
 | Plans failed | 0 |
 | Blockers resolved | 0 |
 
@@ -130,6 +130,9 @@ Overall:  [#########.] 33/34 plans (97%)
 | useSyncExternalStore for online status | SSR-safe pattern that returns true on server, syncs with navigator.onLine on client | 4 |
 | 30-day install dismissal | Prevents install banner nagging while allowing re-prompt after reasonable time | 4 |
 | PWAWrapper client component | Server component layout.tsx cannot directly render client components with hooks | 4 |
+| Denormalized lineup in OfflineEntry | Entries store lineup with athlete names to display without joins | 5 |
+| Dexie version 2 for regatta tables | Keep version 1 stores, add version 2 with regattas and entries tables | 5 |
+| Disable Add Entry when offline | Prevents mutation attempts that would fail | 5 |
 
 ### Architecture Notes
 
@@ -143,7 +146,7 @@ Overall:  [#########.] 33/34 plans (97%)
 - **Practice models:** Practice, PracticeBlock, PracticeTemplate, TemplateBlock, BlockTemplate
 - **Lineup models:** Lineup, SeatAssignment, LineupTemplate, TemplateSeat, EquipmentUsageLog, LandAssignment
 - **Regatta models:** Regatta, Entry, EntryLineup, EntrySeat, NotificationConfig, RegattaCentralConnection
-- **Offline models:** OfflineSchedule, OfflineLineup, SyncQueueItem, CacheMeta (Dexie/IndexedDB)
+- **Offline models:** OfflineSchedule, OfflineLineup, OfflineRegatta, OfflineEntry, SyncQueueItem, CacheMeta (Dexie/IndexedDB)
 - **Push models:** PushSubscription (team-scoped push notification subscriptions)
 - **Date handling:** date-fns for time manipulation in template application
 - **Rowing positions:** 1-based numbering (1=Bow, 8=Stroke, 9=Cox for 8+), SeatSide enum (PORT/STARBOARD/NONE)
@@ -227,6 +230,8 @@ Overall:  [#########.] 33/34 plans (97%)
 | Cron-triggered Edge Function | pg_cron calls http_post to invoke Edge Function on schedule | supabase/functions/process-race-notifications/index.ts |
 | Scheduled notification processing | Query by scheduledFor range, mark as sent after dispatch | supabase/functions/process-race-notifications/index.ts |
 | Manual race reminder trigger | notifyRaceReminder for ad-hoc race notifications | src/lib/push/triggers.ts |
+| Regatta cache manager | Transaction-based writes with metadata for regatta/entry caching | src/lib/db/regatta-cache.ts |
+| Offline regatta hook | API fetch with IndexedDB fallback for regatta data | src/hooks/use-offline-regatta.ts |
 
 ### Todos
 
@@ -335,29 +340,26 @@ All 4 requirements for Phase 4 verified complete:
 ### Last Session
 
 - **Date:** 2026-01-22
-- **Activity:** Executed 05-05-PLAN.md (Regatta UI)
-- **Outcome:** Created timeline view UI with date-fns-tz timezone support
+- **Activity:** Executed 05-07-PLAN.md (Regatta Offline Cache)
+- **Outcome:** Extended Dexie schema v2, created regatta cache manager and offline hook
 
 ### Next Actions
 
-1. Execute 05-07-PLAN.md (Regatta Calendar Integration)
-2. Complete Phase 5 verification
-3. Mark Phase 5 complete
+1. Run Phase 5 verification checklist
+2. Mark Phase 5 complete
+3. Project complete - all 34 plans executed
 
 ### Files Modified This Session
 
 **Created:**
-- `src/components/regatta/entry-card.tsx` (Entry card component)
-- `src/components/regatta/race-timeline.tsx` (Timeline component)
-- `src/components/regatta/regatta-form.tsx` (Regatta create/edit form)
-- `src/app/(dashboard)/[teamSlug]/regattas/page.tsx` (Regatta list page)
-- `src/app/(dashboard)/[teamSlug]/regattas/new/page.tsx` (New regatta page)
-- `src/app/(dashboard)/[teamSlug]/regattas/[id]/page.tsx` (Regatta detail page)
-- `src/app/(dashboard)/[teamSlug]/regattas/[id]/regatta-detail-client.tsx` (Interactive client component)
-- `.planning/phases/05-regatta-mode/05-05-SUMMARY.md` (completed)
+- `src/lib/db/regatta-cache.ts` (Regatta cache manager)
+- `src/hooks/use-offline-regatta.ts` (Offline regatta hook)
+- `.planning/phases/05-regatta-mode/05-07-SUMMARY.md` (completed)
 
 **Modified:**
-- `package.json` (added date-fns-tz)
+- `src/lib/db/schema.ts` (Added OfflineRegatta, OfflineEntry, version 2)
+- `src/app/(dashboard)/[teamSlug]/regattas/[id]/regatta-detail-client.tsx` (Offline support)
+- `src/app/(dashboard)/[teamSlug]/regattas/[id]/page.tsx` (Pass initialCachedAt)
 - `.planning/STATE.md` (updated)
 
 ## Phase 5 Progress
@@ -370,8 +372,25 @@ All 4 requirements for Phase 4 verified complete:
 | 05-04 | Entry lineup and notification config API | COMPLETE |
 | 05-05 | Regatta UI | COMPLETE |
 | 05-06 | Race notifications dispatch | COMPLETE |
-| 05-07 | Regatta calendar integration | PENDING |
+| 05-07 | Regatta offline cache | COMPLETE |
+
+**Phase 5 Complete** - All 7 plans executed, regatta mode fully operational.
+
+## Phase 5 Completion Summary
+
+All 7 requirements for Phase 5 verified complete:
+
+| REQ-ID | Description | Status |
+|--------|-------------|--------|
+| REG-01 | Create regattas with schedule | COMPLETE |
+| REG-02 | Add race entries | COMPLETE |
+| REG-03 | Import from Regatta Central | COMPLETE |
+| REG-04 | Assign lineups to entries | COMPLETE |
+| REG-05 | Configure race notifications | COMPLETE |
+| REG-06 | Send race reminders | COMPLETE |
+| REG-07 | Timeline view UI | COMPLETE |
+| REG-08 | Offline regatta viewing | COMPLETE |
 
 ---
 
-*Last updated: 2026-01-22 (Phase 5 - IN PROGRESS - 6/7 plans complete, 1 remaining)*
+*Last updated: 2026-01-22 (Phase 5 - COMPLETE - 7/7 plans complete)*
