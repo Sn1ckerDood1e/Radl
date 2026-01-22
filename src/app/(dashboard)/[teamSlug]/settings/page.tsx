@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useTheme } from '@/components/providers/theme-provider';
+import { NotificationSettings } from '@/components/pwa/notification-settings';
 
 interface Coach {
   userId: string;
@@ -370,9 +371,15 @@ export default function TeamSettingsPage() {
         </div>
       </div>
 
-      {/* Notification Settings */}
+      {/* Push Notifications Section */}
       <div className="bg-zinc-900 rounded-xl border border-zinc-800 p-6 mb-6">
-        <h2 className="text-lg font-semibold text-white mb-2">Notification Settings</h2>
+        <h2 className="text-lg font-semibold text-white mb-4">Push Notifications</h2>
+        <NotificationSettings />
+      </div>
+
+      {/* Damage Report Notification Settings */}
+      <div className="bg-zinc-900 rounded-xl border border-zinc-800 p-6 mb-6">
+        <h2 className="text-lg font-semibold text-white mb-2">Damage Report Recipients</h2>
         <p className="text-sm text-zinc-400 mb-6">
           Configure who receives notifications when damage is reported on equipment.
         </p>
