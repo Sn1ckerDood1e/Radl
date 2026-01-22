@@ -11,19 +11,19 @@
 | Field | Value |
 |-------|-------|
 | Phase | 4 of 5 (PWA Infrastructure) |
-| Plan | 4 of 7 |
+| Plan | 5 of 7 |
 | Status | In progress |
-| Last activity | 2026-01-21 - Completed 04-04-PLAN.md |
+| Last activity | 2026-01-21 - Completed 04-05-PLAN.md |
 
 **Progress:**
 ```
 Phase 1: [##########] 100% (5/5 plans) COMPLETE
 Phase 2: [##########] 100% (8/8 plans) COMPLETE
 Phase 3: [##########] 100% (7/7 plans) COMPLETE
-Phase 4: [######....] 57% (4/7 plans)
+Phase 4: [#######...] 71% (5/7 plans)
 Phase 5: [..........] 0%
 
-Overall:  [########..] 24/27 plans (89%)
+Overall:  [#########.] 25/27 plans (93%)
 ```
 
 ## Performance Metrics
@@ -31,7 +31,7 @@ Overall:  [########..] 24/27 plans (89%)
 | Metric | Value |
 |--------|-------|
 | Requirements completed | 21/31 |
-| Plans completed | 24 |
+| Plans completed | 25 |
 | Plans failed | 0 |
 | Blockers resolved | 0 |
 
@@ -107,6 +107,9 @@ Overall:  [########..] 24/27 plans (89%)
 | Unique endpoint constraint | Browser push endpoints are unique, enables upsert pattern on re-subscribe | 4 |
 | Supabase Edge Function for dispatch | Push notifications sent via Edge Function, avoids web-push in Next.js | 4 |
 | 410 Gone auto-cleanup | Invalid push subscriptions automatically removed when push fails | 4 |
+| Optimistic update first | Apply local change before attempting online sync for responsive UI | 4 |
+| Network error detection | TypeError or fetch message triggers offline fallback | 4 |
+| SyncStatus conditional render | Only renders when pendingCount > 0 to avoid UI clutter | 4 |
 
 ### Architecture Notes
 
@@ -177,6 +180,9 @@ Overall:  [########..] 24/27 plans (89%)
 | Push subscription flow | permission -> subscribe -> store on server | src/lib/push/subscribe.ts |
 | Push notification handlers | Service worker push/notificationclick events | src/app/sw.ts |
 | Edge Function dispatch | Supabase Edge Function sends notifications via web-push | supabase/functions/send-notification/index.ts |
+| executeWithOfflineFallback | Try online action first, queue if offline or network error | src/lib/db/offline-mutations.ts |
+| useOfflineMutation hook | React hook for offline-capable mutations with loading/error state | src/hooks/use-offline-mutation.ts |
+| Animated sync indicator | Ping animation for pending sync items | src/components/pwa/sync-status.tsx |
 
 ### Todos
 
@@ -263,7 +269,7 @@ All 5 requirements for Phase 3 verified complete:
 | 04-02 | IndexedDB schema and hooks | COMPLETE |
 | 04-03 | Offline data sync | COMPLETE |
 | 04-04 | Push notification infrastructure | COMPLETE |
-| 04-05 | Offline UI indicators | Pending |
+| 04-05 | Offline mutation and sync status UI | COMPLETE |
 | 04-06 | Install prompt and manifest | Pending |
 | 04-07 | Offline-first schedule view | Pending |
 
@@ -272,31 +278,28 @@ All 5 requirements for Phase 3 verified complete:
 ### Last Session
 
 - **Date:** 2026-01-21
-- **Activity:** Executed 04-04-PLAN.md (Push notification infrastructure)
-- **Outcome:** PushSubscription model, subscribe/unsubscribe API, client helpers, Supabase Edge Function, SW push handlers
+- **Activity:** Executed 04-05-PLAN.md (Offline mutation and sync status)
+- **Outcome:** Offline mutation utilities, useOfflineMutation hook, SyncStatus component integrated in header
 
 ### Next Actions
 
-1. Continue Phase 4 with plan 04-05 (Offline UI indicators)
-2. Add offline status banner and sync indicators
-3. Implement install prompt UI
+1. Continue Phase 4 with plan 04-06 (Install prompt and manifest)
+2. Create PWA manifest.json
+3. Add install prompt component
+4. Then plan 04-07 (Offline-first schedule view)
 
 ### Files Modified This Session
 
 **Created:**
-- `src/app/api/push/subscribe/route.ts` (Push subscription endpoint)
-- `src/app/api/push/unsubscribe/route.ts` (Push unsubscribe endpoint)
-- `src/lib/push/vapid.ts` (VAPID key configuration)
-- `src/lib/push/subscribe.ts` (Client subscription helpers)
-- `supabase/functions/send-notification/index.ts` (Edge Function for push dispatch)
-- `.planning/phases/04-pwa-infrastructure/04-04-SUMMARY.md` (completed)
+- `src/lib/db/offline-mutations.ts` (Offline mutation utilities)
+- `src/hooks/use-offline-mutation.ts` (React hook for offline mutations)
+- `src/components/pwa/sync-status.tsx` (Sync status UI component)
+- `.planning/phases/04-pwa-infrastructure/04-05-SUMMARY.md` (completed)
 
 **Modified:**
-- `prisma/schema.prisma` (PushSubscription model added)
-- `src/app/sw.ts` (push/notificationclick handlers)
-- `.env.example` (VAPID placeholders)
+- `src/components/layout/dashboard-header.tsx` (Added SyncStatus)
 - `.planning/STATE.md` (updated)
 
 ---
 
-*Last updated: 2026-01-21 (Phase 4 - 4/7 plans complete)*
+*Last updated: 2026-01-21 (Phase 4 - 5/7 plans complete)*
