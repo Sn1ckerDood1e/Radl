@@ -156,6 +156,17 @@ Plans:
 
 **Dependencies:** Phase 4 (offline capability and push notifications required)
 
+**Plans:** 7 plans
+
+Plans:
+- [ ] 05-01-PLAN.md - Data models for Regatta, Entry, EntryLineup, NotificationConfig, RC connection
+- [ ] 05-02-PLAN.md - Regatta and entry CRUD API (manual creation)
+- [ ] 05-03-PLAN.md - Regatta Central API integration (OAuth, import)
+- [ ] 05-04-PLAN.md - Entry lineup assignment and notification configuration API
+- [ ] 05-05-PLAN.md - Timeline view UI with date-fns-tz timezone support
+- [ ] 05-06-PLAN.md - Scheduled race notifications (pg_cron + Edge Function)
+- [ ] 05-07-PLAN.md - Offline regatta support (extend Dexie schema)
+
 **Requirements:**
 | REQ-ID | Description |
 |--------|-------------|
@@ -185,7 +196,7 @@ Plans:
 | 2 - Practice Scheduling | Complete | 6 | 6 |
 | 3 - Lineup Management | Complete | 6 | 6 |
 | 4 - PWA Infrastructure | Complete | 5 | 5 |
-| 5 - Regatta Mode | Not Started | 8 | 0 |
+| 5 - Regatta Mode | Planned | 8 | 0 |
 
 **Total:** 23/31 requirements completed (74%)
 
@@ -212,3 +223,4 @@ Phases that may need deeper research during planning:
 *Phase 3 complete: 2026-01-21*
 *Phase 4 planned: 2026-01-21*
 *Phase 4 complete: 2026-01-21*
+*Phase 5 planned: 2026-01-21*
