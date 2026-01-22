@@ -11,16 +11,16 @@
 | Field | Value |
 |-------|-------|
 | Milestone | v1.1 |
-| Phase | 6 (RC Settings UI) — not started |
-| Plan | None active |
-| Status | Roadmap complete, ready for phase planning |
-| Last activity | 2026-01-21 — v1.1 roadmap created |
+| Phase | 6 (RC Settings UI) — in progress |
+| Plan | 06-01 of ? |
+| Status | Plan 06-01 complete |
+| Last activity | 2026-01-22 — Completed 06-01-PLAN.md |
 
 **Progress:**
 ```
 v1.0: [##########] 100% SHIPPED
-v1.1: [          ] 0% (4 phases, 11 requirements)
-      Phase 6: RC Settings UI — pending
+v1.1: [█         ] 9% (4 phases, 11 requirements)
+      Phase 6: RC Settings UI — in progress (06-01 complete)
       Phase 7: Equipment Usage Display — pending
       Phase 8: Notifications — pending
       Phase 9: Data Export — pending
@@ -52,8 +52,8 @@ v1.1: [          ] 0% (4 phases, 11 requirements)
 
 ## Next Steps
 
-1. Run `/gsd:plan-phase 6` to plan RC Settings UI
-2. Execute plans 06-01 through 06-0N
+1. Continue executing Phase 6 plans (06-02 onwards)
+2. Complete RC Settings UI implementation
 3. Continue with phases 7-9
 
 ## Accumulated Context
@@ -69,6 +69,7 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 - **Stack:** Next.js 16 + Prisma 6 + Supabase
 - **PWA:** Serwist (service worker), Dexie.js (IndexedDB), web-push (notifications)
 - **External API:** Regatta Central v4 (OAuth2, per-team keys)
+- **Toast notifications:** Sonner (dark theme, bottom-right, rich colors)
 
 ### Tech Debt Tracker
 
@@ -84,6 +85,12 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 
 See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
 
+## Session Continuity
+
+**Last session:** 2026-01-22 05:12:11 UTC
+**Stopped at:** Completed 06-01-PLAN.md
+**Resume file:** None
+
 ---
 
-*Last updated: 2026-01-21 (v1.1 roadmap created)*
+*Last updated: 2026-01-22 (Plan 06-01 complete)*
