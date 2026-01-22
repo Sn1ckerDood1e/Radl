@@ -182,6 +182,7 @@ export default async function RegattaDetailPage({ params }: PageProps) {
         athletes={athletes}
         boats={boats}
         isCoach={isCoach}
+        initialCachedAt={Date.now()}
       />
     </div>
   );
