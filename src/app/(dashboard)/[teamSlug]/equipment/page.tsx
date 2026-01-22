@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { requireTeam } from '@/lib/auth/authorize';
 import { prisma } from '@/lib/prisma';
 import { EquipmentListClient } from './equipment-list-client';
+import { EquipmentUsageSummary } from '@/components/equipment/equipment-usage-summary';
 
 interface EquipmentPageProps {
   params: Promise<{ teamSlug: string }>;
@@ -41,6 +42,52 @@ export default async function EquipmentPage({ params }: EquipmentPageProps) {
     ],
   });
 
+  // Get usage summary data
+  const usageLogs = await prisma.equipmentUsageLog.findMany({
+    where: { teamId: team.id },
+    include: {
+      equipment: { select: { id: true, name: true } },
+      practice: { select: { id: true, name: true } },
+    },
+    orderBy: { usageDate: 'desc' },
+    take: 100, // Get enough to compute summary
+  });
+
+  // Compute most used equipment
+  const usageCounts = new Map<string, { name: string; count: number; lastUsed: Date | null }>();
+  for (const log of usageLogs) {
+    const existing = usageCounts.get(log.equipmentId);
+    if (existing) {
+      existing.count++;
+    } else {
+      usageCounts.set(log.equipmentId, {
+        name: log.equipment.name,
+        count: 1,
+        lastUsed: log.usageDate,
+      });
+    }
+  }
+
+  const mostUsed = Array.from(usageCounts.entries())
+    .map(([equipmentId, data]) => ({
+      equipmentId,
+      equipmentName: data.name,
+      usageCount: data.count,
+      lastUsed: data.lastUsed?.toISOString() ?? null,
+    }))
+    .sort((a, b) => b.usageCount - a.usageCount)
+    .slice(0, 5);
+
+  // Get recent usage (last 5 unique equipment uses)
+  const recentUsage = usageLogs.slice(0, 5).map(log => ({
+    id: log.id,
+    equipmentId: log.equipmentId,
+    equipmentName: log.equipment.name,
+    practiceName: log.practice.name,
+    practiceId: log.practiceId,
+    usageDate: log.usageDate.toISOString(),
+  }));
+
   const isCoach = claims.user_role === 'COACH';
 
   return (
@@ -74,6 +121,12 @@ export default async function EquipmentPage({ params }: EquipmentPageProps) {
           </Link>
         )}
       </div>
+
+      <EquipmentUsageSummary
+        mostUsed={mostUsed}
+        recentUsage={recentUsage}
+        teamSlug={teamSlug}
+      />
 
       <EquipmentListClient
         equipment={equipment.map(e => ({

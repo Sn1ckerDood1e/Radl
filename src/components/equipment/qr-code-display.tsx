@@ -8,8 +8,9 @@ interface QRCodeDisplayProps {
 }
 
 export function QRCodeDisplay({ equipmentId, size = 128 }: QRCodeDisplayProps) {
-  // Use environment variable for base URL to work in all environments
-  const reportUrl = `${process.env.NEXT_PUBLIC_APP_URL}/report/${equipmentId}`;
+  // Use environment variable for base URL, fallback to window.location.origin for dev
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || (typeof window !== 'undefined' ? window.location.origin : '');
+  const reportUrl = `${baseUrl}/report/${equipmentId}`;
 
   return (
     <div className="inline-block p-4 bg-white rounded-lg border border-gray-200">
