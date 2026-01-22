@@ -45,3 +45,7 @@ yarn-error.log*
 
 # GSD planning intelligence (auto-regenerated)
 .planning/intel/
+
+# Generated service worker (built at compile time)
+public/sw.js
+public/sw.js.map
