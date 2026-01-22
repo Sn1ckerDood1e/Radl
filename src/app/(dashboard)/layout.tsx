@@ -4,6 +4,7 @@ import { getUserClaims } from '@/lib/auth/authorize';
 import { prisma } from '@/lib/prisma';
 import { DashboardHeader } from '@/components/layout/dashboard-header';
 import { TeamColorProvider } from '@/components/providers/team-color-provider';
+import { PWAWrapper } from '@/components/pwa/pwa-wrapper';
 
 export default async function DashboardLayout({
   children,
@@ -50,12 +51,14 @@ export default async function DashboardLayout({
 
   return (
     <TeamColorProvider colors={teamColors}>
-      <div className="min-h-screen bg-[var(--background)] transition-colors">
-        <DashboardHeader team={team} />
-        <main className="container mx-auto px-4 py-8">
-          {children}
-        </main>
-      </div>
+      <PWAWrapper>
+        <div className="min-h-screen bg-[var(--background)] transition-colors">
+          <DashboardHeader team={team} />
+          <main className="container mx-auto px-4 py-8">
+            {children}
+          </main>
+        </div>
+      </PWAWrapper>
     </TeamColorProvider>
   );
 }
