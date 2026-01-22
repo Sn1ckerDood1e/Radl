@@ -137,6 +137,10 @@ enum Side {
 // Notification type enum
 enum NotificationType {
   DAMAGE_REPORT
+  LINEUP_ASSIGNMENT
+  PRACTICE_CHANGE
+  PRACTICE_CANCELLED
+  ATHLETE_JOINED
 }
 
 // Season status enum
@@ -516,4 +520,22 @@ model Regatta {
 
   @@index([teamId])
   @@index([teamId, seasonId])
+}
+
+// Push notification subscriptions for Web Push Protocol
+model PushSubscription {
+  id             String    @id @default(uuid())
+  userId         String    // Supabase auth user ID
+  teamId         String    // For team-scoped notifications
+  endpoint       String    @unique // Push service endpoint URL
+  p256dh         String    // Public key for encryption
+  auth           String    // Auth secret for encryption
+  expirationTime DateTime? // Optional expiration from browser
+  userAgent      String?   // For debugging
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  @@index([userId])
+  @@index([teamId])
+  @@index([teamId, userId])
 }
