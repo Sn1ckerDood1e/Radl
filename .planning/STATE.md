@@ -11,19 +11,18 @@
 | Field | Value |
 |-------|-------|
 | Milestone | v1.1 |
-| Phase | 6 (RC Settings UI) — UI complete, testing deferred |
-| Plan | 06-02 of 2 |
-| Status | UI built, RC credentials needed for full test |
-| Last activity | 2026-01-22 — Phase 6 UI complete |
+| Phase | All phases built |
+| Status | Cautiously approved — deferred items noted |
+| Last activity | 2026-01-22 — Export functionality added |
 
 **Progress:**
 ```
 v1.0: [##########] 100% SHIPPED
-v1.1: [██        ] 18% (4 phases, 11 requirements)
-      Phase 6: RC Settings UI — UI complete (RC credentials needed)
-      Phase 7: Equipment Usage Display — pending
-      Phase 8: Notifications — pending
-      Phase 9: Data Export — pending
+v1.1: [########  ] 82% (4 phases, 11 requirements)
+      Phase 6: RC Settings UI — UI complete (RC credentials needed for testing)
+      Phase 7: Equipment Usage Display — COMPLETE
+      Phase 8: Notifications — DEFERRED (push notifications for damage/lineup)
+      Phase 9: Data Export — COMPLETE
 ```
 
 ## v1.0 Summary
@@ -45,16 +44,24 @@ v1.1: [██        ] 18% (4 phases, 11 requirements)
 **Phases:**
 | Phase | Name | Requirements | Status |
 |-------|------|--------------|--------|
-| 6 | RC Settings UI | 4 | Pending |
-| 7 | Equipment Usage Display | 2 | Pending |
-| 8 | Notifications | 2 | Pending |
-| 9 | Data Export | 3 | Pending |
+| 6 | RC Settings UI | 4 | UI Complete (needs RC credentials) |
+| 7 | Equipment Usage Display | 2 | Complete |
+| 8 | Notifications | 2 | Deferred |
+| 9 | Data Export | 3 | Complete |
+
+## Deferred Items
+
+| Item | Reason | Priority |
+|------|--------|----------|
+| RC connection testing | Needs RC_CLIENT_ID and RC_CLIENT_SECRET from Regatta Central API registration | When RC credentials obtained |
+| QR code external scanning | Localhost not accessible from mobile devices | When deployed to production |
+| Push notifications (Phase 8) | NOTIF-01 (damage alerts), NOTIF-02 (lineup published) | Future milestone |
 
 ## Next Steps
 
-1. Continue executing Phase 6 plans (06-02 onwards)
-2. Complete RC Settings UI implementation
-3. Continue with phases 7-9
+1. Obtain Regatta Central API credentials to test RC connection
+2. Deploy to production for QR code testing
+3. Plan Phase 8 (Notifications) for future milestone
 
 ## Accumulated Context
 
@@ -78,8 +85,10 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 | DEBT-01: Claims helper | COMPLETE | v1.0 |
 | DEBT-02: Form refactoring | COMPLETE | v1.0 |
 | DEBT-03: Query caching | COMPLETE | v1.0 |
-| RC import UI | v1.1 ACTIVE | Phase 6: Settings page for connection management |
-| Equipment usage display | v1.1 ACTIVE | Phase 7: Detail pages + dashboard summary |
+| RC import UI | v1.1 COMPLETE | Phase 6: Settings page built, needs credentials |
+| Equipment usage display | v1.1 COMPLETE | Phase 7: Detail page + list page summary |
+| Data export | v1.1 COMPLETE | Phase 9: Equipment, roster, schedule CSV export |
+| Push notifications | DEFERRED | Phase 8: Damage alerts, lineup published |
 
 ### Patterns Established
 
