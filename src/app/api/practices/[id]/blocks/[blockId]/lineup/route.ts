@@ -4,6 +4,7 @@ import { getClaimsForApiRoute } from '@/lib/auth/claims';
 import { unauthorizedResponse, forbiddenResponse, notFoundResponse, serverErrorResponse } from '@/lib/errors';
 import { createLineupSchema } from '@/lib/validations/lineup';
 import { createUsageLog, deleteUsageLogForLineup } from '@/lib/equipment/usage-logger';
+import { notifyLineupAssignment } from '@/lib/push/triggers';
 
 interface RouteParams {
   params: Promise<{ id: string; blockId: string }>;
@@ -158,13 +159,20 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
 
     // Use transaction to replace lineup
     const lineup = await prisma.$transaction(async (tx) => {
-      // Check if lineup exists
+      // Check if lineup exists with seats to determine new athletes
       const existing = await tx.lineup.findUnique({
         where: { blockId },
+        include: {
+          seats: {
+            select: { athleteId: true },
+          },
+        },
       });
 
       // Track old boat for usage log cleanup
       const oldBoatId = existing?.boatId;
+      // Track existing athlete IDs for notification comparison
+      const existingAthleteIds = existing?.seats.map((s) => s.athleteId) || [];
 
       // If exists, delete it (and its usage logs will be handled after)
       if (existing) {
@@ -203,7 +211,7 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
         },
       });
 
-      return { lineup: newLineup, oldBoatId };
+      return { lineup: newLineup, oldBoatId, existingAthleteIds };
     });
 
     // Handle usage log changes after transaction completes
@@ -233,6 +241,39 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
     } catch (error) {
       // Log warning but don't fail the request - usage logs are supplementary
       console.warn('Failed to update usage log:', error);
+    }
+
+    // Notify newly assigned athletes (fire-and-forget)
+    // Only notify if practice is published (athletes shouldn't see draft changes)
+    if (practice.status === 'PUBLISHED') {
+      // Find athletes that weren't in the old lineup
+      const newAthleteIds = athleteIds.filter(
+        (id) => !lineup.existingAthleteIds.includes(id)
+      );
+
+      if (newAthleteIds.length > 0) {
+        // Get user IDs for the new athletes
+        const newAthletes = await prisma.athleteProfile.findMany({
+          where: { id: { in: newAthleteIds } },
+          include: {
+            teamMember: {
+              select: { userId: true },
+            },
+          },
+        });
+
+        const newAthleteUserIds = newAthletes
+          .map((a) => a.teamMember?.userId)
+          .filter((id): id is string => !!id);
+
+        notifyLineupAssignment(
+          claims.team_id,
+          newAthleteUserIds,
+          practice.name,
+          practice.date,
+          practiceId
+        );
+      }
     }
 
     return NextResponse.json({ lineup: lineup.lineup }, { status: 200 });

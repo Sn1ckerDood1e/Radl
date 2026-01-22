@@ -3,6 +3,7 @@ import { prisma } from '@/lib/prisma';
 import { getClaimsForApiRoute } from '@/lib/auth/claims';
 import { unauthorizedResponse, forbiddenResponse, notFoundResponse, serverErrorResponse } from '@/lib/errors';
 import { updatePracticeSchema } from '@/lib/validations/practice';
+import { notifyPracticeChange, notifyPracticeCancelled } from '@/lib/push/triggers';
 
 interface RouteParams {
   params: Promise<{ id: string }>;
@@ -79,14 +80,14 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
     if (data.notes !== undefined) updateData.notes = data.notes;
     if (data.status !== undefined) updateData.status = data.status;
 
+    // Always fetch existing practice for validation and notification comparison
+    const existing = await prisma.practice.findFirst({
+      where: { id, teamId: claims.team_id },
+    });
+    if (!existing) return notFoundResponse('Practice');
+
     // Validate time ordering if both times are being updated or if one is updated
     if (updateData.startTime || updateData.endTime) {
-      // Fetch existing practice to validate times
-      const existing = await prisma.practice.findFirst({
-        where: { id, teamId: claims.team_id },
-      });
-      if (!existing) return notFoundResponse('Practice');
-
       const effectiveStart = updateData.startTime || existing.startTime;
       const effectiveEnd = updateData.endTime || existing.endTime;
 
@@ -117,6 +118,36 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
       },
     });
 
+    // Notify on significant changes to published practices (fire-and-forget)
+    // Only notify if practice was already published (not when publishing for the first time)
+    if (existing.status === 'PUBLISHED' && practice) {
+      const changes: string[] = [];
+
+      // Check for date change
+      if (updateData.date && updateData.date.getTime() !== existing.date.getTime()) {
+        changes.push('date changed');
+      }
+
+      // Check for time changes
+      if (updateData.startTime && updateData.startTime.getTime() !== existing.startTime.getTime()) {
+        changes.push('start time changed');
+      }
+      if (updateData.endTime && updateData.endTime.getTime() !== existing.endTime.getTime()) {
+        changes.push('end time changed');
+      }
+
+      // Notify if there are significant changes
+      if (changes.length > 0) {
+        notifyPracticeChange(
+          claims.team_id,
+          practice.name,
+          practice.date,
+          id,
+          changes.join(', ')
+        );
+      }
+    }
+
     return NextResponse.json({ practice });
   } catch (error) {
     return serverErrorResponse(error, 'practices/[id]:PATCH');
@@ -132,15 +163,26 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
     if (!claims?.team_id) return forbiddenResponse('No team associated with user');
     if (claims.user_role !== 'COACH') return forbiddenResponse('Only coaches can delete practices');
 
-    // Delete practice (blocks cascade delete via Prisma schema)
-    const result = await prisma.practice.deleteMany({
-      where: {
-        id,
-        teamId: claims.team_id,
-      },
+    // Fetch practice before deletion for notification
+    const practice = await prisma.practice.findFirst({
+      where: { id, teamId: claims.team_id },
     });
 
-    if (result.count === 0) return notFoundResponse('Practice');
+    if (!practice) return notFoundResponse('Practice');
+
+    // Delete practice (blocks cascade delete via Prisma schema)
+    await prisma.practice.delete({
+      where: { id },
+    });
+
+    // Notify about cancellation if practice was published (fire-and-forget)
+    if (practice.status === 'PUBLISHED') {
+      notifyPracticeCancelled(
+        claims.team_id,
+        practice.name,
+        practice.date
+      );
+    }
 
     return new NextResponse(null, { status: 204 });
   } catch (error) {
