@@ -53,7 +53,7 @@ export function RaceTimeline({ entries, timezone, onEntryClick }: RaceTimelinePr
 
   if (entries.length === 0) {
     return (
-      <div className="text-center py-12 text-gray-500">
+      <div className="text-center py-12 text-zinc-500">
         <p>No entries scheduled</p>
         <p className="text-sm mt-2">Add entries to see the race timeline</p>
       </div>
@@ -65,11 +65,11 @@ export function RaceTimeline({ entries, timezone, onEntryClick }: RaceTimelinePr
       {Object.entries(groupedByDate).map(([date, dayEntries]) => (
         <div key={date}>
           {/* Date header */}
-          <div className="sticky top-0 bg-white z-10 py-2 border-b mb-4">
-            <h3 className="text-lg font-semibold text-gray-700">
+          <div className="sticky top-0 bg-zinc-900 z-10 py-2 border-b border-zinc-700 mb-4">
+            <h3 className="text-lg font-semibold text-zinc-200">
               {format(parseISO(date), 'EEEE, MMMM d, yyyy')}
             </h3>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-zinc-500">
               Times shown in {timezone}
             </p>
           </div>
