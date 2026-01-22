@@ -11,16 +11,16 @@
 | Field | Value |
 |-------|-------|
 | Milestone | v1.1 |
-| Phase | 6 (RC Settings UI) — in progress |
-| Plan | 06-01 of ? |
-| Status | Plan 06-01 complete |
-| Last activity | 2026-01-22 — Completed 06-01-PLAN.md |
+| Phase | 6 (RC Settings UI) — UI complete, testing deferred |
+| Plan | 06-02 of 2 |
+| Status | UI built, RC credentials needed for full test |
+| Last activity | 2026-01-22 — Phase 6 UI complete |
 
 **Progress:**
 ```
 v1.0: [##########] 100% SHIPPED
-v1.1: [█         ] 9% (4 phases, 11 requirements)
-      Phase 6: RC Settings UI — in progress (06-01 complete)
+v1.1: [██        ] 18% (4 phases, 11 requirements)
+      Phase 6: RC Settings UI — UI complete (RC credentials needed)
       Phase 7: Equipment Usage Display — pending
       Phase 8: Notifications — pending
       Phase 9: Data Export — pending

@@ -4,6 +4,8 @@ import { requireTeam } from '@/lib/auth/authorize';
 import { prisma } from '@/lib/prisma';
 import { EquipmentDetail } from '@/components/equipment/equipment-detail';
 import { DamageHistory } from '@/components/equipment/damage-history';
+import { UsageHistory } from '@/components/equipment/usage-history';
+import { getUsageLogsForEquipment } from '@/lib/equipment/usage-logger';
 
 interface EquipmentDetailPageProps {
   params: Promise<{ teamSlug: string; id: string }>;
@@ -48,6 +50,9 @@ export default async function EquipmentDetailPage({ params }: EquipmentDetailPag
 
   const isCoach = claims.user_role === 'COACH';
 
+  // Fetch usage history
+  const usageLogs = await getUsageLogsForEquipment(equipment.id, { limit: 20 });
+
   // Serialize for client components
   const equipmentData = {
     id: equipment.id,
@@ -73,6 +78,17 @@ export default async function EquipmentDetailPage({ params }: EquipmentDetailPag
     resolvedAt: r.resolvedAt?.toISOString() ?? null,
     resolvedBy: r.resolvedBy,
     createdAt: r.createdAt.toISOString(),
+  }));
+
+  // Serialize usage logs for client component
+  const usageLogsData = usageLogs.map(log => ({
+    id: log.id,
+    usageDate: log.usageDate.toISOString(),
+    practice: {
+      id: log.practice.id,
+      name: log.practice.name,
+      date: log.practice.date.toISOString(),
+    },
   }));
 
   return (
@@ -103,6 +119,11 @@ export default async function EquipmentDetailPage({ params }: EquipmentDetailPag
           equipment={equipmentData}
           teamSlug={teamSlug}
           isCoach={isCoach}
+        />
+
+        <UsageHistory
+          usageLogs={usageLogsData}
+          teamSlug={teamSlug}
         />
 
         <DamageHistory
