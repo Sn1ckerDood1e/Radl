@@ -11,19 +11,19 @@
 | Field | Value |
 |-------|-------|
 | Phase | 4 of 5 (PWA Infrastructure) |
-| Plan | 6 of 7 |
-| Status | In progress |
-| Last activity | 2026-01-22 - Completed 04-06-PLAN.md |
+| Plan | 7 of 7 |
+| Status | Phase complete |
+| Last activity | 2026-01-22 - Completed 04-07-PLAN.md |
 
 **Progress:**
 ```
 Phase 1: [##########] 100% (5/5 plans) COMPLETE
 Phase 2: [##########] 100% (8/8 plans) COMPLETE
 Phase 3: [##########] 100% (7/7 plans) COMPLETE
-Phase 4: [########..] 86% (6/7 plans)
+Phase 4: [##########] 100% (7/7 plans) COMPLETE
 Phase 5: [..........] 0%
 
-Overall:  [#########.] 26/27 plans (96%)
+Overall:  [##########] 27/27 plans (100%)
 ```
 
 ## Performance Metrics
@@ -31,7 +31,7 @@ Overall:  [#########.] 26/27 plans (96%)
 | Metric | Value |
 |--------|-------|
 | Requirements completed | 21/31 |
-| Plans completed | 26 |
+| Plans completed | 27 |
 | Plans failed | 0 |
 | Blockers resolved | 0 |
 
@@ -113,6 +113,9 @@ Overall:  [#########.] 26/27 plans (96%)
 | Fire-and-forget notifications | Notifications never block API responses or cause failures | 4 |
 | Published-only notification guards | Draft practice changes don't trigger notifications to athletes | 4 |
 | Notify only new athletes | Avoid redundant notifications when lineup is modified | 4 |
+| useSyncExternalStore for online status | SSR-safe pattern that returns true on server, syncs with navigator.onLine on client | 4 |
+| 30-day install dismissal | Prevents install banner nagging while allowing re-prompt after reasonable time | 4 |
+| PWAWrapper client component | Server component layout.tsx cannot directly render client components with hooks | 4 |
 
 ### Architecture Notes
 
@@ -188,6 +191,10 @@ Overall:  [#########.] 26/27 plans (96%)
 | Animated sync indicator | Ping animation for pending sync items | src/components/pwa/sync-status.tsx |
 | Fire-and-forget notification trigger | Non-blocking notification dispatch via Supabase Edge Function | src/lib/push/triggers.ts |
 | NotificationSettings toggle | Permission-aware toggle with unsupported browser handling | src/components/pwa/notification-settings.tsx |
+| Online status hook | useSyncExternalStore with navigator.onLine and event listeners | src/hooks/use-online-status.ts |
+| Install banner | Intercept beforeinstallprompt, store deferred prompt, trigger on user action | src/components/pwa/install-banner.tsx |
+| Offline context | Provider pattern with show/dismiss/retry error management | src/components/pwa/offline-indicator.tsx |
+| PWA integration | Client wrapper component for server component layouts | src/components/pwa/pwa-wrapper.tsx |
 
 ### Todos
 
@@ -276,36 +283,48 @@ All 5 requirements for Phase 3 verified complete:
 | 04-04 | Push notification infrastructure | COMPLETE |
 | 04-05 | Offline mutation and sync status UI | COMPLETE |
 | 04-06 | Notification triggers and settings UI | COMPLETE |
-| 04-07 | Offline-first schedule view | Pending |
+| 04-07 | Install UX and offline indicator | COMPLETE |
+
+## Phase 4 Completion Summary
+
+All 4 requirements for Phase 4 verified complete:
+
+| REQ-ID | Description | Status |
+|--------|-------------|--------|
+| PWA-01 | Service worker with caching strategies | COMPLETE |
+| PWA-02 | Offline data sync with IndexedDB | COMPLETE |
+| PWA-03 | Push notification infrastructure | COMPLETE |
+| PWA-04 | Install UX and offline indicators | COMPLETE |
+
+**Phase 4 Complete** - All 7 plans executed, PWA infrastructure fully operational.
 
 ## Session Continuity
 
 ### Last Session
 
 - **Date:** 2026-01-22
-- **Activity:** Executed 04-06-PLAN.md (Notification triggers and settings UI)
-- **Outcome:** Fire-and-forget notification triggers, API route integration, NotificationSettings UI component
+- **Activity:** Executed 04-07-PLAN.md (Install UX and offline indicator)
+- **Outcome:** useOnlineStatus hook, OfflineProvider context, InstallBanner component, dashboard integration
 
 ### Next Actions
 
-1. Continue Phase 4 with plan 04-07 (Offline-first schedule view)
-2. Build offline-capable schedule page
-3. Then Phase 5 (Regatta Mode)
+1. Phase 4 complete - ready for Phase 5 (Regatta Mode)
+2. Build regatta data import and management
+3. Deploy and verify PWA in production
 
 ### Files Modified This Session
 
 **Created:**
-- `src/lib/push/triggers.ts` (Notification trigger functions)
-- `src/components/pwa/notification-settings.tsx` (Toggle UI component)
-- `.planning/phases/04-pwa-infrastructure/04-06-SUMMARY.md` (completed)
+- `src/hooks/use-online-status.ts` (Online status tracking hook)
+- `src/components/pwa/offline-indicator.tsx` (Offline error context and UI)
+- `src/components/pwa/install-banner.tsx` (PWA install prompt)
+- `src/components/pwa/pwa-wrapper.tsx` (Client wrapper for layout)
+- `.planning/phases/04-pwa-infrastructure/04-07-SUMMARY.md` (completed)
 
 **Modified:**
-- `src/app/api/practices/[id]/route.ts` (Practice change/cancel notifications)
-- `src/app/api/lineups/[id]/route.ts` (Lineup assignment notifications)
-- `src/app/api/practices/[id]/blocks/[blockId]/lineup/route.ts` (Lineup assignment notifications)
-- `src/app/(dashboard)/[teamSlug]/settings/page.tsx` (Added NotificationSettings)
+- `src/app/(dashboard)/layout.tsx` (Added PWAWrapper)
 - `.planning/STATE.md` (updated)
 
 ---
 
-*Last updated: 2026-01-22 (Phase 4 - 6/7 plans complete)*
+*Last updated: 2026-01-22 (Phase 4 - COMPLETE - 7/7 plans)*
