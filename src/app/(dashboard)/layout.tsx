@@ -5,6 +5,7 @@ import { prisma } from '@/lib/prisma';
 import { DashboardHeader } from '@/components/layout/dashboard-header';
 import { TeamColorProvider } from '@/components/providers/team-color-provider';
 import { PWAWrapper } from '@/components/pwa/pwa-wrapper';
+import { Toaster } from 'sonner';
 
 export default async function DashboardLayout({
   children,
@@ -57,6 +58,7 @@ export default async function DashboardLayout({
           <main className="container mx-auto px-4 py-8">
             {children}
           </main>
+          <Toaster position="bottom-right" richColors closeButton theme="dark" />
         </div>
       </PWAWrapper>
     </TeamColorProvider>
