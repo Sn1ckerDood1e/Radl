@@ -36,63 +36,25 @@ export default async function RegattaDetailPage({ params }: PageProps) {
     redirect('/create-team');
   }
 
+  // Simplified query - only fetch data needed for server-side header
+  // Full regatta data (with entries) is fetched client-side via useOfflineRegatta hook
   const regatta = await prisma.regatta.findFirst({
     where: { id, teamId: team.id },
-    include: {
-      season: { select: { id: true, name: true } },
-      entries: {
-        include: {
-          entryLineup: {
-            include: {
-              boat: { select: { id: true, name: true, boatClass: true } },
-              seats: {
-                include: {
-                  athlete: { select: { id: true, displayName: true } },
-                },
-                orderBy: { position: 'asc' },
-              },
-            },
-          },
-          notificationConfig: {
-            select: { leadTimeMinutes: true, notificationSent: true },
-          },
-        },
-        orderBy: { scheduledTime: 'asc' },
-      },
+    select: {
+      id: true,
+      name: true,
+      location: true,
+      venue: true,
+      timezone: true,
+      startDate: true,
+      endDate: true,
+      source: true,
+      lastSyncAt: true,
+      season: { select: { name: true } },
     },
   });
 
   if (!regatta) notFound();
-
-  // Get team athletes for lineup assignment
-  const athletes = await prisma.athleteProfile.findMany({
-    where: {
-      teamMember: { teamId: team.id },
-    },
-    select: {
-      id: true,
-      displayName: true,
-      sidePreference: true,
-      canBow: true,
-      canCox: true,
-    },
-    orderBy: { displayName: 'asc' },
-  });
-
-  // Get available boats
-  const boats = await prisma.equipment.findMany({
-    where: {
-      teamId: team.id,
-      type: 'SHELL',
-      status: 'ACTIVE',
-    },
-    select: {
-      id: true,
-      name: true,
-      boatClass: true,
-    },
-    orderBy: { name: 'asc' },
-  });
 
   const timezone = regatta.timezone || 'America/New_York';
   const isCoach = claims.user_role === 'COACH';
@@ -148,41 +110,13 @@ export default async function RegattaDetailPage({ params }: PageProps) {
         </div>
       </div>
 
-      {/* Client component for interactive features */}
+      {/* Client component for interactive features - fetches entries via offline-aware hook */}
       <RegattaDetailClient
         teamSlug={teamSlug}
-        regatta={{
-          id: regatta.id,
-          name: regatta.name,
-          timezone,
-          source: regatta.source,
-          entries: regatta.entries.map((e) => ({
-            id: e.id,
-            eventName: e.eventName,
-            scheduledTime: e.scheduledTime.toISOString(),
-            meetingLocation: e.meetingLocation,
-            meetingTime: e.meetingTime?.toISOString(),
-            notes: e.notes,
-            status: e.status,
-            heat: e.heat,
-            lane: e.lane,
-            placement: e.placement,
-            entryLineup: e.entryLineup
-              ? {
-                  boat: e.entryLineup.boat,
-                  seats: e.entryLineup.seats.map((s) => ({
-                    position: s.position,
-                    athlete: { id: s.athlete.id, displayName: s.athlete.displayName },
-                  })),
-                }
-              : null,
-            notificationConfig: e.notificationConfig,
-          })),
-        }}
-        athletes={athletes}
-        boats={boats}
+        regattaId={id}
+        regattaName={regatta.name}
+        timezone={timezone}
         isCoach={isCoach}
-        initialCachedAt={Date.now()}
       />
     </div>
   );
