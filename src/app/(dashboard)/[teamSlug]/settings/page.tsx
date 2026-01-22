@@ -5,6 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useTheme } from '@/components/providers/theme-provider';
 import { NotificationSettings } from '@/components/pwa/notification-settings';
+import { RCSettingsSection } from '@/components/regatta-central/rc-settings-section';
 
 interface Coach {
   userId: string;
@@ -376,6 +377,10 @@ export default function TeamSettingsPage() {
         <h2 className="text-lg font-semibold text-white mb-4">Push Notifications</h2>
         <NotificationSettings />
       </div>
+
+      {/* Regatta Central Settings Section */}
+      <RCSettingsSection />
+      <div className="mb-6"></div>
 
       {/* Damage Report Notification Settings */}
       <div className="bg-zinc-900 rounded-xl border border-zinc-800 p-6 mb-6">
