@@ -4,22 +4,26 @@
 
 **Core Value:** Coaches can plan practices with lineups and equipment, and athletes know where to be and what boat they're in.
 
-**Current Focus:** v1.1 Polish — RC import UI, equipment usage display, notifications, data export
+**Current Focus:** v1.1 Polish — RC settings UI, equipment usage display, notifications, data export
 
 ## Current Position
 
 | Field | Value |
 |-------|-------|
-| Milestone | v1.1 (defining requirements) |
-| Phase | None active |
+| Milestone | v1.1 |
+| Phase | 6 (RC Settings UI) — not started |
 | Plan | None active |
-| Status | Defining requirements |
-| Last activity | 2026-01-21 — v1.1 milestone started |
+| Status | Roadmap complete, ready for phase planning |
+| Last activity | 2026-01-21 — v1.1 roadmap created |
 
 **Progress:**
 ```
 v1.0: [##########] 100% SHIPPED
-v1.1: [          ] 0% (defining requirements)
+v1.1: [          ] 0% (4 phases, 11 requirements)
+      Phase 6: RC Settings UI — pending
+      Phase 7: Equipment Usage Display — pending
+      Phase 8: Notifications — pending
+      Phase 9: Data Export — pending
 ```
 
 ## v1.0 Summary
@@ -34,11 +38,23 @@ v1.1: [          ] 0% (defining requirements)
 
 **Archived:** `.planning/milestones/v1.0-ROADMAP.md`, `.planning/milestones/v1.0-REQUIREMENTS.md`
 
+## v1.1 Scope
+
+**Goal:** Polish v1.0 — complete UI gaps, surface collected data, add notifications and data portability.
+
+**Phases:**
+| Phase | Name | Requirements | Status |
+|-------|------|--------------|--------|
+| 6 | RC Settings UI | 4 | Pending |
+| 7 | Equipment Usage Display | 2 | Pending |
+| 8 | Notifications | 2 | Pending |
+| 9 | Data Export | 3 | Pending |
+
 ## Next Steps
 
-1. Define v1.1 requirements (in progress)
-2. Create roadmap with phases
-3. Run `/gsd:plan-phase [N]` to start execution
+1. Run `/gsd:plan-phase 6` to plan RC Settings UI
+2. Execute plans 06-01 through 06-0N
+3. Continue with phases 7-9
 
 ## Accumulated Context
 
@@ -61,8 +77,8 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 | DEBT-01: Claims helper | COMPLETE | v1.0 |
 | DEBT-02: Form refactoring | COMPLETE | v1.0 |
 | DEBT-03: Query caching | COMPLETE | v1.0 |
-| RC import UI | v1.1 ACTIVE | Settings page for connection management |
-| Equipment usage display | v1.1 ACTIVE | Detail pages + dashboard summary |
+| RC import UI | v1.1 ACTIVE | Phase 6: Settings page for connection management |
+| Equipment usage display | v1.1 ACTIVE | Phase 7: Detail pages + dashboard summary |
 
 ### Patterns Established
 
@@ -70,4 +86,4 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
 
 ---
 
-*Last updated: 2026-01-21 (v1.1 milestone started)*
+*Last updated: 2026-01-21 (v1.1 roadmap created)*

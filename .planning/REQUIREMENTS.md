@@ -65,23 +65,23 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| RC-09 | — | Pending |
-| RC-10 | — | Pending |
-| RC-11 | — | Pending |
-| RC-12 | — | Pending |
-| EQUIP-04 | — | Pending |
-| EQUIP-05 | — | Pending |
-| NOTIF-01 | — | Pending |
-| NOTIF-02 | — | Pending |
-| EXPORT-01 | — | Pending |
-| EXPORT-02 | — | Pending |
-| EXPORT-03 | — | Pending |
+| RC-09 | Phase 6 | Pending |
+| RC-10 | Phase 6 | Pending |
+| RC-11 | Phase 6 | Pending |
+| RC-12 | Phase 6 | Pending |
+| EQUIP-04 | Phase 7 | Pending |
+| EQUIP-05 | Phase 7 | Pending |
+| NOTIF-01 | Phase 8 | Pending |
+| NOTIF-02 | Phase 8 | Pending |
+| EXPORT-01 | Phase 9 | Pending |
+| EXPORT-02 | Phase 9 | Pending |
+| EXPORT-03 | Phase 9 | Pending |
 
 **Coverage:**
 - v1.1 requirements: 11 total
-- Mapped to phases: 0
-- Unmapped: 11 ⚠️
+- Mapped to phases: 11
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-01-21*
-*Last updated: 2026-01-21 after initial definition*
+*Last updated: 2026-01-21 (traceability updated for v1.1 roadmap)*
