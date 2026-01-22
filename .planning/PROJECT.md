@@ -76,17 +76,18 @@ A multi-tenant SaaS for rowing team operations — practice planning, equipment 
 **Goal:** Polish v1.0 — complete UI gaps, surface collected data, add targeted notifications and data portability.
 
 **RC Integration UI:**
-- [ ] **RC-09**: Build settings page for RC connection management
-- [ ] **RC-10**: Implement manual regatta import trigger
-- [ ] **RC-11**: Add auto-sync toggle
+- [ ] **RC-09**: Coach can view RC connection status in settings
+- [ ] **RC-10**: Coach can connect/disconnect RC account via OAuth
+- [ ] **RC-11**: Coach can trigger manual regatta import
+- [ ] **RC-12**: Coach can toggle auto-sync on/off
 
 **Equipment Usage Display:**
-- [ ] **EQUIP-04**: Show usage history on equipment detail pages
-- [ ] **EQUIP-05**: Add equipment usage summary to dashboard
+- [ ] **EQUIP-04**: Coach can view usage history on equipment detail page
+- [ ] **EQUIP-05**: Coach can see equipment usage summary on dashboard
 
 **Notifications:**
-- [ ] **NOTIF-01**: Send notification when equipment marked damaged
-- [ ] **NOTIF-02**: Send notification when lineup is published
+- [ ] **NOTIF-01**: Coach receives notification when equipment is marked damaged
+- [ ] **NOTIF-02**: Athletes receive notification when lineup is published
 
 **Data Export:**
 - [ ] **EXPORT-01**: Export equipment inventory to CSV/Excel
