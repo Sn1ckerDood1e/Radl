@@ -11,28 +11,27 @@
 | Field | Value |
 |-------|-------|
 | Milestone | v2.0 Commercial Readiness |
-| Phase | Phase 10: Security Foundation & RBAC |
-| Plan | 11 of 11 complete |
-| Status | Complete |
-| Last activity | 2026-01-23 — Phase 10 verified |
+| Phase | Phase 11: MFA & SSO |
+| Plan | 1 of 12 complete |
+| Status | In progress |
+| Last activity | 2026-01-23 — Completed 11-01-PLAN.md |
 
 **Progress:**
 ```
 v1.0: [##########] 100% SHIPPED (2026-01-22)
 v1.1: [##########] 100% SHIPPED (2026-01-22) — 9/11 reqs, 2 deferred
-v2.0: [##        ] 15% — Phase 10 complete (5/34 requirements)
+v2.0: [##        ] 18% — Phase 11 plan 1 complete (5/34 requirements)
 ```
 
 **Current Phase Detail:**
-- Phase 10: Security Foundation & RBAC — COMPLETE
-- Plans: 11/11 complete
-- Requirements: SEC-04, SEC-05, SEC-06, SEC-07, SEC-11 — all verified
-- Verification: passed (5/5 success criteria)
+- Phase 11: MFA & SSO — IN PROGRESS
+- Plans: 1/12 complete
+- Requirements: SEC-08, SEC-09, SEC-10 — in progress
+- Current: Database foundation (MfaBackupCode, PermissionGrant, SsoConfig)
 
-**Next Phase:**
-- Phase 11: MFA & SSO
-- Requirements: SEC-08, SEC-09, SEC-10
-- Depends on: Phase 10 (complete)
+**Next Plan:**
+- Plan 11-02: MFA Backup Code Generation
+- Builds on: 11-01 schema models
 
 ## v2.0 Scope
 
@@ -146,4 +145,4 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
 
 ---
 
-*Last updated: 2026-01-23 (Phase 10 complete, verified)*
+*Last updated: 2026-01-23 (Phase 11 plan 1 complete)*
