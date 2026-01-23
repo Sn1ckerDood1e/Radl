@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
-import { requireRole } from '@/lib/auth/authorize';
+import { getClaimsForApiRoute } from '@/lib/auth/claims';
 import { prisma } from '@/lib/prisma';
 
 interface TeamDashboardPageProps {
@@ -10,17 +10,48 @@ interface TeamDashboardPageProps {
 export default async function TeamDashboardPage({ params }: TeamDashboardPageProps) {
   const { teamSlug } = await params;
 
-  // Verify user belongs to a team (any role can access)
-  const { claims } = await requireRole(['COACH', 'ATHLETE', 'PARENT']);
+  // Get validated claims with cookie-based clubId
+  const { user, clubId, roles, error } = await getClaimsForApiRoute();
 
-  if (!claims.team_id) {
+  if (error || !user) {
+    redirect('/login');
+  }
+
+  // Find the team by slug first to allow switching
+  const teamBySlug = await prisma.team.findUnique({
+    where: { slug: teamSlug },
+    select: { id: true },
+  });
+
+  // Use the team from URL slug, or fall back to current clubId
+  const teamId = teamBySlug?.id ?? clubId;
+
+  if (!teamId) {
     redirect('/create-team');
   }
+
+  // Verify user has membership in this team (ClubMembership or TeamMember)
+  const [clubMembership, teamMember] = await Promise.all([
+    prisma.clubMembership.findFirst({
+      where: { clubId: teamId, userId: user.id, isActive: true },
+    }),
+    prisma.teamMember.findFirst({
+      where: { teamId: teamId, userId: user.id },
+    }),
+  ]);
+
+  if (!clubMembership && !teamMember) {
+    redirect('/create-team');
+  }
+
+  // Get user's role for this team
+  const userRoles = clubMembership?.roles ?? (teamMember ? [teamMember.role] : []);
+  const isCoach = userRoles.includes('COACH');
 
   // Get team info and counts in parallel
   const [team, equipmentCount, memberCount, pendingInvitationCount, openDamageReportCount] = await Promise.all([
     prisma.team.findUnique({
-      where: { id: claims.team_id },
+      where: { id: teamId },
       select: {
         id: true,
         name: true,
@@ -30,25 +61,22 @@ export default async function TeamDashboardPage({ params }: TeamDashboardPagePro
       },
     }),
     prisma.equipment.count({
-      where: { teamId: claims.team_id, status: 'ACTIVE' },
+      where: { teamId: teamId, status: 'ACTIVE' },
     }),
     prisma.teamMember.count({
-      where: { teamId: claims.team_id },
+      where: { teamId: teamId },
     }),
     prisma.invitation.count({
-      where: { teamId: claims.team_id, status: 'PENDING' },
+      where: { teamId: teamId, status: 'PENDING' },
     }),
     prisma.damageReport.count({
-      where: { teamId: claims.team_id, status: 'OPEN' },
+      where: { teamId: teamId, status: 'OPEN' },
     }),
   ]);
 
-  // Validate URL teamSlug matches user's team
-  if (!team || team.slug !== teamSlug) {
+  if (!team) {
     redirect('/create-team');
   }
-
-  const isCoach = claims.user_role === 'COACH';
 
   return (
     <div className="max-w-5xl mx-auto">
