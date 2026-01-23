@@ -123,15 +123,15 @@ export function ContextSwitcher({ initialContexts }: ContextSwitcherProps) {
       const supabase = createClient();
       await supabase.auth.refreshSession();
 
-      // Navigate and invalidate cache
+      // Navigate with full page reload to ensure cookies are read fresh
       const newPath =
         data.viewMode === 'facility'
           ? `/facility/${contexts.facility.slug}`
           : `/${data.club.slug}`;
 
       setIsOpen(false);
-      router.push(newPath);
-      router.refresh();
+      // Use window.location for full reload to ensure cookies are read correctly
+      window.location.href = newPath;
     } catch (error) {
       console.error('Context switch failed:', error);
     } finally {
