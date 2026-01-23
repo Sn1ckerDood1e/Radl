@@ -12,9 +12,9 @@
 |-------|-------|
 | Milestone | v2.0 Commercial Readiness |
 | Phase | Phase 13: Facility Auth Integration |
-| Plan | 2 of TBD |
+| Plan | 3 of TBD |
 | Status | In progress |
-| Last activity | 2026-01-23 — Completed 13-02-PLAN.md |
+| Last activity | 2026-01-23 — Completed 13-03-PLAN.md |
 
 **Progress:**
 ```
@@ -25,8 +25,8 @@ v2.0: [######    ] 35% — Phase 13 started (12/34 requirements)
 
 **Current Phase Detail:**
 - Phase 13: Facility Auth Integration — IN PROGRESS
-- Plans: 2 of TBD complete
-- Delivered: Extended CASL ability factory with viewMode-based permission scoping, unified context switch API with viewMode derivation
+- Plans: 3 of TBD complete
+- Delivered: Extended CASL ability factory with viewMode-based permission scoping, unified context switch API with viewMode derivation, context validator with auto-recovery for invalid cookies
 
 **Previous Phases:**
 - Phase 12: Facility Schema Migration — COMPLETE (7/7 plans)
@@ -123,6 +123,8 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 - **Facility subject:** Added to CASL subjects for facility profile management
 - **Context switch API:** Unified /api/context/switch endpoint for facility and club view switching
 - **ViewMode derivation:** Computed from cookie state in getClaimsForApiRoute (facilityId + clubId combination)
+- **Context validation:** Auto-recovery for invalid club/facility cookies with first-available membership fallback
+- **Login restoration:** validateAndRecoverContext and restoreLastContext for continuity across sessions
 
 **v2.0 additions (planned):**
 - **Design system:** shadcn/ui with Tailwind v4 theme
@@ -162,9 +164,9 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
 | Field | Value |
 |-------|-------|
 | Last session | 2026-01-23 |
-| Stopped at | Completed 13-02-PLAN.md |
+| Stopped at | Completed 13-03-PLAN.md |
 | Resume file | None |
 
 ---
 
-*Last updated: 2026-01-23 (Phase 13, Plan 2 complete)*
+*Last updated: 2026-01-23 (Phase 13, Plan 3 complete)*
