@@ -12,22 +12,22 @@
 |-------|-------|
 | Milestone | v2.0 Commercial Readiness |
 | Phase | Phase 12: Facility Schema Migration |
-| Plan | 1 of N in progress |
+| Plan | 2 of N complete |
 | Status | In progress |
-| Last activity | 2026-01-23 — Completed 12-01-PLAN.md (schema foundation) |
+| Last activity | 2026-01-23 — Completed 12-02-PLAN.md (RLS helper functions) |
 
 **Progress:**
 ```
 v1.0: [##########] 100% SHIPPED (2026-01-22)
 v1.1: [##########] 100% SHIPPED (2026-01-22) — 9/11 reqs, 2 deferred
-v2.0: [#####     ] 27% — Phase 12 started (9/34 requirements)
+v2.0: [#####     ] 28% — Phase 12 in progress (10/34 requirements)
 ```
 
 **Current Phase Detail:**
 - Phase 12: Facility Schema Migration — IN PROGRESS
-- Plans: 1/N complete (12-01 schema foundation)
-- Completed: Facility model, FacilityMembership, Equipment ownership hierarchy
-- Next: 12-02 (auth integration if exists)
+- Plans: 2/N complete (12-01 schema, 12-02 RLS helpers)
+- Completed: Facility model, FacilityMembership, Equipment ownership, RLS helper functions
+- Next: 12-03 (if exists)
 
 **Previous Phase:**
 - Phase 11: MFA & SSO — COMPLETE (12/12 plans)
@@ -111,6 +111,7 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 - **Facility model:** Facility table with profile fields (location, contact, branding, billing)
 - **FacilityMembership:** Facility-level roles with FACILITY_ADMIN support
 - **Equipment ownership:** EquipmentOwnerType enum (FACILITY, CLUB, TEAM) with hierarchy fields
+- **RLS helpers:** 8 functions for JWT claim extraction and role checking (facility_id, club_id, has_role, has_any_role)
 
 **v2.0 additions (planned):**
 - **Design system:** shadcn/ui with Tailwind v4 theme
@@ -150,10 +151,10 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
 
 | Field | Value |
 |-------|-------|
-| Last session | 2026-01-23T18:37:00Z |
-| Stopped at | Completed 12-01-PLAN.md |
+| Last session | 2026-01-23T18:38:30Z |
+| Stopped at | Completed 12-02-PLAN.md |
 | Resume file | None |
 
 ---
 
-*Last updated: 2026-01-23 (Phase 12 plan 01 complete)*
+*Last updated: 2026-01-23 (Phase 12 plan 02 complete)*
