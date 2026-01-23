@@ -61,6 +61,7 @@ export async function getAuthContext(request?: NextRequest): Promise<AuthContext
         userId: apiKeyUserId,
         clubId: apiKeyClubId,
         roles: membership.roles as UserContext['roles'],
+        viewMode: null,  // API keys don't use facility view mode
       };
 
       return {
@@ -99,6 +100,7 @@ export async function getAuthContext(request?: NextRequest): Promise<AuthContext
     clubId,
     roles: roles as UserContext['roles'],
     linkedAthleteIds,
+    viewMode: null,  // Default to null (will be set by facility context in future)
   };
 
   return {

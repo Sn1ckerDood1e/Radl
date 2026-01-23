@@ -18,12 +18,19 @@ export type AppAbility = PureAbility<[Action, AppSubjects], PrismaQuery>;
  *
  * The auth layer (claims.ts) handles merging these before
  * passing to the ability builder.
+ *
+ * **viewMode semantics for FACILITY_ADMIN:**
+ * - 'facility': Viewing at facility level - broad read access to all clubs' data
+ * - 'club': Drilling into specific club - scoped read-only access to that club only
+ * - null: No facility context (legacy team-only mode, or non-facility user)
  */
 export interface UserContext {
   userId: string;
   clubId: string;
   roles: ('FACILITY_ADMIN' | 'CLUB_ADMIN' | 'COACH' | 'ATHLETE' | 'PARENT')[];
   linkedAthleteIds?: string[];  // For PARENT role - IDs of athletes they can see
+  facilityId?: string;  // Current facility ID (optional for backward compatibility)
+  viewMode: 'facility' | 'club' | null;  // Determines permission scope for FACILITY_ADMIN
 }
 
 /**
