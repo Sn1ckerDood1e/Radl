@@ -12,22 +12,22 @@
 |-------|-------|
 | Milestone | v2.0 Commercial Readiness |
 | Phase | Phase 12: Facility Schema Migration |
-| Plan | 3 of N complete |
+| Plan | 5 of 7 complete |
 | Status | In progress |
-| Last activity | 2026-01-23 — Completed 12-03-PLAN.md (custom access token hook) |
+| Last activity | 2026-01-23 — Completed 12-05-PLAN.md (RLS policies) |
 
 **Progress:**
 ```
 v1.0: [##########] 100% SHIPPED (2026-01-22)
 v1.1: [##########] 100% SHIPPED (2026-01-22) — 9/11 reqs, 2 deferred
-v2.0: [######    ] 29% — Phase 12 in progress (11/34 requirements)
+v2.0: [######    ] 33% — Phase 12 in progress (13/34 requirements)
 ```
 
 **Current Phase Detail:**
 - Phase 12: Facility Schema Migration — IN PROGRESS
-- Plans: 3/N complete (12-01 schema, 12-02 RLS helpers, 12-03 JWT hook)
-- Completed: Facility model, FacilityMembership, Equipment ownership, RLS helper functions, JWT claims hook
-- Next: 12-04 (if exists)
+- Plans: 5/7 complete (12-01 schema, 12-02 RLS helpers, 12-03 JWT hook, 12-04 data migration, 12-05 RLS policies)
+- Completed: Facility model, FacilityMembership, Equipment ownership, RLS helper functions, JWT claims hook, data migration SQL, facility hierarchy RLS policies
+- Next: 12-06
 
 **Previous Phase:**
 - Phase 11: MFA & SSO — COMPLETE (12/12 plans)
@@ -113,11 +113,12 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 - **Equipment ownership:** EquipmentOwnerType enum (FACILITY, CLUB, TEAM) with hierarchy fields
 - **RLS helpers:** 8 functions for JWT claim extraction and role checking (facility_id, club_id, has_role, has_any_role)
 - **JWT claims hook:** custom_access_token_hook injects facility_id, club_id, user_roles with TeamMember fallback
+- **Data migration:** SQL to create Facility wrappers for Teams and set Equipment ownership
+- **RLS policies:** 13 policies for Facility, FacilityMembership, Equipment with hierarchical visibility
 
 **v2.0 additions (planned):**
 - **Design system:** shadcn/ui with Tailwind v4 theme
 - **Touch gestures:** @use-gesture/react for mobile interactions
-- **RLS:** PostgreSQL Row Level Security via Supabase
 
 ### Tech Debt Tracker
 
@@ -152,10 +153,10 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
 
 | Field | Value |
 |-------|-------|
-| Last session | 2026-01-23T18:36:18Z |
-| Stopped at | Completed 12-03-PLAN.md |
+| Last session | 2026-01-23T18:39:00Z |
+| Stopped at | Completed 12-04-PLAN.md |
 | Resume file | None |
 
 ---
 
-*Last updated: 2026-01-23 (Phase 12 plan 03 complete)*
+*Last updated: 2026-01-23 (Phase 12 plan 04 complete)*
