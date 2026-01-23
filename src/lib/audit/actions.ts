@@ -31,6 +31,25 @@ export const AUDITABLE_ACTIONS = {
 
   // Auth events (optional - captured by Supabase, but useful for correlation)
   LOGIN_SUSPICIOUS: 'LOGIN_SUSPICIOUS', // Unusual login pattern detected
+
+  // MFA operations
+  MFA_ENROLLED: 'MFA_ENROLLED',                           // User enrolled in MFA
+  MFA_VERIFIED: 'MFA_VERIFIED',                           // User verified MFA code
+  MFA_UNENROLLED: 'MFA_UNENROLLED',                       // User removed MFA
+  MFA_BACKUP_CODES_REGENERATED: 'MFA_BACKUP_CODES_REGENERATED',  // User regenerated backup codes
+  MFA_BACKUP_CODE_USED: 'MFA_BACKUP_CODE_USED',           // User used backup code for recovery
+  MFA_RESET_BY_ADMIN: 'MFA_RESET_BY_ADMIN',               // Admin reset user MFA settings
+
+  // Permission grants
+  PERMISSION_GRANT_CREATED: 'PERMISSION_GRANT_CREATED',   // Admin granted temporary elevated permissions
+  PERMISSION_GRANT_REVOKED: 'PERMISSION_GRANT_REVOKED',   // Admin revoked temporary permissions
+  PERMISSION_GRANT_EXPIRED: 'PERMISSION_GRANT_EXPIRED',   // Temporary permissions expired automatically
+
+  // SSO configuration
+  SSO_CONFIG_UPDATED: 'SSO_CONFIG_UPDATED',               // Facility admin updated SSO configuration
+  SSO_ENABLED: 'SSO_ENABLED',                             // SSO was enabled for facility
+  SSO_DISABLED: 'SSO_DISABLED',                           // SSO was disabled for facility
+  SSO_ROLE_MAPPING_CHANGED: 'SSO_ROLE_MAPPING_CHANGED',   // SSO role mappings were modified
 } as const;
 
 export type AuditAction = keyof typeof AUDITABLE_ACTIONS;
@@ -53,4 +72,17 @@ export const AUDIT_ACTION_DESCRIPTIONS: Record<AuditAction, string> = {
   API_KEY_CREATED: 'API key created',
   API_KEY_REVOKED: 'API key revoked',
   LOGIN_SUSPICIOUS: 'Suspicious login detected',
+  MFA_ENROLLED: 'User enrolled in multi-factor authentication',
+  MFA_VERIFIED: 'User verified MFA code successfully',
+  MFA_UNENROLLED: 'User removed multi-factor authentication',
+  MFA_BACKUP_CODES_REGENERATED: 'User regenerated MFA backup codes',
+  MFA_BACKUP_CODE_USED: 'User used MFA backup code for recovery',
+  MFA_RESET_BY_ADMIN: 'Admin reset user MFA settings',
+  PERMISSION_GRANT_CREATED: 'Admin granted temporary elevated permissions to user',
+  PERMISSION_GRANT_REVOKED: 'Admin revoked temporary permissions from user',
+  PERMISSION_GRANT_EXPIRED: 'Temporary permissions expired automatically',
+  SSO_CONFIG_UPDATED: 'Facility admin updated SSO configuration',
+  SSO_ENABLED: 'SSO was enabled for facility',
+  SSO_DISABLED: 'SSO was disabled for facility',
+  SSO_ROLE_MAPPING_CHANGED: 'SSO role mappings were modified',
 };
