@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { getClaimsForApiRoute } from '@/lib/auth/claims';
+import { getAuthContext } from '@/lib/auth/get-auth-context';
+import { accessibleBy } from '@casl/prisma';
+import { ForbiddenError } from '@casl/ability';
 import { unauthorizedResponse, forbiddenResponse, notFoundResponse, serverErrorResponse } from '@/lib/errors';
 import { createLineupSchema } from '@/lib/validations/lineup';
 import { createUsageLog } from '@/lib/equipment/usage-logger';
@@ -8,10 +10,19 @@ import { createUsageLog } from '@/lib/equipment/usage-logger';
 // POST: Create new lineup for a water block
 export async function POST(request: NextRequest) {
   try {
-    const { user, claims, error } = await getClaimsForApiRoute();
-    if (error || !user) return unauthorizedResponse();
-    if (!claims?.team_id) return forbiddenResponse('No team associated with user');
-    if (claims.user_role !== 'COACH') return forbiddenResponse('Only coaches can create lineups');
+    const result = await getAuthContext(request);
+    if (!result.success) {
+      return result.status === 401
+        ? unauthorizedResponse()
+        : forbiddenResponse(result.error);
+    }
+
+    const { context } = result;
+
+    // Check create permission
+    if (!context.ability.can('create', 'Lineup')) {
+      return forbiddenResponse('You do not have permission to create lineups');
+    }
 
     const body = await request.json();
     const validationResult = createLineupSchema.safeParse(body);
@@ -25,12 +36,12 @@ export async function POST(request: NextRequest) {
 
     const { blockId, boatId, notes, seats } = validationResult.data;
 
-    // Verify block exists and belongs to team (via Practice)
+    // Verify block exists and belongs to club (via Practice)
     const block = await prisma.practiceBlock.findFirst({
       where: {
         id: blockId,
         practice: {
-          teamId: claims.team_id,
+          teamId: context.clubId,
         },
       },
       include: {
@@ -40,7 +51,7 @@ export async function POST(request: NextRequest) {
 
     if (!block) {
       return NextResponse.json(
-        { error: 'Block not found or does not belong to your team' },
+        { error: 'Block not found or does not belong to your club' },
         { status: 404 }
       );
     }
@@ -65,38 +76,38 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // If boatId provided, verify it exists, belongs to team, and is SHELL type
+    // If boatId provided, verify it exists, belongs to club, and is SHELL type
     if (boatId) {
       const boat = await prisma.equipment.findFirst({
         where: {
           id: boatId,
-          teamId: claims.team_id,
+          teamId: context.clubId,
           type: 'SHELL',
         },
       });
 
       if (!boat) {
         return NextResponse.json(
-          { error: 'Boat not found, does not belong to your team, or is not a shell' },
+          { error: 'Boat not found, does not belong to your club, or is not a shell' },
           { status: 404 }
         );
       }
     }
 
-    // Verify all athletes belong to the team
+    // Verify all athletes belong to the club
     const athleteIds = seats.map((s) => s.athleteId);
     const athletes = await prisma.athleteProfile.findMany({
       where: {
         id: { in: athleteIds },
         teamMember: {
-          teamId: claims.team_id,
+          teamId: context.clubId,
         },
       },
     });
 
     if (athletes.length !== athleteIds.length) {
       return NextResponse.json(
-        { error: 'One or more athletes not found or do not belong to your team' },
+        { error: 'One or more athletes not found or do not belong to your club' },
         { status: 400 }
       );
     }
@@ -137,7 +148,7 @@ export async function POST(request: NextRequest) {
       try {
         await createUsageLog({
           equipmentId: boatId,
-          teamId: claims.team_id,
+          teamId: context.clubId,
           practiceId: block.practice.id,
           lineupId: lineup.id,
           usageDate: block.practice.date,
@@ -157,10 +168,14 @@ export async function POST(request: NextRequest) {
 // GET: List lineups for a practice (optional, for listing)
 export async function GET(request: NextRequest) {
   try {
-    const { user, claims, error } = await getClaimsForApiRoute();
-    if (error || !user) return unauthorizedResponse();
-    if (!claims?.team_id) return forbiddenResponse('No team associated with user');
+    const result = await getAuthContext(request);
+    if (!result.success) {
+      return result.status === 401
+        ? unauthorizedResponse()
+        : forbiddenResponse(result.error);
+    }
 
+    const { context } = result;
     const { searchParams } = new URL(request.url);
     const practiceId = searchParams.get('practiceId');
 
@@ -171,41 +186,53 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Verify practice exists and belongs to team
+    // Verify practice exists and belongs to club
     const practice = await prisma.practice.findFirst({
       where: {
         id: practiceId,
-        teamId: claims.team_id,
+        teamId: context.clubId,
       },
     });
 
     if (!practice) return notFoundResponse('Practice');
 
-    // Get all lineups for practice blocks
-    const lineups = await prisma.lineup.findMany({
-      where: {
-        block: {
-          practiceId,
-        },
-      },
-      include: {
-        seats: {
-          include: {
-            athlete: {
-              select: {
-                id: true,
-                displayName: true,
+    try {
+      // Get all lineups for practice blocks using accessibleBy
+      const lineups = await prisma.lineup.findMany({
+        where: {
+          AND: [
+            accessibleBy(context.ability).Lineup,
+            {
+              block: {
+                practiceId,
               },
             },
-          },
-          orderBy: { position: 'asc' },
+          ],
         },
-        boat: true,
-        block: true,
-      },
-    });
+        include: {
+          seats: {
+            include: {
+              athlete: {
+                select: {
+                  id: true,
+                  displayName: true,
+                },
+              },
+            },
+            orderBy: { position: 'asc' },
+          },
+          boat: true,
+          block: true,
+        },
+      });
 
-    return NextResponse.json({ lineups });
+      return NextResponse.json({ lineups });
+    } catch (e) {
+      if (e instanceof ForbiddenError) {
+        return NextResponse.json({ lineups: [] });
+      }
+      throw e;
+    }
   } catch (error) {
     return serverErrorResponse(error, 'lineups:GET');
   }

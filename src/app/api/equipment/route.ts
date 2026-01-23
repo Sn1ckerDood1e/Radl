@@ -1,56 +1,84 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { createEquipmentSchema } from '@/lib/validations/equipment';
-import { getClaimsForApiRoute } from '@/lib/auth/claims';
+import { getAuthContext } from '@/lib/auth/get-auth-context';
+import { accessibleBy } from '@casl/prisma';
+import { ForbiddenError } from '@casl/ability';
 import { unauthorizedResponse, forbiddenResponse, serverErrorResponse } from '@/lib/errors';
 import { computeMultipleEquipmentReadiness } from '@/lib/equipment/readiness';
 
-// GET: List equipment for current team with readiness status
+// GET: List equipment for current club with readiness status
 export async function GET(request: NextRequest) {
   try {
-    const { user, claims, error } = await getClaimsForApiRoute();
-    if (error || !user) return unauthorizedResponse();
-    if (!claims?.team_id) return forbiddenResponse('No team associated with user');
+    const result = await getAuthContext(request);
+    if (!result.success) {
+      return result.status === 401
+        ? unauthorizedResponse()
+        : forbiddenResponse(result.error);
+    }
 
+    const { context } = result;
     const { searchParams } = new URL(request.url);
     const availableOnly = searchParams.get('available') === 'true';
 
-    // Get equipment for the team with open damage reports for readiness computation
-    const equipment = await prisma.equipment.findMany({
-      where: { teamId: claims.team_id },
-      include: {
-        damageReports: {
-          where: { status: 'OPEN' },
-          select: { id: true, description: true, location: true },
+    try {
+      // Get equipment for the club with open damage reports for readiness computation
+      // Use accessibleBy to filter to authorized equipment
+      const equipment = await prisma.equipment.findMany({
+        where: {
+          AND: [
+            accessibleBy(context.ability).Equipment,
+            { teamId: context.clubId },
+          ],
         },
-      },
-      orderBy: [
-        { type: 'asc' },
-        { name: 'asc' },
-      ],
-    });
+        include: {
+          damageReports: {
+            where: { status: 'OPEN' },
+            select: { id: true, description: true, location: true },
+          },
+        },
+        orderBy: [
+          { type: 'asc' },
+          { name: 'asc' },
+        ],
+      });
 
-    // Compute readiness status for all equipment
-    const equipmentWithReadiness = computeMultipleEquipmentReadiness(equipment);
+      // Compute readiness status for all equipment
+      const equipmentWithReadiness = computeMultipleEquipmentReadiness(equipment);
 
-    // Optionally filter to available only
-    const result = availableOnly
-      ? equipmentWithReadiness.filter(e => e.isAvailable)
-      : equipmentWithReadiness;
+      // Optionally filter to available only
+      const resultData = availableOnly
+        ? equipmentWithReadiness.filter(e => e.isAvailable)
+        : equipmentWithReadiness;
 
-    return NextResponse.json({ equipment: result });
+      return NextResponse.json({ equipment: resultData });
+    } catch (e) {
+      if (e instanceof ForbiddenError) {
+        return NextResponse.json({ equipment: [] });
+      }
+      throw e;
+    }
   } catch (error) {
     return serverErrorResponse(error, 'equipment:GET');
   }
 }
 
-// POST: Create equipment (coach only)
+// POST: Create equipment (requires manage permission)
 export async function POST(request: NextRequest) {
   try {
-    const { user, claims, error } = await getClaimsForApiRoute();
-    if (error || !user) return unauthorizedResponse();
-    if (!claims?.team_id) return forbiddenResponse('No team associated with user');
-    if (claims.user_role !== 'COACH') return forbiddenResponse('Only coaches can add equipment');
+    const result = await getAuthContext(request);
+    if (!result.success) {
+      return result.status === 401
+        ? unauthorizedResponse()
+        : forbiddenResponse(result.error);
+    }
+
+    const { context } = result;
+
+    // Check create permission
+    if (!context.ability.can('create', 'Equipment')) {
+      return forbiddenResponse('You do not have permission to add equipment');
+    }
 
     // Parse and validate request body
     const body = await request.json();
@@ -68,7 +96,7 @@ export async function POST(request: NextRequest) {
     // Create the equipment
     const equipment = await prisma.equipment.create({
       data: {
-        teamId: claims.team_id,
+        teamId: context.clubId,
         type: data.type,
         name: data.name,
         manufacturer: data.manufacturer,
