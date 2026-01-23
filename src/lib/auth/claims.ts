@@ -3,6 +3,7 @@ import { jwtDecode } from 'jwt-decode';
 import { prisma } from '@/lib/prisma';
 import type { User } from '@supabase/supabase-js';
 import { getCurrentClubId } from './club-context';
+import { getCurrentFacilityId } from './facility-context';
 import { getUserEffectiveRoles } from './permission-grant';
 import type { Role } from '@/generated/prisma';
 
@@ -44,11 +45,14 @@ export type ClaimsResult = {
  * Includes database fallback for team_id when JWT claims are stale (e.g., user
  * just joined a team but JWT not yet refreshed).
  *
+ * Facility context: Reads current facility from httpOnly cookie, with fallback to
+ * team's facilityId via database lookup, then JWT claims.
+ *
  * Club context: Reads current club from httpOnly cookie and fetches user's roles
  * in that club from ClubMembership. Falls back to legacy team_id/user_role for
  * backward compatibility.
  *
- * @returns ClaimsResult with user, claims, clubId, roles, and error
+ * @returns ClaimsResult with user, claims, facilityId, clubId, roles, and error
  */
 export async function getClaimsForApiRoute(): Promise<ClaimsResult> {
   const supabase = await createClient();
@@ -89,6 +93,25 @@ export async function getClaimsForApiRoute(): Promise<ClaimsResult> {
   const clubId = await getCurrentClubId();
   let roles: string[] = [];
 
+  // Get current facility from cookie
+  let facilityId = await getCurrentFacilityId();
+
+  // Database fallback: If facilityId is null but clubId exists, look up team's facility
+  if (!facilityId && clubId) {
+    const team = await prisma.team.findUnique({
+      where: { id: clubId },
+      select: { facilityId: true },
+    });
+    if (team?.facilityId) {
+      facilityId = team.facilityId;
+    }
+  }
+
+  // Also check JWT claims as fallback
+  if (!facilityId && claims.facility_id) {
+    facilityId = claims.facility_id;
+  }
+
   if (clubId) {
     // Get user's roles in current club
     const membership = await prisma.clubMembership.findFirst({
@@ -121,7 +144,7 @@ export async function getClaimsForApiRoute(): Promise<ClaimsResult> {
   return {
     user,
     claims,
-    facilityId: claims.facility_id,  // From JWT claims, will be enhanced in Task 3
+    facilityId,  // From cookie, team lookup, or JWT claims
     clubId: clubId || claims.team_id,  // Fall back to legacy team_id
     roles,
     error: null,
