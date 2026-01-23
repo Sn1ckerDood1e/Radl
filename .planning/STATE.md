@@ -10,21 +10,29 @@
 
 | Field | Value |
 |-------|-------|
-| Milestone | v2.0 |
-| Phase | Not started (defining requirements) |
-| Status | Gathering requirements |
-| Last activity | 2026-01-22 — Milestone v2.0 started |
+| Milestone | v2.0 Commercial Readiness |
+| Phase | Phase 10: Security Foundation & RBAC |
+| Status | Ready for planning |
+| Last activity | 2026-01-22 — Roadmap created |
 
 **Progress:**
 ```
 v1.0: [##########] 100% SHIPPED (2026-01-22)
 v1.1: [##########] 100% SHIPPED (2026-01-22) — 9/11 reqs, 2 deferred
-v2.0: [          ] 0% — defining requirements
+v2.0: [          ] 0% — 0/34 requirements complete
 ```
+
+**Current Phase Detail:**
+- Phase 10: Security Foundation & RBAC
+- Requirements: SEC-04, SEC-05, SEC-06, SEC-07, SEC-11
+- Success criteria: 5 observable behaviors
+- Dependencies: None (foundation phase)
 
 ## v2.0 Scope
 
 **Goal:** Prepare RowOps for commercial sale to rowing organizations
+
+**Phases:** 10-17 (8 phases total)
 
 **Target features:**
 1. **Facility Model** — Facility-level tenancy with shared equipment between clubs
@@ -32,9 +40,18 @@ v2.0: [          ] 0% — defining requirements
 3. **UI/UX Polish** — Modern design + intuitive workflows
 4. **Security Hardening** — Roles audit, permissions, multi-tenant confidence
 
-**Priority:** Mobile > Facility Model > UI/UX > Security (but all must ship)
-
 **Real-world scenario:** Chattanooga Rowing (boathouse) hosts Lookout Rowing Club and Chattanooga Juniors. Each club has subscription, some boats are shared.
+
+**Phase structure:**
+- Phase 10-11: Security foundation (RBAC, MFA, SSO)
+- Phase 12-13: Facility model (schema, auth integration)
+- Phase 14: Design system foundation
+- Phase 15: Mobile PWA improvements (parallel with 13-14)
+- Phase 16: UI/UX polish
+- Phase 17: Facility UI features
+
+**Critical path:** Phase 10 → 12 → 13 → 17
+**Parallel opportunities:** Phase 15 (Mobile) can run with Phases 13-14
 
 ## Shipped Milestones
 
@@ -61,6 +78,14 @@ v2.0: [          ] 0% — defining requirements
 
 See `.planning/PROJECT.md` for full decision table with outcomes.
 
+**v2.0 decisions:**
+- Security foundation first (all features depend on stable hierarchical auth)
+- Expand-migrate-contract for schema (backward compatibility for team-only installs)
+- JWT claims extension (minimal change to existing auth)
+- shadcn/ui over full framework (copy-paste ownership, no runtime dependency)
+- Mobile parallel with auth (no dependency, can run simultaneously)
+- Facility UI last (requires complete foundation)
+
 ### Architecture Notes
 
 - **Multi-tenant:** Team-scoped data with JWT claims, application-level filtering
@@ -71,6 +96,13 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 - **Toast notifications:** Sonner (dark theme, bottom-right, rich colors)
 - **Data export:** CSV with proper escaping, immediate download
 
+**v2.0 additions (planned):**
+- **Design system:** shadcn/ui with Tailwind v4 theme
+- **RBAC:** @casl/ability + @casl/react for isomorphic permissions
+- **Touch gestures:** @use-gesture/react for mobile interactions
+- **RLS:** PostgreSQL Row Level Security via Supabase
+- **Hierarchical tenancy:** Facility → Club → Team
+
 ### Tech Debt Tracker
 
 | Item | Status | Notes |
@@ -79,10 +111,27 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 | QR external scanning | DEFERRED | Needs production deployment |
 | Push notifications | DEFERRED | NOTIF-01, NOTIF-02 for future milestone |
 
+**v2.0 mitigation:**
+- Component migration tracking (Phase 14) to prevent drift
+- RLS connection pooling tests (Phase 12) to prevent leaks
+- Tenant-aware cache keys (Phase 15) to prevent cross-tenant data exposure
+
 ### Patterns Established
 
 See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
 
+### Research Flags for v2.0
+
+**Phases needing deeper research during planning:**
+- **Phase 13:** Custom Access Token Hook with Supabase Edge Functions (memory/timeout constraints)
+- **Phase 17:** Equipment reservation conflict detection (partial boat availability logic)
+
+**Standard patterns (skip research-phase):**
+- **Phase 10:** Prisma Client Extensions, CASL setup
+- **Phase 14:** shadcn/ui installation
+- **Phase 15:** PWA offline-first, touch gestures
+- **Phase 16:** Standard UI/UX patterns
+
 ---
 
-*Last updated: 2026-01-22 (v2.0 milestone started)*
+*Last updated: 2026-01-22 (v2.0 roadmap created)*

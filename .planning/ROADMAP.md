@@ -1,7 +1,32 @@
 # Roadmap: RowOps
 
-**Current Milestone:** None — run `/gsd:new-milestone` to start next milestone
-**Last Completed:** v1.1 Polish
+**Current Milestone:** v2.0 Commercial Readiness
+**Status:** In Progress (0/34 requirements complete)
+**Started:** 2026-01-22
+
+---
+
+## Current Milestone: v2.0 Commercial Readiness
+
+**Goal:** Prepare RowOps for commercial sale with facility model, mobile PWA, UI/UX polish, and security hardening.
+
+**Phases:** 10-17 (8 phases total)
+
+**Progress:**
+```
+Phase 10: Security Foundation & RBAC      [          ] Pending
+Phase 11: MFA & SSO                       [          ] Pending
+Phase 12: Facility Schema Migration       [          ] Pending
+Phase 13: Facility Auth Integration       [          ] Pending
+Phase 14: Design System Foundation        [          ] Pending
+Phase 15: Mobile PWA Improvements         [          ] Pending
+Phase 16: UI/UX Polish                    [          ] Pending
+Phase 17: Facility UI Features            [          ] Pending
+```
+
+**Overall:** 0/34 requirements (0%)
+
+**Details:** See [v2.0 roadmap](milestones/v2.0-ROADMAP.md)
 
 ---
 

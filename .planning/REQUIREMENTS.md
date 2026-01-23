@@ -91,46 +91,48 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| FAC-01 | TBD | Pending |
-| FAC-02 | TBD | Pending |
-| FAC-03 | TBD | Pending |
-| FAC-04 | TBD | Pending |
-| FAC-05 | TBD | Pending |
-| FAC-06 | TBD | Pending |
-| FAC-07 | TBD | Pending |
-| FAC-08 | TBD | Pending |
-| FAC-09 | TBD | Pending |
-| MOB-01 | TBD | Pending |
-| MOB-02 | TBD | Pending |
-| MOB-03 | TBD | Pending |
-| MOB-04 | TBD | Pending |
-| MOB-05 | TBD | Pending |
-| MOB-06 | TBD | Pending |
-| MOB-07 | TBD | Pending |
-| MOB-08 | TBD | Pending |
-| UIX-01 | TBD | Pending |
-| UIX-02 | TBD | Pending |
-| UIX-03 | TBD | Pending |
-| UIX-04 | TBD | Pending |
-| UIX-05 | TBD | Pending |
-| UIX-06 | TBD | Pending |
-| UIX-07 | TBD | Pending |
-| UIX-08 | TBD | Pending |
-| UIX-09 | TBD | Pending |
-| SEC-04 | TBD | Pending |
-| SEC-05 | TBD | Pending |
-| SEC-06 | TBD | Pending |
-| SEC-07 | TBD | Pending |
-| SEC-08 | TBD | Pending |
-| SEC-09 | TBD | Pending |
-| SEC-10 | TBD | Pending |
-| SEC-11 | TBD | Pending |
+| SEC-04 | Phase 10 | Pending |
+| SEC-05 | Phase 10 | Pending |
+| SEC-06 | Phase 10 | Pending |
+| SEC-07 | Phase 10 | Pending |
+| SEC-11 | Phase 10 | Pending |
+| SEC-08 | Phase 11 | Pending |
+| SEC-09 | Phase 11 | Pending |
+| SEC-10 | Phase 11 | Pending |
+| FAC-01 | Phase 12 | Pending |
+| FAC-02 | Phase 12 | Pending |
+| FAC-04 | Phase 12 | Pending |
+| UIX-01 | Phase 14 | Pending |
+| UIX-06 | Phase 14 | Pending |
+| MOB-01 | Phase 15 | Pending |
+| MOB-02 | Phase 15 | Pending |
+| MOB-03 | Phase 15 | Pending |
+| MOB-04 | Phase 15 | Pending |
+| MOB-05 | Phase 15 | Pending |
+| MOB-06 | Phase 15 | Pending |
+| MOB-07 | Phase 15 | Pending |
+| MOB-08 | Phase 15 | Pending |
+| UIX-02 | Phase 16 | Pending |
+| UIX-03 | Phase 16 | Pending |
+| UIX-04 | Phase 16 | Pending |
+| UIX-05 | Phase 16 | Pending |
+| UIX-07 | Phase 16 | Pending |
+| UIX-08 | Phase 16 | Pending |
+| UIX-09 | Phase 16 | Pending |
+| FAC-03 | Phase 17 | Pending |
+| FAC-05 | Phase 17 | Pending |
+| FAC-06 | Phase 17 | Pending |
+| FAC-07 | Phase 17 | Pending |
+| FAC-08 | Phase 17 | Pending |
+| FAC-09 | Phase 17 | Pending |
 
 **Coverage:**
 - v2.0 requirements: 34 total
-- Mapped to phases: 0 (pending roadmap)
-- Unmapped: 34
+- Mapped to phases: 34/34 ✓
+- Unmapped: 0
+
+**Note:** Phase 13 (Facility Auth Integration) has no direct requirements but enables FAC-05 and FAC-06 by providing the auth foundation they need.
 
 ---
 *Requirements defined: 2026-01-22*
-*Last updated: 2026-01-22 after initial definition*
+*Last updated: 2026-01-22 after roadmap creation*
