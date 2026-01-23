@@ -12,9 +12,9 @@
 |-------|-------|
 | Milestone | v2.0 Commercial Readiness |
 | Phase | Phase 12: Facility Schema Migration |
-| Plan | 5 of 7 complete |
+| Plan | 6 of 7 complete |
 | Status | In progress |
-| Last activity | 2026-01-23 — Completed 12-05-PLAN.md (RLS policies) |
+| Last activity | 2026-01-23 — Completed 12-06-PLAN.md (TypeScript facility context helpers) |
 
 **Progress:**
 ```
@@ -25,9 +25,9 @@ v2.0: [######    ] 33% — Phase 12 in progress (13/34 requirements)
 
 **Current Phase Detail:**
 - Phase 12: Facility Schema Migration — IN PROGRESS
-- Plans: 5/7 complete (12-01 schema, 12-02 RLS helpers, 12-03 JWT hook, 12-04 data migration, 12-05 RLS policies)
-- Completed: Facility model, FacilityMembership, Equipment ownership, RLS helper functions, JWT claims hook, data migration SQL, facility hierarchy RLS policies
-- Next: 12-06
+- Plans: 6/7 complete (12-01 schema, 12-02 RLS helpers, 12-03 JWT hook, 12-04 data migration, 12-05 RLS policies, 12-06 TS helpers)
+- Completed: Facility model, FacilityMembership, Equipment ownership, RLS helper functions, JWT claims hook, data migration SQL, facility hierarchy RLS policies, TypeScript facility context helpers
+- Next: 12-07
 
 **Previous Phase:**
 - Phase 11: MFA & SSO — COMPLETE (12/12 plans)
@@ -115,6 +115,7 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 - **JWT claims hook:** custom_access_token_hook injects facility_id, club_id, user_roles with TeamMember fallback
 - **Data migration:** SQL to create Facility wrappers for Teams and set Equipment ownership
 - **RLS policies:** 13 policies for Facility, FacilityMembership, Equipment with hierarchical visibility
+- **Facility context helpers:** Cookie-based facility context with DB and JWT fallback chain in claims helper
 
 **v2.0 additions (planned):**
 - **Design system:** shadcn/ui with Tailwind v4 theme
@@ -153,10 +154,10 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
 
 | Field | Value |
 |-------|-------|
-| Last session | 2026-01-23T18:39:21Z |
-| Stopped at | Completed 12-05-PLAN.md |
+| Last session | 2026-01-23T18:45:34Z |
+| Stopped at | Completed 12-06-PLAN.md |
 | Resume file | None |
 
 ---
 
-*Last updated: 2026-01-23 (Phase 12 plan 05 complete)*
+*Last updated: 2026-01-23 (Phase 12 plan 06 complete)*
