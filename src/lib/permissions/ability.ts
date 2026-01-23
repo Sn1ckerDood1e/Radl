@@ -48,22 +48,55 @@ export function defineAbilityFor(user: UserContext): AppAbility {
 
   // FACILITY_ADMIN - manages all clubs in facility, no lineup creation
   if (user.roles.includes('FACILITY_ADMIN')) {
-    // Admin powers for all clubs (facility-wide)
-    can('manage', 'Team');
-    can('assign-role', 'Team');
-    can('view-audit-log', 'AuditLog');  // All audit logs in facility
-    can('export-data', 'Team');
-    can('manage-api-keys', 'ApiKey');
-    can('invite-member', 'Team');
-    can('remove-member', 'Team');
-    can('read', 'Practice');
-    can('read', 'Lineup');
-    can('read', 'Equipment');
-    can('read', 'AthleteProfile');
-    can('read', 'Season');
-    can('read', 'Regatta');
-    can('read', 'Entry');
-    // NOTE: Cannot create/update lineups, practices - must also have COACH role
+    if (user.viewMode === 'facility') {
+      // FACILITY VIEW MODE: Broad read access to all clubs' data
+      can('read', 'Team');  // All teams in facility (no filter)
+      can('read', 'Practice');  // All practices in facility
+      can('read', 'Lineup');  // All lineups in facility
+      can('read', 'Equipment');  // All equipment (facility + club owned)
+      can('read', 'AthleteProfile');  // All athletes in facility
+      can('read', 'Season');  // All seasons
+      can('read', 'Regatta');  // All regattas
+      can('read', 'Entry');  // All entries
+      can('manage', 'Facility', { id: user.facilityId });  // Can edit own facility profile
+      can('view-audit-log', 'AuditLog');  // All audit logs in facility
+      can('assign-role', 'Team');
+      can('export-data', 'Team');
+      can('manage-api-keys', 'ApiKey');
+      can('invite-member', 'Team');
+      can('remove-member', 'Team');
+      // NOTE: Cannot create/update lineups, practices - must also have COACH role
+    } else if (user.viewMode === 'club') {
+      // CLUB DRILL-DOWN MODE: Read-only access to specific club
+      can('read', 'Team', { id: user.clubId });  // Specific club only
+      can('read', 'Practice', { teamId: user.clubId });  // Club's practices
+      can('read', 'Lineup');  // Club's lineups (filtered server-side)
+      can('read', 'Equipment', { teamId: user.clubId });  // Club's equipment
+      can('read', 'AthleteProfile');  // View roster (filtered server-side)
+      can('read', 'Season', { teamId: user.clubId });  // Club's seasons
+      can('read', 'Regatta', { teamId: user.clubId });  // Club's regattas
+      can('read', 'Entry');  // Entries (filtered server-side)
+      can('view-audit-log', 'AuditLog');  // Audit logs (filtered server-side)
+      // NO manage/create/update permissions (read-only drill-down)
+      // NO assign-role, invite/remove-member in club drill-down
+    } else {
+      // LEGACY MODE (null/undefined): Keep current behavior for backward compat
+      can('manage', 'Team');
+      can('assign-role', 'Team');
+      can('view-audit-log', 'AuditLog');  // All audit logs in facility
+      can('export-data', 'Team');
+      can('manage-api-keys', 'ApiKey');
+      can('invite-member', 'Team');
+      can('remove-member', 'Team');
+      can('read', 'Practice');
+      can('read', 'Lineup');
+      can('read', 'Equipment');
+      can('read', 'AthleteProfile');
+      can('read', 'Season');
+      can('read', 'Regatta');
+      can('read', 'Entry');
+      // NOTE: Cannot create/update lineups, practices - must also have COACH role
+    }
   }
 
   // CLUB_ADMIN - manages their specific club
