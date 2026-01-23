@@ -12,7 +12,39 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-// Multi-tenant team model
+// Facility model (boathouse/organization level)
+model Facility {
+  id           String   @id @default(uuid())
+  name         String
+  slug         String   @unique
+  // Location
+  address      String?
+  city         String?
+  state        String?
+  country      String?  @default("US")
+  timezone     String   @default("America/New_York")
+  coordinates  Json?    // { lat: number, lng: number }
+  // Contact
+  phone        String?
+  email        String?
+  website      String?
+  // Branding
+  logoUrl      String?
+  description  String?
+  // Billing (hybrid model)
+  billingType  BillingType @default(FACILITY)
+  // Timestamps
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  clubs         Team[]   @relation("FacilityClubs")
+  equipment     Equipment[]  @relation("FacilityEquipment")
+  memberships   FacilityMembership[]
+
+  @@index([slug])
+}
+
+// Multi-tenant team model (Club level in facility hierarchy)
 model Team {
   id             String   @id @default(uuid())
   name           String
@@ -21,9 +53,11 @@ model Team {
   secondaryColor String
   logoUrl        String?
   joinCode       String   @unique // 8-char code for joining
+  facilityId     String?  // Nullable for backward compat during migration
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 
+  facility          Facility? @relation("FacilityClubs", fields: [facilityId], references: [id])
   members           TeamMember[]
   invitations       Invitation[]
   equipment         Equipment[]
@@ -37,6 +71,9 @@ model Team {
   rcConnection      RegattaCentralConnection?
   clubMemberships   ClubMembership[] @relation("ClubMemberships")
   apiKeys           ApiKey[] @relation("ApiKeys")
+  clubEquipment     Equipment[] @relation("ClubEquipment")
+
+  @@index([facilityId])
 }
 
 // Team membership linking users to teams with roles
@@ -71,6 +108,23 @@ model ClubMembership {
   @@index([userId])
   @@index([clubId])
   @@index([userId, isActive])
+}
+
+// FacilityMembership for facility-level roles (FACILITY_ADMIN)
+model FacilityMembership {
+  id           String   @id @default(uuid())
+  facilityId   String
+  userId       String   // Supabase auth user ID
+  roles        Role[]   // FACILITY_ADMIN only at this level
+  isActive     Boolean  @default(true)
+  joinedAt     DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  facility     Facility @relation(fields: [facilityId], references: [id], onDelete: Cascade)
+
+  @@unique([facilityId, userId])
+  @@index([userId])
+  @@index([facilityId])
 }
 
 // Invitation model for email invites and team code joins
@@ -191,6 +245,20 @@ enum PracticeStatus {
   PUBLISHED // Visible to all team members
 }
 
+// Billing type enum (facility subscription model)
+enum BillingType {
+  FACILITY   // Facility pays for all clubs
+  CLUB       // Each club has own subscription
+  HYBRID     // Mix - some clubs pay, some don't
+}
+
+// Equipment ownership type enum (hierarchy level)
+enum EquipmentOwnerType {
+  FACILITY  // Shared across facility (boathouse boats)
+  CLUB      // Club-exclusive (club-owned boats)
+  TEAM      // Legacy team-owned (backward compat)
+}
+
 // Block type enum
 enum BlockType {
   WATER
@@ -208,7 +276,7 @@ enum SeatSide {
 // Equipment model for tracking team assets (shells, oars, launches, etc.)
 model Equipment {
   id                    String          @id @default(uuid())
-  teamId                String
+  teamId                String?         // Optional for facility-owned equipment
   type                  EquipmentType
   name                  String // e.g., "Varsity 8+", "Oar Set A"
   manufacturer          String?
@@ -223,10 +291,17 @@ model Equipment {
   // Manual unavailability for practice scheduling
   manualUnavailable     Boolean         @default(false)
   manualUnavailableNote String?
+  // Ownership hierarchy
+  ownerType             EquipmentOwnerType @default(TEAM)
+  facilityId            String?
+  clubId                String?
+  isShared              Boolean         @default(false)  // For club equipment shared with facility
   createdAt             DateTime        @default(now())
   updatedAt             DateTime        @updatedAt
 
-  team          Team                 @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  team          Team?                @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  facility      Facility?            @relation("FacilityEquipment", fields: [facilityId], references: [id])
+  club          Team?                @relation("ClubEquipment", fields: [clubId], references: [id])
   damageReports DamageReport[]
   usageLogs     EquipmentUsageLog[]
   lineups       Lineup[]
@@ -235,6 +310,9 @@ model Equipment {
 
   @@index([teamId])
   @@index([teamId, type])
+  @@index([facilityId])
+  @@index([clubId])
+  @@index([ownerType])
 }
 
 // Damage report model for tracking equipment damage
