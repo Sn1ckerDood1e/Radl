@@ -4,11 +4,23 @@
 
 A multi-tenant SaaS for rowing team operations — practice planning, equipment management, roster coordination, and race-day execution at regattas.
 
-**Current State:** v1.1 shipped with polish features. Coaches can manage RC integration, view equipment usage, and export data. Push notifications deferred to future milestone.
+**Current State:** v1.1 shipped. Starting v2.0 commercial readiness — facility model, mobile PWA, UI/UX polish, and security hardening.
 
 ## Core Value
 
 **The ONE thing that must work:** Coaches can plan practices with lineups and equipment, and athletes know where to be and what boat they're in.
+
+## Current Milestone: v2.0 Commercial Readiness
+
+**Goal:** Prepare RowOps for commercial sale to rowing organizations with proper multi-facility architecture, mobile-first experience, and hardened security.
+
+**Target features:**
+1. **Facility Model** — Support facility-level tenancy (boathouses) with multiple clubs sharing equipment
+2. **Mobile PWA** — Responsive design, touch-friendly, app-like experience, architect for future native
+3. **UI/UX Polish** — Modern visual design + intuitive workflows
+4. **Security Hardening** — Comprehensive roles audit, permissions review, multi-tenant confidence
+
+**Real-world scenario:** Chattanooga Rowing (boathouse/foundation) hosts Lookout Rowing Club and Chattanooga Juniors Rowing. Each club needs its own subscription, but some boats are shared facility equipment.
 
 ## Who It's For
 
@@ -16,7 +28,8 @@ A multi-tenant SaaS for rowing team operations — practice planning, equipment 
 |------|-------------|--------------|
 | **Coach** | Plan practices, manage equipment, assign lineups, run regatta mode | Full control |
 | **Athlete** | View schedule, see assignments, receive notifications, acknowledge races | Personal schedule + assignments |
-| **Parent** | View child's schedule and race times | Read-only, invite/athlete-linked |
+| **Parent** | View child's schedule and race times | Read-only, invite-linked |
+| **Facility Admin** | Manage shared equipment, oversee multiple clubs | Facility-level control |
 
 ## Current Codebase
 
@@ -85,6 +98,12 @@ A multi-tenant SaaS for rowing team operations — practice planning, equipment 
 - [x] **EXPORT-02**: Export roster to CSV
 - [x] **EXPORT-03**: Export season schedule to CSV
 
+### Active (v2.0)
+
+**Goal:** Commercial readiness — facility model, mobile PWA, UI/UX polish, security hardening
+
+*(Requirements to be defined after research)*
+
 ### Deferred (Future Milestone)
 
 - **NOTIF-01**: Coach receives notification when equipment is marked damaged
@@ -106,7 +125,6 @@ A multi-tenant SaaS for rowing team operations — practice planning, equipment 
 - Public scoring — not a spectator-facing app
 - Messaging-first workflows — not a communication platform
 - Social features — not a social network
-- Native mobile apps — PWA sufficient for v1
 
 ## Key Decisions
 
@@ -121,16 +139,18 @@ A multi-tenant SaaS for rowing team operations — practice planning, equipment 
 | Serwist for service worker | Production-tested caching strategies | Good — reliable offline |
 | AES-256-CBC for RC tokens | Industry standard encryption | Good — secure |
 | Sonner for toasts | Dark theme, bottom-right, rich colors | Good — consistent UX |
+| Facility model for v2.0 | Real-world orgs have shared boathouses with multiple clubs | — Pending |
 
 ## Constraints
 
 | Constraint | Detail |
 |------------|--------|
-| **Platform** | PWA (web + service workers), no native app for v1 |
+| **Platform** | PWA (web + service workers), architect for future native |
 | **Offline** | Required for regatta mode (unreliable cellular at venues) |
-| **Multi-tenant** | Single deployed instance, tenant IDs enforce isolation |
+| **Multi-tenant** | Facility → Club hierarchy, equipment can be shared |
 | **Notifications** | Push (service workers) + optional email, all configurable |
 | **External API** | Regatta Central v4, per-team API keys |
+| **Commercial** | Must be sellable — security, UX, and mobile must be production-quality |
 
 ---
-*Last updated: 2026-01-22 after v1.1 milestone completed*
+*Last updated: 2026-01-22 after v2.0 milestone started*

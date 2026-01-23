@@ -4,22 +4,37 @@
 
 **Core Value:** Coaches can plan practices with lineups and equipment, and athletes know where to be and what boat they're in.
 
-**Current Focus:** Between milestones — v1.1 completed, run `/gsd:new-milestone` to start next
+**Current Focus:** v2.0 Commercial Readiness — facility model, mobile PWA, UI/UX polish, security hardening
 
 ## Current Position
 
 | Field | Value |
 |-------|-------|
-| Milestone | None (between milestones) |
-| Last Completed | v1.1 Polish |
-| Status | Ready for next milestone |
-| Last activity | 2026-01-22 — v1.1 milestone completed |
+| Milestone | v2.0 |
+| Phase | Not started (defining requirements) |
+| Status | Gathering requirements |
+| Last activity | 2026-01-22 — Milestone v2.0 started |
 
 **Progress:**
 ```
 v1.0: [##########] 100% SHIPPED (2026-01-22)
 v1.1: [##########] 100% SHIPPED (2026-01-22) — 9/11 reqs, 2 deferred
+v2.0: [          ] 0% — defining requirements
 ```
+
+## v2.0 Scope
+
+**Goal:** Prepare RowOps for commercial sale to rowing organizations
+
+**Target features:**
+1. **Facility Model** — Facility-level tenancy with shared equipment between clubs
+2. **Mobile PWA** — Responsive, touch-friendly, app-like, architect for native
+3. **UI/UX Polish** — Modern design + intuitive workflows
+4. **Security Hardening** — Roles audit, permissions, multi-tenant confidence
+
+**Priority:** Mobile > Facility Model > UI/UX > Security (but all must ship)
+
+**Real-world scenario:** Chattanooga Rowing (boathouse) hosts Lookout Rowing Club and Chattanooga Juniors. Each club has subscription, some boats are shared.
 
 ## Shipped Milestones
 
@@ -33,10 +48,6 @@ v1.1: [##########] 100% SHIPPED (2026-01-22) — 9/11 reqs, 2 deferred
 **Deferred:**
 - NOTIF-01: Push notification for equipment damage
 - NOTIF-02: Push notification for lineup published
-- RC connection testing (needs RC_CLIENT_ID and RC_CLIENT_SECRET)
-- QR code external scanning (needs production deployment)
-
-**Stats:** 4 phases, 13 commits, 80,840 LOC
 
 ### v1.0 MVP (2026-01-22)
 
@@ -64,9 +75,6 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 
 | Item | Status | Notes |
 |------|--------|-------|
-| DEBT-01: Claims helper | COMPLETE | v1.0 |
-| DEBT-02: Form refactoring | COMPLETE | v1.0 |
-| DEBT-03: Query caching | COMPLETE | v1.0 |
 | RC connection testing | DEFERRED | Needs RC_CLIENT_ID and RC_CLIENT_SECRET |
 | QR external scanning | DEFERRED | Needs production deployment |
 | Push notifications | DEFERRED | NOTIF-01, NOTIF-02 for future milestone |
@@ -75,13 +83,6 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 
 See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
 
-## Next Steps
-
-Run `/gsd:new-milestone` to:
-1. Define next milestone scope
-2. Create new REQUIREMENTS.md
-3. Create new ROADMAP.md with phases
-
 ---
 
-*Last updated: 2026-01-22 (v1.1 milestone completed)*
+*Last updated: 2026-01-22 (v2.0 milestone started)*
