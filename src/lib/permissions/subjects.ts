@@ -9,6 +9,7 @@ import type {
   ClubMembership,
   Regatta,
   Entry,
+  Facility,
 } from '@/generated/prisma';
 
 /**
@@ -29,6 +30,7 @@ export type AppSubjects =
       ClubMembership: ClubMembership;
       Regatta: Regatta;
       Entry: Entry;
+      Facility: Facility;
     }>
   | 'AuditLog'  // Placeholder until model exists
   | 'ApiKey';   // Placeholder until model exists
@@ -45,6 +47,7 @@ export const SUBJECTS = [
   'ApiKey',
   'Regatta',
   'Entry',
+  'Facility',
 ] as const;
 
 export type SubjectName = typeof SUBJECTS[number];
