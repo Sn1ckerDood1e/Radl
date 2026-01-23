@@ -717,3 +717,34 @@ model ApiKey {
   @@index([keyPrefix])
   @@index([createdBy])
 }
+
+// MFA backup codes for account recovery (SHA-256 hashed)
+model MfaBackupCode {
+  id        String    @id @default(uuid())
+  userId    String    // Supabase auth user ID
+  codeHash  String    // SHA-256 hash of backup code
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([userId])
+  @@unique([userId, codeHash])
+}
+
+// Temporary permission grants with expiration (elevated access)
+model PermissionGrant {
+  id         String    @id @default(uuid())
+  clubId     String    // Club where grant applies
+  userId     String    // Who receives elevated access
+  grantedBy  String    // Who granted it
+  roles      Role[]    // Elevated roles granted
+  reason     String?   // Why granted (audit trail)
+  expiresAt  DateTime  // When grant expires
+  revokedAt  DateTime? // Soft revoke before expiration
+  notifiedAt DateTime? // When expiration warning sent
+  createdAt  DateTime  @default(now())
+
+  @@index([clubId])
+  @@index([userId])
+  @@index([expiresAt])
+  @@index([userId, clubId])
+}
