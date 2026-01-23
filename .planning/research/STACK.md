@@ -1,356 +1,513 @@
-# Technology Stack
+# Stack Research: v2.0 Commercial Readiness
 
-**Project:** RowOps - Rowing Team Operations SaaS
-**Dimension:** PWA, Offline-First, Push Notifications, External API Integration
-**Researched:** 2026-01-20
+**Project:** RowOps v2.0 — Facility Model + Mobile PWA + UI/UX Polish + Security Hardening
+**Researched:** 2026-01-22
 **Overall Confidence:** HIGH
 
 ## Executive Summary
 
-This stack recommendation extends your existing Next.js 16 + Prisma 6 + Supabase setup with PWA capabilities optimized for race-day offline scenarios at regattas. The key insight: **offline-first for rowing apps means caching read data (schedules, lineups) while queuing writes (timing, attendance) for sync when connectivity returns**.
+This research focuses on stack additions needed for v2.0's four new capabilities, building on the validated v1.0/v1.1 stack (Next.js 16, React 19, Prisma 6, Supabase, Tailwind v4, Serwist, Dexie). The key insight: **v2.0 is about structure and polish, not new infrastructure**. Most needs are met through patterns and selective library additions rather than major framework changes.
 
-## Recommended Stack
+**What's already validated (DO NOT add):**
+- Next.js 16 + React 19 (existing)
+- Prisma 6 + PostgreSQL via Supabase (existing)
+- Tailwind CSS v4 (existing, confirmed in package.json)
+- Serwist + Dexie for PWA/offline (existing)
+- Lucide React for icons (existing)
+- Sonner for toasts (existing)
 
-### PWA & Service Worker
+**What v2.0 needs:**
+1. **Facility model**: Schema patterns + database-level RLS (no library needed)
+2. **Mobile PWA improvements**: Component library (shadcn/ui) + touch gestures (@use-gesture/react)
+3. **UI/UX polish**: Component library (shadcn/ui) + consistent design tokens
+4. **Security hardening**: Authorization library (CASL) + RLS enforcement
 
-| Technology | Version | Purpose | Confidence |
-|------------|---------|---------|------------|
-| **@serwist/next** | ^9.5.0 | Service worker integration for Next.js | HIGH |
-| **serwist** | ^9.5.0 | Workbox-based SW tooling (dev dependency) | HIGH |
+## Recommended Additions
+
+### UI Component Library
+
+**shadcn/ui** (latest with Tailwind v4 support)
+
+**Purpose:** Mobile-first, accessible component primitives for commercial-grade UI
 
 **Rationale:**
-- Serwist is the **official successor** to next-pwa, actively maintained
-- [Next.js official docs](https://nextjs.org/docs/app/guides/progressive-web-apps) recommend Serwist for offline functionality
-- Built on Workbox (Google's SW library used by 54% of mobile sites)
-- The original `next-pwa` is abandoned (last update 2+ years ago)
-- `@ducanh2912/next-pwa` is deprecated by its own maintainer in favor of Serwist
+- **Not a traditional NPM dependency** — copies component source code directly into your project (full ownership)
+- Built on **Radix UI** primitives (battle-tested accessibility, keyboard navigation, ARIA support)
+- **Native Tailwind v4 support** — shadcn/ui CLI (canary) can now initialize projects with Tailwind v4, all components updated for React 19
+- **Mobile-responsive by default** — proper touch targets, responsive sizing, mobile-first design
+- Fastest-growing React component ecosystem in 2026 (104K+ GitHub stars, 560K+ weekly npm downloads)
+- No runtime JavaScript for basic components (CSS-only when possible)
 
-**Configuration:**
+**Why NOT alternatives:**
+- **Headless UI**: Tailwind team's library but less comprehensive than shadcn/ui's Radix foundation
+- **Chakra UI / Mantine**: Heavier runtime, opinionated styling conflicts with existing Tailwind v4 setup
+- **Material Tailwind**: Material Design doesn't match rowing domain (need utility-focused, not consumer app aesthetic)
+- **Custom components only**: Commercial products need accessibility guarantees — Radix provides this
+
+**Installation:**
+```bash
+# Install CLI (canary for Tailwind v4 support)
+npx shadcn@canary init
+
+# Add components as needed (examples)
+npx shadcn@canary add button
+npx shadcn@canary add card
+npx shadcn@canary add dialog
+npx shadcn@canary add select
+npx shadcn@canary add tabs
+npx shadcn@canary add dropdown-menu
+npx shadcn@canary add sheet  # Mobile drawer/bottom sheet
+```
+
+**Integration Notes:**
+- Components copied to `/src/components/ui/` (already have export-button.tsx there)
+- Uses existing Tailwind v4 setup (no config changes needed)
+- Dark mode built-in via Tailwind classes (matches existing zinc-900 palette)
+- Customize directly in source (you own the code)
+
+**Confidence:** HIGH — Official Tailwind v4 support, React 19 compatible, proven ecosystem
+
+**Sources:**
+- [shadcn/ui Tailwind v4 Documentation](https://ui.shadcn.com/docs/tailwind-v4)
+- [15 Best React UI Libraries for 2026](https://www.builder.io/blog/react-component-libraries-2026)
+- [shadcn/ui vs Radix UI Comparison](https://scratchdb.com/compare/radix-ui-vs-shadcn-ui/)
+
+---
+
+### Touch Gestures for Mobile
+
+**@use-gesture/react** (latest: 10.x+)
+
+**Purpose:** Native-feeling swipe, drag, pinch gestures for mobile lineup editing and regatta mode
+
+**Rationale:**
+- **Lightweight** — Adds gesture handling without bloat (~15KB)
+- **Works with mouse AND touch** — Desktop drag-and-drop still works, mobile gets swipe gestures
+- **Pairs with animation libraries** — Works seamlessly with CSS transitions or Framer Motion if needed later
+- Handles complex gesture combos (swipe to dismiss, drag to reorder, pinch to zoom schedules)
+- Maintained by Poimandres (same team as Three.js, React Three Fiber — trusted ecosystem)
+
+**Use cases in RowOps:**
+- **Lineup editor**: Swipe to remove athlete from seat, drag to reorder
+- **Regatta timeline**: Horizontal scroll/swipe between races, pull-to-refresh
+- **Equipment list**: Swipe to mark unavailable
+- **Practice calendar**: Pinch to zoom week/month view
+
+**Why NOT alternatives:**
+- **react-swipeable**: Swipe-only, no drag or pinch (too limited)
+- **react-touch**: Abandoned, last update 5+ years ago
+- **React Native Gesture Handler**: React Native only, not for web
+
+**Installation:**
+```bash
+npm install @use-gesture/react
+```
+
+**Example Usage:**
 ```typescript
-// next.config.mjs
-import withSerwistInit from "@serwist/next";
+import { useDrag } from '@use-gesture/react';
 
-const withSerwist = withSerwistInit({
-  swSrc: "app/sw.ts",
-  swDest: "public/sw.js",
+const bind = useDrag(({ movement: [x], swipe: [swipeX] }) => {
+  if (swipeX < 0) {
+    // Swiped left — remove from lineup
+    handleRemove();
+  }
 });
 
-export default withSerwist(nextConfig);
+return <div {...bind()} className="touch-none">Swipeable Item</div>;
 ```
 
-### Offline Data Storage
+**Confidence:** HIGH — Actively maintained, proven in production PWAs, 2M+ weekly downloads
 
-| Technology | Version | Purpose | Confidence |
-|------------|---------|---------|------------|
-| **Dexie.js** | ^4.2.1 | IndexedDB wrapper for offline storage | HIGH |
+**Sources:**
+- [@use-gesture/react npm page](https://www.npmjs.com/package/@use-gesture/react)
+- [GitHub: pmndrs/use-gesture](https://github.com/pmndrs/use-gesture)
+- [React Mobile Responsive Touch Gestures Library 2026](https://codingcops.com/react-swipeable/)
+
+---
+
+### Authorization & Permissions
+
+**@casl/ability** (latest: 6.8.0) + **@casl/react** (latest: 4.x+)
+
+**Purpose:** Fine-grained role-based access control (RBAC) for facility admin vs coach vs athlete
 
 **Rationale:**
-- Dexie provides a **fluent, Promise-based API** over raw IndexedDB
-- Supports versioning, schema migrations, and reactive queries
-- Superior performance for complex queries vs. `idb` (~1.19kb but minimal features)
-- Optional Dexie Cloud available if you need sync later (but Supabase handles this)
-- Widely used in production offline-first PWAs
+- **Isomorphic** — Same permission logic on client (UI hiding) and server (API enforcement)
+- **Type-safe** — TypeScript definitions for abilities
+- **Declarative** — Define "can(action, subject)" rules, check everywhere
+- **Zero vendor lock-in** — Pure JavaScript, no external service required
+- **Prisma integration** — `@casl/prisma` package (optional) translates CASL rules to Prisma `where` clauses
 
-**Why NOT `idb`:**
-- idb is lighter (1.19kb) but lacks versioning, migrations, and bulk operations
-- For regatta data (lineups, schedules, results), you need query capabilities
-- Dexie's extra ~10kb is worth the DX improvement
-
-**Usage Pattern for RowOps:**
-```typescript
-// db/offlineDb.ts
-import Dexie, { Table } from 'dexie';
-
-interface CachedRace {
-  id: string;
-  regattaId: string;
-  eventName: string;
-  scheduledTime: Date;
-  lineup: string[];
-  syncedAt: Date;
-}
-
-class RowOpsOfflineDB extends Dexie {
-  races!: Table<CachedRace>;
-  pendingActions!: Table<PendingAction>;
-
-  constructor() {
-    super('rowops-offline');
-    this.version(1).stores({
-      races: 'id, regattaId, scheduledTime',
-      pendingActions: '++id, type, createdAt, [synced+createdAt]'
-    });
-  }
+**Current roles (from schema):**
+```prisma
+enum Role {
+  COACH
+  ATHLETE
+  PARENT
 }
 ```
 
-### Push Notifications
+**v2.0 adds Facility Admin (likely new role):**
+- Facility Admin: Manage shared equipment, oversee multiple clubs
+- Club Admin: Current "COACH" role scoped to club
+- Coach: Team-level coach
+- Athlete: Existing
+- Parent: Existing (read-only)
 
-| Technology | Version | Purpose | Confidence |
-|------------|---------|---------|------------|
-| **web-push** | ^3.6.7 | Server-side VAPID push notifications | HIGH |
-| **Native Push API** | Browser API | Client-side subscription management | HIGH |
-
-**Rationale:**
-- `web-push` is the **standard Node.js library** for Web Push Protocol
-- Zero vendor lock-in (vs. third-party services like OneSignal, PushEngage)
-- VAPID keys provide server identification without GCM dependency
-- Works with existing Supabase backend (trigger notifications on DB events)
-
-**Why NOT third-party services:**
-- PushEngage, Webpushr etc. add cost and vendor dependency
-- For athlete notifications about races, you control the data and timing
-- web-push + Supabase Edge Functions = complete solution
-
-**Architecture:**
-```
-Athlete subscribes (browser)
-  -> Store PushSubscription in Supabase
-  -> Race schedule changes
-  -> Supabase trigger/Edge Function
-  -> web-push sends notification
-  -> Service worker shows notification
-```
-
-**Payload Limit:** 4KB (Chrome/Firefox), 2KB (Safari) - sufficient for race alerts
-
-### Real-Time Updates
-
-| Technology | Version | Purpose | Confidence |
-|------------|---------|---------|------------|
-| **@supabase/supabase-js** | ^2.91.0 | Existing - includes Realtime | HIGH |
-| **Supabase Broadcast** | Built-in | Recommended for scalable real-time | HIGH |
-
-**Rationale:**
-- You already have Supabase - **use its built-in Realtime, don't add another layer**
-- Supabase recommends **Broadcast over Postgres Changes** at scale
-- Postgres Changes checks RLS for every subscriber (100 users = 100 reads per change)
-- Broadcast is lower latency and scales better
-
-**Architecture Recommendation:**
-```typescript
-// Use Broadcast with a Postgres trigger for scalability
-// Trigger sends to broadcast channel, clients subscribe to channel
-
-// Client subscription
-supabase.channel('race-updates')
-  .on('broadcast', { event: 'race-changed' }, (payload) => {
-    updateLocalRace(payload);
-  })
-  .subscribe();
-```
-
-**Cost Awareness:**
-- $2.50 per 1M messages
-- $10 per 1,000 peak connections
-- For race-day usage, this is minimal cost
-
-### Regatta Central API Integration
-
-| Technology | Version | Purpose | Confidence |
-|------------|---------|---------|------------|
-| **react-oauth2-code-pkce** | ^1.23.4 | OAuth2 PKCE flow for SPA | MEDIUM |
-| **Native fetch** | Browser API | API calls with token injection | HIGH |
-
-**Rationale for OAuth2 approach:**
-
-The RegattaCentral API v4 uses standard OAuth2 with client credentials. However, their OAuth flow requires:
-- client_id and client_secret (server-side)
-- User's RegattaCentral credentials for token exchange
-- Token endpoint: `https://api.regattacentral.com/oauth2/api/token`
-- TLS 1.2+ required
-- CORS only with registered referer URLs
-
-**Recommended Pattern:**
-```
-User clicks "Connect Regatta Central"
-  -> Redirect to RC OAuth authorize
-  -> Callback with auth code
-  -> Server exchanges code for tokens (keeps client_secret secure)
-  -> Store refresh_token encrypted in DB
-  -> Access token used for API calls
-  -> Auto-refresh when expired
-```
-
-**Why `react-oauth2-code-pkce`:**
-- PKCE adds security layer for browser-based OAuth
-- Zero dependencies, well-maintained
-- Handles token refresh automatically
-- Works with Next.js (needs 'use client' marking)
-
-**Alternative: Server-side only OAuth:**
-Given RC's CORS restrictions and client_secret requirement, you may want to handle OAuth entirely server-side via Next.js API routes. This is actually **more secure** and avoids CORS issues.
-
-**MEDIUM confidence** because: RC API docs don't specify PKCE support. May need pure server-side OAuth instead.
-
-### Background Sync (Offline Actions)
-
-| Technology | Version | Purpose | Confidence |
-|------------|---------|---------|------------|
-| **workbox-background-sync** | ^7.4.0 | Queue failed requests for retry | MEDIUM |
-| **Custom queue + Dexie** | - | Fallback for Safari/Firefox | HIGH |
-
-**Browser Support Reality:**
-Background Sync API support is **LIMITED**:
-- Chrome/Edge/Opera: Supported (49+)
-- Safari: NOT SUPPORTED (all versions)
-- Firefox: NOT SUPPORTED (all versions)
-- Global coverage: ~80%
-
-**Recommended Hybrid Approach:**
-```typescript
-// Attempt Background Sync, fall back to manual sync
-async function queueOfflineAction(action: PendingAction) {
-  await offlineDb.pendingActions.add(action);
-
-  if ('serviceWorker' in navigator && 'SyncManager' in window) {
-    // Chromium browsers - use Background Sync
-    const reg = await navigator.serviceWorker.ready;
-    await reg.sync.register('sync-pending-actions');
-  } else {
-    // Safari/Firefox - sync on reconnect or app focus
-    window.addEventListener('online', syncPendingActions, { once: true });
-  }
-}
-```
-
-**Why MEDIUM confidence:**
-Safari users (significant portion of athletes on iOS) won't get automatic background sync. Must implement manual sync triggers.
-
-## Full Installation
-
+**Installation:**
 ```bash
-# PWA & Service Worker
-npm install @serwist/next
-npm install -D serwist
-
-# Offline Storage
-npm install dexie
-
-# Push Notifications (server-side)
-npm install web-push
-
-# OAuth (if client-side flow)
-npm install react-oauth2-code-pkce
-
-# Already have (verify versions)
-# @supabase/supabase-js@^2.91.0
+npm install @casl/ability @casl/react
+npm install -D @casl/prisma  # Optional for server-side filtering
 ```
 
-## What NOT to Use
+**Example Usage:**
+```typescript
+// Define abilities
+import { defineAbility } from '@casl/ability';
+
+const ability = defineAbility((can, cannot) => {
+  if (user.role === 'FACILITY_ADMIN') {
+    can('manage', 'all');
+  } else if (user.role === 'COACH') {
+    can('manage', 'Practice', { teamId: user.teamId });
+    can('read', 'Equipment');
+  } else if (user.role === 'ATHLETE') {
+    can('read', 'Practice', { teamId: user.teamId });
+    cannot('delete', 'Practice');
+  }
+});
+
+// Use in components
+import { Can } from '@casl/react';
+
+<Can I="delete" a="Practice" ability={ability}>
+  <button>Delete Practice</button>
+</Can>
+```
+
+**Why NOT alternatives:**
+- **Auth.js RBAC**: Session-based, not fine-grained enough (role checks, not resource-level permissions)
+- **Clerk RBAC**: Vendor lock-in, paid plans for advanced features, overkill for existing Supabase auth
+- **Permit.io / Permify**: External services add cost, latency, complexity — CASL is self-hosted
+- **Custom helper functions**: Reinventing the wheel, no type safety, harder to audit
+
+**Confidence:** HIGH — Latest version 6.8.0 published recently, 517+ projects using it, proven Next.js integration
+
+**Sources:**
+- [@casl/ability npm](https://www.npmjs.com/package/@casl/ability)
+- [Step-By-Step Tutorial: Frontend Authorization with Next.js and CASL](https://www.permit.io/blog/frontend-authorization-with-nextjs-and-casl-tutorial)
+- [Building a Scalable RBAC System in Next.js](https://medium.com/@muhebollah.diu/building-a-scalable-role-based-access-control-rbac-system-in-next-js-b67b9ecfe5fa)
+
+---
+
+### Database-Level Security (No Library)
+
+**PostgreSQL Row-Level Security (RLS)** — Native Postgres feature via Supabase
+
+**Purpose:** Enforce multi-tenant isolation at database level (defense-in-depth)
+
+**Rationale:**
+- **Defense-in-depth** — Even if application code has bug, RLS prevents cross-tenant data leaks
+- **Supabase includes RLS** — Already available, no installation needed
+- **Prisma compatible** — Prisma Client Extensions can set tenant context via `SET LOCAL`
+- **Hierarchical tenancy** — Facility → Club → Team hierarchy enforced at DB level
+
+**Pattern:**
+```sql
+-- Enable RLS on Team table
+ALTER TABLE "Team" ENABLE ROW LEVEL SECURITY;
+
+-- Policy: Users can only see teams they're members of
+CREATE POLICY team_member_access ON "Team"
+  USING (
+    id IN (
+      SELECT "teamId" FROM "TeamMember"
+      WHERE "userId" = current_setting('app.current_user_id')::text
+    )
+  );
+
+-- Set user context before queries (via Prisma middleware)
+SET LOCAL app.current_user_id = 'user-uuid';
+```
+
+**For facility hierarchy:**
+- Add `facilityId` and `clubId` to relevant tables
+- RLS policies enforce: Facility Admin sees all clubs → Coach sees own club → Athlete sees own team
+- Use adjacency list pattern (simple `parentId` foreign key) for facility → club → team hierarchy
+
+**Why NOT closure tables:**
+- Closure tables optimize deep hierarchy queries (5+ levels)
+- Rowing orgs are shallow: Facility → Club → Team (max 3 levels)
+- Adjacency list is simpler, sufficient, and Prisma-native (self-referencing foreign key)
+
+**Confidence:** HIGH — RLS is production-proven for multi-tenant SaaS, Supabase provides it out-of-box
+
+**Sources:**
+- [Securing Multi-Tenant Applications Using RLS with Prisma ORM](https://medium.com/@francolabuschagne90/securing-multi-tenant-applications-using-row-level-security-in-postgresql-with-prisma-orm-4237f4d4bd35)
+- [Using Row-Level Security in Prisma | Atlas Guides](https://atlasgo.io/guides/orms/prisma/row-level-security)
+- [Prisma Multi-Tenancy Patterns (2026)](https://github.com/prisma/prisma/discussions/2846)
+
+---
+
+## Integration Notes
+
+### How New Stack Integrates with Existing
+
+| New Addition | Integrates With | How |
+|--------------|-----------------|-----|
+| **shadcn/ui** | Tailwind v4 | Components use existing Tailwind classes, no config changes |
+| **@use-gesture/react** | React 19, dnd-kit | Gesture hooks wrap existing drag-drop, add mobile swipe |
+| **@casl/ability** | Supabase auth, Prisma | Reads user role from JWT claims, enforces in API routes |
+| **PostgreSQL RLS** | Prisma, Supabase | Prisma middleware sets tenant context, RLS filters at DB |
+
+### Data Model Changes for v2.0
+
+**Add to schema.prisma:**
+```prisma
+model Facility {
+  id        String   @id @default(uuid())
+  name      String
+  slug      String   @unique
+  createdAt DateTime @default(now())
+
+  clubs     Club[]
+  equipment Equipment[]  // Shared facility equipment
+}
+
+model Club {
+  id         String   @id @default(uuid())
+  facilityId String?  // Nullable for clubs without facility
+  name       String
+  slug       String   @unique
+  createdAt  DateTime @default(now())
+
+  facility   Facility? @relation(fields: [facilityId], references: [id])
+  teams      Team[]
+
+  @@index([facilityId])
+}
+
+// Update Team model
+model Team {
+  // ... existing fields
+  clubId String?  // Nullable for teams without club
+  club   Club?    @relation(fields: [clubId], references: [id])
+
+  @@index([clubId])
+}
+
+// Update Equipment model (add optional facility ownership)
+model Equipment {
+  // ... existing fields
+  facilityId String?  // If owned by facility, not team
+  facility   Facility? @relation(fields: [facilityId], references: [id])
+
+  @@index([facilityId])
+}
+
+// Add new role
+enum Role {
+  FACILITY_ADMIN  // NEW
+  COACH
+  ATHLETE
+  PARENT
+}
+```
+
+**Migration strategy:**
+- Existing teams without clubs: `clubId` nullable, backfill later
+- Existing equipment: `facilityId` nullable, defaults to team-owned
+- Adjacency list pattern (simple foreign keys, not closure table)
+
+---
+
+## What NOT to Add
+
+### Libraries/Services to Avoid
 
 | Technology | Why Avoid |
 |------------|-----------|
-| **next-pwa** | Abandoned, last update 2+ years ago |
-| **@ducanh2912/next-pwa** | Deprecated by maintainer in favor of Serwist |
-| **localforage** | Legacy, Dexie is more modern and performant |
-| **idb** | Too minimal for complex offline queries |
-| **Socket.io** | Unnecessary - Supabase Realtime handles this |
-| **Pusher/Ably** | Unnecessary - Supabase Realtime handles this |
-| **OneSignal/PushEngage** | Vendor lock-in, cost, web-push is sufficient |
-| **Firebase Messaging** | Google lock-in, Supabase + web-push is cleaner |
+| **Chakra UI, Mantine, Material Tailwind** | Opinionated styling conflicts with Tailwind v4, heavier runtime |
+| **Headless UI only** | Less comprehensive than shadcn/ui's Radix foundation |
+| **Clerk / Auth.js RBAC** | Vendor lock-in or insufficient granularity, existing Supabase auth works |
+| **Permit.io, Permify, Oso** | External authorization services add cost/latency, CASL is self-hosted |
+| **Closure tables** | Overkill for shallow hierarchy (Facility→Club→Team = 3 levels max) |
+| **Socket.io, Pusher, Ably** | Already have Supabase Realtime for live updates |
+| **Framer Motion** | Animation library — defer until UX testing shows need (YAGNI) |
+| **React Hook Form replacements** | Already using react-hook-form v7.71.1, works fine |
+| **Zod replacements** | Already using Zod v4.3.5 for validation, no need to change |
 
-## TypeScript Configuration
+### Patterns to Avoid
 
-```json
-// tsconfig.json additions for service worker
-{
-  "compilerOptions": {
-    "lib": ["dom", "dom.iterable", "esnext", "webworker"],
-    "types": ["@serwist/next/typings"]
+**Don't use multi-database tenancy:**
+- Prisma supports multiple databases but not optimized (memory per client instance)
+- PostgreSQL RLS + single DB is simpler and performant enough
+- Supabase pricing is per database — multi-DB = higher cost
+
+**Don't use multi-schema tenancy (unless 100+ clubs):**
+- PostgreSQL multi-schema requires `@@schema` attribute on every model
+- Adds complexity for minimal isolation benefit
+- RLS on single schema is sufficient for rowing orgs (not Slack-scale)
+
+**Don't add component library for animations yet:**
+- CSS transitions handle 90% of needs
+- Framer Motion is powerful but heavy (60KB+)
+- Wait for user research to prove need before adding
+
+---
+
+## Mobile PWA Best Practices (No Library Needed)
+
+### Viewport Configuration
+
+**Update `app/layout.tsx` or `app/index.html` with:**
+```html
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no"
+/>
+```
+
+- `viewport-fit=cover`: Access full screen including notched areas (iPhone)
+- `user-scalable=no`: Prevent accidental zoom on tap (standard for app-like PWAs)
+
+**Use CSS safe area insets:**
+```css
+.header {
+  padding-top: max(1rem, env(safe-area-inset-top));
+}
+
+.bottom-nav {
+  padding-bottom: max(1rem, env(safe-area-inset-bottom));
+}
+```
+
+### Touch Target Guidelines
+
+**Minimum touch target size: 44×44px** (iOS) or **48×48px** (Android Material Design)
+
+**Current buttons in export-button.tsx:**
+```tsx
+className="inline-flex items-center gap-2 px-3 py-1.5"
+// py-1.5 = 6px top/bottom = 12px + text height ≈ 28px total — TOO SMALL
+```
+
+**Fix for mobile:**
+```tsx
+// Desktop (hover states work)
+className="px-3 py-1.5 hover:bg-zinc-700"
+
+// Mobile-first (larger targets)
+className="px-4 py-2.5 min-h-[44px] active:bg-zinc-700"
+```
+
+**Use shadcn/ui buttons** — already have proper touch targets built-in
+
+### Eliminate Tap Delay
+
+**Add to global CSS:**
+```css
+* {
+  touch-action: manipulation; /* Eliminates 300ms tap delay */
+}
+```
+
+**For specific elements with custom gestures:**
+```css
+.draggable-lineup {
+  touch-action: none; /* Allow custom touch handling */
+}
+```
+
+### Responsive Design for Regatta Mode
+
+**Use container queries** (production-ready in 2026):
+```css
+.regatta-timeline {
+  container-type: inline-size;
+}
+
+@container (max-width: 600px) {
+  .race-card {
+    grid-template-columns: 1fr; /* Stack on mobile */
   }
 }
 ```
 
-## Environment Variables
+**Use dynamic viewport height** for bottom sheets:
+```css
+.mobile-drawer {
+  height: 85dvh; /* Dynamic viewport height (accounts for mobile browser chrome) */
+}
+```
+
+**Sources:**
+- [Best practices for PWAs - MDN](https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Guides/Best_practices)
+- [PWA Design: UX/UI Principles & Best Practices](https://www.gomage.com/blog/pwa-design/)
+- [Responsive Design Best Practices 2026 Guide](https://pxlpeak.com/blog/web-design/responsive-design-best-practices)
+
+---
+
+## Installation Summary
 
 ```bash
-# .env.local
+# UI Component Library (copy components, not install package)
+npx shadcn@canary init
 
-# VAPID keys for push notifications (generate once, keep forever)
-NEXT_PUBLIC_VAPID_PUBLIC_KEY=your_public_key
-VAPID_PRIVATE_KEY=your_private_key
+# Touch Gestures
+npm install @use-gesture/react
 
-# Regatta Central OAuth
-REGATTA_CENTRAL_CLIENT_ID=your_client_id
-REGATTA_CENTRAL_CLIENT_SECRET=your_client_secret
+# Authorization
+npm install @casl/ability @casl/react
 
-# Existing Supabase vars should already be set
+# Optional: CASL + Prisma integration for server-side filtering
+npm install -D @casl/prisma
+
+# Database: No install (use existing Supabase PostgreSQL with RLS)
 ```
 
-Generate VAPID keys:
-```bash
-npx web-push generate-vapid-keys --json
-```
-
-## Architecture Overview
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│                        BROWSER                               │
-├─────────────────────────────────────────────────────────────┤
-│  React App (Next.js 16)                                     │
-│  ├── Push subscription management                           │
-│  ├── Dexie.js offline database                              │
-│  └── Realtime subscriptions (Supabase)                      │
-├─────────────────────────────────────────────────────────────┤
-│  Service Worker (Serwist)                                   │
-│  ├── Cache: App shell, static assets                        │
-│  ├── Cache: Race schedules, lineups (stale-while-revalidate)│
-│  ├── Queue: Pending actions (attendance, timing)            │
-│  └── Push: Display notifications                            │
-└─────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────────┐
-│                        SERVER                                │
-├─────────────────────────────────────────────────────────────┤
-│  Next.js API Routes / Server Actions                        │
-│  ├── OAuth token management (Regatta Central)               │
-│  ├── Push notification sending (web-push)                   │
-│  └── Offline action sync endpoint                           │
-├─────────────────────────────────────────────────────────────┤
-│  Supabase                                                   │
-│  ├── Auth (existing)                                        │
-│  ├── Database (Prisma) (existing)                           │
-│  ├── Realtime Broadcast (race updates)                      │
-│  ├── Edge Functions (push triggers)                         │
-│  └── Storage (existing)                                     │
-├─────────────────────────────────────────────────────────────┤
-│  External APIs                                              │
-│  └── Regatta Central v4 (OAuth2, JSON)                      │
-└─────────────────────────────────────────────────────────────┘
-```
+---
 
 ## Confidence Summary
 
 | Component | Confidence | Notes |
 |-----------|------------|-------|
-| Serwist for PWA | HIGH | Official recommendation, actively maintained, verified v9.5.0 |
-| Dexie for offline | HIGH | Proven library, v4.2.1 verified, excellent DX |
-| web-push for notifications | HIGH | Standard library, v3.6.7 verified, no lock-in |
-| Supabase Realtime | HIGH | Already using Supabase, Broadcast recommended |
-| Background Sync | MEDIUM | 80% browser coverage, Safari/Firefox need fallback |
-| RC OAuth integration | MEDIUM | Standard OAuth2, but PKCE support unverified |
+| shadcn/ui | HIGH | Official Tailwind v4 + React 19 support verified, 100K+ stars |
+| @use-gesture/react | HIGH | Active maintenance, 2M+ weekly downloads, Poimandres team |
+| @casl/ability | HIGH | Version 6.8.0 published recently, 517+ projects using it |
+| PostgreSQL RLS | HIGH | Production-proven multi-tenant pattern, Supabase native |
+| Adjacency list | HIGH | Simple, Prisma-native, sufficient for shallow hierarchies |
+| Mobile PWA patterns | HIGH | MDN best practices, container queries production-ready |
+
+---
 
 ## Sources
 
 ### Official Documentation
-- [Next.js PWA Guide](https://nextjs.org/docs/app/guides/progressive-web-apps) - Official PWA documentation
-- [Serwist Documentation](https://serwist.pages.dev/docs/next/getting-started) - Getting started guide
-- [Supabase Realtime](https://supabase.com/docs/guides/realtime) - Realtime features documentation
-- [RegattaCentral API v4](https://api.regattacentral.com/v4/apiV4.jsp) - API documentation
-- [RegattaCentral API Cookbook](https://api.regattacentral.com/v4/RegattaCentral_APIV4_Cookbook.pdf) - OAuth2 examples
+- [shadcn/ui Tailwind v4 Documentation](https://ui.shadcn.com/docs/tailwind-v4)
+- [Prisma Multi-Database Guide](https://www.prisma.io/docs/guides/multiple-databases)
+- [Prisma Multi-Schema Guide](https://www.prisma.io/docs/orm/prisma-schema/data-model/multi-schema)
+- [Best practices for PWAs - MDN](https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Guides/Best_practices)
 
 ### Library References
-- [web-push GitHub](https://github.com/web-push-libs/web-push) - Node.js Web Push library
-- [Dexie.js](https://dexie.org/) - IndexedDB wrapper documentation
-- [react-oauth2-code-pkce](https://github.com/soofstad/react-oauth2-pkce) - OAuth2 PKCE for React
+- [@use-gesture/react GitHub](https://github.com/pmndrs/use-gesture)
+- [@casl/ability npm](https://www.npmjs.com/package/@casl/ability)
+- [CASL Official Documentation](https://casl.js.org/)
 
-### Browser Compatibility
-- [Background Sync API Support](https://caniuse.com/background-sync) - ~80% global coverage
-- [Push API MDN](https://developer.mozilla.org/en-US/docs/Web/API/Push_API) - Browser push support
+### Comparison & Analysis
+- [15 Best React UI Libraries for 2026](https://www.builder.io/blog/react-component-libraries-2026)
+- [shadcn/ui vs Radix UI vs Headless UI Comparison](https://scratchdb.com/compare/radix-ui-vs-shadcn-ui/)
+- [Implementing Hierarchical Data in PostgreSQL: LTREE vs Adjacency List vs Closure Table](https://dev.to/dowerdev/implementing-hierarchical-data-structures-in-postgresql-ltree-vs-adjacency-list-vs-closure-table-2jpb)
 
-### Best Practices
-- [Supabase Best Practices](https://www.leanware.co/insights/supabase-best-practices) - Realtime optimization
-- [Workbox Caching Strategies](https://developer.chrome.com/docs/workbox/caching-strategies-overview) - Cache patterns
+### Best Practices & Patterns
+- [Securing Multi-Tenant Applications Using RLS with Prisma ORM](https://medium.com/@francolabuschagne90/securing-multi-tenant-applications-using-row-level-security-in-postgresql-with-prisma-orm-4237f4d4bd35)
+- [Using Row-Level Security in Prisma | Atlas Guides](https://atlasgo.io/guides/orms/prisma/row-level-security)
+- [Step-By-Step Tutorial: Frontend Authorization with Next.js and CASL](https://www.permit.io/blog/frontend-authorization-with-nextjs-and-casl-tutorial)
+- [PWA Design: UX/UI Principles & Best Practices](https://www.gomage.com/blog/pwa-design/)
+- [Responsive Design Best Practices 2026 Guide](https://pxlpeak.com/blog/web-design/responsive-design-best-practices)
+
+### Community Discussions
+- [Prisma Multi-Tenancy Discussion](https://github.com/prisma/prisma/discussions/2846)
+- [Building a Scalable RBAC System in Next.js](https://medium.com/@muhebollah.diu/building-a-scalable-role-based-access-control-rbac-system-in-next-js-b67b9ecfe5fa)
+- [shadcn/ui Tailwind v4 Upgrade Discussion](https://github.com/shadcn-ui/ui/discussions/2996)

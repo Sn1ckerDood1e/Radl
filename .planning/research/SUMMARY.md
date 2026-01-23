@@ -1,190 +1,258 @@
 # Project Research Summary
 
-**Project:** RowOps - Rowing Team Operations SaaS
-**Domain:** Multi-tenant PWA with offline-first capabilities, push notifications, and external API integration
-**Researched:** 2026-01-20
-**Confidence:** MEDIUM-HIGH
+**Project:** RowOps v2.0 Commercial Readiness
+**Domain:** Multi-tenant SaaS for rowing team operations
+**Researched:** 2026-01-22
+**Confidence:** HIGH
 
 ## Executive Summary
 
-RowOps is building scheduling, lineup management, and regatta-mode features on top of an existing Next.js 16 + Prisma 6 + Supabase foundation. Research confirms this is a **well-trodden domain** with established patterns from competitors (iCrew, CrewLAB, Ludum) but the **offline-first PWA requirement for race-day operations** is the key differentiator that adds complexity. The recommended approach: use Serwist for service workers, Dexie.js for IndexedDB, and web-push for notifications, while leveraging existing Supabase Realtime rather than adding new infrastructure.
+RowOps v2.0 represents a strategic upgrade from single-team operations to commercial-grade multi-facility SaaS. Research reveals this is fundamentally a **structure and polish effort, not new infrastructure**. The validated v1.0/v1.1 stack (Next.js 16, React 19, Prisma 6, Supabase, Tailwind v4, Serwist, Dexie) already provides the foundation. Success depends on careful hierarchical multi-tenancy implementation, mobile-first responsive design, design system adoption, and RBAC hardening.
 
-The critical insight is that RowOps must operate in **two distinct modes**: normal connected operations (server-authoritative) and regatta mode (local-authoritative with eventual sync). This dual-mode architecture requires careful design of the offline sync strategy before implementation, not after. The existing tech debt (no test coverage, JWT claims gaps) creates compounding risk and must be addressed in Phase 1 before adding complexity.
+The recommended approach centers on **backward-compatible expansion**: extend existing JWT claims to support facility/club hierarchy while maintaining team-only installations; adopt shadcn/ui component primitives without replacing the entire UI at once; implement database-level RLS alongside application filtering for defense-in-depth; and enhance existing PWA capabilities with tenant-aware caching and touch-optimized interactions. This incremental strategy minimizes migration risk while enabling facility-level features.
 
-Key risks center on multi-tenant security (tenant data leakage via missing filters, JWT claims vulnerabilities) and offline sync reliability (data loss on conflict, iOS push notification failures). Mitigation requires: (1) database-level RLS as defense-in-depth, (2) integration tests for tenant isolation, (3) hybrid sync strategy with manual conflict resolution for critical data, and (4) SMS/email fallback for race-day notifications.
+Critical risks cluster around **data migration and tenant isolation**: JWT claims migration breaking existing sessions, service worker cache serving stale tenant data across facility switches, RLS implementation creating connection pooling leaks, and component drift from design system adoption creating duplicates instead of replacements. Mitigation requires expand-migrate-contract patterns for schema evolution, tenant-scoped cache keys, explicit transaction management for RLS, and systematic component migration tracking. The highest-risk integration point is the intersection of facility model and RBAC—tenant scoping must be bulletproof across both facility and club boundaries.
 
 ## Key Findings
 
 ### Recommended Stack
 
-The research confirms an extension of the existing stack rather than replacement. Serwist (successor to abandoned next-pwa) is the official Next.js recommendation for PWA capabilities. Dexie.js provides superior IndexedDB ergonomics over lighter alternatives like idb, which matters when querying lineups and schedules offline. Web-push provides vendor-independent push notifications that integrate cleanly with Supabase triggers.
+RowOps v2.0 needs selective library additions rather than framework changes. The existing stack is production-validated and appropriate—don't introduce new infrastructure.
 
-**Core technologies:**
-- **@serwist/next + serwist** (v9.5.0): Service worker for PWA — Workbox-based, officially recommended, replaces abandoned next-pwa
-- **Dexie.js** (v4.2.1): IndexedDB wrapper — Fluent API, schema migrations, essential for complex offline queries
-- **web-push** (v3.6.7): Push notifications — Standard library, zero vendor lock-in, integrates with Supabase
-- **Supabase Broadcast**: Real-time updates — Already available, more scalable than Postgres Changes
-- **react-oauth2-code-pkce** (v1.23.4): RegattaCentral OAuth — PKCE security, may need server-side fallback
+**Core additions:**
+- **shadcn/ui (canary with Tailwind v4)**: Copy-paste component primitives built on Radix UI—provides mobile-first accessibility, native Tailwind v4 support, and full code ownership without runtime dependencies
+- **@use-gesture/react (10.x+)**: Lightweight touch gestures for mobile lineup editing—15KB, works with mouse and touch, handles swipe-to-dismiss and drag-to-reorder patterns
+- **@casl/ability + @casl/react (6.8.0/4.x+)**: Isomorphic RBAC with type-safe permissions—same logic on client (UI hiding) and server (API enforcement), zero vendor lock-in
+- **PostgreSQL RLS (native Supabase)**: Database-level multi-tenant isolation—defense-in-depth enforcement, already available via Supabase, no library installation needed
 
-**What NOT to use:** next-pwa (abandoned), @ducanh2912/next-pwa (deprecated), localforage (legacy), Socket.io/Pusher (redundant with Supabase), OneSignal/Firebase (vendor lock-in).
+**What NOT to add:**
+- Avoid Chakra UI/Mantine/Material Tailwind (heavier runtime, styling conflicts with existing Tailwind v4)
+- Skip Framer Motion until UX testing proves need (YAGNI for animation library)
+- Don't use closure tables for hierarchy (overkill for shallow Facility→Club→Team structure)
+- Reject external auth services (Clerk/Auth.js RBAC insufficient, existing Supabase auth works)
 
 ### Expected Features
 
-Research identified clear separation between table stakes (must ship) and differentiators (competitive advantage).
+Research across multi-tenant SaaS, PWA best practices, design systems, and RBAC patterns reveals clear table stakes vs differentiators.
 
 **Must have (table stakes):**
-- Practice calendar with time blocks (water/land/erg) — coaches cannot use app without this
-- Athlete availability/RSVP — prerequisite for lineup assignment
-- Lineup builder with seat assignment and templates — core coach workflow
-- Boat compatibility validation — prevent assigning damaged/incompatible equipment
-- Push notifications for practice reminders, lineup assignments, schedule changes
-- Regatta calendar with race schedule view
-- Role-based views (coach planning / athlete personal / parent read-only)
+- **Facility Model**: Hierarchical tenancy (facility→club), shared resource management, tenant-scoped data isolation, facility admin role, club isolation by default
+- **Mobile PWA**: Touch-friendly targets (≥44px), responsive breakpoints, network-aware UI, conflict resolution for offline sync
+- **UI/UX**: Design system with consistent components, empty states with guidance, dark mode support, accessible form validation, loading states (skeletons)
+- **Security/RBAC**: Tenant-scoped roles (user = admin in Club A, athlete in Club B), invite flow with role assignment, audit logging, MFA support, permission delegation
 
 **Should have (competitive differentiators):**
-- **RegattaCentral API integration** — auto-import race schedules, major time saver
-- **Regatta mode UX** — dedicated race-day operational state, no competitor has this explicitly
-- **Offline-first race day** — cached schedules work without signal at remote venues
-- **Race-specific notifications with configurable timing** — "Report to dock in 45 min"
-- **Drag-drop lineup builder** — superior UX over form-based competitors
+- Equipment reservation system (prevent booking conflicts for shared boats)
+- Granular sync status ("3 changes pending" with list of queued operations)
+- Smart defaults (auto-fill practice duration from team's usual patterns)
+- Contextual help (inline tooltips, hints without leaving page)
+- Bulk invite (CSV upload with roles for large rosters)
 
-**Defer (v2+):**
-- Erg test integration (Concept2 API) — RowHero already exists, complex integration
-- Seat racing algorithm — start with data capture, add suggestions later based on patterns
-- Weather integration — link to external resources, don't build
-- Video analysis — existing tools (Coach's Eye) are better
-- Messaging platform — teams use GroupMe/Slack, won't switch
+**Defer (v2.0+):**
+- Custom roles/hybrid RBAC (20% use case, high complexity)
+- SSO/SAML support (enterprise feature, not MVP)
+- Cross-club lineup sharing (complex permissions, rare need)
+- Temporary role elevation (advanced delegation scenario)
 
 ### Architecture Approach
 
-The architecture requires a hybrid pattern: server-first CRUD for connected operations with an overlay of offline-first local storage for regatta scenarios. The key abstraction is a **Repository layer** that reads from IndexedDB first, queues writes for background sync, and handles conflict resolution. Regatta mode operates as a **state machine** (syncing -> active -> reconciling -> complete) with distinct data handling rules per state.
+Extend current application-level tenant filtering (JWT claims + manual Prisma `where: { teamId }`) to hierarchical multi-tenancy with database-level RLS enforcement. Migration strategy: expand-migrate-contract pattern to avoid breaking existing installations.
 
 **Major components:**
-1. **Prisma Schema + RLS Policies** — Multi-tenant foundation with database-level isolation
-2. **Repository Pattern** — Abstraction over IndexedDB + API, handles cache-first reads
-3. **Practice Scheduler** — Practice sessions with typed time blocks (water/land/erg)
-4. **Lineup Manager** — Seats-first model (define crew, then assign boat)
-5. **Service Worker (Serwist)** — Cache shell, offline requests, background sync queue
-6. **Sync Queue + Conflict Resolver** — Queue mutations offline, last-write-wins with manual override for critical data
-7. **Regatta State Machine** — Manages dual-mode transitions and sync lifecycle
+
+1. **Hierarchical JWT Claims** — Extend CustomJwtPayload with facility_id, club_id, team_id (nullable for backward compatibility); implement via Supabase Custom Access Token Hook querying TeamMember→Team→Club→Facility on token issuance
+2. **Prisma Client Extensions** — Automatic tenant filtering via extended client that injects facility/club/team context into all queries; prevents accidental data leaks through centralized tenant logic
+3. **PostgreSQL RLS Policies** — Database-level enforcement using `SET LOCAL` session variables inside explicit transactions; guards against connection pooling leaks where one user's context bleeds into another's
+4. **Tenant-Aware PWA Cache** — Service worker cache keys include facility/club IDs; cache cleared on tenant switch; IndexedDB prefixed with tenant identifiers to prevent cross-tenant data exposure
+5. **shadcn/ui Component Library** — Copy-paste Radix UI primitives into `/src/components/ui/` with CVA variants for mobile-first responsive design; 44px minimum touch targets, focus-visible keyboard navigation
+6. **RBAC Hierarchy** — Five roles (FACILITY_ADMIN→CLUB_ADMIN→COACH→ATHLETE→PARENT) with inheritance; hierarchical permissions where facility admin inherits club admin capabilities, avoiding role explosion
+
+**Integration strategy:**
+- Phase 1: Add nullable facility/club schema fields before removing team-only patterns
+- Phase 2: Dual-write old and new claim structures during transition period
+- Phase 3: Implement RLS alongside existing application filtering for verification
+- Phase 4: Systematic component migration with deprecation tracking
 
 ### Critical Pitfalls
 
-Research identified 13 pitfalls across phases. The top 5 that require upfront design decisions:
+1. **JWT Claims Migration Without Backward Compatibility** — Adding facility_id/club_id breaks all existing sessions with team_id-only claims; users see empty data or 403 errors after deploy. **Avoid:** Use expand-migrate-contract (dual claims during transition), forced re-login with user messaging, feature flag for gradual rollout, database fallback that works regardless of claim structure.
 
-1. **Multi-tenant data leakage (#1)** — A single missing `WHERE tenant_id = ?` exposes Team A's data to Team B. Enforce tenant context at middleware + use RLS as defense-in-depth + write tenant isolation integration tests.
+2. **Service Worker Cache Invalidation Across Tenants** — Cache keyed by URL only; user switching from Facility A to Facility B sees stale cached data creating silent data leak. **Avoid:** Tenant-aware cache keys (`${facilityId}-${clubId}-${url}`), clear cache on tenant switch, Clear-Site-Data header on logout, IndexedDB tenant scoping, cache validation headers with tenant ID verification.
 
-2. **JWT claims gaps (#2)** — Existing vulnerability in RowOps. Attacker modifies JWT payload to spoof tenant. Fix immediately: always use `verify()` not `decode()`, include tenant_id in claims, validate user belongs to tenant.
+3. **Application-Level to RLS Migration Data Leaks** — Connection pooling reuses connections; `SET LOCAL` becomes `SET` accidentally, persisting tenant context globally; User A's facility_id leaks into User B's pooled connection. **Avoid:** Always use SET LOCAL inside explicit transactions, test with connection pooling enabled, monitor RLS violations (0-row queries), use LEAKPROOF functions for index usage, dual-run period comparing application-level and RLS results.
 
-3. **Offline sync data loss (#4)** — Coach A edits lineup offline, Coach B edits online, sync loses one version silently. Design sync strategy upfront: queue writes in IndexedDB, implement version tracking, surface conflicts to user for critical lineup data.
+4. **Component Drift - Duplicates Instead of Replacement** — New shadcn/ui components created but 50 old components stay in use; design inconsistency grows instead of shrinking. **Avoid:** Component inventory audit before starting, deprecation with linting, codemods for automated replacement, migration tracking checklist, aggressive deletion of deprecated components.
 
-4. **iOS push notification failures (#5)** — WebPush endpoints expire after 1-2 weeks on iOS, Safari requires home screen install. Never rely solely on PWA push for race-day alerts — implement SMS/email fallback for critical notifications.
-
-5. **Service worker cache staleness (#6)** — Users stuck on old versions after deploys. Implement versioned caches, update prompts, and `skipWaiting()` for non-breaking changes from day one.
+5. **RBAC Absolutism - Role Explosion** — Creating role for every job title (FACILITY_ADMIN, CLUB_ADMIN, CLUB_COACH, ASSISTANT_COACH, HEAD_COACH, ATHLETE_CAPTAIN, etc.); 20+ roles become unmanageable. **Avoid:** 80/20 rule (roles cover 80%, permissions cover 20%), design around tasks not titles, role hierarchy with inheritance, audit role usage (<5 checks = removal candidate).
 
 ## Implications for Roadmap
 
-Based on research, suggested phase structure:
+Based on research findings, v2.0 should follow a **security-first, incremental expansion** approach. The facility model and RBAC changes are foundational and carry the highest migration risk—these must be stable before UI/UX polish. Mobile PWA improvements and design system adoption can proceed in parallel once security foundation is solid.
 
-### Phase 1: Security Remediation & Foundation
-**Rationale:** Existing JWT claims gaps and no test coverage create compounding risk. Must fix before adding features that handle sensitive data.
-**Delivers:** Secure multi-tenant foundation, baseline integration tests, JWT validation fixes
-**Addresses:** Season model, tenant context provider, eligibility scoping
-**Avoids:** Pitfalls #1 (tenant leakage), #2 (JWT spoofing)
-**Stack:** Prisma schema updates, Supabase RLS policies
+### Phase 1: Security Foundation & Auth Hardening
+**Rationale:** All subsequent features depend on hierarchical auth working correctly. Security changes are foundational—cannot build facility features without stable JWT claims and RLS patterns.
 
-### Phase 2: Practice Scheduling
-**Rationale:** Core daily operations — coaches need to plan before assigning lineups. Lower complexity than lineups, establishes data model patterns.
-**Delivers:** Practice calendar, time blocks (water/land/erg), template practices, availability/RSVP, attendance tracking
-**Uses:** Prisma, standard CRUD patterns (server-first, no offline yet)
-**Implements:** Practice Scheduler component, TimeBlock types
-**Avoids:** Pitfall #8 (timezone chaos) — get timezone handling right in data model now
+**Delivers:** Hardened auth layer with hierarchical tenant support, Prisma Client Extensions for automatic filtering, Data Access Layer pattern for Server Actions, migration-ready schema with backward compatibility.
 
-### Phase 3: Lineup Management
-**Rationale:** Depends on practice scheduling. Core coach workflow, prepares for regatta features.
-**Delivers:** Lineup builder, seat assignment, boat compatibility check, lineup templates, export/share
-**Uses:** Prisma, existing Supabase Realtime for concurrent edit awareness
-**Implements:** Lineup Manager, Boat Matcher, Assignment validation
-**Avoids:** Pitfall #3 (race conditions) — design database constraints and optimistic locking upfront
+**Addresses:** Tenant-scoped roles (FEATURES), audit logging infrastructure (FEATURES), backward-compatible JWT migration (PITFALLS), TypeScript branded types for facility/club/team IDs (PITFALLS)
 
-### Phase 4: PWA Offline Infrastructure
-**Rationale:** Must establish offline patterns before regatta mode. Service worker and IndexedDB foundations needed.
-**Delivers:** Service worker setup, IndexedDB schema, Repository pattern, cache strategies, sync queue foundation
-**Uses:** Serwist, Dexie.js
-**Implements:** Service Worker, Sync Queue, offline Repository layer
-**Avoids:** Pitfalls #4 (sync conflicts), #6 (cache staleness), #9 (storage quota)
+**Avoids:** JWT claims migration breaking sessions (PITFALLS #1), client-side only RBAC (PITFALLS #6), data migration without dry-run (PITFALLS #9)
 
-### Phase 5: Push Notifications
-**Rationale:** Can build in parallel with offline after foundation is ready. Needed before regatta mode for race-day alerts.
-**Delivers:** Push subscription management, practice reminders, lineup notifications, schedule change alerts, SMS/email fallback
-**Uses:** web-push, Supabase Edge Functions for triggers
-**Implements:** Push Manager component
-**Avoids:** Pitfalls #5 (iOS failures), #13 (notification spam)
+**Stack:** Prisma Client Extensions, Supabase Custom Access Token Hook, Next.js 16 proxy.ts (middleware rename)
 
-### Phase 6: Regatta Mode & RC Integration
-**Rationale:** Highest complexity, requires all prior phases. Offline infrastructure and notifications must exist first.
-**Delivers:** Regatta mode state machine, RegattaCentral OAuth integration, race schedule sync, race-specific notifications, meeting location per race, offline race-day operations
-**Uses:** react-oauth2-code-pkce (or server-side OAuth), existing offline infrastructure
-**Implements:** Regatta State Machine, RegattaCentral sync, Conflict Resolver for regatta data
-**Avoids:** Pitfall #7 (OAuth token expiration) — proactive refresh, token health monitoring
+### Phase 2: Facility Model Schema & Data Migration
+**Rationale:** Database schema is foundation for all facility features. Backward-compatible approach allows existing team-only installations to continue working while enabling facility hierarchy.
+
+**Delivers:** Facility/Club models with adjacency list hierarchy, Equipment ownership types (FACILITY/CLUB/TEAM), nullable foreign keys for graceful migration, data migration scripts with dry-run and rollback.
+
+**Addresses:** Hierarchical tenancy (FEATURES), shared resource management (FEATURES), equipment ownership isolation (ARCHITECTURE)
+
+**Avoids:** Breaking existing installations (PITFALLS #1), foreign key cascade deletion destroying data (PITFALLS #4), shared resource booking conflicts (PITFALLS #3)
+
+**Stack:** Prisma schema evolution, PostgreSQL migrations, equipment booking model
+
+### Phase 3: Facility Auth Integration & RLS
+**Rationale:** Auth must understand hierarchy before UI can use it. RLS provides defense-in-depth enforcement at database level.
+
+**Delivers:** Extended JWT claims (facility_id, club_id, team_id), Custom Access Token Hook implementation, RLS policies for Equipment/Practice/Team, CASL ability definitions for hierarchical permissions.
+
+**Addresses:** Facility admin role (FEATURES), permission delegation (FEATURES), tenant-scoped data isolation (FEATURES)
+
+**Avoids:** RLS connection pooling leaks (PITFALLS #2), application-level filtering gaps (ARCHITECTURE)
+
+**Stack:** @casl/ability + @casl/react, Supabase RLS, Supabase Custom Access Token Hook
+
+**Research Flag:** NEEDS DEEPER RESEARCH for Custom Access Token Hook implementation patterns—Supabase Edge Functions have specific memory/timeout constraints that may require batching for large facility hierarchies.
+
+### Phase 4: Mobile PWA Improvements
+**Rationale:** Mobile improvements are independent of facility model and can proceed in parallel with Phase 3. Builds on existing Serwist/Dexie foundation (70% complete from v1.0).
+
+**Delivers:** Touch-optimized drag-and-drop with dnd-kit TouchSensor, 44px minimum touch targets, tenant-aware service worker caching, sync queue pattern in Dexie with conflict resolution, responsive breakpoints for mobile-first layout.
+
+**Addresses:** Touch-friendly targets (FEATURES), offline-first data sync (FEATURES), conflict resolution (FEATURES), network-aware UI (FEATURES)
+
+**Avoids:** Service worker tenant cache leaks (PITFALLS #2), iOS PWA limitations breaking functionality (PITFALLS #5), responsive retrofit breaking desktop workflows (PITFALLS #6)
+
+**Stack:** @use-gesture/react, enhanced Serwist configuration, Dexie sync queue
+
+**Research Flag:** STANDARD PATTERNS—PWA offline-first and touch optimization are well-documented (MDN, Serwist docs, dnd-kit docs). Skip phase-specific research.
+
+### Phase 5: Design System Integration
+**Rationale:** Design system changes are mostly visual and can proceed in parallel with Phases 3-4. Start small (top 5 components) and expand based on actual usage.
+
+**Delivers:** shadcn/ui infrastructure with Tailwind v4 theme, Button/Dialog/DropdownMenu primitives, component migration tracking, refactored high-traffic components (PracticeEditor, LineupEditor).
+
+**Addresses:** Design system with consistent components (FEATURES), empty states (FEATURES), dark mode support (FEATURES), accessible form validation (FEATURES)
+
+**Avoids:** Component drift with duplicates (PITFALLS #4), building too much too soon (PITFALLS #7), fragmented tooling (PITFALLS #8)
+
+**Stack:** shadcn/ui (canary), CVA for variants, Radix UI primitives
+
+**Research Flag:** STANDARD PATTERNS—shadcn/ui installation and component usage are well-documented. Component inventory and migration planning needed but no technical research gaps.
+
+### Phase 6: Facility UI Features
+**Rationale:** UI features require all foundation work complete (schema, auth, design system). This phase delivers user-facing facility management capabilities.
+
+**Delivers:** Facility admin dashboard, club management interface, equipment ownership selector, owner badges in equipment list, multi-team user switcher dropdown.
+
+**Addresses:** Facility management UI (FEATURES), equipment visibility controls (FEATURES), club isolation (FEATURES)
+
+**Avoids:** Building UI before auth/schema ready (dependencies)
+
+**Stack:** Integrates all previous phases—shadcn/ui components, CASL permissions, hierarchical JWT claims
+
+### Phase 7: Integration Testing & Polish
+**Rationale:** End-to-end testing ensures all pieces work together correctly. Validates multi-facility scenarios and accessibility standards.
+
+**Delivers:** Multi-facility scenario tests (Chattanooga Rowing example), offline sync queue with conflict testing, role-based access control audit for all roles, WCAG 2.1 AAA accessibility validation, mobile device performance testing.
+
+**Addresses:** Overall system integration and validation
+
+**Avoids:** Shipping before end-to-end validation
 
 ### Phase Ordering Rationale
 
-- **Security first (Phase 1)**: Existing JWT gaps are active vulnerabilities. Cannot add features that handle lineup/attendance data without fixing.
-- **Scheduling before Lineups (2 before 3)**: Lineups are assigned to practice sessions. Data model dependency.
-- **Offline before Regatta (4 before 6)**: Regatta mode is the primary use case for offline. Building regatta features without offline infrastructure would require rework.
-- **Notifications in parallel (5)**: Can develop alongside Phase 4 after Phase 3. Independent path.
-- **Regatta last (Phase 6)**: Highest complexity, most dependencies. External API integration adds risk. Needs all prior capabilities.
+**Critical path:** Phase 1 (Security) → Phase 2 (Schema) → Phase 3 (Auth) → Phase 6 (UI) forms the blocking chain for facility features. Phases 4 (Mobile) and 5 (Design System) can run parallel with Phase 3 since they have no facility model dependency.
+
+**Grouping logic:** Security changes precede all feature work to avoid building on unstable foundation. Schema evolution comes before auth integration because Custom Access Token Hook needs database structure to query. UI features are last because they require stable auth and design system.
+
+**Pitfall mitigation:** Phasing follows expand-migrate-contract pattern—Phase 1 expands auth patterns, Phase 2 adds schema alongside old structure, Phase 3 migrates to new patterns while maintaining backward compatibility. Component migration in Phase 5 uses systematic tracking to avoid drift. Testing in Phase 7 validates all integration points including RLS connection pooling and tenant cache isolation.
 
 ### Research Flags
 
-Phases likely needing deeper research during planning:
-- **Phase 6 (Regatta Integration):** RegattaCentral API v4 documentation is limited. PKCE support unverified. May need direct contact with RC ([email protected]). OAuth flow may require pure server-side implementation due to CORS restrictions.
-- **Phase 4 (Offline Infrastructure):** Background Sync API only 80% browser coverage (no Safari/Firefox). Hybrid approach needed. Conflict resolution strategy needs detailed design per entity type.
+**Phases needing deeper research during planning:**
+- **Phase 3 (Facility Auth Integration):** Custom Access Token Hook implementation with Supabase Edge Functions—need to research memory/timeout constraints, batching strategies for large hierarchies, error handling patterns for hook failures
+- **Phase 6 (Facility UI Features):** Equipment reservation/booking conflict detection—need to research calendar conflict algorithms, timezone handling for multi-facility scenarios, UI patterns for booking management
 
-Phases with standard patterns (skip research-phase):
-- **Phase 2 (Practice Scheduling):** Standard calendar/scheduling patterns. Well-documented.
-- **Phase 3 (Lineup Management):** Standard CRUD with constraints. Drag-drop libraries well-established.
-- **Phase 5 (Push Notifications):** web-push is mature. Pattern is straightforward. Main decision is fallback strategy.
+**Phases with standard patterns (skip research-phase):**
+- **Phase 1 (Security Foundation):** Prisma Client Extensions and Data Access Layer are well-documented patterns
+- **Phase 4 (Mobile PWA):** PWA offline-first, touch gestures, responsive design have extensive MDN/vendor documentation
+- **Phase 5 (Design System):** shadcn/ui installation and component adoption are thoroughly documented
+- **Phase 7 (Integration Testing):** Standard testing patterns, no novel technical challenges
 
 ## Confidence Assessment
 
 | Area | Confidence | Notes |
 |------|------------|-------|
-| Stack | HIGH | Serwist is official recommendation, Dexie/web-push are mature libraries with verified versions |
-| Features | HIGH | Multiple competitor analyses, clear table stakes vs differentiators identified |
-| Architecture | MEDIUM | Patterns synthesized from PWA best practices and rowing domain, dual-mode design is novel |
-| Pitfalls | MEDIUM-HIGH | Strong sources for multi-tenant/JWT/PWA issues, rowing-specific pitfalls less documented |
+| Stack | HIGH | Official Tailwind v4 support verified for shadcn/ui, @use-gesture/react actively maintained (2M+ weekly downloads), CASL latest version 6.8.0 published recently, RLS production-proven via Supabase |
+| Features | HIGH | Multi-tenancy patterns from Microsoft/AWS/Google/Oracle (authoritative), RBAC from WorkOS/Permit.io/AWS, PWA from MDN best practices, WCAG 2.5.5 touch targets (official W3C standard) |
+| Architecture | HIGH | Prisma Client Extensions officially documented, Supabase Custom Claims/RLS extensively documented, Next.js 16 auth patterns from official guides, hierarchical multi-tenancy patterns from Crunchy Data/ZenStack |
+| Pitfalls | HIGH | RLS footguns from ByteBase/Permit.io (production experience), PWA cache invalidation from hasura/iInteractive, component drift from Netguru/HubSpot, RBAC pitfalls from IdenHaus/Microsoft, data migration from Brainhub/Rivery |
 
-**Overall confidence:** MEDIUM-HIGH
+**Overall confidence:** HIGH
+
+Research sources are authoritative (official documentation, cloud provider best practices, established SaaS platforms) and findings are corroborated across multiple sources. The four research dimensions (stack, features, architecture, pitfalls) have consistent HIGH confidence because they draw from production-validated patterns rather than experimental approaches.
 
 ### Gaps to Address
 
-- **RegattaCentral OAuth specifics**: PKCE support unverified. May need server-side only OAuth. Test early in Phase 6.
-- **Background Sync Safari/Firefox fallback**: Need to design and test hybrid approach (manual sync triggers) for non-Chromium browsers.
-- **Conflict resolution per entity**: Research provides general patterns, but exact rules (which entities get last-write-wins vs. manual resolution) need domain validation with coaches.
-- **Storage budget for offline**: 50MB iOS limit is hard constraint. Need to define exactly what data gets cached (current season only? last N days?).
+**Custom Access Token Hook performance:** Supabase Edge Functions have execution limits (10s timeout, 50MB memory). For facilities with 100+ clubs, the hierarchy query in the hook could exceed limits. **Resolution:** Test hook performance during Phase 3 planning with synthetic large datasets; consider caching strategy or denormalized claims table if needed.
+
+**Equipment reservation conflict detection:** Research identified the pattern (booking calendar with conflict checks) but not the specific algorithm for rowing equipment which can have partial availability (8+ boat can row as 4+). **Resolution:** Research during Phase 6 planning—likely needs domain-specific logic for equipment subdivision.
+
+**iOS PWA storage limits:** 50MB storage limit may be insufficient for offline regatta data with large rosters and multi-day schedules. **Resolution:** Monitor storage usage in Phase 4, implement data pruning strategy (keep only current season offline, archive older data to server-only).
+
+**Shadcn/ui long-term stability:** Radix UI team shifted focus to Base UI; shadcn/ui may migrate in future. **Resolution:** Not blocking for v2.0 (shadcn components are copy-pasted, not runtime dependency), but monitor for long-term roadmap beyond v2.0.
 
 ## Sources
 
-### Primary (HIGH confidence)
-- [Next.js PWA Guide](https://nextjs.org/docs/app/guides/progressive-web-apps) — official Serwist recommendation
-- [Serwist Documentation](https://serwist.pages.dev/docs/next/getting-started) — service worker configuration
-- [Supabase Realtime](https://supabase.com/docs/guides/realtime) — Broadcast vs Postgres Changes scaling
-- [Supabase Row Level Security](https://supabase.com/docs/guides/database/postgres/row-level-security) — tenant isolation patterns
-- [MDN Storage Quotas](https://developer.mozilla.org/en-US/docs/Web/API/Storage_API/Storage_quotas_and_eviction_criteria) — iOS limits
-- [RegattaCentral API v4](https://api.regattacentral.com/v4/apiV4.jsp) — OAuth2, endpoints
+### Stack Research (HIGH confidence)
+- [shadcn/ui Tailwind v4 Documentation](https://ui.shadcn.com/docs/tailwind-v4) — Official Tailwind v4 support verified
+- [@use-gesture/react npm](https://www.npmjs.com/package/@use-gesture/react) + [GitHub](https://github.com/pmndrs/use-gesture) — 2M+ weekly downloads, actively maintained
+- [@casl/ability npm](https://www.npmjs.com/package/@casl/ability) — Version 6.8.0 latest, 517+ projects
+- [Securing Multi-Tenant Applications Using RLS with Prisma ORM](https://medium.com/@francolabuschagne90/securing-multi-tenant-applications-using-row-level-security-in-postgresql-with-prisma-orm-4237f4d4bd35)
+- [15 Best React UI Libraries for 2026](https://www.builder.io/blog/react-component-libraries-2026)
 
-### Secondary (MEDIUM confidence)
-- [iCrew](https://www.icrew.club/), [CrewLAB](https://crewlab.io/), [Ludum](https://ludum.com/) — competitor feature analysis
-- [JWT Vulnerabilities Best Practices](https://www.vaadata.com/blog/jwt-json-web-token-vulnerabilities-common-attacks-and-security-best-practices/) — security patterns
-- [Offline-First PWA IndexedDB](https://blog.logrocket.com/offline-first-frontend-apps-2025-indexeddb-sqlite/) — offline patterns
-- [Multi-Tenant RLS Patterns](https://www.antstack.com/blog/multi-tenant-applications-with-rls-on-supabase-postgress/) — Prisma + Supabase
+### Features Research (HIGH confidence)
+- [Multi-Tenant Architecture - Microsoft Azure](https://learn.microsoft.com/en-us/azure/architecture/guide/saas-multitenant-solution-architecture/)
+- [Best Practices for Enterprise Multi-Tenancy - Google Cloud](https://cloud.google.com/kubernetes-engine/docs/best-practices/enterprise-multitenancy)
+- [Best Practices for Multi-Tenant Authorization - Permit.io](https://www.permit.io/blog/best-practices-for-multi-tenant-authorization)
+- [Mobile Accessibility WCAG - W3C](https://www.w3.org/TR/mobile-accessibility-mapping/) — Touch target standards
+- [PWA 2.0 + Edge Runtime 2026 - Zignuts](https://www.zignuts.com/blog/pwa-2-0-edge-runtime-full-stack-2026)
 
-### Tertiary (LOW confidence)
-- [Data Science of Rowing Crew Selection](https://medium.com/@harry.powell72/the-data-science-of-rowing-crew-selection-16e5692cca79) — lineup algorithm caution
-- [British Rowing Seat Racing](https://plus.britishrowing.org/2024/01/02/seat-racing/) — domain patterns
+### Architecture Research (HIGH confidence)
+- [Prisma Client Extensions Preview](https://www.prisma.io/blog/client-extensions-preview-8t3w27xkrxxn) — Official documentation
+- [Custom Claims & RBAC | Supabase](https://supabase.com/docs/guides/database/postgres/custom-claims-and-role-based-access-control-rbac)
+- [Custom Access Token Hook | Supabase](https://supabase.com/docs/guides/auth/auth-hooks/custom-access-token-hook)
+- [Multi-Tenancy with Prisma - ZenStack](https://zenstack.dev/blog/multi-tenant)
+- [Designing Postgres Database for Multi-tenancy - Crunchy Data](https://www.crunchydata.com/blog/designing-your-postgres-database-for-multi-tenancy)
+- [Next.js 16 Authentication Guide](https://nextjs.org/docs/app/guides/authentication) — Official proxy.ts patterns
+
+### Pitfalls Research (HIGH confidence)
+- [Common Postgres RLS Footguns - ByteBase](https://www.bytebase.com/blog/postgres-row-level-security-footguns/)
+- [Why Tenant Context Must Be Scoped Per Transaction](https://dev.to/m_zinger_2fc60eb3f3897908/why-tenant-context-must-be-scoped-per-transaction-3aop)
+- [Strategies for Service Worker Caching - Hasura](https://hasura.io/blog/strategies-for-service-worker-caching-d66f3c828433)
+- [Design System Adoption Pitfalls - Netguru](https://www.netguru.com/blog/design-system-adoption-pitfalls)
+- [6 Common RBAC Implementation Pitfalls - IdenHaus](https://idenhaus.com/rbac-implementation-pitfalls/)
+- [Data Migration Challenges & Risks - Brainhub](https://brainhub.eu/library/data-migration-challenges-risks-legacy-modernization)
+- [Backward Compatible Database Changes - PlanetScale](https://planetscale.com/blog/backward-compatible-databases-changes)
+
+### Cross-Reference Sources (aggregated)
+- Multi-tenant SaaS: Frontegg, Clerk, ClickIT, Oracle Cloud, Microsoft Entra
+- PWA offline-first: MobiDev, GTC Systems, eLuminous, Microsoft Dynamics
+- UI/UX design systems: Millipixels, Index.dev, Eleken, Candu, Makers Den
+- RBAC security: WorkOS, Aserto, EnterpriseReady.io, AWS Prescriptive Guidance, Concentric AI
+- Sports team management (domain): CrewTimer, iCrew, CrewLAB, TeamSnap, EZFacility
 
 ---
-*Research completed: 2026-01-20*
+*Research completed: 2026-01-22*
 *Ready for roadmap: yes*
