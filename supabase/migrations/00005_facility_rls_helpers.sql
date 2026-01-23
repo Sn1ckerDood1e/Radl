@@ -8,8 +8,9 @@
 
 -- Get facility_id from JWT claims
 -- Returns NULL if not set (user not in any facility)
+-- Returns text to match Prisma's UUID storage as text type
 CREATE OR REPLACE FUNCTION public.get_current_facility_id()
-RETURNS uuid
+RETURNS text
 LANGUAGE sql
 STABLE
 SECURITY DEFINER
@@ -18,13 +19,14 @@ AS $$
   SELECT NULLIF(
     (current_setting('request.jwt.claims', true)::jsonb ->> 'facility_id'),
     ''
-  )::uuid
+  )
 $$;
 
 -- Get club_id from JWT claims
 -- Returns NULL if not set (user not in any club)
+-- Returns text to match Prisma's UUID storage as text type
 CREATE OR REPLACE FUNCTION public.get_current_club_id()
-RETURNS uuid
+RETURNS text
 LANGUAGE sql
 STABLE
 SECURITY DEFINER
@@ -33,13 +35,14 @@ AS $$
   SELECT NULLIF(
     (current_setting('request.jwt.claims', true)::jsonb ->> 'club_id'),
     ''
-  )::uuid
+  )
 $$;
 
 -- Get team_id from JWT claims (backward compatibility alias)
 -- Returns club_id value (team = club in current schema)
+-- Returns text to match Prisma's UUID storage as text type
 CREATE OR REPLACE FUNCTION public.get_current_team_id()
-RETURNS uuid
+RETURNS text
 LANGUAGE sql
 STABLE
 SECURITY DEFINER

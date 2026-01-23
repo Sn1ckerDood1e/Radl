@@ -99,9 +99,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | SEC-08 | Phase 11 | Complete |
 | SEC-09 | Phase 11 | Complete |
 | SEC-10 | Phase 11 | Complete |
-| FAC-01 | Phase 12 | Pending |
-| FAC-02 | Phase 12 | Pending |
-| FAC-04 | Phase 12 | Pending |
+| FAC-01 | Phase 12 | Complete |
+| FAC-02 | Phase 12 | Complete |
+| FAC-04 | Phase 12 | Complete |
 | UIX-01 | Phase 14 | Pending |
 | UIX-06 | Phase 14 | Pending |
 | MOB-01 | Phase 15 | Pending |

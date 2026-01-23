@@ -12,22 +12,21 @@
 |-------|-------|
 | Milestone | v2.0 Commercial Readiness |
 | Phase | Phase 12: Facility Schema Migration |
-| Plan | 6 of 7 complete |
-| Status | In progress |
-| Last activity | 2026-01-23 — Completed 12-06-PLAN.md (TypeScript facility context helpers) |
+| Plan | 7 of 7 complete |
+| Status | Complete |
+| Last activity | 2026-01-23 — Completed Phase 12 (Facility Schema Migration) |
 
 **Progress:**
 ```
 v1.0: [##########] 100% SHIPPED (2026-01-22)
 v1.1: [##########] 100% SHIPPED (2026-01-22) — 9/11 reqs, 2 deferred
-v2.0: [######    ] 33% — Phase 12 in progress (13/34 requirements)
+v2.0: [######    ] 32% — Phase 12 complete (11/34 requirements)
 ```
 
 **Current Phase Detail:**
-- Phase 12: Facility Schema Migration — IN PROGRESS
-- Plans: 6/7 complete (12-01 schema, 12-02 RLS helpers, 12-03 JWT hook, 12-04 data migration, 12-05 RLS policies, 12-06 TS helpers)
-- Completed: Facility model, FacilityMembership, Equipment ownership, RLS helper functions, JWT claims hook, data migration SQL, facility hierarchy RLS policies, TypeScript facility context helpers
-- Next: 12-07
+- Phase 12: Facility Schema Migration — COMPLETE
+- Plans: 7/7 complete
+- Delivered: Facility model, FacilityMembership, Equipment ownership hierarchy, RLS policies, JWT claims, TypeScript helpers
 
 **Previous Phase:**
 - Phase 11: MFA & SSO — COMPLETE (12/12 plans)
@@ -154,10 +153,10 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
 
 | Field | Value |
 |-------|-------|
-| Last session | 2026-01-23T18:45:34Z |
-| Stopped at | Completed 12-06-PLAN.md |
+| Last session | 2026-01-23 |
+| Stopped at | Completed Phase 12 |
 | Resume file | None |
 
 ---
 
-*Last updated: 2026-01-23 (Phase 12 plan 06 complete)*
+*Last updated: 2026-01-23 (Phase 12 complete)*
