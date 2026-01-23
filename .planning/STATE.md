@@ -12,26 +12,26 @@
 |-------|-------|
 | Milestone | v2.0 Commercial Readiness |
 | Phase | Phase 11: MFA & SSO |
-| Plan | 7 of 12 complete |
+| Plan | 10 of 12 complete |
 | Status | In progress |
-| Last activity | 2026-01-23 — Completed 11-05-PLAN.md |
+| Last activity | 2026-01-23 — Completed 11-09-PLAN.md |
 
 **Progress:**
 ```
 v1.0: [##########] 100% SHIPPED (2026-01-22)
 v1.1: [##########] 100% SHIPPED (2026-01-22) — 9/11 reqs, 2 deferred
-v2.0: [###       ] 29% — Phase 11 plan 7 complete (8/34 requirements)
+v2.0: [####      ] 38% — Phase 11 plan 10 complete (11/34 requirements)
 ```
 
 **Current Phase Detail:**
 - Phase 11: MFA & SSO — IN PROGRESS
-- Plans: 7/12 complete (11-01, 11-02, 11-04, 11-05, 11-06, 11-07, 11-08)
+- Plans: 10/12 complete (11-01 to 11-11 except 11-10, 11-12)
 - Requirements: SEC-08, SEC-09, SEC-10 — in progress
-- Current: Permission grants API with cron expiration job
+- Current: MFA setup UI components complete
 
 **Next Plan:**
-- Plan 11-03: MFA API Endpoints (remaining)
-- Builds on: 11-02 MFA enrollment helpers
+- Plan 11-10: User settings MFA integration
+- Plan 11-12: SSO login flow
 
 ## v2.0 Scope
 
@@ -145,4 +145,4 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
 
 ---
 
-*Last updated: 2026-01-23 (Phase 11 plan 7 complete)*
+*Last updated: 2026-01-23 (Phase 11 plan 10 complete)*
