@@ -36,6 +36,7 @@ model Team {
   regattas          Regatta[]
   rcConnection      RegattaCentralConnection?
   clubMemberships   ClubMembership[] @relation("ClubMemberships")
+  apiKeys           ApiKey[] @relation("ApiKeys")
 }
 
 // Team membership linking users to teams with roles
@@ -674,4 +675,45 @@ model PushSubscription {
   @@index([userId])
   @@index([teamId])
   @@index([teamId, userId])
+}
+
+// Audit log for security-critical operations (365-day retention)
+model AuditLog {
+  id          String   @id @default(uuid())
+  clubId      String   // Tenant scoping
+  userId      String   // Who performed action
+  action      String   // e.g., 'ROLE_CHANGED', 'MEMBER_REMOVED', 'DATA_EXPORTED'
+  targetType  String   // e.g., 'ClubMembership', 'Practice', 'Equipment'
+  targetId    String?  // ID of affected record (nullable for bulk ops)
+  metadata    Json     @default("{}")  // Action-specific details
+  ipAddress   String?
+  userAgent   String?
+  createdAt   DateTime @default(now())
+
+  @@index([clubId])
+  @@index([userId])
+  @@index([createdAt])
+  @@index([clubId, createdAt])
+  @@index([action])
+}
+
+// API keys for external integrations (sk_ prefix pattern)
+model ApiKey {
+  id           String    @id @default(uuid())
+  clubId       String
+  name         String    // User-friendly name
+  keyPrefix    String    // First 8 chars for identification (e.g., 'sk_live_a')
+  keyHash      String    @unique  // SHA-256 hash of full key
+  createdBy    String    // userId who created the key
+  permissions  Json      @default("{}")  // Reserved for future scoped permissions
+  lastUsedAt   DateTime?
+  expiresAt    DateTime? // Optional expiration
+  revokedAt    DateTime? // Soft delete via revocation
+  createdAt    DateTime  @default(now())
+
+  club Team @relation("ApiKeys", fields: [clubId], references: [id], onDelete: Cascade)
+
+  @@index([clubId])
+  @@index([keyPrefix])
+  @@index([createdBy])
 }
