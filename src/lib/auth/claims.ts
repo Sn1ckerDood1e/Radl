@@ -32,6 +32,7 @@ export type ClaimsResult = {
   facilityId: string | null;   // Current facility from cookie or JWT
   clubId: string | null;       // Current club from cookie
   roles: string[];             // Roles in current club
+  viewMode: 'facility' | 'club' | null;  // Derived from cookie state
   error: string | null;
 };
 
@@ -52,7 +53,12 @@ export type ClaimsResult = {
  * in that club from ClubMembership. Falls back to legacy team_id/user_role for
  * backward compatibility.
  *
- * @returns ClaimsResult with user, claims, facilityId, clubId, roles, and error
+ * ViewMode derivation: Computes from cookie state:
+ * - 'facility': facilityId set, no clubId (facility-level view)
+ * - 'club': both facilityId and clubId set, or clubId only (club view)
+ * - null: no facility context (legacy team-only mode)
+ *
+ * @returns ClaimsResult with user, claims, facilityId, clubId, roles, viewMode, and error
  */
 export async function getClaimsForApiRoute(): Promise<ClaimsResult> {
   const supabase = await createClient();
@@ -61,13 +67,13 @@ export async function getClaimsForApiRoute(): Promise<ClaimsResult> {
   const { data: { user }, error: authError } = await supabase.auth.getUser();
 
   if (authError || !user) {
-    return { user: null, claims: null, facilityId: null, clubId: null, roles: [], error: 'Unauthorized' };
+    return { user: null, claims: null, facilityId: null, clubId: null, roles: [], viewMode: null, error: 'Unauthorized' };
   }
 
   // Get session for JWT claims (after getUser validates auth)
   const { data: { session } } = await supabase.auth.getSession();
   if (!session) {
-    return { user: null, claims: null, facilityId: null, clubId: null, roles: [], error: 'No session found' };
+    return { user: null, claims: null, facilityId: null, clubId: null, roles: [], viewMode: null, error: 'No session found' };
   }
 
   // Decode JWT to extract custom claims
@@ -141,12 +147,28 @@ export async function getClaimsForApiRoute(): Promise<ClaimsResult> {
     }
   }
 
+  // Derive viewMode from cookie state
+  let viewMode: 'facility' | 'club' | null = null;
+
+  if (facilityId && !clubId) {
+    // Facility cookie set but no club - facility-level view
+    viewMode = 'facility';
+  } else if (facilityId && clubId) {
+    // Both set - club view within facility
+    viewMode = 'club';
+  } else if (clubId) {
+    // Only club set (legacy path) - treat as club view
+    viewMode = 'club';
+  }
+  // null viewMode = no facility context (legacy team-only)
+
   return {
     user,
     claims,
     facilityId,  // From cookie, team lookup, or JWT claims
     clubId: clubId || claims.team_id,  // Fall back to legacy team_id
     roles,
+    viewMode,
     error: null,
   };
 }
