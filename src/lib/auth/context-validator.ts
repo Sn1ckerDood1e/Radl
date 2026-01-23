@@ -44,6 +44,30 @@ export async function validateAndRecoverContext(
   let validFacilityId: string | null = null;
   let wasRecovered = false;
 
+  // Special case: Facility view mode (facilityId set, clubId intentionally cleared)
+  // When user is in facility-level view, don't auto-select a club
+  if (currentFacilityId && !currentClubId) {
+    // Verify user has FACILITY_ADMIN role in this facility
+    const facilityMembership = await prisma.facilityMembership.findFirst({
+      where: {
+        facilityId: currentFacilityId,
+        userId,
+        isActive: true,
+        roles: { has: 'FACILITY_ADMIN' },
+      },
+    });
+
+    if (facilityMembership) {
+      // User is legitimately in facility view mode
+      return {
+        facilityId: currentFacilityId,
+        clubId: null,  // Intentionally null for facility view
+        wasRecovered: false,
+      };
+    }
+    // If not a facility admin, fall through to normal recovery
+  }
+
   // Step 1: Validate clubId cookie
   if (currentClubId) {
     const membership = await prisma.clubMembership.findFirst({
