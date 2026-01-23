@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getClaimsForApiRoute } from '@/lib/auth/claims';
+import { createAuditLogger } from '@/lib/audit/logger';
 import { unauthorizedResponse, forbiddenResponse, notFoundResponse, serverErrorResponse } from '@/lib/errors';
 
 // DELETE: Revoke invitation (set status to REVOKED)
@@ -78,14 +79,24 @@ export async function PATCH(
       );
     }
 
-    // For team code joins, create the TeamMember and mark invitation as accepted
+    // For team code joins, create the TeamMember and ClubMembership, mark invitation as accepted
     await prisma.$transaction(async (tx) => {
-      // Create TeamMember
+      // Create TeamMember (legacy, for backward compatibility)
       await tx.teamMember.create({
         data: {
           teamId: invitation.teamId,
           userId: userId,
           role: invitation.role,
+        },
+      });
+
+      // Create ClubMembership (new RBAC model)
+      await tx.clubMembership.create({
+        data: {
+          clubId: invitation.teamId,
+          userId: userId,
+          roles: [invitation.role],
+          isActive: true,
         },
       });
 
@@ -97,6 +108,22 @@ export async function PATCH(
           acceptedAt: new Date(),
         },
       });
+    });
+
+    // Audit the member join
+    const audit = createAuditLogger(request, {
+      clubId: invitation.teamId,
+      userId: userId,
+    });
+
+    await audit.log({
+      action: 'MEMBER_JOINED',
+      targetType: 'ClubMembership',
+      metadata: {
+        invitationId: invitation.id,
+        invitedBy: invitation.invitedBy,
+        role: invitation.role,
+      },
     });
 
     return NextResponse.json({ success: true });

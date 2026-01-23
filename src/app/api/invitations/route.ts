@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { createInvitationSchema } from '@/lib/validations/invitation';
 import { getClaimsForApiRoute } from '@/lib/auth/claims';
+import { getCurrentClubId } from '@/lib/auth/club-context';
+import { createAuditLogger } from '@/lib/audit/logger';
 import { unauthorizedResponse, forbiddenResponse, serverErrorResponse } from '@/lib/errors';
 
 // GET: List invitations for current team (coach only)
@@ -83,6 +85,23 @@ export async function POST(request: NextRequest) {
     // NOTE: Email sending not implemented in v1 - coaches share join link manually
     // See: .planning/phases/01-foundation-multi-tenancy/01-KNOWN-LIMITATIONS.md
     // TODO(v2): Implement with Resend per limitation doc
+
+    // Audit the invitation
+    const clubId = await getCurrentClubId() || claims.team_id;
+    const audit = createAuditLogger(request, {
+      clubId,
+      userId: user.id,
+    });
+
+    await audit.log({
+      action: 'MEMBER_INVITED',
+      targetType: 'Invitation',
+      targetId: invitation.id,
+      metadata: {
+        email: email,
+        role: role,
+      },
+    });
 
     return NextResponse.json(
       {
