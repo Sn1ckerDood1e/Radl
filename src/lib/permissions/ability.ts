@@ -11,6 +11,13 @@ export type AppAbility = PureAbility<[Action, AppSubjects], PrismaQuery>;
 /**
  * User context for ability creation.
  * Passed from auth layer to define what user can do.
+ *
+ * NOTE: The `roles` array may include both:
+ * - Base roles from ClubMembership
+ * - Temporary roles from active PermissionGrants
+ *
+ * The auth layer (claims.ts) handles merging these before
+ * passing to the ability builder.
  */
 export interface UserContext {
   userId: string;
