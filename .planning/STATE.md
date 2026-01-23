@@ -12,28 +12,27 @@
 |-------|-------|
 | Milestone | v2.0 Commercial Readiness |
 | Phase | Phase 10: Security Foundation & RBAC |
-| Plan | 09 of 11 complete |
-| Status | In progress |
-| Last activity | 2026-01-23 — Completed 10-09-PLAN.md |
+| Plan | 11 of 11 complete |
+| Status | Complete |
+| Last activity | 2026-01-23 — Phase 10 verified |
 
 **Progress:**
 ```
 v1.0: [##########] 100% SHIPPED (2026-01-22)
 v1.1: [##########] 100% SHIPPED (2026-01-22) — 9/11 reqs, 2 deferred
-v2.0: [######    ] ~8% — Phase 10 Plan 09 complete
+v2.0: [##        ] 15% — Phase 10 complete (5/34 requirements)
 ```
 
 **Current Phase Detail:**
-- Phase 10: Security Foundation & RBAC
-- Plans: 9/11 complete
-- Requirements: SEC-04, SEC-05, SEC-06, SEC-07, SEC-11
-- Success criteria: 5 observable behaviors
-- Dependencies: None (foundation phase)
+- Phase 10: Security Foundation & RBAC — COMPLETE
+- Plans: 11/11 complete
+- Requirements: SEC-04, SEC-05, SEC-06, SEC-07, SEC-11 — all verified
+- Verification: passed (5/5 success criteria)
 
-**Session Continuity:**
-- Last session: 2026-01-23
-- Stopped at: Completed 10-09-PLAN.md
-- Resume file: .planning/phases/10-security-foundation-rbac/10-10-PLAN.md
+**Next Phase:**
+- Phase 11: MFA & SSO
+- Requirements: SEC-08, SEC-09, SEC-10
+- Depends on: Phase 10 (complete)
 
 ## v2.0 Scope
 
@@ -104,9 +103,14 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 - **Toast notifications:** Sonner (dark theme, bottom-right, rich colors)
 - **Data export:** CSV with proper escaping, immediate download
 
+**v2.0 additions (implemented in Phase 10):**
+- **RBAC:** @casl/ability + @casl/prisma + @casl/react for isomorphic permissions
+- **Audit logging:** 13 auditable actions with 365-day retention
+- **API keys:** sk_ prefix, SHA-256 hash, admin UI for management
+- **Multi-club:** ClubMembership model with roles[] array, cookie-based context
+
 **v2.0 additions (planned):**
 - **Design system:** shadcn/ui with Tailwind v4 theme
-- **RBAC:** @casl/ability + @casl/react for isomorphic permissions
 - **Touch gestures:** @use-gesture/react for mobile interactions
 - **RLS:** PostgreSQL Row Level Security via Supabase
 - **Hierarchical tenancy:** Facility → Club → Team
@@ -135,11 +139,11 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
 - **Phase 17:** Equipment reservation conflict detection (partial boat availability logic)
 
 **Standard patterns (skip research-phase):**
-- **Phase 10:** Prisma Client Extensions, CASL setup
+- **Phase 11:** MFA with Supabase Auth, SSO/SAML integration
 - **Phase 14:** shadcn/ui installation
 - **Phase 15:** PWA offline-first, touch gestures
 - **Phase 16:** Standard UI/UX patterns
 
 ---
 
-*Last updated: 2026-01-23 (Phase 10 Plan 09 complete)*
+*Last updated: 2026-01-23 (Phase 10 complete, verified)*

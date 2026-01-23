@@ -91,11 +91,11 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| SEC-04 | Phase 10 | Pending |
-| SEC-05 | Phase 10 | Pending |
-| SEC-06 | Phase 10 | Pending |
-| SEC-07 | Phase 10 | Pending |
-| SEC-11 | Phase 10 | Pending |
+| SEC-04 | Phase 10 | Complete |
+| SEC-05 | Phase 10 | Complete |
+| SEC-06 | Phase 10 | Complete |
+| SEC-07 | Phase 10 | Complete |
+| SEC-11 | Phase 10 | Complete |
 | SEC-08 | Phase 11 | Pending |
 | SEC-09 | Phase 11 | Pending |
 | SEC-10 | Phase 11 | Pending |
