@@ -27,9 +27,9 @@ function LoadingSkeleton() {
 export default async function SecuritySettingsPage({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ teamSlug: string }>;
 }) {
-  const { slug } = await params;
+  const { teamSlug } = await params;
   const { user, claims } = await requireTeam();
 
   const clubId = await getCurrentClubId() || claims.team_id;
@@ -53,7 +53,7 @@ export default async function SecuritySettingsPage({
       {/* Header with back link */}
       <div className="mb-8">
         <Link
-          href={`/${slug}/settings`}
+          href={`/${teamSlug}/settings`}
           className="inline-flex items-center gap-1.5 text-sm text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors mb-4"
         >
           <ArrowLeft className="h-4 w-4" />
