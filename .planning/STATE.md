@@ -11,24 +11,25 @@
 | Field | Value |
 |-------|-------|
 | Milestone | v2.0 Commercial Readiness |
-| Phase | Phase 12: Facility Schema Migration |
-| Plan | 7 of 7 complete |
-| Status | Complete |
-| Last activity | 2026-01-23 — Completed Phase 12 (Facility Schema Migration) |
+| Phase | Phase 13: Facility Auth Integration |
+| Plan | 1 of TBD |
+| Status | In progress |
+| Last activity | 2026-01-23 — Completed 13-01-PLAN.md |
 
 **Progress:**
 ```
 v1.0: [##########] 100% SHIPPED (2026-01-22)
 v1.1: [##########] 100% SHIPPED (2026-01-22) — 9/11 reqs, 2 deferred
-v2.0: [######    ] 32% — Phase 12 complete (11/34 requirements)
+v2.0: [######    ] 35% — Phase 13 started (12/34 requirements)
 ```
 
 **Current Phase Detail:**
-- Phase 12: Facility Schema Migration — COMPLETE
-- Plans: 7/7 complete
-- Delivered: Facility model, FacilityMembership, Equipment ownership hierarchy, RLS policies, JWT claims, TypeScript helpers
+- Phase 13: Facility Auth Integration — IN PROGRESS
+- Plans: 1 of TBD complete
+- Delivered: Extended CASL ability factory with viewMode-based permission scoping
 
-**Previous Phase:**
+**Previous Phases:**
+- Phase 12: Facility Schema Migration — COMPLETE (7/7 plans)
 - Phase 11: MFA & SSO — COMPLETE (12/12 plans)
 
 ## v2.0 Scope
@@ -116,6 +117,11 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 - **RLS policies:** 13 policies for Facility, FacilityMembership, Equipment with hierarchical visibility
 - **Facility context helpers:** Cookie-based facility context with DB and JWT fallback chain in claims helper
 
+**v2.0 additions (implemented in Phase 13):**
+- **viewMode permissions:** FACILITY_ADMIN permissions scope based on viewMode (facility vs club drill-down)
+- **Extended UserContext:** facilityId and viewMode fields for hierarchical access control
+- **Facility subject:** Added to CASL subjects for facility profile management
+
 **v2.0 additions (planned):**
 - **Design system:** shadcn/ui with Tailwind v4 theme
 - **Touch gestures:** @use-gesture/react for mobile interactions
@@ -154,9 +160,9 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
 | Field | Value |
 |-------|-------|
 | Last session | 2026-01-23 |
-| Stopped at | Completed Phase 12 |
+| Stopped at | Completed 13-01-PLAN.md |
 | Resume file | None |
 
 ---
 
-*Last updated: 2026-01-23 (Phase 12 complete)*
+*Last updated: 2026-01-23 (Phase 13, Plan 1 complete)*
