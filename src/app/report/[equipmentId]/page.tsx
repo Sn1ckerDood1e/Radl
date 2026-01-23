@@ -18,6 +18,11 @@ export default async function ReportDamagePage({ params }: Props) {
     notFound();
   }
 
+  // Equipment must have a team association for public damage reports
+  if (!equipment.team || !equipment.teamId) {
+    notFound();
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4">
       <div className="max-w-md mx-auto">

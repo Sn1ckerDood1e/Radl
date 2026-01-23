@@ -40,6 +40,13 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
       return NextResponse.json({ error: 'Equipment not found' }, { status: 404 });
     }
 
+    // Equipment must have a teamId to create damage reports (facility-owned equipment handled separately)
+    if (!equipment.teamId) {
+      return NextResponse.json({ error: 'Equipment has no team association' }, { status: 400 });
+    }
+
+    const teamId = equipment.teamId;
+
     // Parse and validate body
     const body = await request.json();
     const validationResult = createDamageReportSchema.safeParse(body);
@@ -70,7 +77,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     const damageReport = await prisma.damageReport.create({
       data: {
         equipmentId,
-        teamId: equipment.teamId,
+        teamId,
         reportedBy,
         location,
         description,
@@ -84,7 +91,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
 
     // Check team settings for custom recipients
     const settings = await prisma.teamSettings.findUnique({
-      where: { teamId: equipment.teamId },
+      where: { teamId },
       select: { damageNotifyUserIds: true },
     });
 
@@ -93,7 +100,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     } else {
       // Default: notify all coaches
       const coaches = await prisma.teamMember.findMany({
-        where: { teamId: equipment.teamId, role: 'COACH' },
+        where: { teamId, role: 'COACH' },
         select: { userId: true },
       });
       notifyUserIds = coaches.map(c => c.userId);
@@ -103,7 +110,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     if (notifyUserIds.length > 0) {
       await prisma.notification.createMany({
         data: notifyUserIds.map(userId => ({
-          teamId: equipment.teamId,
+          teamId,
           userId,
           type: 'DAMAGE_REPORT',
           title: `Damage reported: ${equipment.name}`,
