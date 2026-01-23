@@ -35,6 +35,7 @@ model Team {
   lineupTemplates   LineupTemplate[]
   regattas          Regatta[]
   rcConnection      RegattaCentralConnection?
+  clubMemberships   ClubMembership[] @relation("ClubMemberships")
 }
 
 // Team membership linking users to teams with roles
@@ -51,6 +52,24 @@ model TeamMember {
   @@unique([teamId, userId])
   @@index([userId]) // For RLS query performance
   @@index([teamId]) // For RLS query performance
+}
+
+// Club membership supporting multi-club with multiple roles per user
+model ClubMembership {
+  id        String   @id @default(uuid())
+  clubId    String   // References Team.id (club = team in current schema)
+  userId    String   // Supabase auth user ID
+  roles     Role[]   // Array of roles (can be COACH + ATHLETE)
+  isActive  Boolean  @default(true)
+  joinedAt  DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  club Team @relation("ClubMemberships", fields: [clubId], references: [id], onDelete: Cascade)
+
+  @@unique([clubId, userId])
+  @@index([userId])
+  @@index([clubId])
+  @@index([userId, isActive])
 }
 
 // Invitation model for email invites and team code joins
@@ -73,8 +92,10 @@ model Invitation {
   @@index([userId]) // For looking up invitations by user
 }
 
-// Role enum for team members
+// Role enum for team members (expanded for RBAC)
 enum Role {
+  FACILITY_ADMIN
+  CLUB_ADMIN
   COACH
   ATHLETE
   PARENT
