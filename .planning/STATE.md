@@ -12,21 +12,20 @@
 |-------|-------|
 | Milestone | v2.0 Commercial Readiness |
 | Phase | Phase 13: Facility Auth Integration |
-| Plan | 5 of 6 |
-| Status | In progress |
-| Last activity | 2026-01-23 — Completed 13-05-PLAN.md |
+| Plan | 6 of 6 |
+| Status | Complete |
+| Last activity | 2026-01-23 — Phase 13 verified and complete |
 
 **Progress:**
 ```
 v1.0: [##########] 100% SHIPPED (2026-01-22)
 v1.1: [##########] 100% SHIPPED (2026-01-22) — 9/11 reqs, 2 deferred
-v2.0: [######    ] 35% — Phase 13 started (12/34 requirements)
+v2.0: [#######   ] 35% — Phase 13 complete (12/34 requirements)
 ```
 
 **Current Phase Detail:**
-- Phase 13: Facility Auth Integration — IN PROGRESS
-- Plans: 5 of 6 complete
-- Delivered: Extended CASL ability factory with viewMode-based permission scoping, unified context switch API with viewMode derivation, context validator with auto-recovery for invalid cookies, ContextSwitcher UI component with JWT refresh, dashboard layout integration with AbilityProvider
+- Phase 13: Facility Auth Integration — COMPLETE (6/6 plans)
+- Delivered: CASL viewMode permissions, context switch API, context validator, context switcher UI, dashboard integration, facility dashboard page, E2E verified
 
 **Previous Phases:**
 - Phase 12: Facility Schema Migration — COMPLETE (7/7 plans)
@@ -168,9 +167,9 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
 | Field | Value |
 |-------|-------|
 | Last session | 2026-01-23 |
-| Stopped at | Completed 13-05-PLAN.md |
+| Stopped at | Phase 13 complete |
 | Resume file | None |
 
 ---
 
-*Last updated: 2026-01-23 (Phase 13, Plan 5 complete)*
+*Last updated: 2026-01-23 (Phase 13 complete)*
