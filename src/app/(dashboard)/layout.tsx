@@ -68,6 +68,39 @@ export default async function DashboardLayout({
   const facilityMembership = facilityMemberships[0];
   const isFacilityAdmin = facilityMembership?.roles.includes('FACILITY_ADMIN') ?? false;
 
+  // If no ClubMembership records, fall back to TeamMember for legacy support
+  let clubsForSwitcher: Array<{
+    id: string;
+    name: string;
+    slug: string;
+    logoUrl: string | null;
+    primaryColor: string;
+    roles: string[];
+  }> = clubMemberships.map(m => ({
+    id: m.club.id,
+    name: m.club.name,
+    slug: m.club.slug,
+    logoUrl: m.club.logoUrl,
+    primaryColor: m.club.primaryColor,
+    roles: m.roles as string[],
+  }));
+
+  // Legacy fallback: if no ClubMembership, check TeamMember
+  if (clubsForSwitcher.length === 0 && clubId) {
+    const teamMemberships = await prisma.teamMember.findMany({
+      where: { userId: user.id },
+      include: { team: { select: { id: true, name: true, slug: true, logoUrl: true, primaryColor: true } } },
+    });
+    clubsForSwitcher = teamMemberships.map(m => ({
+      id: m.team.id,
+      name: m.team.name,
+      slug: m.team.slug,
+      logoUrl: m.team.logoUrl,
+      primaryColor: m.team.primaryColor,
+      roles: [m.role] as string[],  // TeamMember has singular role
+    }));
+  }
+
   const contexts = {
     facility: facilityMembership ? {
       id: facilityMembership.facility.id,
@@ -75,14 +108,7 @@ export default async function DashboardLayout({
       slug: facilityMembership.facility.slug,
       isFacilityAdmin,
     } : undefined,
-    clubs: clubMemberships.map(m => ({
-      id: m.club.id,
-      name: m.club.name,
-      slug: m.club.slug,
-      logoUrl: m.club.logoUrl,
-      primaryColor: m.club.primaryColor,
-      roles: m.roles as string[],
-    })),
+    clubs: clubsForSwitcher,
     currentContext: {
       viewMode,
       facilityId,
