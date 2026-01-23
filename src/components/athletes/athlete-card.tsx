@@ -14,7 +14,7 @@ interface AthleteProfile {
 interface AthleteCardProps {
   id: string;
   userId: string;
-  role: 'COACH' | 'ATHLETE' | 'PARENT';
+  role: 'FACILITY_ADMIN' | 'CLUB_ADMIN' | 'COACH' | 'ATHLETE' | 'PARENT';
   profile: AthleteProfile | null;
   teamSlug: string;
   email?: string;
@@ -40,7 +40,9 @@ export function AthleteCard({ id, role, profile, teamSlug, email }: AthleteCardP
   }[profile.sidePreference] : null;
 
   // Role badge styles - dark theme
-  const roleBadgeStyles = {
+  const roleBadgeStyles: Record<AthleteCardProps['role'], string> = {
+    FACILITY_ADMIN: 'bg-red-500/20 text-red-400',
+    CLUB_ADMIN: 'bg-orange-500/20 text-orange-400',
     COACH: 'bg-purple-500/20 text-purple-400',
     ATHLETE: 'bg-blue-500/20 text-blue-400',
     PARENT: 'bg-green-500/20 text-green-400',

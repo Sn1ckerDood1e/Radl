@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { AthleteForm } from '@/components/athletes/athlete-form';
 
-type Role = 'COACH' | 'ATHLETE' | 'PARENT';
+type Role = 'FACILITY_ADMIN' | 'CLUB_ADMIN' | 'COACH' | 'ATHLETE' | 'PARENT';
 type Side = 'PORT' | 'STARBOARD' | 'BOTH';
 
 interface AthleteProfile {
@@ -61,7 +61,9 @@ export function AthleteProfileClient({
   }[member.profile.sidePreference] : 'Not set';
 
   // Role badge styles
-  const roleBadgeStyles = {
+  const roleBadgeStyles: Record<Role, string> = {
+    FACILITY_ADMIN: 'bg-red-100 text-red-800',
+    CLUB_ADMIN: 'bg-orange-100 text-orange-800',
     COACH: 'bg-purple-100 text-purple-800',
     ATHLETE: 'bg-blue-100 text-blue-800',
     PARENT: 'bg-green-100 text-green-800',

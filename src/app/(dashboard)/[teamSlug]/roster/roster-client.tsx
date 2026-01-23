@@ -5,7 +5,7 @@ import { AthleteCard } from '@/components/athletes/athlete-card';
 import { ExportButton } from '@/components/ui/export-button';
 import { toCSV, downloadCSV } from '@/lib/export/csv';
 
-type Role = 'COACH' | 'ATHLETE' | 'PARENT';
+type Role = 'FACILITY_ADMIN' | 'CLUB_ADMIN' | 'COACH' | 'ATHLETE' | 'PARENT';
 
 interface AthleteProfile {
   id: string;

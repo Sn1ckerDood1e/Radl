@@ -8,7 +8,7 @@ interface Invitation {
   id: string;
   email: string | null;
   userId: string | null;
-  role: 'COACH' | 'ATHLETE' | 'PARENT';
+  role: 'FACILITY_ADMIN' | 'CLUB_ADMIN' | 'COACH' | 'ATHLETE' | 'PARENT';
   status: 'PENDING' | 'ACCEPTED' | 'REVOKED';
   createdAt: string;
   acceptedAt: string | null;
