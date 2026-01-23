@@ -11,26 +11,26 @@
 | Field | Value |
 |-------|-------|
 | Milestone | v2.0 Commercial Readiness |
-| Phase | Phase 11: MFA & SSO |
-| Plan | 12 of 12 complete |
-| Status | Complete |
-| Last activity | 2026-01-23 — Phase 11 verified and complete |
+| Phase | Phase 12: Facility Schema Migration |
+| Plan | 1 of N in progress |
+| Status | In progress |
+| Last activity | 2026-01-23 — Completed 12-01-PLAN.md (schema foundation) |
 
 **Progress:**
 ```
 v1.0: [##########] 100% SHIPPED (2026-01-22)
 v1.1: [##########] 100% SHIPPED (2026-01-22) — 9/11 reqs, 2 deferred
-v2.0: [####      ] 24% — Phase 11 complete (8/34 requirements)
+v2.0: [#####     ] 27% — Phase 12 started (9/34 requirements)
 ```
 
 **Current Phase Detail:**
-- Phase 11: MFA & SSO — COMPLETE
-- Plans: 12/12 complete
-- Requirements: SEC-08, SEC-09, SEC-10 — complete
-- Verified: User confirmed MFA works via TOTP enrollment and verification
+- Phase 12: Facility Schema Migration — IN PROGRESS
+- Plans: 1/N complete (12-01 schema foundation)
+- Completed: Facility model, FacilityMembership, Equipment ownership hierarchy
+- Next: 12-02 (auth integration if exists)
 
-**Next Phase:**
-- Phase 12: Facility Schema Migration
+**Previous Phase:**
+- Phase 11: MFA & SSO — COMPLETE (12/12 plans)
 
 ## v2.0 Scope
 
@@ -107,11 +107,15 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 - **API keys:** sk_ prefix, SHA-256 hash, admin UI for management
 - **Multi-club:** ClubMembership model with roles[] array, cookie-based context
 
+**v2.0 additions (implemented in Phase 12):**
+- **Facility model:** Facility table with profile fields (location, contact, branding, billing)
+- **FacilityMembership:** Facility-level roles with FACILITY_ADMIN support
+- **Equipment ownership:** EquipmentOwnerType enum (FACILITY, CLUB, TEAM) with hierarchy fields
+
 **v2.0 additions (planned):**
 - **Design system:** shadcn/ui with Tailwind v4 theme
 - **Touch gestures:** @use-gesture/react for mobile interactions
 - **RLS:** PostgreSQL Row Level Security via Supabase
-- **Hierarchical tenancy:** Facility → Club → Team
 
 ### Tech Debt Tracker
 
@@ -142,6 +146,14 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
 - **Phase 15:** PWA offline-first, touch gestures
 - **Phase 16:** Standard UI/UX patterns
 
+## Session Continuity
+
+| Field | Value |
+|-------|-------|
+| Last session | 2026-01-23T18:37:00Z |
+| Stopped at | Completed 12-01-PLAN.md |
+| Resume file | None |
+
 ---
 
-*Last updated: 2026-01-23 (Phase 11 complete)*
+*Last updated: 2026-01-23 (Phase 12 plan 01 complete)*
