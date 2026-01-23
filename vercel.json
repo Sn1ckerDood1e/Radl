@@ -1,0 +1,12 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/audit-cleanup",
+      "schedule": "0 3 * * *"
+    },
+    {
+      "path": "/api/cron/expire-grants",
+      "schedule": "0 */4 * * *"
+    }
+  ]
+}
