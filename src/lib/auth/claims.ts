@@ -6,6 +6,7 @@ import { getCurrentClubId } from './club-context';
 import { getCurrentFacilityId } from './facility-context';
 import { getUserEffectiveRoles } from './permission-grant';
 import type { Role } from '@/generated/prisma';
+import { validateAndRecoverContext } from './context-validator';
 
 /**
  * Custom JWT payload interface for Supabase auth tokens.
@@ -95,12 +96,18 @@ export async function getClaimsForApiRoute(): Promise<ClaimsResult> {
     }
   }
 
-  // Get current club from cookie
-  const clubId = await getCurrentClubId();
-  let roles: string[] = [];
+  // Validate and recover context if needed
+  const { facilityId: validFacilityId, clubId: validClubId, wasRecovered } =
+    await validateAndRecoverContext(user.id);
 
-  // Get current facility from cookie
-  let facilityId = await getCurrentFacilityId();
+  if (wasRecovered) {
+    console.log(`Context recovered for user ${user.id}: facility=${validFacilityId}, club=${validClubId}`);
+  }
+
+  // Use validated values from context validator
+  const clubId = validClubId;
+  let facilityId = validFacilityId;
+  let roles: string[] = [];
 
   // Database fallback: If facilityId is null but clubId exists, look up team's facility
   if (!facilityId && clubId) {
