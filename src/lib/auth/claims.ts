@@ -3,6 +3,8 @@ import { jwtDecode } from 'jwt-decode';
 import { prisma } from '@/lib/prisma';
 import type { User } from '@supabase/supabase-js';
 import { getCurrentClubId } from './club-context';
+import { getUserEffectiveRoles } from './permission-grant';
+import type { Role } from '@/generated/prisma';
 
 /**
  * Custom JWT payload interface for Supabase auth tokens.
@@ -94,7 +96,13 @@ export async function getClaimsForApiRoute(): Promise<ClaimsResult> {
     });
 
     if (membership) {
-      roles = membership.roles;
+      // Get effective roles including any temporary grants
+      const effectiveRoles = await getUserEffectiveRoles(
+        user.id,
+        clubId,
+        membership.roles as Role[]
+      );
+      roles = effectiveRoles.map(r => r.toString());
     }
   }
 
