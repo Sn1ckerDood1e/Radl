@@ -13,10 +13,13 @@ import type { Role } from '@/generated/prisma';
 export interface CustomJwtPayload {
   sub: string;
   email: string;
-  team_id: string | null;      // Legacy - kept for backward compatibility
-  club_id?: string | null;     // New - current club from cookie
+  // Facility hierarchy
+  facility_id: string | null;
+  club_id?: string | null;     // Current club from cookie
+  // Legacy - kept for backward compatibility
+  team_id: string | null;
   user_role: 'COACH' | 'ATHLETE' | 'PARENT' | null;  // Legacy single role
-  user_roles?: string[];       // New - all roles in current club
+  user_roles?: string[];       // All roles in current club
 }
 
 /**
@@ -25,6 +28,7 @@ export interface CustomJwtPayload {
 export type ClaimsResult = {
   user: User | null;
   claims: CustomJwtPayload | null;
+  facilityId: string | null;   // Current facility from cookie or JWT
   clubId: string | null;       // Current club from cookie
   roles: string[];             // Roles in current club
   error: string | null;
@@ -53,13 +57,13 @@ export async function getClaimsForApiRoute(): Promise<ClaimsResult> {
   const { data: { user }, error: authError } = await supabase.auth.getUser();
 
   if (authError || !user) {
-    return { user: null, claims: null, clubId: null, roles: [], error: 'Unauthorized' };
+    return { user: null, claims: null, facilityId: null, clubId: null, roles: [], error: 'Unauthorized' };
   }
 
   // Get session for JWT claims (after getUser validates auth)
   const { data: { session } } = await supabase.auth.getSession();
   if (!session) {
-    return { user: null, claims: null, clubId: null, roles: [], error: 'No session found' };
+    return { user: null, claims: null, facilityId: null, clubId: null, roles: [], error: 'No session found' };
   }
 
   // Decode JWT to extract custom claims
@@ -117,6 +121,7 @@ export async function getClaimsForApiRoute(): Promise<ClaimsResult> {
   return {
     user,
     claims,
+    facilityId: claims.facility_id,  // From JWT claims, will be enhanced in Task 3
     clubId: clubId || claims.team_id,  // Fall back to legacy team_id
     roles,
     error: null,
