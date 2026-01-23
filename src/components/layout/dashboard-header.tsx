@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { NotificationBell } from '@/components/notifications/notification-bell';
 import { SyncStatus } from '@/components/pwa/sync-status';
-import { ClubSwitcher } from './club-switcher';
+import { ContextSwitcher } from './context-switcher';
 
 interface Team {
   slug: string;
@@ -13,6 +13,13 @@ interface Team {
   secondaryColor: string;
 }
 
+interface Facility {
+  id: string;
+  name: string;
+  slug: string;
+  isFacilityAdmin: boolean;
+}
+
 interface Club {
   id: string;
   name: string;
@@ -20,20 +27,32 @@ interface Club {
   logoUrl: string | null;
   primaryColor: string;
   roles: string[];
-  isCurrent: boolean;
+}
+
+interface CurrentContext {
+  viewMode: 'facility' | 'club' | null;
+  facilityId: string | null;
+  clubId: string | null;
+}
+
+interface AvailableContextsResponse {
+  facility?: Facility;
+  clubs: Club[];
+  currentContext: CurrentContext;
 }
 
 interface DashboardHeaderProps {
   team: Team | null;  // Keep for backward compatibility
-  clubs?: Club[];
-  currentClubId?: string;
+  contexts?: AvailableContextsResponse;  // New: from layout
 }
 
-export function DashboardHeader({ team, clubs, currentClubId }: DashboardHeaderProps) {
-  // Determine the current slug for links (prefer club over legacy team)
-  const currentSlug = clubs && clubs.length > 0
-    ? (clubs.find(c => c.id === currentClubId)?.slug ?? clubs[0]?.slug)
-    : team?.slug;
+export function DashboardHeader({ team, contexts }: DashboardHeaderProps) {
+  // Determine the current slug for links
+  // Priority: contexts (new) > team (legacy)
+  const currentSlug = contexts?.currentContext.viewMode === 'facility'
+    ? contexts.facility?.slug
+    : contexts?.clubs.find(c => c.id === contexts.currentContext.clubId)?.slug
+      ?? team?.slug;
 
   return (
     <header className="bg-[var(--surface-1)] border-b border-[var(--border-subtle)] sticky top-0 z-50">
@@ -50,15 +69,15 @@ export function DashboardHeader({ team, clubs, currentClubId }: DashboardHeaderP
             </Link>
 
             {/* Separator */}
-            {(clubs && clubs.length > 0) || team ? (
+            {contexts || team ? (
               <span className="text-[var(--text-muted)]">/</span>
             ) : null}
 
-            {/* Club Switcher (replaces team display for multi-club) */}
-            {clubs && clubs.length > 0 ? (
-              <ClubSwitcher initialClubs={clubs} currentClubId={currentClubId} />
+            {/* Context Switcher (replaces ClubSwitcher and legacy team display) */}
+            {contexts ? (
+              <ContextSwitcher initialContexts={contexts} />
             ) : team ? (
-              // Fallback to legacy team display
+              // Fallback to legacy team display for backward compat
               <div className="flex items-center gap-2">
                 {team.logoUrl ? (
                   <Link href={`/${team.slug}`} className="flex-shrink-0">
