@@ -12,22 +12,22 @@
 |-------|-------|
 | Milestone | v2.0 Commercial Readiness |
 | Phase | Phase 12: Facility Schema Migration |
-| Plan | 2 of N complete |
+| Plan | 3 of N complete |
 | Status | In progress |
-| Last activity | 2026-01-23 — Completed 12-02-PLAN.md (RLS helper functions) |
+| Last activity | 2026-01-23 — Completed 12-03-PLAN.md (custom access token hook) |
 
 **Progress:**
 ```
 v1.0: [##########] 100% SHIPPED (2026-01-22)
 v1.1: [##########] 100% SHIPPED (2026-01-22) — 9/11 reqs, 2 deferred
-v2.0: [#####     ] 28% — Phase 12 in progress (10/34 requirements)
+v2.0: [######    ] 29% — Phase 12 in progress (11/34 requirements)
 ```
 
 **Current Phase Detail:**
 - Phase 12: Facility Schema Migration — IN PROGRESS
-- Plans: 2/N complete (12-01 schema, 12-02 RLS helpers)
-- Completed: Facility model, FacilityMembership, Equipment ownership, RLS helper functions
-- Next: 12-03 (if exists)
+- Plans: 3/N complete (12-01 schema, 12-02 RLS helpers, 12-03 JWT hook)
+- Completed: Facility model, FacilityMembership, Equipment ownership, RLS helper functions, JWT claims hook
+- Next: 12-04 (if exists)
 
 **Previous Phase:**
 - Phase 11: MFA & SSO — COMPLETE (12/12 plans)
@@ -112,6 +112,7 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 - **FacilityMembership:** Facility-level roles with FACILITY_ADMIN support
 - **Equipment ownership:** EquipmentOwnerType enum (FACILITY, CLUB, TEAM) with hierarchy fields
 - **RLS helpers:** 8 functions for JWT claim extraction and role checking (facility_id, club_id, has_role, has_any_role)
+- **JWT claims hook:** custom_access_token_hook injects facility_id, club_id, user_roles with TeamMember fallback
 
 **v2.0 additions (planned):**
 - **Design system:** shadcn/ui with Tailwind v4 theme
@@ -151,10 +152,10 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
 
 | Field | Value |
 |-------|-------|
-| Last session | 2026-01-23T18:38:30Z |
-| Stopped at | Completed 12-02-PLAN.md |
+| Last session | 2026-01-23T18:36:18Z |
+| Stopped at | Completed 12-03-PLAN.md |
 | Resume file | None |
 
 ---
 
-*Last updated: 2026-01-23 (Phase 12 plan 02 complete)*
+*Last updated: 2026-01-23 (Phase 12 plan 03 complete)*
