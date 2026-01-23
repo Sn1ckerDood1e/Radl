@@ -8,6 +8,16 @@ export interface ValidatedContext {
   wasRecovered: boolean;  // True if context was auto-corrected
 }
 
+interface ValidateOptions {
+  /**
+   * Whether to update cookies when recovery is needed.
+   * Set to false when calling from Server Components (pages/layouts).
+   * Set to true when calling from Route Handlers or Server Actions.
+   * @default false
+   */
+  updateCookies?: boolean;
+}
+
 /**
  * Validates current context cookies against user's actual memberships.
  * Auto-recovers invalid context by selecting first available membership.
@@ -16,8 +26,17 @@ export interface ValidatedContext {
  * 1. If clubId cookie invalid -> select first active ClubMembership
  * 2. If facilityId cookie invalid -> detect from validated club
  * 3. If no memberships at all -> return null (caller should redirect to onboarding)
+ *
+ * @param userId - The user's ID
+ * @param options - Options for validation
+ * @param options.updateCookies - Whether to update cookies (only works in Route Handlers)
  */
-export async function validateAndRecoverContext(userId: string): Promise<ValidatedContext> {
+export async function validateAndRecoverContext(
+  userId: string,
+  options: ValidateOptions = {}
+): Promise<ValidatedContext> {
+  const { updateCookies = false } = options;
+
   const currentClubId = await getCurrentClubId();
   const currentFacilityId = await getCurrentFacilityId();
 
@@ -75,8 +94,9 @@ export async function validateAndRecoverContext(userId: string): Promise<Validat
     wasRecovered = true;
   }
 
-  // Step 4: Update cookies if recovery happened
-  if (wasRecovered) {
+  // Step 4: Update cookies if recovery happened AND updateCookies is enabled
+  // Note: Cookie updates only work in Route Handlers or Server Actions, not in Server Components
+  if (wasRecovered && updateCookies) {
     if (validClubId) {
       await setCurrentClubId(validClubId);
     } else {
