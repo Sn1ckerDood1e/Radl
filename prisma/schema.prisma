@@ -748,3 +748,21 @@ model PermissionGrant {
   @@index([expiresAt])
   @@index([userId, clubId])
 }
+
+// SSO configuration per facility (SAML/OIDC provider settings)
+model SsoConfig {
+  id            String   @id @default(uuid())
+  facilityId    String   @unique  // Facility where SSO applies (currently maps to Team.id)
+  enabled       Boolean  @default(false)
+  ssoProviderId String?  // From Supabase SSO setup
+  idpDomain     String?  // e.g., 'company.com'
+  idpGroupClaim String   @default("groups")  // Which claim contains group membership
+  roleMappings  Json     @default("[]")  // Array of { idpValue, rowopsRoles }
+  defaultRole   Role     @default(ATHLETE)  // Default if no mapping matches
+  allowOverride Boolean  @default(true)  // Facility admin can override SSO roles
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([facilityId])
+  @@index([ssoProviderId])
+}
