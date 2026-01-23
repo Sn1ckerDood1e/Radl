@@ -29,13 +29,13 @@ export async function requireAuth() {
   return user;
 }
 
-export async function requireTeam() {
+export async function requireTeam(): Promise<{ user: Awaited<ReturnType<typeof requireAuth>>; claims: CustomJwtPayload }> {
   const user = await requireAuth();
-  let claims = await getUserClaims();
+  const jwtClaims = await getUserClaims();
 
   // If JWT claims don't have team_id, check database directly
   // This handles the case where team was just created but JWT not refreshed
-  if (!claims?.team_id) {
+  if (!jwtClaims?.team_id) {
     const teamMember = await prisma.teamMember.findFirst({
       where: { userId: user.id },
       include: { team: true },
@@ -46,15 +46,18 @@ export async function requireTeam() {
     }
 
     // Create synthetic claims from database
-    claims = {
+    const claims: CustomJwtPayload = {
       sub: user.id,
       email: user.email || '',
+      facility_id: null,
       team_id: teamMember.teamId,
       user_role: teamMember.role as CustomJwtPayload['user_role'],
     };
+
+    return { user, claims };
   }
 
-  return { user, claims };
+  return { user, claims: jwtClaims };
 }
 
 export async function requireRole(allowedRoles: CustomJwtPayload['user_role'][]) {
