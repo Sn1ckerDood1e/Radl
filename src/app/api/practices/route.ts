@@ -1,74 +1,97 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { getClaimsForApiRoute } from '@/lib/auth/claims';
+import { getAuthContext } from '@/lib/auth/get-auth-context';
+import { accessibleBy } from '@casl/prisma';
+import { ForbiddenError } from '@casl/ability';
 import { unauthorizedResponse, forbiddenResponse, serverErrorResponse } from '@/lib/errors';
 import { createPracticeSchema } from '@/lib/validations/practice';
 
-// GET: List practices for current team
+// GET: List practices for current club
 export async function GET(request: NextRequest) {
   try {
-    const { user, claims, error } = await getClaimsForApiRoute();
-    if (error || !user) return unauthorizedResponse();
-    if (!claims?.team_id) return forbiddenResponse('No team associated with user');
+    const result = await getAuthContext(request);
+    if (!result.success) {
+      return result.status === 401
+        ? unauthorizedResponse()
+        : forbiddenResponse(result.error);
+    }
 
+    const { context } = result;
     const { searchParams } = new URL(request.url);
     const seasonId = searchParams.get('seasonId');
     const startDate = searchParams.get('startDate');
     const endDate = searchParams.get('endDate');
 
-    // Build where clause with team isolation
-    const where: {
-      teamId: string;
-      seasonId?: string;
-      status?: 'PUBLISHED';
-      date?: { gte?: Date; lte?: Date };
-    } = {
-      teamId: claims.team_id,
+    // Build base where clause
+    const where: Record<string, unknown> = {
+      teamId: context.clubId,
     };
 
-    // Filter by season if provided
     if (seasonId) {
       where.seasonId = seasonId;
-    }
-
-    // Athletes only see PUBLISHED practices
-    if (claims.user_role !== 'COACH') {
-      where.status = 'PUBLISHED';
     }
 
     // Date range filter
     if (startDate || endDate) {
       where.date = {};
-      if (startDate) where.date.gte = new Date(startDate);
-      if (endDate) where.date.lte = new Date(endDate);
+      if (startDate) (where.date as Record<string, Date>).gte = new Date(startDate);
+      if (endDate) (where.date as Record<string, Date>).lte = new Date(endDate);
     }
 
-    const practices = await prisma.practice.findMany({
-      where,
-      include: {
-        blocks: {
-          orderBy: { position: 'asc' },
+    try {
+      // Use accessibleBy to filter to authorized practices
+      const practices = await prisma.practice.findMany({
+        where: {
+          AND: [
+            accessibleBy(context.ability).Practice,
+            where,
+          ],
         },
-      },
-      orderBy: [
-        { date: 'asc' },
-        { startTime: 'asc' },
-      ],
-    });
+        include: {
+          blocks: {
+            orderBy: { position: 'asc' },
+          },
+        },
+        orderBy: [
+          { date: 'asc' },
+          { startTime: 'asc' },
+        ],
+      });
 
-    return NextResponse.json({ practices });
+      // For non-coaches, filter to PUBLISHED only
+      // (CASL handles read permission, but status filter is business logic)
+      const filteredPractices = context.ability.can('manage', 'Practice')
+        ? practices
+        : practices.filter(p => p.status === 'PUBLISHED');
+
+      return NextResponse.json({ practices: filteredPractices });
+    } catch (e) {
+      if (e instanceof ForbiddenError) {
+        return NextResponse.json({ practices: [] });
+      }
+      throw e;
+    }
   } catch (error) {
     return serverErrorResponse(error, 'practices:GET');
   }
 }
 
-// POST: Create new practice with blocks (coach only)
+// POST: Create new practice (requires manage permission)
 export async function POST(request: NextRequest) {
   try {
-    const { user, claims, error } = await getClaimsForApiRoute();
-    if (error || !user) return unauthorizedResponse();
-    if (!claims?.team_id) return forbiddenResponse('No team associated with user');
-    if (claims.user_role !== 'COACH') return forbiddenResponse('Only coaches can create practices');
+    const result = await getAuthContext(request);
+    if (!result.success) {
+      return result.status === 401
+        ? unauthorizedResponse()
+        : forbiddenResponse(result.error);
+    }
+
+    const { context } = result;
+
+    // Check create permission
+    if (!context.ability.can('create', 'Practice')) {
+      return forbiddenResponse('You do not have permission to create practices');
+    }
 
     const body = await request.json();
     const validationResult = createPracticeSchema.safeParse(body);
@@ -82,14 +105,14 @@ export async function POST(request: NextRequest) {
 
     const { seasonId, name, date, startTime, endTime, notes, blocks } = validationResult.data;
 
-    // Verify season belongs to team
+    // Verify season belongs to club
     const season = await prisma.season.findFirst({
-      where: { id: seasonId, teamId: claims.team_id },
+      where: { id: seasonId, teamId: context.clubId },
     });
 
     if (!season) {
       return NextResponse.json(
-        { error: 'Season not found or does not belong to your team' },
+        { error: 'Season not found or does not belong to your club' },
         { status: 404 }
       );
     }
@@ -97,7 +120,7 @@ export async function POST(request: NextRequest) {
     // Create practice with nested blocks
     const practice = await prisma.practice.create({
       data: {
-        teamId: claims.team_id,
+        teamId: context.clubId,
         seasonId,
         name,
         date: new Date(date),
