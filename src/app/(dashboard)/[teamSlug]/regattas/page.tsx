@@ -180,8 +180,8 @@ export default async function RegattasPage({ params, searchParams }: PageProps) 
           <EmptyState
             icon={Trophy}
             title="No regattas yet"
-            description="Create a regatta or import from Regatta Central"
-            action={isCoach ? { label: "Add Regatta", href: `/${teamSlug}/regattas/new` } : undefined}
+            description="Create your first regatta to start planning race day."
+            action={isCoach ? { label: "New Regatta", href: `/${teamSlug}/regattas/new` } : undefined}
           />
         </div>
       )}
