@@ -43,17 +43,8 @@ export default async function DashboardLayout({
     viewMode: viewMode ?? 'club',  // Default to club for legacy
   };
 
-  // Get team colors from current club
-  let teamColors = { primaryColor: '#10b981', secondaryColor: '#6ee7b7' };
-  if (clubId) {
-    const team = await prisma.team.findUnique({
-      where: { id: clubId },
-      select: { primaryColor: true, secondaryColor: true },
-    });
-    if (team) {
-      teamColors = { primaryColor: team.primaryColor, secondaryColor: team.secondaryColor };
-    }
-  }
+  // Default team colors (team-specific colors are set by nested [teamSlug]/layout.tsx)
+  const teamColors = { primaryColor: '#10b981', secondaryColor: '#6ee7b7' };
 
   // Build contexts for header SSR
   const facilityMemberships = await prisma.facilityMembership.findMany({
