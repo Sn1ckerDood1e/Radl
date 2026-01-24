@@ -9,7 +9,6 @@ import { ReactNode } from 'react';
 
 interface DashboardWithOnboardingProps {
   teamId: string;
-  teamSlug: string;
   teamName: string;
   isCoach: boolean;
   children: ReactNode;
@@ -25,7 +24,6 @@ interface DashboardWithOnboardingProps {
  */
 export function DashboardWithOnboarding({
   teamId,
-  teamSlug,
   teamName,
   isCoach,
   children,
@@ -36,7 +34,6 @@ export function DashboardWithOnboarding({
       {isCoach && (
         <OnboardingWizard
           teamId={teamId}
-          teamSlug={teamSlug}
           teamName={teamName}
         />
       )}

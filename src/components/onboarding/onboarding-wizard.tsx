@@ -12,7 +12,6 @@ import { cn } from '@/lib/utils';
 
 interface OnboardingWizardProps {
   teamId: string;
-  teamSlug: string;
   teamName: string;
 }
 
@@ -49,7 +48,7 @@ function ProgressDots({ currentStep, totalSteps }: ProgressDotsProps) {
 // Main Component
 // ============================================================================
 
-export function OnboardingWizard({ teamId, teamSlug, teamName }: OnboardingWizardProps) {
+export function OnboardingWizard({ teamId, teamName }: OnboardingWizardProps) {
   const { state, showOnboarding, nextStep, complete, skip } = useOnboarding(teamId);
 
   // Don't render if onboarding shouldn't be shown or still loading
@@ -90,17 +89,13 @@ export function OnboardingWizard({ teamId, teamSlug, teamName }: OnboardingWizar
               <WelcomeStep teamName={teamName} onNext={nextStep} />
             )}
             {currentStep === 2 && (
-              <RosterStep teamSlug={teamSlug} onNext={nextStep} />
+              <RosterStep onNext={nextStep} />
             )}
             {currentStep === 3 && (
-              <PracticeStep
-                teamSlug={teamSlug}
-                onNext={nextStep}
-                onComplete={complete}
-              />
+              <PracticeStep onNext={nextStep} onComplete={complete} />
             )}
             {currentStep === 4 && (
-              <CompleteStep teamSlug={teamSlug} onComplete={complete} />
+              <CompleteStep onComplete={complete} />
             )}
           </div>
         </div>

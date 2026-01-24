@@ -1,7 +1,6 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import Link from 'next/link';
 import { Sparkles, Users, Calendar, CheckCircle2 } from 'lucide-react';
 
 // ============================================================================
@@ -37,11 +36,10 @@ export function WelcomeStep({ teamName, onNext }: WelcomeStepProps) {
 // ============================================================================
 
 interface RosterStepProps {
-  teamSlug: string;
   onNext: () => void;
 }
 
-export function RosterStep({ teamSlug, onNext }: RosterStepProps) {
+export function RosterStep({ onNext }: RosterStepProps) {
   return (
     <div className="text-center">
       <div className="h-16 w-16 rounded-full bg-gradient-to-br from-green-500/20 to-teal-500/20 flex items-center justify-center mx-auto mb-6">
@@ -53,16 +51,9 @@ export function RosterStep({ teamSlug, onNext }: RosterStepProps) {
       <p className="text-zinc-400 mb-8 max-w-md mx-auto">
         Manage your team members, send invitations, and keep track of everyone in your rowing club.
       </p>
-      <div className="flex flex-col sm:flex-row gap-3 justify-center">
-        <Button asChild variant="outline">
-          <Link href={`/${teamSlug}/roster`}>
-            View Roster
-          </Link>
-        </Button>
-        <Button onClick={onNext}>
-          Continue
-        </Button>
-      </div>
+      <Button onClick={onNext}>
+        Continue
+      </Button>
     </div>
   );
 }
@@ -72,21 +63,11 @@ export function RosterStep({ teamSlug, onNext }: RosterStepProps) {
 // ============================================================================
 
 interface PracticeStepProps {
-  teamSlug: string;
   onNext: () => void;
   onComplete: () => void;
 }
 
-export function PracticeStep({ teamSlug, onNext, onComplete }: PracticeStepProps) {
-  const handleLater = () => {
-    onComplete();
-  };
-
-  const handleCreatePractice = () => {
-    onComplete();
-    // Navigation will happen via Link
-  };
-
+export function PracticeStep({ onNext, onComplete }: PracticeStepProps) {
   return (
     <div className="text-center">
       <div className="h-16 w-16 rounded-full bg-gradient-to-br from-orange-500/20 to-red-500/20 flex items-center justify-center mx-auto mb-6">
@@ -99,13 +80,11 @@ export function PracticeStep({ teamSlug, onNext, onComplete }: PracticeStepProps
         Create practice sessions, assign lineups, and let your team know when and where to meet.
       </p>
       <div className="flex flex-col sm:flex-row gap-3 justify-center">
-        <Button onClick={handleLater} variant="outline">
-          I'll do this later
+        <Button onClick={onComplete} variant="outline">
+          I'll explore first
         </Button>
-        <Button asChild onClick={handleCreatePractice}>
-          <Link href={`/${teamSlug}/schedule?create=true`}>
-            Create Practice
-          </Link>
+        <Button onClick={onNext}>
+          Continue
         </Button>
       </div>
     </div>
@@ -117,11 +96,10 @@ export function PracticeStep({ teamSlug, onNext, onComplete }: PracticeStepProps
 // ============================================================================
 
 interface CompleteStepProps {
-  teamSlug: string;
   onComplete: () => void;
 }
 
-export function CompleteStep({ teamSlug, onComplete }: CompleteStepProps) {
+export function CompleteStep({ onComplete }: CompleteStepProps) {
   return (
     <div className="text-center">
       <div className="h-16 w-16 rounded-full bg-gradient-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center mx-auto mb-6">
@@ -131,18 +109,11 @@ export function CompleteStep({ teamSlug, onComplete }: CompleteStepProps) {
         You're All Set!
       </h2>
       <p className="text-zinc-400 mb-8 max-w-md mx-auto">
-        You're ready to start managing your rowing team. Explore the dashboard to get started.
+        You're ready to start managing your rowing team. Use the Schedule link on the dashboard to create your first practice.
       </p>
-      <div className="flex flex-col sm:flex-row gap-3 justify-center">
-        <Button onClick={onComplete}>
-          Go to Dashboard
-        </Button>
-        <Button asChild variant="outline">
-          <Link href={`/${teamSlug}/schedule?create=true`}>
-            Create Practice
-          </Link>
-        </Button>
-      </div>
+      <Button onClick={onComplete} size="lg">
+        Get Started
+      </Button>
     </div>
   );
 }

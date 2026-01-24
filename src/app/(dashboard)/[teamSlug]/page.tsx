@@ -302,7 +302,6 @@ export default async function TeamDashboardPage({ params }: TeamDashboardPagePro
   return (
     <DashboardWithOnboarding
       teamId={team.id}
-      teamSlug={team.slug}
       teamName={team.name}
       isCoach={isCoach}
     >
