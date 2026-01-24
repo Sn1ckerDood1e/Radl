@@ -1,9 +1,19 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { EquipmentCard } from '@/components/equipment/equipment-card';
 import { ExportButton } from '@/components/ui/export-button';
 import { toCSV, downloadCSV } from '@/lib/export/csv';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
 
 interface Equipment {
   id: string;
@@ -39,9 +49,14 @@ export function EquipmentListClient({
   teamSlug,
   isCoach,
 }: EquipmentListClientProps) {
+  const router = useRouter();
   const [typeFilter, setTypeFilter] = useState<FilterType>('ALL');
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('ALL');
   const [collapsedSections, setCollapsedSections] = useState<Set<string>>(new Set());
+
+  // Delete confirmation dialog state
+  const [deleteTarget, setDeleteTarget] = useState<Equipment | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   // Apply filters
   const filteredEquipment = equipment.filter(e => {
@@ -89,6 +104,30 @@ export function EquipmentListClient({
     ]);
     const date = new Date().toISOString().split('T')[0];
     downloadCSV(csv, `equipment-${date}.csv`);
+  };
+
+  // Handle equipment deletion
+  const handleDelete = async () => {
+    if (!deleteTarget) return;
+
+    setIsDeleting(true);
+    try {
+      const response = await fetch(`/api/equipment/${deleteTarget.id}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        // Refresh the page to show updated list
+        router.refresh();
+      } else {
+        console.error('Failed to delete equipment');
+      }
+    } catch (error) {
+      console.error('Delete error:', error);
+    } finally {
+      setIsDeleting(false);
+      setDeleteTarget(null);
+    }
   };
 
   if (equipment.length === 0) {
@@ -210,6 +249,8 @@ export function EquipmentListClient({
                         boatClass={item.boatClass}
                         teamSlug={teamSlug}
                         isCoach={isCoach}
+                        onEdit={() => router.push(`/${teamSlug}/equipment/${item.id}/edit`)}
+                        onDelete={() => setDeleteTarget(item)}
                       />
                     ))}
                   </div>
@@ -219,6 +260,34 @@ export function EquipmentListClient({
           })}
         </div>
       )}
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog open={deleteTarget !== null} onOpenChange={(open) => !open && setDeleteTarget(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Delete Equipment</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to delete &quot;{deleteTarget?.name}&quot;? This action cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setDeleteTarget(null)}
+              disabled={isDeleting}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={handleDelete}
+              disabled={isDeleting}
+            >
+              {isDeleting ? 'Deleting...' : 'Delete'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
