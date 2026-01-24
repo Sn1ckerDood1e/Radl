@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { NotificationBell } from '@/components/notifications/notification-bell';
-import { SyncStatus } from '@/components/pwa/sync-status';
+import { SyncStatusIndicator } from '@/components/pwa/sync-status-indicator';
 import { ContextSwitcher } from './context-switcher';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
 
@@ -110,7 +110,7 @@ export function DashboardHeader({ team, contexts }: DashboardHeaderProps) {
           {/* Right side - Theme + Sync Status + Notifications */}
           <div className="flex items-center gap-4">
             <ThemeToggle />
-            <SyncStatus />
+            <SyncStatusIndicator />
             {currentSlug && <NotificationBell teamSlug={currentSlug} />}
           </div>
         </div>
