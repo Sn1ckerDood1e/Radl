@@ -12,9 +12,9 @@
 |-------|-------|
 | Milestone | v2.0 Commercial Readiness |
 | Phase | Phase 16: UI/UX Polish |
-| Plan | 1 of TBD |
+| Plan | 5 of TBD |
 | Status | In progress |
-| Last activity | 2026-01-24 — Completed 16-01-PLAN.md |
+| Last activity | 2026-01-24 — Completed 16-05-PLAN.md |
 
 **Progress:**
 ```
@@ -24,9 +24,9 @@ v2.0: [#######   ] 70% — Phase 16 in progress (23/34 requirements)
 ```
 
 **Current Phase Detail:**
-- Phase 16: UI/UX Polish — IN PROGRESS (1 plan complete)
+- Phase 16: UI/UX Polish — IN PROGRESS (5 plans complete)
 - Goal: Application provides modern, intuitive experience with helpful guidance and polished interactions
-- Recent: Skeleton and EmptyState components for loading and empty states
+- Recent: Onboarding wizard for first-time coaches with multi-step guided tour
 
 **Previous Phases:**
 - Phase 15: Mobile PWA Improvements — COMPLETE (6/6 plans)
@@ -203,9 +203,9 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
 | Field | Value |
 |-------|-------|
 | Last session | 2026-01-24 |
-| Stopped at | Completed 16-01-PLAN.md |
+| Stopped at | Completed 16-05-PLAN.md |
 | Resume file | None |
 
 ---
 
-*Last updated: 2026-01-24 (Phase 16 in progress - 1 plan complete)*
+*Last updated: 2026-01-24 (Phase 16 in progress - 5 plans complete)*
