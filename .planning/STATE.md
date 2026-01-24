@@ -26,7 +26,7 @@ v2.0: [#######   ] 70% — Phase 16 in progress (23/34 requirements)
 **Current Phase Detail:**
 - Phase 16: UI/UX Polish — IN PROGRESS (3 plans complete)
 - Goal: Application provides modern, intuitive experience with helpful guidance and polished interactions
-- Recent: Enhanced form validation with onTouched mode for immediate, non-intrusive feedback
+- Recent: Error toasts with retry actions and inline success animations for consistent feedback
 
 **Previous Phases:**
 - Phase 15: Mobile PWA Improvements — COMPLETE (6/6 plans)
@@ -101,6 +101,9 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 - Include mobile touch target styles for WCAG 2.5.5 compliance (44px minimum)
 - ThemeToggle uses DropdownMenu pattern for compact header integration (icon button trigger with sr-only label)
 - Use onTouched validation mode for optimal UX (validates on blur, then on change)
+- Error toasts persist until dismissed (duration: Infinity) to prevent missing critical errors
+- Success toasts auto-dismiss after 4s to avoid notification fatigue
+- Retry actions in error toasts help users recover from transient failures
 
 ### Architecture Notes
 
@@ -164,9 +167,11 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 
 **v2.0 additions (implemented in Phase 16 - in progress):**
 - **Loading skeletons:** Skeleton and EmptyState components for perceived performance
-- **Toast helpers:** showSuccessToast and showErrorToast for consistent notifications
+- **Error handling patterns:** showErrorToast with retry actions, showSuccessToast with 4s auto-dismiss
 - **Form validation UX:** FormField component with onTouched mode for immediate, non-intrusive feedback
-- **Inline success states:** InlineSuccess component for contextual success messages
+- **Inline success states:** InlineSuccess component with zoom/fade animation for quick feedback
+- **Animation utilities:** 9 animation presets (fadeIn, slideInFromBottom, zoomIn, etc.)
+- **List animations:** AnimatedListItem with 50ms stagger delay for smooth cascades
 
 ### Tech Debt Tracker
 
@@ -202,7 +207,7 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
 | Field | Value |
 |-------|-------|
 | Last session | 2026-01-24 |
-| Stopped at | Completed 16-03-PLAN.md |
+| Stopped at | Completed 16-02-PLAN.md |
 | Resume file | None |
 
 ---
