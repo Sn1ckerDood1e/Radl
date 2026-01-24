@@ -12,20 +12,20 @@
 |-------|-------|
 | Milestone | v2.0 Commercial Readiness |
 | Phase | Phase 14: Design System Foundation |
-| Plan | 1 of 4 |
+| Plan | 2 of 4 |
 | Status | In progress |
-| Last activity | 2026-01-24 — Completed 14-01-PLAN.md |
+| Last activity | 2026-01-24 — Completed 14-02-PLAN.md |
 
 **Progress:**
 ```
 v1.0: [##########] 100% SHIPPED (2026-01-22)
 v1.1: [##########] 100% SHIPPED (2026-01-22) — 9/11 reqs, 2 deferred
-v2.0: [########  ] 38% — Phase 14 started (13/34 requirements, 76/79 plans)
+v2.0: [########  ] 39% — Phase 14 started (13/34 requirements, 77/79 plans)
 ```
 
 **Current Phase Detail:**
-- Phase 14: Design System Foundation — IN PROGRESS (1/4 plans)
-- Completed: shadcn/ui initialization with Tailwind v4 and CSS variable mapping
+- Phase 14: Design System Foundation — IN PROGRESS (2/4 plans)
+- Completed: shadcn/ui initialization, core component installation (Button, Dialog, Select, Input, DropdownMenu)
 
 **Previous Phases:**
 - Phase 13: Facility Auth Integration — COMPLETE (6/6 plans)
@@ -93,6 +93,9 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 - Zinc color scheme for shadcn/ui (matches existing --surface palette)
 - Map shadcn variables to existing theme rather than replace (--color-primary uses --team-primary, not new variable)
 - Preserve original CSS structure, use @theme inline for Tailwind v4 mapping only
+- Use class-variance-authority for component variant management (type-safe with IntelliSense)
+- Enable ESLint deprecation tracking for component migration safety
+- Include mobile touch target styles for WCAG 2.5.5 compliance (44px minimum)
 
 ### Architecture Notes
 
@@ -138,6 +141,10 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 - **CSS variable mapping:** shadcn namespace mapped to existing theme (--color-card uses --surface-2, --color-primary uses --team-primary)
 - **Component utilities:** cn() function for className composition with clsx + tailwind-merge
 - **Animation library:** tw-animate-css for Tailwind v4 animation support
+- **Core components:** Button, Dialog, Select, Input, DropdownMenu with Radix UI primitives
+- **Variant system:** class-variance-authority for type-safe component variants
+- **Mobile accessibility:** WCAG 2.5.5 touch targets (44px minimum on mobile)
+- **Component migration tracking:** ESLint @deprecated rule for safe migrations
 
 **v2.0 additions (planned):**
 - **Touch gestures:** @use-gesture/react for mobile interactions
@@ -176,9 +183,9 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
 | Field | Value |
 |-------|-------|
 | Last session | 2026-01-24 |
-| Stopped at | Completed 14-01-PLAN.md |
+| Stopped at | Completed 14-02-PLAN.md |
 | Resume file | None |
 
 ---
 
-*Last updated: 2026-01-24 (Phase 14 Plan 01 complete)*
+*Last updated: 2026-01-24 (Phase 14 Plan 02 complete)*
