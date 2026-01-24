@@ -62,15 +62,8 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     setThemeState(newTheme);
   };
 
-  // Prevent flash by not rendering until mounted
-  if (!mounted) {
-    return (
-      <div className="min-h-screen bg-zinc-950">
-        {children}
-      </div>
-    );
-  }
-
+  // Always provide context, even when not mounted (SSR/hydration)
+  // Use current state values - they default to 'dark' which is safe
   return (
     <ThemeContext.Provider value={{ theme, setTheme, resolvedTheme }}>
       {children}
