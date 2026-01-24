@@ -21,14 +21,14 @@ Commercial readiness — facility model, mobile PWA, UI/UX polish, security hard
 
 ### Mobile PWA
 
-- [ ] **MOB-01**: Mobile-first responsive design with proper breakpoints
-- [ ] **MOB-02**: All interactive elements have 44px minimum touch targets
-- [ ] **MOB-03**: Offline-first with conflict resolution for mutations
-- [ ] **MOB-04**: Network-aware UI (loading states, connectivity indicator)
-- [ ] **MOB-05**: Swipe gesture navigation for common actions
-- [ ] **MOB-06**: PWA install prompt for eligible users
-- [ ] **MOB-07**: Bottom sheet navigation for mobile context menus
-- [ ] **MOB-08**: App-like transitions between views
+- [x] **MOB-01**: Mobile-first responsive design with proper breakpoints
+- [x] **MOB-02**: All interactive elements have 44px minimum touch targets
+- [x] **MOB-03**: Offline-first with conflict resolution for mutations
+- [x] **MOB-04**: Network-aware UI (loading states, connectivity indicator)
+- [x] **MOB-05**: Swipe gesture navigation for common actions
+- [x] **MOB-06**: PWA install prompt for eligible users
+- [x] **MOB-07**: Bottom sheet navigation for mobile context menus
+- [x] **MOB-08**: App-like transitions between views
 
 ### UI/UX Polish
 
@@ -104,14 +104,14 @@ Which phases cover which requirements. Updated during roadmap creation.
 | FAC-04 | Phase 12 | Complete |
 | UIX-01 | Phase 14 | Complete |
 | UIX-06 | Phase 14 | Complete |
-| MOB-01 | Phase 15 | Pending |
-| MOB-02 | Phase 15 | Pending |
-| MOB-03 | Phase 15 | Pending |
-| MOB-04 | Phase 15 | Pending |
-| MOB-05 | Phase 15 | Pending |
-| MOB-06 | Phase 15 | Pending |
-| MOB-07 | Phase 15 | Pending |
-| MOB-08 | Phase 15 | Pending |
+| MOB-01 | Phase 15 | Complete |
+| MOB-02 | Phase 15 | Complete |
+| MOB-03 | Phase 15 | Complete |
+| MOB-04 | Phase 15 | Complete |
+| MOB-05 | Phase 15 | Complete |
+| MOB-06 | Phase 15 | Complete |
+| MOB-07 | Phase 15 | Complete |
+| MOB-08 | Phase 15 | Complete |
 | UIX-02 | Phase 16 | Pending |
 | UIX-03 | Phase 16 | Pending |
 | UIX-04 | Phase 16 | Pending |
@@ -135,4 +135,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2026-01-22*
-*Last updated: 2026-01-24 after Phase 14 completion*
+*Last updated: 2026-01-24 after Phase 15 completion*

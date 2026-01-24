@@ -11,23 +11,24 @@
 | Field | Value |
 |-------|-------|
 | Milestone | v2.0 Commercial Readiness |
-| Phase | Phase 15: Mobile PWA Improvements |
-| Plan | 5 of 6 |
-| Status | In progress |
-| Last activity | 2026-01-24 — Completed 15-05-PLAN.md |
+| Phase | Phase 16: UI/UX Polish |
+| Plan | 0 of TBD |
+| Status | Ready to plan |
+| Last activity | 2026-01-24 — Completed Phase 15 |
 
 **Progress:**
 ```
 v1.0: [##########] 100% SHIPPED (2026-01-22)
 v1.1: [##########] 100% SHIPPED (2026-01-22) — 9/11 reqs, 2 deferred
-v2.0: [########  ] 53% — Phase 15 in progress (18/34 requirements)
+v2.0: [######    ] 65% — Phase 16 ready (22/34 requirements)
 ```
 
 **Current Phase Detail:**
-- Phase 15: Mobile PWA Improvements — IN PROGRESS (5/6 plans)
-- Completed: Core dependencies (@use-gesture/react, vaul), Drawer, view transitions, useSyncStatus hook, SyncStatusIndicator, useSwipeGesture hook, SwipeableListItem, useMediaQuery, ResponsiveMenu, usePwaInstall hook, iOS InstallBanner instructions, mobile CSS utilities
+- Phase 16: UI/UX Polish — READY TO PLAN
+- Goal: Application provides modern, intuitive experience with helpful guidance and polished interactions
 
 **Previous Phases:**
+- Phase 15: Mobile PWA Improvements — COMPLETE (6/6 plans)
 - Phase 14: Design System Foundation — COMPLETE (4/4 plans)
 - Phase 13: Facility Auth Integration — COMPLETE (6/6 plans)
 - Phase 12: Facility Schema Migration — COMPLETE (7/7 plans)
@@ -193,9 +194,9 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
 | Field | Value |
 |-------|-------|
 | Last session | 2026-01-24 |
-| Stopped at | Completed 15-05-PLAN.md |
+| Stopped at | Completed Phase 15 |
 | Resume file | None |
 
 ---
 
-*Last updated: 2026-01-24 (15-05 complete)*
+*Last updated: 2026-01-24 (Phase 15 complete)*
