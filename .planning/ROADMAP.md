@@ -18,13 +18,13 @@ Phase 10: Security Foundation & RBAC      [##########] Complete
 Phase 11: MFA & SSO                       [##########] Complete
 Phase 12: Facility Schema Migration       [##########] Complete
 Phase 13: Facility Auth Integration       [##########] Complete
-Phase 14: Design System Foundation        [          ] Pending
+Phase 14: Design System Foundation        [##########] Complete
 Phase 15: Mobile PWA Improvements         [          ] Pending
 Phase 16: UI/UX Polish                    [          ] Pending
 Phase 17: Facility UI Features            [          ] Pending
 ```
 
-**Overall:** 12/34 requirements (35%)
+**Overall:** 14/34 requirements (41%)
 
 **Details:** See [v2.0 roadmap](milestones/v2.0-ROADMAP.md)
 

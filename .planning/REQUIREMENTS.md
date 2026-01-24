@@ -102,8 +102,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | FAC-01 | Phase 12 | Complete |
 | FAC-02 | Phase 12 | Complete |
 | FAC-04 | Phase 12 | Complete |
-| UIX-01 | Phase 14 | Pending |
-| UIX-06 | Phase 14 | Pending |
+| UIX-01 | Phase 14 | Complete |
+| UIX-06 | Phase 14 | Complete |
 | MOB-01 | Phase 15 | Pending |
 | MOB-02 | Phase 15 | Pending |
 | MOB-03 | Phase 15 | Pending |
@@ -135,4 +135,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2026-01-22*
-*Last updated: 2026-01-22 after roadmap creation*
+*Last updated: 2026-01-24 after Phase 14 completion*
