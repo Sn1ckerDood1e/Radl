@@ -157,3 +157,49 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 select {
   color-scheme: dark;
 }
+
+/* Mobile touch targets - WCAG 2.5.5 compliance */
+@media (max-width: 768px) {
+  /* Buttons */
+  button,
+  [role="button"],
+  .btn {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Form inputs */
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="number"],
+  input[type="tel"],
+  input[type="url"],
+  input[type="search"],
+  input[type="date"],
+  input[type="time"],
+  input[type="datetime-local"],
+  select,
+  textarea {
+    min-height: 44px;
+  }
+
+  /* Icon-only buttons (like theme toggle) */
+  button:has(> svg:only-child),
+  [role="button"]:has(> svg:only-child) {
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Ensure links in navigation have adequate tap targets */
+  nav a,
+  header a {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+}
