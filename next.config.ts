@@ -10,7 +10,9 @@ const withSerwist = withSerwistInit({
 });
 
 const nextConfig: NextConfig = {
-  // appDir is the default in Next.js 16, no experimental config needed
+  experimental: {
+    viewTransition: true,
+  },
 };
 
 export default withSerwist(nextConfig);
