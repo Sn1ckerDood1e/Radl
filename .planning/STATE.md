@@ -12,20 +12,20 @@
 |-------|-------|
 | Milestone | v2.0 Commercial Readiness |
 | Phase | Phase 15: Mobile PWA Improvements |
-| Plan | 1 of 6 |
+| Plan | 2 of 6 |
 | Status | In progress |
-| Last activity | 2026-01-24 — Completed 15-01-PLAN.md |
+| Last activity | 2026-01-24 — Completed 15-02-PLAN.md |
 
 **Progress:**
 ```
 v1.0: [##########] 100% SHIPPED (2026-01-22)
 v1.1: [##########] 100% SHIPPED (2026-01-22) — 9/11 reqs, 2 deferred
-v2.0: [########  ] 44% — Phase 15 started (15/34 requirements)
+v2.0: [########  ] 47% — Phase 15 in progress (16/34 requirements)
 ```
 
 **Current Phase Detail:**
-- Phase 15: Mobile PWA Improvements — IN PROGRESS (1/6 plans)
-- Completed: Core dependencies installed (@use-gesture/react, vaul), Drawer component, view transitions enabled
+- Phase 15: Mobile PWA Improvements — IN PROGRESS (2/6 plans)
+- Completed: Core dependencies (@use-gesture/react, vaul), Drawer, view transitions, useSyncStatus hook, SyncStatusIndicator
 
 **Previous Phases:**
 - Phase 14: Design System Foundation — COMPLETE (4/4 plans)
@@ -152,6 +152,8 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 - **Touch gestures:** @use-gesture/react for mobile touch interactions
 - **Bottom sheets:** vaul-based Drawer component for mobile menus and action sheets
 - **View transitions:** Next.js experimental.viewTransition for smooth page navigation
+- **Sync status:** useSyncStatus hook combining online/pending/syncing/error states with triggerSync action
+- **Network indicator:** SyncStatusIndicator component with dropdown details (hidden when online with no pending)
 
 ### Tech Debt Tracker
 
@@ -187,9 +189,9 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
 | Field | Value |
 |-------|-------|
 | Last session | 2026-01-24 |
-| Stopped at | Completed 15-01-PLAN.md |
+| Stopped at | Completed 15-02-PLAN.md |
 | Resume file | None |
 
 ---
 
-*Last updated: 2026-01-24 (15-01 complete)*
+*Last updated: 2026-01-24 (15-02 complete)*
