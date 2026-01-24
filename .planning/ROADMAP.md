@@ -1,7 +1,7 @@
 # Roadmap: RowOps
 
 **Current Milestone:** v2.0 Commercial Readiness
-**Status:** In Progress (20/34 requirements complete)
+**Status:** In Progress (22/34 requirements complete)
 **Started:** 2026-01-22
 
 ---
@@ -20,7 +20,7 @@ Phase 12: Facility Schema Migration       [##########] Complete
 Phase 13: Facility Auth Integration       [##########] Complete
 Phase 14: Design System Foundation        [##########] Complete
 Phase 15: Mobile PWA Improvements         [##########] Complete
-Phase 16: UI/UX Polish                    [          ] Pending
+Phase 16: UI/UX Polish                    [#         ] Planned (6 plans)
 Phase 17: Facility UI Features            [          ] Pending
 ```
 
@@ -36,4 +36,4 @@ Phase 17: Facility UI Features            [          ] Pending
 - **v1.0 MVP** — Phases 1-5 (shipped 2026-01-22) — [archived](milestones/v1.0-ROADMAP.md)
 
 ---
-*Roadmap updated: 2026-01-22*
+*Roadmap updated: 2026-01-24*
