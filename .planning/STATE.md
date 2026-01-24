@@ -12,20 +12,20 @@
 |-------|-------|
 | Milestone | v2.0 Commercial Readiness |
 | Phase | Phase 15: Mobile PWA Improvements |
-| Plan | 2 of 6 |
+| Plan | 4 of 6 |
 | Status | In progress |
-| Last activity | 2026-01-24 — Completed 15-02-PLAN.md |
+| Last activity | 2026-01-24 — Completed 15-04-PLAN.md |
 
 **Progress:**
 ```
 v1.0: [##########] 100% SHIPPED (2026-01-22)
 v1.1: [##########] 100% SHIPPED (2026-01-22) — 9/11 reqs, 2 deferred
-v2.0: [########  ] 47% — Phase 15 in progress (16/34 requirements)
+v2.0: [########  ] 53% — Phase 15 in progress (18/34 requirements)
 ```
 
 **Current Phase Detail:**
-- Phase 15: Mobile PWA Improvements — IN PROGRESS (2/6 plans)
-- Completed: Core dependencies (@use-gesture/react, vaul), Drawer, view transitions, useSyncStatus hook, SyncStatusIndicator
+- Phase 15: Mobile PWA Improvements — IN PROGRESS (4/6 plans)
+- Completed: Core dependencies (@use-gesture/react, vaul), Drawer, view transitions, useSyncStatus hook, SyncStatusIndicator, useMediaQuery, ResponsiveMenu
 
 **Previous Phases:**
 - Phase 14: Design System Foundation — COMPLETE (4/4 plans)
@@ -154,6 +154,8 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 - **View transitions:** Next.js experimental.viewTransition for smooth page navigation
 - **Sync status:** useSyncStatus hook combining online/pending/syncing/error states with triggerSync action
 - **Network indicator:** SyncStatusIndicator component with dropdown details (hidden when online with no pending)
+- **Media queries:** useMediaQuery hook with SSR support for responsive detection
+- **Responsive menus:** ResponsiveMenu component adapting Drawer (mobile) and DropdownMenu (desktop)
 
 ### Tech Debt Tracker
 
@@ -189,9 +191,9 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
 | Field | Value |
 |-------|-------|
 | Last session | 2026-01-24 |
-| Stopped at | Completed 15-02-PLAN.md |
+| Stopped at | Completed 15-04-PLAN.md |
 | Resume file | None |
 
 ---
 
-*Last updated: 2026-01-24 (15-02 complete)*
+*Last updated: 2026-01-24 (15-04 complete)*
