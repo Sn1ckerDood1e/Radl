@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "tw-animate-css";
 
 :root {
   /* Default to dark theme */
@@ -54,6 +55,28 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  /* shadcn/ui component variables */
+  --color-card: var(--surface-2);
+  --color-card-foreground: var(--text-primary);
+  --color-popover: var(--surface-2);
+  --color-popover-foreground: var(--text-primary);
+  --color-primary: var(--team-primary);
+  --color-primary-foreground: #ffffff;
+  --color-secondary: var(--surface-3);
+  --color-secondary-foreground: var(--text-primary);
+  --color-muted: var(--surface-3);
+  --color-muted-foreground: var(--text-muted);
+  --color-accent: var(--surface-3);
+  --color-accent-foreground: var(--text-primary);
+  --color-destructive: oklch(0.55 0.22 25);
+  --color-destructive-foreground: #ffffff;
+  --color-border: var(--border);
+  --color-input: var(--border);
+  --color-ring: var(--team-primary);
+
+  /* Border radius */
+  --radius: 0.5rem;
 }
 
 body {
