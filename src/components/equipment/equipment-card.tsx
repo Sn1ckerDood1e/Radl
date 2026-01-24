@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { SwipeableListItem } from '@/components/mobile/swipeable-list-item';
 
 interface EquipmentCardProps {
   id: string;
@@ -10,6 +11,8 @@ interface EquipmentCardProps {
   boatClass: string | null;
   teamSlug: string;
   isCoach: boolean;
+  onEdit?: () => void;
+  onDelete?: () => void;
 }
 
 const boatClassLabels: Record<string, string> = {
@@ -32,48 +35,56 @@ export function EquipmentCard({
   boatClass,
   teamSlug,
   isCoach,
+  onEdit,
+  onDelete,
 }: EquipmentCardProps) {
   return (
-    <div className="bg-zinc-800 rounded-lg border border-zinc-700 p-4 hover:border-zinc-600 transition-colors">
-      <div className="flex items-start justify-between">
-        <div className="flex-1 min-w-0">
-          <Link
-            href={`/${teamSlug}/equipment/${id}`}
-            className="font-medium text-white hover:text-emerald-400 block truncate"
-          >
-            {name}
-          </Link>
-          {manufacturer && (
-            <p className="text-sm text-zinc-400 truncate">{manufacturer}</p>
-          )}
-          {boatClass && (
-            <span className="inline-flex items-center mt-2 px-2 py-0.5 rounded text-xs font-medium bg-emerald-500/20 text-emerald-400">
-              {boatClassLabels[boatClass] || boatClass}
-            </span>
-          )}
-        </div>
-        <div className="flex items-center gap-2 ml-4">
-          <span
-            className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
-              status === 'ACTIVE'
-                ? 'bg-emerald-500/20 text-emerald-400'
-                : status === 'INACTIVE'
-                ? 'bg-yellow-500/20 text-yellow-400'
-                : 'bg-zinc-700 text-zinc-400'
-            }`}
-          >
-            {status === 'ACTIVE' ? 'Active' : status === 'INACTIVE' ? 'Inactive' : 'Retired'}
-          </span>
-          {isCoach && (
+    <SwipeableListItem
+      onSwipeLeft={onDelete}
+      onSwipeRight={onEdit}
+      disabled={!isCoach}
+    >
+      <div className="bg-zinc-800 rounded-lg border border-zinc-700 p-4 hover:border-zinc-600 transition-colors">
+        <div className="flex items-start justify-between">
+          <div className="flex-1 min-w-0">
             <Link
-              href={`/${teamSlug}/equipment/${id}/edit`}
-              className="text-sm text-zinc-400 hover:text-emerald-400"
+              href={`/${teamSlug}/equipment/${id}`}
+              className="font-medium text-white hover:text-emerald-400 block truncate"
             >
-              Edit
+              {name}
             </Link>
-          )}
+            {manufacturer && (
+              <p className="text-sm text-zinc-400 truncate">{manufacturer}</p>
+            )}
+            {boatClass && (
+              <span className="inline-flex items-center mt-2 px-2 py-0.5 rounded text-xs font-medium bg-emerald-500/20 text-emerald-400">
+                {boatClassLabels[boatClass] || boatClass}
+              </span>
+            )}
+          </div>
+          <div className="flex items-center gap-2 ml-4">
+            <span
+              className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
+                status === 'ACTIVE'
+                  ? 'bg-emerald-500/20 text-emerald-400'
+                  : status === 'INACTIVE'
+                  ? 'bg-yellow-500/20 text-yellow-400'
+                  : 'bg-zinc-700 text-zinc-400'
+              }`}
+            >
+              {status === 'ACTIVE' ? 'Active' : status === 'INACTIVE' ? 'Inactive' : 'Retired'}
+            </span>
+            {isCoach && (
+              <Link
+                href={`/${teamSlug}/equipment/${id}/edit`}
+                className="text-sm text-zinc-400 hover:text-emerald-400"
+              >
+                Edit
+              </Link>
+            )}
+          </div>
         </div>
       </div>
-    </div>
+    </SwipeableListItem>
   );
 }
