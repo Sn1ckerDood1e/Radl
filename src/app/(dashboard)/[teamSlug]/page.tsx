@@ -141,13 +141,9 @@ export default async function TeamDashboardPage({ params }: TeamDashboardPagePro
           className="group bg-[var(--surface-1)] hover:bg-[var(--surface-2)] rounded-xl p-6 transition-all duration-200 border border-[var(--border-subtle)] hover:border-[var(--border)]"
         >
           <div className="flex items-start justify-between mb-4">
-            <div
-              className="h-14 w-14 rounded-xl flex items-center justify-center"
-              style={{ backgroundColor: `${team.primaryColor}20` }}
-            >
+            <div className="h-14 w-14 rounded-xl flex items-center justify-center bg-emerald-500/20">
               <svg
-                className="h-7 w-7"
-                style={{ color: team.primaryColor }}
+                className="h-7 w-7 text-emerald-500"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -194,10 +190,7 @@ export default async function TeamDashboardPage({ params }: TeamDashboardPagePro
             <div className="text-right">
               <span className="text-3xl font-bold text-[var(--text-primary)]">{memberCount}</span>
               {isCoach && pendingInvitationCount > 0 && (
-                <span
-                  className="ml-2 px-2 py-0.5 text-white text-xs font-medium rounded-full"
-                  style={{ backgroundColor: team.primaryColor }}
-                >
+                <span className="ml-2 px-2 py-0.5 text-white text-xs font-medium rounded-full bg-emerald-600">
                   +{pendingInvitationCount}
                 </span>
               )}
@@ -249,13 +242,9 @@ export default async function TeamDashboardPage({ params }: TeamDashboardPagePro
           className="group bg-[var(--surface-1)] hover:bg-[var(--surface-2)] rounded-xl p-6 transition-all duration-200 border border-[var(--border-subtle)] hover:border-[var(--border)]"
         >
           <div className="flex items-start justify-between mb-4">
-            <div
-              className="h-14 w-14 rounded-xl flex items-center justify-center"
-              style={{ backgroundColor: `${team.primaryColor}20` }}
-            >
+            <div className="h-14 w-14 rounded-xl flex items-center justify-center bg-emerald-500/20">
               <svg
-                className="h-7 w-7"
-                style={{ color: team.primaryColor }}
+                className="h-7 w-7 text-emerald-500"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"

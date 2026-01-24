@@ -151,10 +151,7 @@ export default async function FacilityDashboardPage({ params }: FacilityDashboar
                     className="h-10 w-10 rounded-lg object-cover"
                   />
                 ) : (
-                  <div
-                    className="h-10 w-10 rounded-lg flex items-center justify-center text-white font-bold"
-                    style={{ backgroundColor: club.primaryColor }}
-                  >
+                  <div className="h-10 w-10 rounded-lg flex items-center justify-center text-white font-bold bg-emerald-600">
                     {club.name.charAt(0)}
                   </div>
                 )}

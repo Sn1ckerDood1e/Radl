@@ -35,10 +35,7 @@ export default async function ReportDamagePage({ params }: Props) {
               className="h-12 mx-auto mb-2"
             />
           )}
-          <h1
-            className="text-xl font-semibold"
-            style={{ color: equipment.team.primaryColor || undefined }}
-          >
+          <h1 className="text-xl font-semibold text-emerald-600">
             {equipment.team.name}
           </h1>
         </div>

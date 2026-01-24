@@ -90,8 +90,7 @@ export function DashboardHeader({ team, contexts }: DashboardHeaderProps) {
                 ) : (
                   <Link
                     href={`/${team.slug}`}
-                    className="h-6 w-6 rounded flex items-center justify-center text-xs font-bold flex-shrink-0"
-                    style={{ backgroundColor: team.primaryColor, color: '#fff' }}
+                    className="h-6 w-6 rounded flex items-center justify-center text-xs font-bold flex-shrink-0 bg-emerald-600 text-white"
                   >
                     {team.name.charAt(0).toUpperCase()}
                   </Link>

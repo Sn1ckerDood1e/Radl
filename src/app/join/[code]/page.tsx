@@ -79,10 +79,7 @@ export default async function JoinPage({ params }: JoinPageProps) {
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
       <div className="max-w-md w-full bg-white rounded-lg shadow-md overflow-hidden">
         {/* Team Header */}
-        <div
-          className="p-6 text-white"
-          style={{ backgroundColor: team.primaryColor || '#1a365d' }}
-        >
+        <div className="p-6 text-white bg-emerald-600">
           <div className="flex items-center gap-4">
             {team.logoUrl ? (
               <img
