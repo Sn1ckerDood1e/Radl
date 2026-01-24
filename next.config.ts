@@ -10,9 +10,8 @@ const withSerwist = withSerwistInit({
 });
 
 const nextConfig: NextConfig = {
-  experimental: {
-    viewTransition: true,
-  },
+  // viewTransition disabled due to Performance.measure timing issues in Next.js 16
+  // Can re-enable when Next.js fixes the negative timestamp bug
 };
 
 export default withSerwist(nextConfig);
