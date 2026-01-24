@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import { BlockEditor } from '@/components/practices/block-editor';
+import { FormField } from '@/components/ui/form-field';
 import { z } from 'zod';
 import type { BlockType } from '@/lib/validations/practice';
 
@@ -78,6 +79,8 @@ export function TemplateForm({ teamSlug, template, onSuccess }: TemplateFormProp
     setValue,
     formState: { errors },
   } = useForm<TemplateFormInput>({
+    mode: 'onTouched',
+    reValidateMode: 'onChange',
     resolver: zodResolver(templateFormSchema),
     defaultValues: {
       name: template?.name || '',
@@ -162,55 +165,55 @@ export function TemplateForm({ teamSlug, template, onSuccess }: TemplateFormProp
       )}
 
       {/* Name */}
-      <div>
-        <label htmlFor="name" className={labelClassName}>
-          Template Name <span className="text-red-400">*</span>
-        </label>
+      <FormField
+        label="Template Name"
+        htmlFor="name"
+        error={errors.name}
+        required
+      >
         <input
           type="text"
           id="name"
           {...register('name')}
-          className={inputClassName}
+          aria-invalid={errors.name ? 'true' : 'false'}
+          className={`${inputClassName} ${errors.name ? 'border-red-500' : ''}`}
           placeholder="e.g., Morning Row, Sprint Practice"
         />
-        {errors.name && (
-          <p className="mt-1 text-sm text-red-400">{errors.name.message}</p>
-        )}
-      </div>
+      </FormField>
 
       {/* Default Time Row */}
       <div className="grid grid-cols-2 gap-4">
         {/* Default Start Time */}
-        <div>
-          <label htmlFor="defaultStartTime" className={labelClassName}>
-            Default Start Time <span className="text-red-400">*</span>
-          </label>
+        <FormField
+          label="Default Start Time"
+          htmlFor="defaultStartTime"
+          error={errors.defaultStartTime}
+          required
+        >
           <input
             type="time"
             id="defaultStartTime"
             {...register('defaultStartTime')}
-            className={inputClassName}
+            aria-invalid={errors.defaultStartTime ? 'true' : 'false'}
+            className={`${inputClassName} ${errors.defaultStartTime ? 'border-red-500' : ''}`}
           />
-          {errors.defaultStartTime && (
-            <p className="mt-1 text-sm text-red-400">{errors.defaultStartTime.message}</p>
-          )}
-        </div>
+        </FormField>
 
         {/* Default End Time */}
-        <div>
-          <label htmlFor="defaultEndTime" className={labelClassName}>
-            Default End Time <span className="text-red-400">*</span>
-          </label>
+        <FormField
+          label="Default End Time"
+          htmlFor="defaultEndTime"
+          error={errors.defaultEndTime}
+          required
+        >
           <input
             type="time"
             id="defaultEndTime"
             {...register('defaultEndTime')}
-            className={inputClassName}
+            aria-invalid={errors.defaultEndTime ? 'true' : 'false'}
+            className={`${inputClassName} ${errors.defaultEndTime ? 'border-red-500' : ''}`}
           />
-          {errors.defaultEndTime && (
-            <p className="mt-1 text-sm text-red-400">{errors.defaultEndTime.message}</p>
-          )}
-        </div>
+        </FormField>
       </div>
 
       {/* Blocks Section */}
