@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { getClaimsForApiRoute } from '@/lib/auth/claims';
 import { prisma } from '@/lib/prisma';
+import { DashboardWithOnboarding } from '@/components/dashboard/dashboard-with-onboarding';
 
 interface TeamDashboardPageProps {
   params: Promise<{ teamSlug: string }>;
@@ -78,7 +79,7 @@ export default async function TeamDashboardPage({ params }: TeamDashboardPagePro
     redirect('/create-team');
   }
 
-  return (
+  const dashboardContent = (
     <div className="max-w-5xl mx-auto">
       {/* Welcome Section */}
       <div className="mb-8">
@@ -296,5 +297,16 @@ export default async function TeamDashboardPage({ params }: TeamDashboardPagePro
         </div>
       </div>
     </div>
+  );
+
+  return (
+    <DashboardWithOnboarding
+      teamId={team.id}
+      teamSlug={team.slug}
+      teamName={team.name}
+      isCoach={isCoach}
+    >
+      {dashboardContent}
+    </DashboardWithOnboarding>
   );
 }
