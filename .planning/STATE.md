@@ -12,21 +12,21 @@
 |-------|-------|
 | Milestone | v2.0 Commercial Readiness |
 | Phase | Phase 16: UI/UX Polish |
-| Plan | 5 of TBD |
-| Status | In progress |
-| Last activity | 2026-01-24 — Completed 16-04-PLAN.md |
+| Plan | 6 of 6 |
+| Status | Complete |
+| Last activity | 2026-01-24 — Completed Phase 16 |
 
 **Progress:**
 ```
 v1.0: [##########] 100% SHIPPED (2026-01-22)
 v1.1: [##########] 100% SHIPPED (2026-01-22) — 9/11 reqs, 2 deferred
-v2.0: [#######   ] 70% — Phase 16 in progress (23/34 requirements)
+v2.0: [########  ] 85% — Phase 16 complete (29/34 requirements)
 ```
 
 **Current Phase Detail:**
-- Phase 16: UI/UX Polish — IN PROGRESS (5 plans complete)
+- Phase 16: UI/UX Polish — COMPLETE (6/6 plans)
 - Goal: Application provides modern, intuitive experience with helpful guidance and polished interactions
-- Recent: Command palette with Cmd+K access and keyboard shortcuts for power users
+- All 7 UIX requirements verified and working
 
 **Previous Phases:**
 - Phase 15: Mobile PWA Improvements — COMPLETE (6/6 plans)
@@ -169,11 +169,13 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 - **Media queries:** useMediaQuery hook with SSR support for responsive detection
 - **Responsive menus:** ResponsiveMenu component adapting Drawer (mobile) and DropdownMenu (desktop)
 
-**v2.0 additions (implemented in Phase 16 - in progress):**
+**v2.0 additions (implemented in Phase 16):**
 - **Loading skeletons:** Skeleton component with pulse animation, loading.tsx files for roster/equipment/practices
 - **Empty states:** EmptyState component with icon, title, description, and optional action (applied to 6 list pages)
 - **Command palette:** cmdk-based command palette with Cmd+K access, navigation items, and action shortcuts
 - **Keyboard shortcuts:** G+key navigation (G+R, G+P, G+E, G+S) and shortcuts overlay with ? key
+- **URL-based team lookup:** requireTeamBySlug helper for consistent team context from URL slug (fixes JWT claim mismatch)
+- **Team colors deferred:** Dynamic team colors temporarily disabled (stored in DB, using fixed emerald) — revisit in future phase
 
 ### Tech Debt Tracker
 
@@ -182,6 +184,7 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 | RC connection testing | DEFERRED | Needs RC_CLIENT_ID and RC_CLIENT_SECRET |
 | QR external scanning | DEFERRED | Needs production deployment |
 | Push notifications | DEFERRED | NOTIF-01, NOTIF-02 for future milestone |
+| Dynamic team colors | DEFERRED | Color settings stored in DB, UI uses fixed emerald colors |
 
 **v2.0 mitigation:**
 - Component migration tracking (Phase 14) to prevent drift
@@ -209,9 +212,9 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
 | Field | Value |
 |-------|-------|
 | Last session | 2026-01-24 |
-| Stopped at | Completed 16-04-PLAN.md |
+| Stopped at | Phase 16 complete, ready for Phase 17 |
 | Resume file | None |
 
 ---
 
-*Last updated: 2026-01-24 (Phase 16 in progress - 4 plans complete)*
+*Last updated: 2026-01-24 (Phase 16 complete)*

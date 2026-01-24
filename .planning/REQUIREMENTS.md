@@ -32,15 +32,15 @@ Commercial readiness — facility model, mobile PWA, UI/UX polish, security hard
 
 ### UI/UX Polish
 
-- [ ] **UIX-01**: Design system with consistent component library (shadcn/ui)
-- [ ] **UIX-02**: Empty states for all list views with helpful guidance
-- [ ] **UIX-03**: Loading states with skeleton placeholders
-- [ ] **UIX-04**: Error handling UI with recovery actions
-- [ ] **UIX-05**: Form validation with inline feedback
-- [ ] **UIX-06**: Dark mode theme support
-- [ ] **UIX-07**: Micro-animations for state transitions
-- [ ] **UIX-08**: Onboarding flow for new users
-- [ ] **UIX-09**: Keyboard shortcuts for power users (desktop)
+- [x] **UIX-01**: Design system with consistent component library (shadcn/ui)
+- [x] **UIX-02**: Empty states for all list views with helpful guidance
+- [x] **UIX-03**: Loading states with skeleton placeholders
+- [x] **UIX-04**: Error handling UI with recovery actions
+- [x] **UIX-05**: Form validation with inline feedback
+- [x] **UIX-06**: Dark mode theme support
+- [x] **UIX-07**: Micro-animations for state transitions
+- [x] **UIX-08**: Onboarding flow for new users
+- [x] **UIX-09**: Keyboard shortcuts for power users (desktop)
 
 ### Security & RBAC
 
@@ -112,13 +112,13 @@ Which phases cover which requirements. Updated during roadmap creation.
 | MOB-06 | Phase 15 | Complete |
 | MOB-07 | Phase 15 | Complete |
 | MOB-08 | Phase 15 | Complete |
-| UIX-02 | Phase 16 | Pending |
-| UIX-03 | Phase 16 | Pending |
-| UIX-04 | Phase 16 | Pending |
-| UIX-05 | Phase 16 | Pending |
-| UIX-07 | Phase 16 | Pending |
-| UIX-08 | Phase 16 | Pending |
-| UIX-09 | Phase 16 | Pending |
+| UIX-02 | Phase 16 | Complete |
+| UIX-03 | Phase 16 | Complete |
+| UIX-04 | Phase 16 | Complete |
+| UIX-05 | Phase 16 | Complete |
+| UIX-07 | Phase 16 | Complete |
+| UIX-08 | Phase 16 | Complete |
+| UIX-09 | Phase 16 | Complete |
 | FAC-03 | Phase 17 | Pending |
 | FAC-05 | Phase 17 | Pending |
 | FAC-06 | Phase 17 | Pending |
