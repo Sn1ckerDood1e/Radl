@@ -7,6 +7,7 @@ import { Toaster } from 'sonner';
 import { AbilityProvider } from '@/components/permissions/ability-provider';
 import { getClaimsForApiRoute } from '@/lib/auth/claims';
 import type { UserContext } from '@/lib/permissions/ability';
+import { CommandPaletteProvider } from '@/components/command-palette/command-palette-provider';
 
 /**
  * Dashboard layout with CASL AbilityProvider integration.
@@ -126,6 +127,7 @@ export default async function DashboardLayout({
     <AbilityProvider user={userContext}>
       <TeamColorProvider colors={teamColors}>
         <PWAWrapper>
+          <CommandPaletteProvider />
           <div className="min-h-screen bg-[var(--background)] transition-colors">
             <DashboardHeader team={legacyTeam} contexts={contexts} />
             <main className="container mx-auto px-4 py-8">
