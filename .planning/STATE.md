@@ -11,23 +11,24 @@
 | Field | Value |
 |-------|-------|
 | Milestone | v2.0 Commercial Readiness |
-| Phase | Phase 13: Facility Auth Integration |
-| Plan | 6 of 6 |
-| Status | Complete |
-| Last activity | 2026-01-23 — Phase 13 verified and complete |
+| Phase | Phase 14: Design System Foundation |
+| Plan | 1 of 4 |
+| Status | In progress |
+| Last activity | 2026-01-24 — Completed 14-01-PLAN.md |
 
 **Progress:**
 ```
 v1.0: [##########] 100% SHIPPED (2026-01-22)
 v1.1: [##########] 100% SHIPPED (2026-01-22) — 9/11 reqs, 2 deferred
-v2.0: [#######   ] 35% — Phase 13 complete (12/34 requirements)
+v2.0: [########  ] 38% — Phase 14 started (13/34 requirements, 76/79 plans)
 ```
 
 **Current Phase Detail:**
-- Phase 13: Facility Auth Integration — COMPLETE (6/6 plans)
-- Delivered: CASL viewMode permissions, context switch API, context validator, context switcher UI, dashboard integration, facility dashboard page, E2E verified
+- Phase 14: Design System Foundation — IN PROGRESS (1/4 plans)
+- Completed: shadcn/ui initialization with Tailwind v4 and CSS variable mapping
 
 **Previous Phases:**
+- Phase 13: Facility Auth Integration — COMPLETE (6/6 plans)
 - Phase 12: Facility Schema Migration — COMPLETE (7/7 plans)
 - Phase 11: MFA & SSO — COMPLETE (12/12 plans)
 
@@ -89,6 +90,9 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 - Mobile parallel with auth (no dependency, can run simultaneously)
 - Facility UI last (requires complete foundation)
 - No-inheritance RBAC: FACILITY_ADMIN cannot create lineups without explicit COACH role
+- Zinc color scheme for shadcn/ui (matches existing --surface palette)
+- Map shadcn variables to existing theme rather than replace (--color-primary uses --team-primary, not new variable)
+- Preserve original CSS structure, use @theme inline for Tailwind v4 mapping only
 
 ### Architecture Notes
 
@@ -129,8 +133,13 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 - **Dashboard layout integration:** AbilityProvider wrapping dashboard children, SSR context hydration for header
 - **Onboarding flow:** /onboarding page for users without memberships
 
+**v2.0 additions (implemented in Phase 14):**
+- **Design system foundation:** shadcn/ui with Tailwind v4, zinc color scheme
+- **CSS variable mapping:** shadcn namespace mapped to existing theme (--color-card uses --surface-2, --color-primary uses --team-primary)
+- **Component utilities:** cn() function for className composition with clsx + tailwind-merge
+- **Animation library:** tw-animate-css for Tailwind v4 animation support
+
 **v2.0 additions (planned):**
-- **Design system:** shadcn/ui with Tailwind v4 theme
 - **Touch gestures:** @use-gesture/react for mobile interactions
 
 ### Tech Debt Tracker
@@ -166,10 +175,10 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
 
 | Field | Value |
 |-------|-------|
-| Last session | 2026-01-23 |
-| Stopped at | Phase 13 complete |
+| Last session | 2026-01-24 |
+| Stopped at | Completed 14-01-PLAN.md |
 | Resume file | None |
 
 ---
 
-*Last updated: 2026-01-23 (Phase 13 complete)*
+*Last updated: 2026-01-24 (Phase 14 Plan 01 complete)*
