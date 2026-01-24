@@ -13,19 +13,19 @@
 | Milestone | v2.0 Commercial Readiness |
 | Phase | Phase 14: Design System Foundation |
 | Plan | 4 of 4 |
-| Status | In progress |
-| Last activity | 2026-01-23 — Completed 14-04-PLAN.md |
+| Status | Phase complete |
+| Last activity | 2026-01-24 — Completed 14-03-PLAN.md |
 
 **Progress:**
 ```
 v1.0: [##########] 100% SHIPPED (2026-01-22)
 v1.1: [##########] 100% SHIPPED (2026-01-22) — 9/11 reqs, 2 deferred
-v2.0: [########  ] 39% — Phase 14 started (13/34 requirements, 78/79 plans)
+v2.0: [########  ] 40% — Phase 14 complete (14/34 requirements, 79/79 plans)
 ```
 
 **Current Phase Detail:**
-- Phase 14: Design System Foundation — IN PROGRESS (4/4 plans)
-- Completed: shadcn/ui initialization, core component installation, mobile touch targets, component migration tracking
+- Phase 14: Design System Foundation — COMPLETE (4/4 plans)
+- Completed: shadcn/ui initialization, core component installation, mobile touch targets, component migration tracking, theme toggle UI
 
 **Previous Phases:**
 - Phase 13: Facility Auth Integration — COMPLETE (6/6 plans)
@@ -96,6 +96,7 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 - Use class-variance-authority for component variant management (type-safe with IntelliSense)
 - Enable ESLint deprecation tracking for component migration safety
 - Include mobile touch target styles for WCAG 2.5.5 compliance (44px minimum)
+- ThemeToggle uses DropdownMenu pattern for compact header integration (icon button trigger with sr-only label)
 
 ### Architecture Notes
 
@@ -182,10 +183,10 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
 
 | Field | Value |
 |-------|-------|
-| Last session | 2026-01-23 |
-| Stopped at | Completed 14-04-PLAN.md |
+| Last session | 2026-01-24 |
+| Stopped at | Completed 14-03-PLAN.md (Phase 14 complete) |
 | Resume file | None |
 
 ---
 
-*Last updated: 2026-01-23 (Phase 14 Plan 04 complete)*
+*Last updated: 2026-01-24 (Phase 14 complete)*
