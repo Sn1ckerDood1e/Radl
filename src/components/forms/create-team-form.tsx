@@ -8,6 +8,8 @@ import { createTeamSchema, type CreateTeamInput } from '@/lib/validations/team';
 import { createClient } from '@/lib/supabase/client';
 import { LogoUploadField } from './logo-upload-field';
 import { ColorPickerFields } from './color-picker-fields';
+import { FormField } from '@/components/ui/form-field';
+import { showErrorToast, showSuccessToast } from '@/lib/toast-helpers';
 
 /**
  * Form for creating a new team.
@@ -20,13 +22,14 @@ export function CreateTeamForm() {
   // --- Form State ---
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [logoFile, setLogoFile] = useState<File | null>(null);
-  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<CreateTeamInput>({
+    mode: 'onTouched',
+    reValidateMode: 'onChange',
     resolver: zodResolver(createTeamSchema),
     defaultValues: {
       primaryColor: '#1a365d',
@@ -36,12 +39,10 @@ export function CreateTeamForm() {
 
   const handleLogoChange = (file: File | null) => {
     setLogoFile(file);
-    setSubmitError(null);
   };
 
   const onSubmit = async (data: CreateTeamInput) => {
     setIsSubmitting(true);
-    setSubmitError(null);
 
     try {
       // 1. Create team via API
@@ -95,11 +96,17 @@ export function CreateTeamForm() {
       const supabaseForRefresh = createClient();
       await supabaseForRefresh.auth.refreshSession();
 
+      showSuccessToast('Team created');
+
       // 4. Redirect to team dashboard
       router.push(`/${teamSlug}`);
 
     } catch (error) {
-      setSubmitError(error instanceof Error ? error.message : 'An error occurred');
+      showErrorToast({
+        message: 'Failed to create team',
+        description: error instanceof Error ? error.message : undefined,
+        retry: () => onSubmit(data),
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -107,28 +114,24 @@ export function CreateTeamForm() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 max-w-lg">
-      {submitError && (
-        <div className="p-4 text-sm text-red-700 bg-red-100 rounded-md">
-          {submitError}
-        </div>
-      )}
-
       {/* Team Name */}
-      <div>
-        <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-          Team Name
-        </label>
+      <FormField
+        label="Team Name"
+        htmlFor="name"
+        error={errors.name}
+        required
+      >
         <input
           type="text"
           id="name"
           {...register('name')}
-          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+          aria-invalid={errors.name ? 'true' : 'false'}
+          className={`mt-1 block w-full rounded-md border px-3 py-2 shadow-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 ${
+            errors.name ? 'border-red-500' : 'border-gray-300'
+          }`}
           placeholder="Enter your team name"
         />
-        {errors.name && (
-          <p className="mt-1 text-sm text-red-600">{errors.name.message}</p>
-        )}
-      </div>
+      </FormField>
 
       {/* Color Pickers */}
       <ColorPickerFields register={register} errors={errors} />

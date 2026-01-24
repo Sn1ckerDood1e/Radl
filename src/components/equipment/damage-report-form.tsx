@@ -6,6 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { createDamageReportSchema, type CreateDamageReportInput } from '@/lib/validations/damage-report';
 import { createClient } from '@/lib/supabase/client';
 import { nanoid } from 'nanoid';
+import { showErrorToast, showSuccessToast } from '@/lib/toast-helpers';
 
 interface DamageReportFormProps {
   equipmentId: string;
@@ -18,7 +19,6 @@ const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/web
 
 export function DamageReportForm({ equipmentId, teamId }: DamageReportFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitError, setSubmitError] = useState<string | null>(null);
   const [isSuccess, setIsSuccess] = useState(false);
   const [photoFile, setPhotoFile] = useState<File | null>(null);
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
@@ -86,7 +86,6 @@ export function DamageReportForm({ equipmentId, teamId }: DamageReportFormProps)
 
   const onSubmit = async (data: CreateDamageReportInput) => {
     setIsSubmitting(true);
-    setSubmitError(null);
 
     try {
       let photoUrl: string | null = null;
@@ -113,9 +112,14 @@ export function DamageReportForm({ equipmentId, teamId }: DamageReportFormProps)
         throw new Error(result.error || 'Failed to submit report');
       }
 
+      showSuccessToast('Damage reported');
       setIsSuccess(true);
     } catch (error) {
-      setSubmitError(error instanceof Error ? error.message : 'An error occurred');
+      showErrorToast({
+        message: 'Failed to submit damage report',
+        description: error instanceof Error ? error.message : undefined,
+        retry: () => onSubmit(data),
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -152,12 +156,6 @@ export function DamageReportForm({ equipmentId, teamId }: DamageReportFormProps)
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="bg-white rounded-lg shadow p-6 space-y-6">
-      {submitError && (
-        <div className="p-4 text-sm text-red-700 bg-red-100 rounded-md">
-          {submitError}
-        </div>
-      )}
-
       {/* Location field */}
       <div>
         <label htmlFor="location" className="block text-sm font-medium text-gray-700">

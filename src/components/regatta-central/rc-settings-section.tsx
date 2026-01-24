@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { Loader2, Link as LinkIcon, Unlink, RefreshCw, Check, X } from 'lucide-react';
 import { toast } from 'sonner';
+import { showErrorToast, showSuccessToast } from '@/lib/toast-helpers';
 
 interface ConnectionStatus {
   connected: boolean;
@@ -101,14 +102,18 @@ export function RCSettingsSection() {
         throw new Error(data.error || 'Connection failed');
       }
 
-      toast.success('Regatta Central connected successfully');
+      showSuccessToast('Regatta Central connected successfully');
       setShowConnectForm(false);
       setUsername('');
       setPassword('');
       setRcClubId('');
       fetchStatus();
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Failed to connect');
+      showErrorToast({
+        message: 'Failed to connect to Regatta Central',
+        description: error instanceof Error ? error.message : undefined,
+        retry: () => handleConnect(e),
+      });
     } finally {
       setConnecting(false);
     }
@@ -127,11 +132,15 @@ export function RCSettingsSection() {
         throw new Error('Failed to disconnect');
       }
 
-      toast.success('Regatta Central disconnected');
+      showSuccessToast('Regatta Central disconnected');
       setShowDisconnectConfirm(false);
       fetchStatus();
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Failed to disconnect');
+      showErrorToast({
+        message: 'Failed to disconnect',
+        description: error instanceof Error ? error.message : undefined,
+        retry: handleDisconnect,
+      });
     } finally {
       setDisconnecting(false);
     }
@@ -179,7 +188,11 @@ export function RCSettingsSection() {
       setRcRegattaId('');
       fetchStatus();
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Import failed');
+      showErrorToast({
+        message: 'Failed to import regatta',
+        description: error instanceof Error ? error.message : undefined,
+        retry: () => handleImport(e),
+      });
     } finally {
       setImporting(false);
     }
@@ -204,9 +217,13 @@ export function RCSettingsSection() {
       }
 
       setStatus(prev => prev ? { ...prev, autoSyncEnabled: newValue } : null);
-      toast.success(`Auto-sync ${newValue ? 'enabled' : 'disabled'}`);
-    } catch {
-      toast.error('Failed to update auto-sync setting');
+      showSuccessToast(`Auto-sync ${newValue ? 'enabled' : 'disabled'}`);
+    } catch (error) {
+      showErrorToast({
+        message: 'Failed to update auto-sync setting',
+        description: error instanceof Error ? error.message : undefined,
+        retry: handleToggleAutoSync,
+      });
     } finally {
       setTogglingSync(false);
     }

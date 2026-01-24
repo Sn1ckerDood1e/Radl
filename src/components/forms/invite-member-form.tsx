@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createInvitationSchema, type CreateInvitationInput } from '@/lib/validations/invitation';
+import { FormField } from '@/components/ui/form-field';
+import { showErrorToast, showSuccessToast } from '@/lib/toast-helpers';
 
 interface Athlete {
   id: string;
@@ -25,8 +27,6 @@ interface InviteMemberFormProps {
 export function InviteMemberForm({ teamSlug, onSuccess }: InviteMemberFormProps) {
   // --- Form State ---
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitError, setSubmitError] = useState<string | null>(null);
-  const [submitSuccess, setSubmitSuccess] = useState<string | null>(null);
 
   // --- Athletes Data (for parent linking) ---
   const [athletes, setAthletes] = useState<Athlete[]>([]);
@@ -39,6 +39,8 @@ export function InviteMemberForm({ teamSlug, onSuccess }: InviteMemberFormProps)
     reset,
     formState: { errors },
   } = useForm<CreateInvitationInput>({
+    mode: 'onTouched',
+    reValidateMode: 'onChange',
     resolver: zodResolver(createInvitationSchema),
     defaultValues: {
       role: 'ATHLETE',
@@ -71,8 +73,6 @@ export function InviteMemberForm({ teamSlug, onSuccess }: InviteMemberFormProps)
 
   const onSubmit = async (data: CreateInvitationInput) => {
     setIsSubmitting(true);
-    setSubmitError(null);
-    setSubmitSuccess(null);
 
     try {
       const response = await fetch('/api/invitations', {
@@ -87,11 +87,15 @@ export function InviteMemberForm({ teamSlug, onSuccess }: InviteMemberFormProps)
         throw new Error(result.error || 'Failed to create invitation');
       }
 
-      setSubmitSuccess(`Invitation sent to ${data.email}`);
+      showSuccessToast('Invitation sent', `Sent to ${data.email}`);
       reset();
       onSuccess?.();
     } catch (error) {
-      setSubmitError(error instanceof Error ? error.message : 'An error occurred');
+      showErrorToast({
+        message: 'Failed to send invitation',
+        description: error instanceof Error ? error.message : undefined,
+        retry: () => onSubmit(data),
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -102,52 +106,40 @@ export function InviteMemberForm({ teamSlug, onSuccess }: InviteMemberFormProps)
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-      {submitError && (
-        <div className="p-3 text-sm text-red-400 bg-red-500/10 border border-red-500/30 rounded-lg">
-          {submitError}
-        </div>
-      )}
-
-      {submitSuccess && (
-        <div className="p-3 text-sm text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 rounded-lg">
-          {submitSuccess}
-        </div>
-      )}
-
       {/* Email */}
-      <div>
-        <label htmlFor="email" className={labelClassName}>
-          Email Address
-        </label>
+      <FormField
+        label="Email Address"
+        htmlFor="email"
+        error={errors.email}
+        required
+      >
         <input
           type="email"
           id="email"
           {...register('email')}
-          className={inputClassName}
+          aria-invalid={errors.email ? 'true' : 'false'}
+          className={`${inputClassName} ${errors.email ? 'border-red-500' : ''}`}
           placeholder="athlete@example.com"
         />
-        {errors.email && (
-          <p className="mt-1 text-sm text-red-400">{errors.email.message}</p>
-        )}
-      </div>
+      </FormField>
 
       {/* Role */}
-      <div>
-        <label htmlFor="role" className={labelClassName}>
-          Role
-        </label>
+      <FormField
+        label="Role"
+        htmlFor="role"
+        error={errors.role}
+        required
+      >
         <select
           id="role"
           {...register('role')}
-          className={inputClassName}
+          aria-invalid={errors.role ? 'true' : 'false'}
+          className={`${inputClassName} ${errors.role ? 'border-red-500' : ''}`}
         >
           <option value="ATHLETE">Athlete</option>
           <option value="PARENT">Parent</option>
         </select>
-        {errors.role && (
-          <p className="mt-1 text-sm text-red-400">{errors.role.message}</p>
-        )}
-      </div>
+      </FormField>
 
       {/* Athlete Selection (for parents) */}
       {selectedRole === 'PARENT' && (
@@ -165,7 +157,8 @@ export function InviteMemberForm({ teamSlug, onSuccess }: InviteMemberFormProps)
             <select
               id="athleteId"
               {...register('athleteId')}
-              className={inputClassName}
+              aria-invalid={errors.athleteId ? 'true' : 'false'}
+              className={`${inputClassName} ${errors.athleteId ? 'border-red-500' : ''}`}
             >
               <option value="">Select an athlete...</option>
               {athletes.map(athlete => (
