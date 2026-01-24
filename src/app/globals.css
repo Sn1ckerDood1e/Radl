@@ -203,3 +203,49 @@ select {
     align-items: center;
   }
 }
+
+/* =============================================================================
+   Mobile PWA Utilities
+   ============================================================================= */
+
+/* Safe area insets for notched devices (iPhone X+) */
+.safe-area-inset-top {
+  padding-top: env(safe-area-inset-top);
+}
+
+.safe-area-inset-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Prevent pull-to-refresh on PWA (optional, can cause issues) */
+.no-overscroll {
+  overscroll-behavior: none;
+}
+
+/* Mobile viewport height fix (100vh issues on mobile browsers) */
+.min-h-screen-mobile {
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+/* Touch manipulation for swipeable elements */
+.touch-pan-y {
+  touch-action: pan-y;
+}
+
+.touch-pan-x {
+  touch-action: pan-x;
+}
+
+/* Mobile-friendly focus styles */
+@media (max-width: 767px) {
+  /* Remove tap highlight on mobile */
+  button, a, [role="button"] {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Ensure dialogs and drawers respect safe areas */
+  [data-radix-popper-content-wrapper] {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
