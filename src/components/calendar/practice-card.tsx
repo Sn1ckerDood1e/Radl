@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { format } from 'date-fns';
+import { SwipeableListItem } from '@/components/mobile/swipeable-list-item';
 
 interface PracticeCardProps {
   id: string;
@@ -10,6 +11,9 @@ interface PracticeCardProps {
   endTime?: string;
   status?: 'DRAFT' | 'PUBLISHED';
   teamSlug: string;
+  onEdit?: () => void;
+  onDelete?: () => void;
+  canEdit?: boolean;
 }
 
 /**
@@ -24,6 +28,9 @@ export function PracticeCard({
   endTime,
   status,
   teamSlug,
+  onEdit,
+  onDelete,
+  canEdit = false,
 }: PracticeCardProps) {
   const isDraft = status === 'DRAFT';
   const startDate = new Date(startTime);
@@ -35,45 +42,51 @@ export function PracticeCard({
     : format(startDate, 'h:mm a');
 
   return (
-    <Link
-      href={`/${teamSlug}/practices/${id}`}
-      className={`
-        block p-3 rounded-lg border transition-colors
-        ${isDraft
-          ? 'bg-amber-500/10 border-amber-500/30 hover:border-amber-500/50'
-          : 'bg-zinc-800 border-zinc-700 hover:border-zinc-600'
-        }
-      `}
+    <SwipeableListItem
+      onSwipeLeft={onDelete}
+      onSwipeRight={onEdit}
+      disabled={!canEdit}
     >
-      <div className="flex items-center gap-2">
-        {/* Practice icon */}
-        <svg
-          className={`h-4 w-4 flex-shrink-0 ${isDraft ? 'text-amber-400' : 'text-blue-400'}`}
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-          />
-        </svg>
-        <div className="min-w-0 flex-1">
-          <p className={`text-sm font-medium truncate ${isDraft ? 'text-amber-300' : 'text-white'}`}>
-            {name}
-          </p>
-          <p className={`text-xs ${isDraft ? 'text-amber-400/70' : 'text-zinc-400'}`}>
-            {timeDisplay}
-          </p>
+      <Link
+        href={`/${teamSlug}/practices/${id}`}
+        className={`
+          block p-3 rounded-lg border transition-colors
+          ${isDraft
+            ? 'bg-amber-500/10 border-amber-500/30 hover:border-amber-500/50'
+            : 'bg-zinc-800 border-zinc-700 hover:border-zinc-600'
+          }
+        `}
+      >
+        <div className="flex items-center gap-2">
+          {/* Practice icon */}
+          <svg
+            className={`h-4 w-4 flex-shrink-0 ${isDraft ? 'text-amber-400' : 'text-blue-400'}`}
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+          <div className="min-w-0 flex-1">
+            <p className={`text-sm font-medium truncate ${isDraft ? 'text-amber-300' : 'text-white'}`}>
+              {name}
+            </p>
+            <p className={`text-xs ${isDraft ? 'text-amber-400/70' : 'text-zinc-400'}`}>
+              {timeDisplay}
+            </p>
+          </div>
+          {isDraft && (
+            <span className="inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-amber-500/20 text-amber-400">
+              Draft
+            </span>
+          )}
         </div>
-        {isDraft && (
-          <span className="inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-amber-500/20 text-amber-400">
-            Draft
-          </span>
-        )}
-      </div>
-    </Link>
+      </Link>
+    </SwipeableListItem>
   );
 }
