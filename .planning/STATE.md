@@ -12,9 +12,9 @@
 |-------|-------|
 | Milestone | v2.0 Commercial Readiness |
 | Phase | Phase 16: UI/UX Polish |
-| Plan | 3 of TBD |
+| Plan | 1 of TBD |
 | Status | In progress |
-| Last activity | 2026-01-24 — Completed 16-02-PLAN.md |
+| Last activity | 2026-01-24 — Completed 16-01-PLAN.md |
 
 **Progress:**
 ```
@@ -24,9 +24,9 @@ v2.0: [#######   ] 70% — Phase 16 in progress (23/34 requirements)
 ```
 
 **Current Phase Detail:**
-- Phase 16: UI/UX Polish — IN PROGRESS (3 plans complete)
+- Phase 16: UI/UX Polish — IN PROGRESS (1 plan complete)
 - Goal: Application provides modern, intuitive experience with helpful guidance and polished interactions
-- Recent: Error toasts with retry actions and inline success animations for consistent feedback
+- Recent: Skeleton and EmptyState components for loading and empty states
 
 **Previous Phases:**
 - Phase 15: Mobile PWA Improvements — COMPLETE (6/6 plans)
@@ -100,10 +100,10 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 - Enable ESLint deprecation tracking for component migration safety
 - Include mobile touch target styles for WCAG 2.5.5 compliance (44px minimum)
 - ThemeToggle uses DropdownMenu pattern for compact header integration (icon button trigger with sr-only label)
-- Use onTouched validation mode for optimal UX (validates on blur, then on change)
-- Error toasts persist until dismissed (duration: Infinity) to prevent missing critical errors
-- Success toasts auto-dismiss after 4s to avoid notification fatigue
-- Retry actions in error toasts help users recover from transient failures
+- Use shadcn skeleton component for consistent pulse animation across loading states
+- EmptyState component supports both href (Link) and onClick action patterns for flexibility
+- Loading skeletons mirror actual content layout dimensions to prevent visual shift on load
+- Empty states show contextual action buttons only to coaches based on isCoach check
 
 ### Architecture Notes
 
@@ -166,12 +166,8 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 - **Responsive menus:** ResponsiveMenu component adapting Drawer (mobile) and DropdownMenu (desktop)
 
 **v2.0 additions (implemented in Phase 16 - in progress):**
-- **Loading skeletons:** Skeleton and EmptyState components for perceived performance
-- **Error handling patterns:** showErrorToast with retry actions, showSuccessToast with 4s auto-dismiss
-- **Form validation UX:** FormField component with onTouched mode for immediate, non-intrusive feedback
-- **Inline success states:** InlineSuccess component with zoom/fade animation for quick feedback
-- **Animation utilities:** 9 animation presets (fadeIn, slideInFromBottom, zoomIn, etc.)
-- **List animations:** AnimatedListItem with 50ms stagger delay for smooth cascades
+- **Loading skeletons:** Skeleton component with pulse animation, loading.tsx files for roster/equipment/practices
+- **Empty states:** EmptyState component with icon, title, description, and optional action (applied to 6 list pages)
 
 ### Tech Debt Tracker
 
@@ -207,9 +203,9 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
 | Field | Value |
 |-------|-------|
 | Last session | 2026-01-24 |
-| Stopped at | Completed 16-02-PLAN.md |
+| Stopped at | Completed 16-01-PLAN.md |
 | Resume file | None |
 
 ---
 
-*Last updated: 2026-01-24 (Phase 16 in progress - 3 plans complete)*
+*Last updated: 2026-01-24 (Phase 16 in progress - 1 plan complete)*
