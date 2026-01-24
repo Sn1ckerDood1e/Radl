@@ -13,6 +13,19 @@ const eslintConfig = defineConfig([
     "build/**",
     "next-env.d.ts",
   ]),
+  // Component migration tracking
+  {
+    languageOptions: {
+      parserOptions: {
+        projectService: true,
+      },
+    },
+    rules: {
+      // Warn when using @deprecated components
+      // Mark old components with JSDoc @deprecated tag during migration
+      '@typescript-eslint/no-deprecated': 'warn',
+    },
+  },
 ]);
 
 export default eslintConfig;
