@@ -12,9 +12,9 @@
 |-------|-------|
 | Milestone | v2.0 Commercial Readiness |
 | Phase | Phase 15: Mobile PWA Improvements |
-| Plan | 4 of 6 |
+| Plan | 5 of 6 |
 | Status | In progress |
-| Last activity | 2026-01-24 — Completed 15-04-PLAN.md |
+| Last activity | 2026-01-24 — Completed 15-05-PLAN.md |
 
 **Progress:**
 ```
@@ -24,8 +24,8 @@ v2.0: [########  ] 53% — Phase 15 in progress (18/34 requirements)
 ```
 
 **Current Phase Detail:**
-- Phase 15: Mobile PWA Improvements — IN PROGRESS (4/6 plans)
-- Completed: Core dependencies (@use-gesture/react, vaul), Drawer, view transitions, useSyncStatus hook, SyncStatusIndicator, useSwipeGesture hook, SwipeableListItem, useMediaQuery, ResponsiveMenu
+- Phase 15: Mobile PWA Improvements — IN PROGRESS (5/6 plans)
+- Completed: Core dependencies (@use-gesture/react, vaul), Drawer, view transitions, useSyncStatus hook, SyncStatusIndicator, useSwipeGesture hook, SwipeableListItem, useMediaQuery, ResponsiveMenu, usePwaInstall hook, iOS InstallBanner instructions, mobile CSS utilities
 
 **Previous Phases:**
 - Phase 14: Design System Foundation — COMPLETE (4/4 plans)
@@ -193,9 +193,9 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
 | Field | Value |
 |-------|-------|
 | Last session | 2026-01-24 |
-| Stopped at | Completed 15-04-PLAN.md |
+| Stopped at | Completed 15-05-PLAN.md |
 | Resume file | None |
 
 ---
 
-*Last updated: 2026-01-24 (15-03, 15-04 complete)*
+*Last updated: 2026-01-24 (15-05 complete)*
