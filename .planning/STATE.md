@@ -12,20 +12,21 @@
 |-------|-------|
 | Milestone | v2.0 Commercial Readiness |
 | Phase | Phase 16: UI/UX Polish |
-| Plan | 0 of TBD |
-| Status | Ready to plan |
-| Last activity | 2026-01-24 — Completed Phase 15 |
+| Plan | 3 of TBD |
+| Status | In progress |
+| Last activity | 2026-01-24 — Completed 16-02-PLAN.md |
 
 **Progress:**
 ```
 v1.0: [##########] 100% SHIPPED (2026-01-22)
 v1.1: [##########] 100% SHIPPED (2026-01-22) — 9/11 reqs, 2 deferred
-v2.0: [######    ] 65% — Phase 16 ready (22/34 requirements)
+v2.0: [#######   ] 70% — Phase 16 in progress (23/34 requirements)
 ```
 
 **Current Phase Detail:**
-- Phase 16: UI/UX Polish — READY TO PLAN
+- Phase 16: UI/UX Polish — IN PROGRESS (3 plans complete)
 - Goal: Application provides modern, intuitive experience with helpful guidance and polished interactions
+- Recent: Enhanced form validation with onTouched mode for immediate, non-intrusive feedback
 
 **Previous Phases:**
 - Phase 15: Mobile PWA Improvements — COMPLETE (6/6 plans)
@@ -99,6 +100,7 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 - Enable ESLint deprecation tracking for component migration safety
 - Include mobile touch target styles for WCAG 2.5.5 compliance (44px minimum)
 - ThemeToggle uses DropdownMenu pattern for compact header integration (icon button trigger with sr-only label)
+- Use onTouched validation mode for optimal UX (validates on blur, then on change)
 
 ### Architecture Notes
 
@@ -160,6 +162,12 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 - **Media queries:** useMediaQuery hook with SSR support for responsive detection
 - **Responsive menus:** ResponsiveMenu component adapting Drawer (mobile) and DropdownMenu (desktop)
 
+**v2.0 additions (implemented in Phase 16 - in progress):**
+- **Loading skeletons:** Skeleton and EmptyState components for perceived performance
+- **Toast helpers:** showSuccessToast and showErrorToast for consistent notifications
+- **Form validation UX:** FormField component with onTouched mode for immediate, non-intrusive feedback
+- **Inline success states:** InlineSuccess component for contextual success messages
+
 ### Tech Debt Tracker
 
 | Item | Status | Notes |
@@ -194,9 +202,9 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
 | Field | Value |
 |-------|-------|
 | Last session | 2026-01-24 |
-| Stopped at | Completed Phase 15 |
+| Stopped at | Completed 16-03-PLAN.md |
 | Resume file | None |
 
 ---
 
-*Last updated: 2026-01-24 (Phase 15 complete)*
+*Last updated: 2026-01-24 (Phase 16 in progress - 3 plans complete)*
