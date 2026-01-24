@@ -15,6 +15,7 @@ const eslintConfig = defineConfig([
   ]),
   // Component migration tracking
   {
+    files: ['src/**/*.ts', 'src/**/*.tsx'],
     languageOptions: {
       parserOptions: {
         projectService: true,
