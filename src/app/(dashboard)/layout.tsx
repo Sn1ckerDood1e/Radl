@@ -1,13 +1,15 @@
 import { redirect } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
 import { DashboardHeader } from '@/components/layout/dashboard-header';
-import { TeamColorProvider } from '@/components/providers/team-color-provider';
 import { PWAWrapper } from '@/components/pwa/pwa-wrapper';
 import { Toaster } from 'sonner';
 import { AbilityProvider } from '@/components/permissions/ability-provider';
 import { getClaimsForApiRoute } from '@/lib/auth/claims';
 import type { UserContext } from '@/lib/permissions/ability';
 import { CommandPaletteProvider } from '@/components/command-palette/command-palette-provider';
+
+// TODO: Re-enable team colors in a future phase
+// import { TeamColorProvider } from '@/components/providers/team-color-provider';
 
 /**
  * Dashboard layout with CASL AbilityProvider integration.
@@ -42,9 +44,6 @@ export default async function DashboardLayout({
     roles: roles as UserContext['roles'],
     viewMode: viewMode ?? 'club',  // Default to club for legacy
   };
-
-  // Default team colors (team-specific colors are set by nested [teamSlug]/layout.tsx)
-  const teamColors = { primaryColor: '#10b981', secondaryColor: '#6ee7b7' };
 
   // Build contexts for header SSR
   const facilityMemberships = await prisma.facilityMembership.findMany({
@@ -116,18 +115,17 @@ export default async function DashboardLayout({
 
   return (
     <AbilityProvider user={userContext}>
-      <TeamColorProvider colors={teamColors}>
-        <PWAWrapper>
-          <CommandPaletteProvider />
-          <div className="min-h-screen bg-[var(--background)] transition-colors">
-            <DashboardHeader team={legacyTeam} contexts={contexts} />
-            <main className="container mx-auto px-4 py-8">
-              {children}
-            </main>
-            <Toaster position="bottom-right" richColors closeButton theme="dark" />
-          </div>
-        </PWAWrapper>
-      </TeamColorProvider>
+      {/* TODO: Re-enable TeamColorProvider in a future phase */}
+      <PWAWrapper>
+        <CommandPaletteProvider />
+        <div className="min-h-screen bg-[var(--background)] transition-colors">
+          <DashboardHeader team={legacyTeam} contexts={contexts} />
+          <main className="container mx-auto px-4 py-8">
+            {children}
+          </main>
+          <Toaster position="bottom-right" richColors closeButton theme="dark" />
+        </div>
+      </PWAWrapper>
     </AbilityProvider>
   );
 }
