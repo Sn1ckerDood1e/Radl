@@ -11,21 +11,21 @@
 | Field | Value |
 |-------|-------|
 | Milestone | v2.0 Commercial Readiness |
-| Phase | Phase 14: Design System Foundation |
-| Plan | 4 of 4 |
-| Status | Phase verified |
-| Last activity | 2026-01-24 — Phase 14 verified, ready for Phase 15 |
+| Phase | Phase 15: Mobile PWA Improvements |
+| Plan | 1 of 6 |
+| Status | In progress |
+| Last activity | 2026-01-24 — Completed 15-01-PLAN.md |
 
 **Progress:**
 ```
 v1.0: [##########] 100% SHIPPED (2026-01-22)
 v1.1: [##########] 100% SHIPPED (2026-01-22) — 9/11 reqs, 2 deferred
-v2.0: [########  ] 41% — Phase 14 verified (14/34 requirements)
+v2.0: [########  ] 44% — Phase 15 started (15/34 requirements)
 ```
 
 **Current Phase Detail:**
-- Phase 14: Design System Foundation — VERIFIED (5/5 success criteria)
-- Completed: shadcn/ui with Tailwind v4, CSS variable mapping, 5 core components, theme toggle UI, 44px mobile touch targets, ESLint migration tracking
+- Phase 15: Mobile PWA Improvements — IN PROGRESS (1/6 plans)
+- Completed: Core dependencies installed (@use-gesture/react, vaul), Drawer component, view transitions enabled
 
 **Previous Phases:**
 - Phase 14: Design System Foundation — COMPLETE (4/4 plans)
@@ -148,8 +148,10 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 - **Mobile accessibility:** WCAG 2.5.5 touch targets (44px minimum on mobile)
 - **Component migration tracking:** ESLint @deprecated rule for safe migrations
 
-**v2.0 additions (planned):**
-- **Touch gestures:** @use-gesture/react for mobile interactions
+**v2.0 additions (implemented in Phase 15):**
+- **Touch gestures:** @use-gesture/react for mobile touch interactions
+- **Bottom sheets:** vaul-based Drawer component for mobile menus and action sheets
+- **View transitions:** Next.js experimental.viewTransition for smooth page navigation
 
 ### Tech Debt Tracker
 
@@ -185,9 +187,9 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
 | Field | Value |
 |-------|-------|
 | Last session | 2026-01-24 |
-| Stopped at | Phase 14 verified, ready for Phase 15 |
+| Stopped at | Completed 15-01-PLAN.md |
 | Resume file | None |
 
 ---
 
-*Last updated: 2026-01-24 (Phase 14 verified)*
+*Last updated: 2026-01-24 (15-01 complete)*
