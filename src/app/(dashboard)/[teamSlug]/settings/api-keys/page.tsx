@@ -1,7 +1,6 @@
 import { Suspense } from 'react';
-import { requireTeam } from '@/lib/auth/authorize';
+import { requireTeamBySlug } from '@/lib/auth/authorize';
 import { prisma } from '@/lib/prisma';
-import { getCurrentClubId } from '@/lib/auth/club-context';
 import { redirect } from 'next/navigation';
 import { ApiKeyList } from './api-key-list';
 
@@ -9,28 +8,26 @@ export const metadata = {
   title: 'API Keys - Settings',
 };
 
-export default async function ApiKeysPage() {
-  const { user, claims } = await requireTeam();
+interface ApiKeysPageProps {
+  params: Promise<{ teamSlug: string }>;
+}
 
-  const clubId = await getCurrentClubId() || claims.team_id;
-  if (!clubId) redirect('/');
+export default async function ApiKeysPage({ params }: ApiKeysPageProps) {
+  const { teamSlug } = await params;
+
+  // Verify user has membership in this team (by URL slug, not JWT claims)
+  const { user, team, userRoles } = await requireTeamBySlug(teamSlug);
 
   // Check user has admin access
-  const membership = await prisma.clubMembership.findFirst({
-    where: {
-      clubId,
-      userId: user.id,
-      isActive: true,
-    },
-  });
-
-  const isAdmin = membership?.roles.some(r =>
+  const isAdmin = userRoles.some(r =>
     ['FACILITY_ADMIN', 'CLUB_ADMIN'].includes(r)
   );
 
   if (!isAdmin) {
     redirect('/unauthorized');
   }
+
+  const clubId = team.id;
 
   // Get existing API keys
   const apiKeysRaw = await prisma.apiKey.findMany({

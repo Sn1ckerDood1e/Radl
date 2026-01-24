@@ -1,7 +1,5 @@
 import { Suspense } from 'react';
-import { requireTeam } from '@/lib/auth/authorize';
-import { prisma } from '@/lib/prisma';
-import { getCurrentClubId } from '@/lib/auth/club-context';
+import { requireTeamBySlug } from '@/lib/auth/authorize';
 import { redirect } from 'next/navigation';
 import { getSsoConfig } from '@/lib/auth/sso';
 import { SsoConfigForm } from '@/components/settings/sso-config-form';
@@ -10,26 +8,24 @@ export const metadata = {
   title: 'SSO Settings - Settings',
 };
 
-export default async function SsoSettingsPage() {
-  const { user, claims } = await requireTeam();
+interface SsoSettingsPageProps {
+  params: Promise<{ teamSlug: string }>;
+}
 
-  const clubId = (await getCurrentClubId()) || claims.team_id;
-  if (!clubId) redirect('/');
+export default async function SsoSettingsPage({ params }: SsoSettingsPageProps) {
+  const { teamSlug } = await params;
+
+  // Verify user has membership in this team (by URL slug, not JWT claims)
+  const { team, userRoles } = await requireTeamBySlug(teamSlug);
 
   // Check user has FACILITY_ADMIN role
-  const membership = await prisma.clubMembership.findFirst({
-    where: {
-      clubId,
-      userId: user.id,
-      isActive: true,
-    },
-  });
-
-  const isFacilityAdmin = membership?.roles.some((r) => r === 'FACILITY_ADMIN');
+  const isFacilityAdmin = userRoles.some((r) => r === 'FACILITY_ADMIN');
 
   if (!isFacilityAdmin) {
     redirect('/unauthorized');
   }
+
+  const clubId = team.id;
 
   // Get existing SSO configuration
   const existingConfig = await getSsoConfig(clubId);

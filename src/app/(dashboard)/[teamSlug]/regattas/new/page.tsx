@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
-import { requireTeam } from '@/lib/auth/authorize';
+import { requireTeamBySlug } from '@/lib/auth/authorize';
 import { RegattaForm } from '@/components/regatta/regatta-form';
 import { ArrowLeft } from 'lucide-react';
 
@@ -17,22 +17,12 @@ interface PageProps {
 export default async function NewRegattaPage({ params }: PageProps) {
   const { teamSlug } = await params;
 
-  const { claims } = await requireTeam();
-  if (!claims.team_id) redirect('/create-team');
+  // Verify user has membership in this team (by URL slug, not JWT claims)
+  const { team, isCoach } = await requireTeamBySlug(teamSlug);
 
   // Only coaches can create regattas
-  if (claims.user_role !== 'COACH') {
+  if (!isCoach) {
     redirect(`/${teamSlug}/regattas`);
-  }
-
-  // Verify slug matches team
-  const team = await prisma.team.findUnique({
-    where: { id: claims.team_id },
-    select: { id: true, slug: true },
-  });
-
-  if (!team || team.slug !== teamSlug) {
-    redirect('/create-team');
   }
 
   // Get active seasons for dropdown

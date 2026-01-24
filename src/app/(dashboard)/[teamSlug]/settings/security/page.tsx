@@ -1,10 +1,7 @@
 import { Suspense } from 'react';
-import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
-import { requireTeam } from '@/lib/auth/authorize';
-import { prisma } from '@/lib/prisma';
-import { getCurrentClubId } from '@/lib/auth/club-context';
+import { requireTeamBySlug } from '@/lib/auth/authorize';
 import { MfaSection } from '@/components/settings/mfa-section';
 import { PermissionGrantsSection } from '@/components/settings/permission-grants-section';
 
@@ -30,21 +27,12 @@ export default async function SecuritySettingsPage({
   params: Promise<{ teamSlug: string }>;
 }) {
   const { teamSlug } = await params;
-  const { user, claims } = await requireTeam();
 
-  const clubId = await getCurrentClubId() || claims.team_id;
-  if (!clubId) redirect('/');
+  // Verify user has membership in this team (by URL slug, not JWT claims)
+  const { userRoles } = await requireTeamBySlug(teamSlug);
 
-  // Get user's membership to check roles
-  const membership = await prisma.clubMembership.findFirst({
-    where: {
-      clubId,
-      userId: user.id,
-      isActive: true,
-    },
-  });
-
-  const isAdmin = membership?.roles.some(r =>
+  // Check if user is admin
+  const isAdmin = userRoles.some(r =>
     ['FACILITY_ADMIN', 'CLUB_ADMIN'].includes(r)
   );
 

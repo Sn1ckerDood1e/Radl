@@ -1,8 +1,7 @@
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
-import { requireRole } from '@/lib/auth/authorize';
+import { requireTeamBySlug } from '@/lib/auth/authorize';
 import { prisma } from '@/lib/prisma';
-import { createClient } from '@/lib/supabase/server';
 import { AthleteProfileClient } from './profile-client';
 
 interface ProfilePageProps {
@@ -12,28 +11,8 @@ interface ProfilePageProps {
 export default async function AthleteProfilePage({ params }: ProfilePageProps) {
   const { teamSlug, id } = await params;
 
-  // Any team member can view profiles
-  const { claims } = await requireRole(['COACH', 'ATHLETE', 'PARENT']);
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-
-  if (!claims.team_id || !user) {
-    redirect('/create-team');
-  }
-
-  // Get team info
-  const team = await prisma.team.findUnique({
-    where: { id: claims.team_id },
-    select: {
-      id: true,
-      name: true,
-      slug: true,
-    },
-  });
-
-  if (!team || team.slug !== teamSlug) {
-    redirect('/create-team');
-  }
+  // Verify user has membership in this team (by URL slug, not JWT claims)
+  const { user, team, isCoach } = await requireTeamBySlug(teamSlug);
 
   // Get team member by ID with their athlete profile
   const teamMember = await prisma.teamMember.findUnique({
@@ -50,7 +29,6 @@ export default async function AthleteProfilePage({ params }: ProfilePageProps) {
   // Determine if current user can edit:
   // - User is the athlete themselves
   // - User is a coach on the team
-  const isCoach = claims.user_role === 'COACH';
   const isSelf = teamMember.userId === user.id;
   const canEdit = isCoach || isSelf;
 

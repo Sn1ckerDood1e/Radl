@@ -1,6 +1,5 @@
-import { redirect } from 'next/navigation';
 import Link from 'next/link';
-import { requireTeam } from '@/lib/auth/authorize';
+import { requireTeamBySlug } from '@/lib/auth/authorize';
 import { prisma } from '@/lib/prisma';
 import { EquipmentListClient } from './equipment-list-client';
 import { EquipmentUsageSummary } from '@/components/equipment/equipment-usage-summary';
@@ -12,26 +11,8 @@ interface EquipmentPageProps {
 export default async function EquipmentPage({ params }: EquipmentPageProps) {
   const { teamSlug } = await params;
 
-  // Verify user has a team
-  const { claims } = await requireTeam();
-
-  if (!claims.team_id) {
-    redirect('/create-team');
-  }
-
-  // Get team info
-  const team = await prisma.team.findUnique({
-    where: { id: claims.team_id },
-    select: {
-      id: true,
-      name: true,
-      slug: true,
-    },
-  });
-
-  if (!team || team.slug !== teamSlug) {
-    redirect('/create-team');
-  }
+  // Verify user has membership in this team (by URL slug, not JWT claims)
+  const { team, isCoach } = await requireTeamBySlug(teamSlug);
 
   // Get all equipment for the team
   const equipment = await prisma.equipment.findMany({
@@ -87,8 +68,6 @@ export default async function EquipmentPage({ params }: EquipmentPageProps) {
     practiceId: log.practiceId,
     usageDate: log.usageDate.toISOString(),
   }));
-
-  const isCoach = claims.user_role === 'COACH';
 
   return (
     <div className="max-w-6xl mx-auto">

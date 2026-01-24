@@ -1,6 +1,5 @@
-import { redirect } from 'next/navigation';
 import Link from 'next/link';
-import { requireRole } from '@/lib/auth/authorize';
+import { requireTeamBySlug } from '@/lib/auth/authorize';
 import { prisma } from '@/lib/prisma';
 import { RosterClient } from './roster-client';
 import { EmptyState } from '@/components/ui/empty-state';
@@ -13,29 +12,8 @@ interface RosterPageProps {
 export default async function RosterPage({ params }: RosterPageProps) {
   const { teamSlug } = await params;
 
-  // Any team member can view roster
-  const { claims } = await requireRole(['COACH', 'ATHLETE', 'PARENT']);
-
-  if (!claims.team_id) {
-    redirect('/create-team');
-  }
-
-  // Get team info including joinCode
-  const team = await prisma.team.findUnique({
-    where: { id: claims.team_id },
-    select: {
-      id: true,
-      name: true,
-      slug: true,
-      joinCode: true,
-    },
-  });
-
-  if (!team || team.slug !== teamSlug) {
-    redirect('/create-team');
-  }
-
-  const isCoach = claims.user_role === 'COACH';
+  // Verify user has membership in this team (by URL slug, not JWT claims)
+  const { team, isCoach } = await requireTeamBySlug(teamSlug);
 
   // Get all team members and pending invitations in parallel
   const [teamMembers, pendingInvitations] = await Promise.all([

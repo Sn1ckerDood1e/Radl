@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { requireTeam } from '@/lib/auth/authorize';
+import { requireTeamBySlug } from '@/lib/auth/authorize';
 import { prisma } from '@/lib/prisma';
 import { EquipmentDetail } from '@/components/equipment/equipment-detail';
 import { DamageHistory } from '@/components/equipment/damage-history';
@@ -14,28 +14,14 @@ interface EquipmentDetailPageProps {
 export default async function EquipmentDetailPage({ params }: EquipmentDetailPageProps) {
   const { teamSlug, id } = await params;
 
-  // Verify user has team access
-  const { claims } = await requireTeam();
-
-  if (!claims.team_id) {
-    notFound();
-  }
-
-  // Get team to verify slug matches
-  const team = await prisma.team.findUnique({
-    where: { id: claims.team_id },
-    select: { id: true, slug: true },
-  });
-
-  if (!team || team.slug !== teamSlug) {
-    notFound();
-  }
+  // Verify user has membership in this team (by URL slug, not JWT claims)
+  const { team, isCoach } = await requireTeamBySlug(teamSlug);
 
   // Fetch equipment with damage reports
   const equipment = await prisma.equipment.findFirst({
     where: {
       id,
-      teamId: claims.team_id,
+      teamId: team.id,
     },
     include: {
       damageReports: {
@@ -47,8 +33,6 @@ export default async function EquipmentDetailPage({ params }: EquipmentDetailPag
   if (!equipment) {
     notFound();
   }
-
-  const isCoach = claims.user_role === 'COACH';
 
   // Fetch usage history
   const usageLogs = await getUsageLogsForEquipment(equipment.id, { limit: 20 });

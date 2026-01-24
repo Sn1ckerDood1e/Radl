@@ -1,7 +1,6 @@
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
-import { requireRole } from '@/lib/auth/authorize';
-import { prisma } from '@/lib/prisma';
+import { requireTeamBySlug } from '@/lib/auth/authorize';
 import { EquipmentForm } from '@/components/equipment/equipment-form';
 
 interface NewEquipmentPageProps {
@@ -11,25 +10,12 @@ interface NewEquipmentPageProps {
 export default async function NewEquipmentPage({ params }: NewEquipmentPageProps) {
   const { teamSlug } = await params;
 
-  // Verify user is a coach
-  const { claims } = await requireRole(['COACH']);
+  // Verify user has membership in this team (by URL slug, not JWT claims)
+  const { team, isCoach } = await requireTeamBySlug(teamSlug);
 
-  if (!claims.team_id) {
-    redirect('/create-team');
-  }
-
-  // Get team info
-  const team = await prisma.team.findUnique({
-    where: { id: claims.team_id },
-    select: {
-      id: true,
-      name: true,
-      slug: true,
-    },
-  });
-
-  if (!team || team.slug !== teamSlug) {
-    redirect('/create-team');
+  // Only coaches can add equipment
+  if (!isCoach) {
+    redirect(`/${teamSlug}`);
   }
 
   return (

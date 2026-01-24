@@ -1,6 +1,6 @@
 import { prisma } from '@/lib/prisma';
-import { requireTeam } from '@/lib/auth/authorize';
-import { redirect, notFound } from 'next/navigation';
+import { requireTeamBySlug } from '@/lib/auth/authorize';
+import { notFound } from 'next/navigation';
 import { LineupTemplateDetailClient } from './lineup-template-detail-client';
 
 interface PageProps {
@@ -10,27 +10,8 @@ interface PageProps {
 export default async function LineupTemplateDetailPage({ params }: PageProps) {
   const { teamSlug, id } = await params;
 
-  // Verify user has a team
-  const { claims } = await requireTeam();
-
-  if (!claims.team_id) {
-    redirect('/create-team');
-  }
-
-  // Get team and verify membership
-  const team = await prisma.team.findUnique({
-    where: { id: claims.team_id },
-    select: {
-      id: true,
-      slug: true,
-    },
-  });
-
-  if (!team || team.slug !== teamSlug) {
-    redirect('/create-team');
-  }
-
-  const isCoach = claims.user_role === 'COACH';
+  // Verify user has membership in this team (by URL slug, not JWT claims)
+  const { team, isCoach } = await requireTeamBySlug(teamSlug);
 
   // Fetch template with seats and athletes
   const template = await prisma.lineupTemplate.findUnique({

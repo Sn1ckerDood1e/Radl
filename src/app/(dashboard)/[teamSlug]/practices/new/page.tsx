@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
-import { requireRole } from '@/lib/auth/authorize';
+import { requireTeamBySlug } from '@/lib/auth/authorize';
 import { prisma } from '@/lib/prisma';
 import { PracticeForm } from '@/components/practices/practice-form';
 
@@ -13,25 +13,12 @@ export default async function NewPracticePage({ params, searchParams }: NewPract
   const { teamSlug } = await params;
   const { seasonId: seasonIdParam, templateId: templateIdParam } = await searchParams;
 
-  // Verify user is a coach
-  const { claims } = await requireRole(['COACH']);
+  // Verify user has membership in this team (by URL slug, not JWT claims)
+  const { team, isCoach } = await requireTeamBySlug(teamSlug);
 
-  if (!claims.team_id) {
-    redirect('/create-team');
-  }
-
-  // Get team info
-  const team = await prisma.team.findUnique({
-    where: { id: claims.team_id },
-    select: {
-      id: true,
-      name: true,
-      slug: true,
-    },
-  });
-
-  if (!team || team.slug !== teamSlug) {
-    redirect('/create-team');
+  // Only coaches can create practices
+  if (!isCoach) {
+    redirect(`/${teamSlug}/practices`);
   }
 
   // Get active seasons for this team

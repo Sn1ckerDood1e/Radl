@@ -68,6 +68,54 @@ export async function requireRole(allowedRoles: CustomJwtPayload['user_role'][])
   return { user, claims };
 }
 
+/**
+ * Require team membership by URL slug (not by JWT claims)
+ * This is the correct pattern for pages under /[teamSlug]/ routes
+ *
+ * @param teamSlug - The team slug from the URL
+ * @returns User, team info, and role
+ */
+export async function requireTeamBySlug(teamSlug: string) {
+  const user = await requireAuth();
+
+  // Look up team by URL slug
+  const team = await prisma.team.findUnique({
+    where: { slug: teamSlug },
+    select: {
+      id: true,
+      name: true,
+      slug: true,
+      joinCode: true,
+      primaryColor: true,
+      secondaryColor: true,
+    },
+  });
+
+  if (!team) {
+    redirect('/create-team');
+  }
+
+  // Verify user has membership in this team
+  const [clubMembership, teamMember] = await Promise.all([
+    prisma.clubMembership.findFirst({
+      where: { clubId: team.id, userId: user.id, isActive: true },
+    }),
+    prisma.teamMember.findFirst({
+      where: { teamId: team.id, userId: user.id },
+    }),
+  ]);
+
+  if (!clubMembership && !teamMember) {
+    redirect('/create-team');
+  }
+
+  // Get user's role for this team
+  const userRoles = clubMembership?.roles ?? (teamMember ? [teamMember.role] : []);
+  const isCoach = userRoles.includes('COACH');
+
+  return { user, team, isCoach, userRoles };
+}
+
 export function isCoach(role: string | null): boolean {
   return role === 'COACH';
 }

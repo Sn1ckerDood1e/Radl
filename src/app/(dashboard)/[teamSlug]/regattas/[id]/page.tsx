@@ -1,8 +1,8 @@
 import { Metadata } from 'next';
-import { redirect, notFound } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
-import { requireTeam } from '@/lib/auth/authorize';
+import { requireTeamBySlug } from '@/lib/auth/authorize';
 import { format } from 'date-fns';
 import { ArrowLeft, Calendar, MapPin, Clock, RefreshCw } from 'lucide-react';
 import { RegattaDetailClient } from './regatta-detail-client';
@@ -23,18 +23,8 @@ interface PageProps {
 export default async function RegattaDetailPage({ params }: PageProps) {
   const { teamSlug, id } = await params;
 
-  const { claims } = await requireTeam();
-  if (!claims.team_id) redirect('/create-team');
-
-  // Verify slug matches team
-  const team = await prisma.team.findUnique({
-    where: { id: claims.team_id },
-    select: { id: true, slug: true },
-  });
-
-  if (!team || team.slug !== teamSlug) {
-    redirect('/create-team');
-  }
+  // Verify user has membership in this team (by URL slug, not JWT claims)
+  const { team, isCoach } = await requireTeamBySlug(teamSlug);
 
   // Simplified query - only fetch data needed for server-side header
   // Full regatta data (with entries) is fetched client-side via useOfflineRegatta hook
@@ -57,7 +47,6 @@ export default async function RegattaDetailPage({ params }: PageProps) {
   if (!regatta) notFound();
 
   const timezone = regatta.timezone || 'America/New_York';
-  const isCoach = claims.user_role === 'COACH';
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
