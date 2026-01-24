@@ -14,6 +14,8 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
+import { EmptyState } from '@/components/ui/empty-state';
+import { Ship } from 'lucide-react';
 
 interface Equipment {
   id: string;
@@ -132,22 +134,12 @@ export function EquipmentListClient({
 
   if (equipment.length === 0) {
     return (
-      <div className="text-center py-12">
-        <div className="mx-auto h-12 w-12 text-zinc-500">
-          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={1.5}
-              d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
-            />
-          </svg>
-        </div>
-        <h3 className="mt-4 text-lg font-medium text-white">No equipment yet</h3>
-        <p className="mt-2 text-sm text-zinc-400">
-          Add your first piece of equipment to start tracking your team&apos;s assets.
-        </p>
-      </div>
+      <EmptyState
+        icon={Ship}
+        title="No equipment yet"
+        description="Add your first shell, oars, or launch to get started."
+        action={isCoach ? { label: "Add Equipment", href: `/${teamSlug}/equipment/new` } : undefined}
+      />
     );
   }
 

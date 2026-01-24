@@ -4,7 +4,8 @@ import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
 import { requireTeam } from '@/lib/auth/authorize';
 import { format } from 'date-fns';
-import { Calendar, MapPin, Plus, ChevronRight } from 'lucide-react';
+import { Calendar, MapPin, Plus, ChevronRight, Trophy } from 'lucide-react';
+import { EmptyState } from '@/components/ui/empty-state';
 
 export const metadata: Metadata = {
   title: 'Regattas | RowOps',
@@ -175,9 +176,13 @@ export default async function RegattasPage({ params, searchParams }: PageProps) 
       )}
 
       {regattas.length === 0 && (
-        <div className="text-center py-12 bg-zinc-900 border border-zinc-800 rounded-lg text-zinc-500">
-          <p>No regattas yet</p>
-          <p className="text-sm mt-2">Create a regatta or import from Regatta Central</p>
+        <div className="bg-zinc-900 border border-zinc-800 rounded-lg">
+          <EmptyState
+            icon={Trophy}
+            title="No regattas yet"
+            description="Create a regatta or import from Regatta Central"
+            action={isCoach ? { label: "Add Regatta", href: `/${teamSlug}/regattas/new` } : undefined}
+          />
         </div>
       )}
     </div>

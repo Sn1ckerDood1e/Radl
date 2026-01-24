@@ -3,6 +3,8 @@ import Link from 'next/link';
 import { requireRole } from '@/lib/auth/authorize';
 import { prisma } from '@/lib/prisma';
 import { TemplateCard } from '@/components/templates/template-card';
+import { EmptyState } from '@/components/ui/empty-state';
+import { FileText } from 'lucide-react';
 
 interface PracticeTemplatesPageProps {
   params: Promise<{ teamSlug: string }>;
@@ -96,14 +98,13 @@ export default async function PracticeTemplatesPage({ params }: PracticeTemplate
           ))}
         </div>
       ) : (
-        <div className="text-center py-12 bg-zinc-900 border border-zinc-800 rounded-lg">
-          <svg className="mx-auto h-12 w-12 text-zinc-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-          </svg>
-          <h3 className="mt-4 text-lg font-medium text-zinc-300">No templates yet</h3>
-          <p className="mt-2 text-sm text-zinc-500 max-w-sm mx-auto">
-            Create your first template to save practice structures for easy reuse.
-          </p>
+        <div className="bg-zinc-900 border border-zinc-800 rounded-lg">
+          <EmptyState
+            icon={FileText}
+            title="No templates yet"
+            description="Create your first template to save practice structures for easy reuse."
+            action={{ label: "New Template", href: `/${teamSlug}/practice-templates/new` }}
+          />
         </div>
       )}
     </div>

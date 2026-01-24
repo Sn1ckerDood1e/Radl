@@ -2,6 +2,8 @@ import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { requireTeam } from '@/lib/auth/authorize';
 import { prisma } from '@/lib/prisma';
+import { EmptyState } from '@/components/ui/empty-state';
+import { Calendar } from 'lucide-react';
 
 interface PracticesPageProps {
   params: Promise<{ teamSlug: string }>;
@@ -183,16 +185,13 @@ export default async function PracticesPage({ params }: PracticesPageProps) {
           ))}
         </div>
       ) : (
-        <div className="text-center py-12 bg-zinc-900 border border-zinc-800 rounded-lg">
-          <svg className="mx-auto h-12 w-12 text-zinc-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-          </svg>
-          <h3 className="mt-4 text-lg font-medium text-zinc-300">No practices yet</h3>
-          <p className="mt-2 text-sm text-zinc-500">
-            {isCoach
-              ? 'Create your first practice to get started.'
-              : 'No practices have been published yet.'}
-          </p>
+        <div className="bg-zinc-900 border border-zinc-800 rounded-lg">
+          <EmptyState
+            icon={Calendar}
+            title="No practices yet"
+            description={isCoach ? "Create your first practice to get started." : "No practices have been published yet."}
+            action={isCoach && seasons.length > 0 ? { label: "New Practice", href: `/${teamSlug}/practices/new` } : undefined}
+          />
         </div>
       )}
     </div>

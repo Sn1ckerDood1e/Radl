@@ -2,7 +2,8 @@ import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { requireTeam } from '@/lib/auth/authorize';
 import { prisma } from '@/lib/prisma';
-import { Plus } from 'lucide-react';
+import { Plus, Users } from 'lucide-react';
+import { EmptyState } from '@/components/ui/empty-state';
 
 interface PageProps {
   params: Promise<{ teamSlug: string }>;
@@ -99,14 +100,13 @@ export default async function LineupTemplatesPage({ params }: PageProps) {
           ))}
         </div>
       ) : (
-        <div className="text-center py-12 bg-zinc-900 border border-zinc-800 rounded-lg">
-          <svg className="mx-auto h-12 w-12 text-zinc-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-          </svg>
-          <h3 className="mt-4 text-lg font-medium text-zinc-300">No lineup templates yet</h3>
-          <p className="mt-2 text-sm text-zinc-500 max-w-sm mx-auto">
-            Save a lineup from a practice to create your first template
-          </p>
+        <div className="bg-zinc-900 border border-zinc-800 rounded-lg">
+          <EmptyState
+            icon={Users}
+            title="No lineup templates yet"
+            description="Save a lineup from a practice to create your first template"
+            action={isCoach ? { label: "View Practices", href: `/${teamSlug}/practices` } : undefined}
+          />
         </div>
       )}
     </div>
