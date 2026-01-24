@@ -25,7 +25,7 @@ v2.0: [########  ] 53% — Phase 15 in progress (18/34 requirements)
 
 **Current Phase Detail:**
 - Phase 15: Mobile PWA Improvements — IN PROGRESS (4/6 plans)
-- Completed: Core dependencies (@use-gesture/react, vaul), Drawer, view transitions, useSyncStatus hook, SyncStatusIndicator, useMediaQuery, ResponsiveMenu
+- Completed: Core dependencies (@use-gesture/react, vaul), Drawer, view transitions, useSyncStatus hook, SyncStatusIndicator, useSwipeGesture hook, SwipeableListItem, useMediaQuery, ResponsiveMenu
 
 **Previous Phases:**
 - Phase 14: Design System Foundation — COMPLETE (4/4 plans)
@@ -154,6 +154,8 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 - **View transitions:** Next.js experimental.viewTransition for smooth page navigation
 - **Sync status:** useSyncStatus hook combining online/pending/syncing/error states with triggerSync action
 - **Network indicator:** SyncStatusIndicator component with dropdown details (hidden when online with no pending)
+- **Swipe gestures:** useSwipeGesture hook wrapping useDrag for horizontal swipe-to-reveal
+- **Swipeable lists:** SwipeableListItem component for mobile swipe actions (delete/edit)
 - **Media queries:** useMediaQuery hook with SSR support for responsive detection
 - **Responsive menus:** ResponsiveMenu component adapting Drawer (mobile) and DropdownMenu (desktop)
 
@@ -196,4 +198,4 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
 
 ---
 
-*Last updated: 2026-01-24 (15-04 complete)*
+*Last updated: 2026-01-24 (15-03, 15-04 complete)*
