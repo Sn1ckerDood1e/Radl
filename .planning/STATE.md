@@ -12,23 +12,24 @@
 |-------|-------|
 | Milestone | v2.0 Commercial Readiness |
 | Phase | Phase 17: Facility UI Features |
-| Plan | 3 of 11 |
+| Plan | 4 of 11 |
 | Status | In progress |
-| Last activity | 2026-01-25 — Completed 17-03-PLAN.md |
+| Last activity | 2026-01-25 — Completed 17-04-PLAN.md |
 
 **Progress:**
 ```
 v1.0: [##########] 100% SHIPPED (2026-01-22)
 v1.1: [##########] 100% SHIPPED (2026-01-22) — 9/11 reqs, 2 deferred
-v2.0: [#########-] 91% — Phase 17 started (31/34 requirements)
+v2.0: [#########-] 94% — Phase 17 in progress (32/34 requirements)
 ```
 
 **Current Phase Detail:**
-- Phase 17: Facility UI Features — IN PROGRESS (3/11 plans)
+- Phase 17: Facility UI Features — IN PROGRESS (4/11 plans)
 - Goal: Equipment booking system and facility management UI
 - Plan 01 (Equipment Booking Schema) complete
 - Plan 02 (Facility Dashboard Enhancement) complete
 - Plan 03 (Clubs List Page) complete
+- Plan 04 (Facility Equipment Management) complete
 
 **Previous Phases:**
 - Phase 16: UI/UX Polish — COMPLETE (6/6 plans)
@@ -190,6 +191,8 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 - **Facility dashboard:** Card grid navigation with aggregate statistics (clubs, athletes, equipment, events)
 - **Navigation pattern:** Facility dashboard follows club dashboard pattern with large clickable cards
 - **Shared equipment count:** Includes both facility-owned and club isShared equipment
+- **Facility equipment management:** CRUD pages for facility-owned shared equipment with availability indicators
+- **Equipment availability status:** Derived from damage reports and manualUnavailable flags
 - **Clubs list page:** Facility admins can view all clubs with drill-down to club dashboards (full admin access)
 
 ### Tech Debt Tracker
@@ -227,9 +230,9 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
 | Field | Value |
 |-------|-------|
 | Last session | 2026-01-25 |
-| Stopped at | Completed 17-03-PLAN.md (Clubs List Page) |
+| Stopped at | Completed 17-04-PLAN.md (Facility Equipment Management) |
 | Resume file | None |
 
 ---
 
-*Last updated: 2026-01-25 (Phase 17 plan 03 complete)*
+*Last updated: 2026-01-25 (Phase 17 plan 04 complete)*
