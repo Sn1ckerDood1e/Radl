@@ -33,6 +33,7 @@ model Facility {
   description  String?
   // Billing (hybrid model)
   billingType  BillingType @default(FACILITY)
+  bookingWindowDays Int @default(30)  // How far in advance clubs can book shared equipment
   // Timestamps
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
@@ -72,6 +73,7 @@ model Team {
   clubMemberships   ClubMembership[] @relation("ClubMemberships")
   apiKeys           ApiKey[] @relation("ApiKeys")
   clubEquipment     Equipment[] @relation("ClubEquipment")
+  equipmentBookings EquipmentBooking[] @relation("ClubBookings")
 
   @@index([facilityId])
 }
@@ -231,6 +233,15 @@ enum NotificationType {
   PRACTICE_CHANGE
   PRACTICE_CANCELLED
   ATHLETE_JOINED
+  EQUIPMENT_REQUEST    // New: booking request notification
+}
+
+// Booking status enum
+enum BookingStatus {
+  PENDING    // Request awaiting approval
+  APPROVED   // Confirmed booking
+  DENIED     // Request rejected
+  CANCELLED  // Booking cancelled by requester
 }
 
 // Season status enum
@@ -307,12 +318,39 @@ model Equipment {
   lineups       Lineup[]
   templateBoats LineupTemplate[]
   entryLineups  EntryLineup[]
+  bookings      EquipmentBooking[]
 
   @@index([teamId])
   @@index([teamId, type])
   @@index([facilityId])
   @@index([clubId])
   @@index([ownerType])
+}
+
+// Equipment booking for shared equipment reservation
+model EquipmentBooking {
+  id           String        @id @default(uuid())
+  equipmentId  String
+  clubId       String        // Club making the booking
+  practiceId   String?       // Optional: linked to practice (automatic booking)
+  startTime    DateTime
+  endTime      DateTime
+  status       BookingStatus @default(PENDING)
+  requestedBy  String        // userId who created request
+  approvedBy   String?       // userId who approved (if approved)
+  deniedReason String?       // Reason for denial (if denied)
+  notes        String?       // Optional booking notes
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  equipment    Equipment     @relation(fields: [equipmentId], references: [id], onDelete: Cascade)
+  club         Team          @relation("ClubBookings", fields: [clubId], references: [id], onDelete: Cascade)
+  practice     Practice?     @relation(fields: [practiceId], references: [id], onDelete: SetNull)
+
+  @@index([equipmentId, startTime, endTime])
+  @@index([clubId])
+  @@index([practiceId])
+  @@index([status])
 }
 
 // Damage report model for tracking equipment damage
@@ -446,10 +484,11 @@ model Practice {
   createdAt DateTime       @default(now())
   updatedAt DateTime       @updatedAt
 
-  team      Team                 @relation(fields: [teamId], references: [id], onDelete: Cascade)
-  season    Season               @relation(fields: [seasonId], references: [id], onDelete: Cascade)
-  blocks    PracticeBlock[]
-  usageLogs EquipmentUsageLog[]
+  team              Team                 @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  season            Season               @relation(fields: [seasonId], references: [id], onDelete: Cascade)
+  blocks            PracticeBlock[]
+  usageLogs         EquipmentUsageLog[]
+  equipmentBookings EquipmentBooking[]
 
   @@index([teamId])
   @@index([teamId, seasonId])
