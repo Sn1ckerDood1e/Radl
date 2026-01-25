@@ -12,9 +12,9 @@
 |-------|-------|
 | Milestone | v2.0 Commercial Readiness |
 | Phase | Phase 17: Facility UI Features |
-| Plan | 1 of 11 |
+| Plan | 2 of 11 |
 | Status | In progress |
-| Last activity | 2026-01-25 — Completed 17-01-PLAN.md |
+| Last activity | 2026-01-25 — Completed 17-02-PLAN.md |
 
 **Progress:**
 ```
@@ -24,9 +24,10 @@ v2.0: [#########-] 88% — Phase 17 started (30/34 requirements)
 ```
 
 **Current Phase Detail:**
-- Phase 17: Facility UI Features — IN PROGRESS (1/11 plans)
+- Phase 17: Facility UI Features — IN PROGRESS (2/11 plans)
 - Goal: Equipment booking system and facility management UI
 - Plan 01 (Equipment Booking Schema) complete
+- Plan 02 (Facility Dashboard Enhancement) complete
 
 **Previous Phases:**
 - Phase 16: UI/UX Polish — COMPLETE (6/6 plans)
@@ -185,6 +186,9 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 - **Equipment booking:** EquipmentBooking model with time ranges and approval workflow (PENDING → APPROVED/DENIED/CANCELLED)
 - **Booking configuration:** Facility.bookingWindowDays field for advance booking limits (default 30 days)
 - **Booking notifications:** EQUIPMENT_REQUEST notification type for booking request alerts
+- **Facility dashboard:** Card grid navigation with aggregate statistics (clubs, athletes, equipment, events)
+- **Navigation pattern:** Facility dashboard follows club dashboard pattern with large clickable cards
+- **Shared equipment count:** Includes both facility-owned and club isShared equipment
 
 ### Tech Debt Tracker
 
@@ -221,9 +225,9 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
 | Field | Value |
 |-------|-------|
 | Last session | 2026-01-25 |
-| Stopped at | Completed 17-01-PLAN.md (Equipment Booking Schema) |
+| Stopped at | Completed 17-02-PLAN.md (Facility Dashboard Enhancement) |
 | Resume file | None |
 
 ---
 
-*Last updated: 2026-01-25 (Phase 17 plan 01 complete)*
+*Last updated: 2026-01-25 (Phase 17 plan 02 complete)*
