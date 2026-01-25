@@ -11,24 +11,25 @@
 | Field | Value |
 |-------|-------|
 | Milestone | v2.0 Commercial Readiness |
-| Phase | Phase 16: UI/UX Polish |
-| Plan | 6 of 6 |
-| Status | Complete |
-| Last activity | 2026-01-24 — Completed Phase 16 |
+| Phase | Phase 17: Facility UI Features |
+| Plan | 1 of 11 |
+| Status | In progress |
+| Last activity | 2026-01-25 — Completed 17-01-PLAN.md |
 
 **Progress:**
 ```
 v1.0: [##########] 100% SHIPPED (2026-01-22)
 v1.1: [##########] 100% SHIPPED (2026-01-22) — 9/11 reqs, 2 deferred
-v2.0: [########  ] 85% — Phase 16 complete (29/34 requirements)
+v2.0: [#########-] 88% — Phase 17 started (30/34 requirements)
 ```
 
 **Current Phase Detail:**
-- Phase 16: UI/UX Polish — COMPLETE (6/6 plans)
-- Goal: Application provides modern, intuitive experience with helpful guidance and polished interactions
-- All 7 UIX requirements verified and working
+- Phase 17: Facility UI Features — IN PROGRESS (1/11 plans)
+- Goal: Equipment booking system and facility management UI
+- Plan 01 (Equipment Booking Schema) complete
 
 **Previous Phases:**
+- Phase 16: UI/UX Polish — COMPLETE (6/6 plans)
 - Phase 15: Mobile PWA Improvements — COMPLETE (6/6 plans)
 - Phase 14: Design System Foundation — COMPLETE (4/4 plans)
 - Phase 13: Facility Auth Integration — COMPLETE (6/6 plans)
@@ -108,6 +109,9 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 - G+key navigation shortcuts timeout after 1 second for sequence completion
 - Keyboard shortcuts excluded from input fields to prevent typing conflicts (except Escape)
 - ? key opens shortcuts overlay following GitHub/Gmail pattern for global help
+- BookingStatus includes CANCELLED state separate from DENIED for requester vs admin actions
+- Optional practiceId on bookings allows automatic reservation when creating practices
+- Composite index on (equipmentId, startTime, endTime) enables efficient conflict detection
 
 ### Architecture Notes
 
@@ -177,6 +181,11 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 - **URL-based team lookup:** requireTeamBySlug helper for consistent team context from URL slug (fixes JWT claim mismatch)
 - **Team colors deferred:** Dynamic team colors temporarily disabled (stored in DB, using fixed emerald) — revisit in future phase
 
+**v2.0 additions (implemented in Phase 17):**
+- **Equipment booking:** EquipmentBooking model with time ranges and approval workflow (PENDING → APPROVED/DENIED/CANCELLED)
+- **Booking configuration:** Facility.bookingWindowDays field for advance booking limits (default 30 days)
+- **Booking notifications:** EQUIPMENT_REQUEST notification type for booking request alerts
+
 ### Tech Debt Tracker
 
 | Item | Status | Notes |
@@ -211,10 +220,10 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
 
 | Field | Value |
 |-------|-------|
-| Last session | 2026-01-24 |
-| Stopped at | Phase 16 complete, ready for Phase 17 |
+| Last session | 2026-01-25 |
+| Stopped at | Completed 17-01-PLAN.md (Equipment Booking Schema) |
 | Resume file | None |
 
 ---
 
-*Last updated: 2026-01-24 (Phase 16 complete)*
+*Last updated: 2026-01-25 (Phase 17 plan 01 complete)*
