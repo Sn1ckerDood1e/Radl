@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { getClaimsForApiRoute } from '@/lib/auth/claims';
 import { prisma } from '@/lib/prisma';
+import { Building2, Ship, Calendar, Settings } from 'lucide-react';
 
 interface FacilityDashboardPageProps {
   params: Promise<{ facilitySlug: string }>;
@@ -79,9 +80,29 @@ export default async function FacilityDashboardPage({ params }: FacilityDashboar
     where: { facilityId: facility.id, ownerType: 'FACILITY' },
   });
 
-  // Get shared equipment count
+  // Get shared equipment count (facility-owned + club isShared)
   const sharedEquipmentCount = await prisma.equipment.count({
-    where: { facilityId: facility.id, isShared: true },
+    where: {
+      facilityId: facility.id,
+      OR: [
+        { ownerType: 'FACILITY' },
+        { isShared: true }
+      ]
+    },
+  });
+
+  // Get upcoming events count (practices in next 7 days across all clubs)
+  const sevenDaysFromNow = new Date();
+  sevenDaysFromNow.setDate(sevenDaysFromNow.getDate() + 7);
+
+  const upcomingEventsCount = await prisma.practice.count({
+    where: {
+      team: { facilityId: facility.id },
+      startTime: {
+        gte: new Date(),
+        lte: sevenDaysFromNow,
+      },
+    },
   });
 
   return (
@@ -115,22 +136,84 @@ export default async function FacilityDashboardPage({ params }: FacilityDashboar
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
         <div className="bg-[var(--surface-1)] rounded-xl p-4 border border-[var(--border-subtle)]">
           <div className="text-3xl font-bold text-[var(--text-primary)]">{clubs.length}</div>
-          <div className="text-sm text-[var(--text-muted)]">Clubs</div>
+          <div className="text-sm text-[var(--text-muted)]">Total Clubs</div>
         </div>
         <div className="bg-[var(--surface-1)] rounded-xl p-4 border border-[var(--border-subtle)]">
           <div className="text-3xl font-bold text-[var(--text-primary)]">
             {clubs.reduce((sum, c) => sum + c._count.members, 0)}
           </div>
-          <div className="text-sm text-[var(--text-muted)]">Total Members</div>
-        </div>
-        <div className="bg-[var(--surface-1)] rounded-xl p-4 border border-[var(--border-subtle)]">
-          <div className="text-3xl font-bold text-[var(--text-primary)]">{facilityEquipmentCount}</div>
-          <div className="text-sm text-[var(--text-muted)]">Facility Equipment</div>
+          <div className="text-sm text-[var(--text-muted)]">Total Athletes</div>
         </div>
         <div className="bg-[var(--surface-1)] rounded-xl p-4 border border-[var(--border-subtle)]">
           <div className="text-3xl font-bold text-[var(--text-primary)]">{sharedEquipmentCount}</div>
           <div className="text-sm text-[var(--text-muted)]">Shared Equipment</div>
         </div>
+        <div className="bg-[var(--surface-1)] rounded-xl p-4 border border-[var(--border-subtle)]">
+          <div className="text-3xl font-bold text-[var(--text-primary)]">{upcomingEventsCount}</div>
+          <div className="text-sm text-[var(--text-muted)]">Upcoming Events</div>
+        </div>
+      </div>
+
+      {/* Navigation Card Grid */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        {/* Clubs */}
+        <Link
+          href={`/facility/${facilitySlug}/clubs`}
+          className="group bg-[var(--surface-1)] hover:bg-[var(--surface-2)] rounded-xl p-6 transition-all duration-200 border border-[var(--border-subtle)] hover:border-[var(--border)]"
+        >
+          <div className="flex items-start justify-between mb-4">
+            <div className="h-14 w-14 rounded-xl flex items-center justify-center bg-emerald-500/20">
+              <Building2 className="h-7 w-7 text-emerald-500" />
+            </div>
+            <span className="text-3xl font-bold text-[var(--text-primary)]">{clubs.length}</span>
+          </div>
+          <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-1">Clubs</h3>
+          <p className="text-sm text-[var(--text-muted)]">Manage member clubs</p>
+        </Link>
+
+        {/* Shared Equipment */}
+        <Link
+          href={`/facility/${facilitySlug}/equipment`}
+          className="group bg-[var(--surface-1)] hover:bg-[var(--surface-2)] rounded-xl p-6 transition-all duration-200 border border-[var(--border-subtle)] hover:border-[var(--border)]"
+        >
+          <div className="flex items-start justify-between mb-4">
+            <div className="h-14 w-14 rounded-xl flex items-center justify-center bg-emerald-500/20">
+              <Ship className="h-7 w-7 text-emerald-500" />
+            </div>
+            <span className="text-3xl font-bold text-[var(--text-primary)]">{sharedEquipmentCount}</span>
+          </div>
+          <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-1">Shared Equipment</h3>
+          <p className="text-sm text-[var(--text-muted)]">Facility and shared boats</p>
+        </Link>
+
+        {/* Events */}
+        <Link
+          href={`/facility/${facilitySlug}/events`}
+          className="group bg-[var(--surface-1)] hover:bg-[var(--surface-2)] rounded-xl p-6 transition-all duration-200 border border-[var(--border-subtle)] hover:border-[var(--border)]"
+        >
+          <div className="flex items-start justify-between mb-4">
+            <div className="h-14 w-14 rounded-xl flex items-center justify-center bg-emerald-500/20">
+              <Calendar className="h-7 w-7 text-emerald-500" />
+            </div>
+            <span className="text-3xl font-bold text-[var(--text-primary)]">{upcomingEventsCount}</span>
+          </div>
+          <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-1">Events</h3>
+          <p className="text-sm text-[var(--text-muted)]">Upcoming practices</p>
+        </Link>
+
+        {/* Settings */}
+        <Link
+          href={`/facility/${facilitySlug}/settings`}
+          className="group bg-[var(--surface-1)] hover:bg-[var(--surface-2)] rounded-xl p-6 transition-all duration-200 border border-[var(--border-subtle)] hover:border-[var(--border)]"
+        >
+          <div className="flex items-start justify-between mb-4">
+            <div className="h-14 w-14 rounded-xl bg-[var(--surface-3)] flex items-center justify-center">
+              <Settings className="h-7 w-7 text-[var(--text-secondary)]" />
+            </div>
+          </div>
+          <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-1">Settings</h3>
+          <p className="text-sm text-[var(--text-muted)]">Facility preferences</p>
+        </Link>
       </div>
 
       {/* Clubs Section */}
@@ -166,25 +249,6 @@ export default async function FacilityDashboardPage({ params }: FacilityDashboar
               </div>
             </Link>
           ))}
-        </div>
-      </div>
-
-      {/* Quick Actions */}
-      <div className="bg-[var(--surface-1)] rounded-xl p-6 border border-[var(--border-subtle)]">
-        <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-4">Facility Admin Actions</h2>
-        <p className="text-[var(--text-muted)] mb-4">
-          As a facility admin, you can view data across all clubs. Click on a club above to drill down into their dashboard (read-only).
-        </p>
-        <div className="flex flex-wrap gap-3">
-          <span className="px-3 py-1.5 bg-[var(--surface-2)] rounded-lg text-sm text-[var(--text-secondary)]">
-            View club rosters
-          </span>
-          <span className="px-3 py-1.5 bg-[var(--surface-2)] rounded-lg text-sm text-[var(--text-secondary)]">
-            View equipment across clubs
-          </span>
-          <span className="px-3 py-1.5 bg-[var(--surface-2)] rounded-lg text-sm text-[var(--text-secondary)]">
-            View practice schedules
-          </span>
         </div>
       </div>
     </div>
