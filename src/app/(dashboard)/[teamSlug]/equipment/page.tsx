@@ -3,6 +3,7 @@ import { requireTeamBySlug } from '@/lib/auth/authorize';
 import { prisma } from '@/lib/prisma';
 import { EquipmentListClient } from './equipment-list-client';
 import { EquipmentUsageSummary } from '@/components/equipment/equipment-usage-summary';
+import { QRBulkExportButton } from '@/components/equipment/qr-bulk-export';
 
 interface EquipmentPageProps {
   params: Promise<{ teamSlug: string }>;
@@ -89,15 +90,18 @@ export default async function EquipmentPage({ params }: EquipmentPageProps) {
           </p>
         </div>
         {isCoach && (
-          <Link
-            href={`/${teamSlug}/equipment/new`}
-            className="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-500 transition-colors"
-          >
-            <svg className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-            </svg>
-            Add Equipment
-          </Link>
+          <div className="flex items-center gap-3">
+            <QRBulkExportButton teamId={team.id} equipmentCount={equipment.length} />
+            <Link
+              href={`/${teamSlug}/equipment/new`}
+              className="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-500 transition-colors"
+            >
+              <svg className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+              </svg>
+              Add Equipment
+            </Link>
+          </div>
         )}
       </div>
 
