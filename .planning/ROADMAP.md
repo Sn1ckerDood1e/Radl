@@ -67,9 +67,20 @@ Plans:
 **Scope:**
 - Public route `/report/[equipmentId]` accessible without login
 - QR code generation for each equipment item
-- Issue form: equipment selector, severity radio (minor/moderate/critical), category dropdown, description textarea, optional reporter name
-- Submit creates MaintenanceAlert and updates equipment status
-- Success confirmation with "Report Another" option
+- Issue form: equipment selector, severity radio (minor/moderate/critical), category dropdown, description textarea, required reporter name
+- Submit creates DamageReport and notifies coaches
+- Success confirmation with reference number and "Report Another" option
+- Honeypot bot protection and rate limiting
+- Email notifications for critical severity issues
+- Individual and bulk QR code export (PDF)
+
+**Plans:** 5 plans
+Plans:
+- [ ] 20-01-PLAN.md — Data foundation: schema extension, validation, dependencies
+- [ ] 20-02-PLAN.md — Form enhancements: severity, category, reporter name, honeypot
+- [ ] 20-03-PLAN.md — API and notifications: severity routing, email alerts
+- [ ] 20-04-PLAN.md — Individual QR: download button on equipment detail
+- [ ] 20-05-PLAN.md — Bulk QR export: PDF generation with all equipment
 
 **Dependencies:** None (uses existing equipment model)
 
