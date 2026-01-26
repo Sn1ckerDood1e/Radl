@@ -20,6 +20,7 @@ const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/web
 export function DamageReportForm({ equipmentId, teamId }: DamageReportFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [reportId, setReportId] = useState<string | null>(null);
   const [photoFile, setPhotoFile] = useState<File | null>(null);
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
   const [photoError, setPhotoError] = useState<string | null>(null);
@@ -106,6 +107,10 @@ export function DamageReportForm({ equipmentId, teamId }: DamageReportFormProps)
         body: JSON.stringify({
           location: data.location,
           description: data.description,
+          severity: data.severity,
+          category: data.category || null,
+          reporterName: data.reporterName,
+          honeypot: data.honeypot, // Server will check this
           photoUrl,
         }),
       });
@@ -117,6 +122,7 @@ export function DamageReportForm({ equipmentId, teamId }: DamageReportFormProps)
       }
 
       showSuccessToast('Damage reported');
+      setReportId(result.damageReport.id);
       setIsSuccess(true);
     } catch (error) {
       showErrorToast({
@@ -150,9 +156,27 @@ export function DamageReportForm({ equipmentId, teamId }: DamageReportFormProps)
             </svg>
           </div>
           <h3 className="text-lg font-medium text-gray-900">Report Submitted</h3>
+          {reportId && (
+            <p className="mt-1 text-sm text-gray-500">
+              Reference: {reportId.substring(0, 8).toUpperCase()}
+            </p>
+          )}
           <p className="mt-2 text-sm text-gray-500">
-            Thank you for reporting this damage. The coaching staff has been notified.
+            Thank you for reporting this issue. The coaching staff has been notified.
           </p>
+          <button
+            type="button"
+            onClick={() => {
+              setIsSuccess(false);
+              setReportId(null);
+              setPhotoFile(null);
+              setPhotoPreview(null);
+              reset();
+            }}
+            className="mt-4 inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
+          >
+            Report Another Issue
+          </button>
         </div>
       </div>
     );
