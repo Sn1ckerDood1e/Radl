@@ -1,15 +1,173 @@
-# Roadmap: RowOps
+# v2.1 UX Refinement Roadmap
 
-**Current Milestone:** None (v2.0 shipped)
-**Next Milestone:** v3.0 (TBD)
+## Milestone Overview
+
+**Version:** 2.1
+**Goal:** Elevate UX with RIM-inspired features, improved navigation, and better practice workflows
+**Phases:** 18-24 (7 phases)
+**Status:** Planning
+
+## Previous Milestones
+
+- v2.0 Commercial Readiness — Phases 10-17 (shipped 2026-01-26) [→ archive](milestones/v2.0-ROADMAP.md)
+- v1.1 Polish — Phases 6-9 (shipped 2026-01-22) [→ archive](milestones/v1.1-ROADMAP.md)
+- v1.0 MVP — Phases 1-5 (shipped 2026-01-22) [→ archive](milestones/v1.0-ROADMAP.md)
+
+## Phase Structure
+
+### Phase 18: Navigation Redesign
+**Goal:** Implement master-detail layout with sidebar navigation on desktop and bottom nav on mobile
+
+**Requirements:** NAV-01, NAV-02, NAV-03, NAV-04, NAV-05, NAV-06
+
+**Scope:**
+- Desktop layout with left sidebar containing main navigation sections
+- Master-detail pattern: nav items load content in center area
+- Mobile layout with bottom navigation bar
+- Responsive breakpoint at 768px
+- Active state indicators for current section
+- Preserve existing page content, change only the shell/layout
+
+**Dependencies:** None (foundational change)
 
 ---
 
-## Shipped Milestones
+### Phase 19: Announcements System
+**Goal:** Enable coaches to broadcast messages to their team with priority levels
 
-- **v2.0 Commercial Readiness** — Phases 10-17 (shipped 2026-01-26) — [archived](milestones/v2.0-ROADMAP.md)
-- **v1.1 Polish** — Phases 6-9 (shipped 2026-01-22) — [archived](milestones/v1.1-ROADMAP.md)
-- **v1.0 MVP** — Phases 1-5 (shipped 2026-01-22) — [archived](milestones/v1.0-ROADMAP.md)
+**Requirements:** ANN-01, ANN-02, ANN-03
+
+**Scope:**
+- Announcement model with priority (info, warning, urgent), title, body, expiry
+- Coach UI to create/edit/delete announcements
+- Athlete dashboard widget showing active announcements sorted by priority
+- Optional practice linking for context-specific announcements
+- Push notification integration (future: NOTIF-03)
+
+**Dependencies:** Phase 18 (uses new layout)
 
 ---
-*Roadmap updated: 2026-01-26*
+
+### Phase 20: Public Issue Reporting
+**Goal:** Allow anyone to report equipment issues via QR code without authentication
+
+**Requirements:** ISS-01, ISS-02, ISS-03
+
+**Scope:**
+- Public route `/report/[equipmentId]` accessible without login
+- QR code generation for each equipment item
+- Issue form: equipment selector, severity radio (minor/moderate/critical), category dropdown, description textarea, optional reporter name
+- Submit creates MaintenanceAlert and updates equipment status
+- Success confirmation with "Report Another" option
+
+**Dependencies:** None (uses existing equipment model)
+
+---
+
+### Phase 21: Equipment Readiness
+**Goal:** Calculate and display equipment readiness status based on inspections and maintenance
+
+**Requirements:** EQR-01, EQR-02, EQR-03
+
+**Scope:**
+- Readiness calculation: days since inspection, open alerts, lifecycle state
+- Status enum: READY, INSPECT_SOON, NEEDS_ATTENTION, OUT_OF_SERVICE
+- Visual badges with color coding (green/yellow/amber/red)
+- Equipment list and detail pages show readiness status
+- Maintenance workflow: status transitions, photo uploads, resolution notes
+- Maintenance history on equipment detail page
+
+**Dependencies:** Phase 20 (maintenance alerts feed readiness)
+
+---
+
+### Phase 22: Practice Flow Redesign
+**Goal:** Rebuild practice creation/editing with inline forms, block structure, and drag-drop lineups
+
+**Requirements:** PRC-01, PRC-02, PRC-03, PRC-04, PRC-05, PRC-06, PRC-07, PRC-08
+
+**Scope:**
+- Inline editing: edit practice details on the practice page itself
+- Block-based structure: practice divided into time blocks
+- Block types: WATER, ERG, LAND, MEETING with type-specific form fields
+- Water blocks: boat selection, lineup assignment
+- Erg blocks: machine assignment, workout details
+- Drag-drop lineup builder: available athletes panel, drag into boat seats
+- Athlete availability indicators
+- Workout structure within blocks: intervals, pieces, steady state
+- Block reordering via drag
+
+**Dependencies:** Phase 18 (uses new layout patterns)
+
+---
+
+### Phase 23: Dashboard Enhancements
+**Goal:** Add analytics, fleet health overview, and today's practices widget
+
+**Requirements:** DASH-01, DASH-02, DASH-03
+
+**Scope:**
+- Today's practices widget: scheduled practices with time, coach, athlete count
+- Fleet health overview: aggregate readiness across all equipment
+- Equipment usage trends: charts showing usage over time
+- Quick actions: create practice, report issue, view schedule
+- Coach vs athlete dashboard variations
+
+**Dependencies:** Phase 21 (fleet health), Phase 22 (practice data)
+
+---
+
+### Phase 24: Regatta Central Public API
+**Goal:** Integrate RC public API to display upcoming regatta schedules
+
+**Requirements:** RC-01, RC-02, RC-03, RC-04
+
+**Scope:**
+- RC public API client: fetch regatta list endpoint
+- Response caching with configurable TTL (avoid rate limits)
+- Regatta display: name, date, location, registration status
+- Calendar integration: regattas appear as events
+- Foundation for future team-specific OAuth integration
+
+**Dependencies:** None (external integration)
+
+---
+
+## Dependency Graph
+
+```
+Phase 18: Navigation Redesign
+    ↓
+    ├── Phase 19: Announcements
+    ├── Phase 22: Practice Flow
+    │
+Phase 20: Public Issue Reporting
+    ↓
+Phase 21: Equipment Readiness
+    ↓
+Phase 23: Dashboard Enhancements ←── Phase 22
+
+Phase 24: RC Public API (independent)
+```
+
+## Execution Order
+
+**Wave 1:** Phase 18 (Navigation) — foundational layout change
+**Wave 2:** Phase 19 (Announcements), Phase 20 (Issue Reporting), Phase 24 (RC API) — parallel
+**Wave 3:** Phase 21 (Equipment Readiness), Phase 22 (Practice Flow) — parallel
+**Wave 4:** Phase 23 (Dashboard) — needs data from 21 and 22
+
+## Progress
+
+```
+Phase 18: [          ] 0% — Not started
+Phase 19: [          ] 0% — Not started
+Phase 20: [          ] 0% — Not started
+Phase 21: [          ] 0% — Not started
+Phase 22: [          ] 0% — Not started
+Phase 23: [          ] 0% — Not started
+Phase 24: [          ] 0% — Not started
+```
+
+---
+*Created: 2026-01-26 for v2.1 UX Refinement milestone*

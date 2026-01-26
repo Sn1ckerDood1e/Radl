@@ -11,17 +11,17 @@
 | Field | Value |
 |-------|-------|
 | Milestone | v2.1 UX Refinement |
-| Phase | Not started (defining requirements) |
+| Phase | 18 — Navigation Redesign |
 | Plan | — |
-| Status | Defining requirements |
-| Last activity | 2026-01-26 — Started v2.1 milestone |
+| Status | Ready to plan Phase 18 |
+| Last activity | 2026-01-26 — v2.1 roadmap and requirements complete |
 
 **Progress:**
 ```
 v1.0: [##########] 100% SHIPPED (2026-01-22)
 v1.1: [##########] 100% SHIPPED (2026-01-22) — 9/11 reqs, 2 deferred
 v2.0: [##########] 100% SHIPPED (2026-01-26) — 34/34 requirements
-v2.1: [          ] 0% — Defining requirements
+v2.1: [          ] 0% — 7 phases, 30 requirements
 ```
 
 ## v2.1 Scope
@@ -258,9 +258,9 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
 | Field | Value |
 |-------|-------|
 | Last session | 2026-01-26 |
-| Stopped at | Phase 17 complete, v2.0 milestone complete |
+| Stopped at | v2.1 planning complete, ready for Phase 18 |
 | Resume file | None |
 
 ---
 
-*Last updated: 2026-01-26 (Phase 17 complete, v2.0 shipped)*
+*Last updated: 2026-01-26 (v2.1 roadmap created with 7 phases, 30 requirements)*
