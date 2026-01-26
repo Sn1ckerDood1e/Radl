@@ -2,7 +2,7 @@ import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { getClaimsForApiRoute } from '@/lib/auth/claims';
 import { prisma } from '@/lib/prisma';
-import { Plus, AlertTriangle, Ban } from 'lucide-react';
+import { Plus, AlertTriangle, Ban, ClipboardList } from 'lucide-react';
 
 interface FacilityEquipmentPageProps {
   params: Promise<{ facilitySlug: string }>;
@@ -50,6 +50,14 @@ export default async function FacilityEquipmentPage({ params }: FacilityEquipmen
   if (!facilityMembership) {
     redirect('/');
   }
+
+  // Count pending booking requests
+  const pendingRequestCount = await prisma.equipmentBooking.count({
+    where: {
+      equipment: { facilityId: facility.id },
+      status: 'PENDING',
+    },
+  });
 
   // Get facility-owned equipment with damage reports and booking status
   const equipment = await prisma.equipment.findMany({
@@ -124,13 +132,24 @@ export default async function FacilityEquipmentPage({ params }: FacilityEquipmen
             Manage facility-owned equipment available to all clubs
           </p>
         </div>
-        <Link
-          href={`/facility/${facilitySlug}/equipment/new`}
-          className="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-500 transition-colors"
-        >
-          <Plus className="h-5 w-5 mr-2" />
-          Add Equipment
-        </Link>
+        <div className="flex items-center gap-3">
+          {pendingRequestCount > 0 && (
+            <Link
+              href={`/facility/${facilitySlug}/equipment/requests`}
+              className="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium bg-amber-500/20 text-amber-400 hover:bg-amber-500/30 transition-colors"
+            >
+              <ClipboardList className="h-5 w-5 mr-2" />
+              {pendingRequestCount} Pending Request{pendingRequestCount !== 1 ? 's' : ''}
+            </Link>
+          )}
+          <Link
+            href={`/facility/${facilitySlug}/equipment/new`}
+            className="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-500 transition-colors"
+          >
+            <Plus className="h-5 w-5 mr-2" />
+            Add Equipment
+          </Link>
+        </div>
       </div>
 
       {/* Equipment Count Summary */}
