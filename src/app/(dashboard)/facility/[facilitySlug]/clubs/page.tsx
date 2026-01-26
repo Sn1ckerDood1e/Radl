@@ -106,7 +106,7 @@ export default async function ClubsPage({ params }: ClubsPageProps) {
           {clubs.map((club) => (
             <Link
               key={club.id}
-              href={`/${club.slug}`}
+              href={`/facility/${facilitySlug}/clubs/${club.slug}`}
               className="group bg-[var(--surface-1)] hover:bg-[var(--surface-2)] rounded-xl p-6 border border-[var(--border-subtle)] hover:border-[var(--border)] transition-all"
             >
               {/* Club Header */}
@@ -148,7 +148,7 @@ export default async function ClubsPage({ params }: ClubsPageProps) {
 
               {/* Drill-down indicator */}
               <div className="mt-4 pt-4 border-t border-[var(--border-subtle)] flex items-center justify-between">
-                <span className="text-xs text-[var(--text-muted)]">View dashboard</span>
+                <span className="text-xs text-[var(--text-muted)]">View details</span>
                 <svg
                   className="h-4 w-4 text-[var(--text-muted)] group-hover:text-[var(--text-secondary)] group-hover:translate-x-1 transition-all"
                   fill="none"
