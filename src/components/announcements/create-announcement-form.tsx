@@ -30,22 +30,35 @@ interface CreateAnnouncementFormProps {
   onCancel?: () => void
 }
 
-// Client-side validation schema
+// Client-side validation schema (no expiry validation - handled by quick options)
 const formSchema = z.object({
   title: z.string().min(1, 'Title is required').max(100, 'Title must be 100 characters or less'),
   body: z.string().min(1, 'Body is required').max(1000, 'Body must be 1000 characters or less'),
   priority: z.enum(['INFO', 'WARNING', 'URGENT']),
   practiceId: z.string().optional(),
   expiresAt: z.string().optional(),
-}).refine(
-  (data) => {
-    if (data.expiresAt) {
-      return new Date(data.expiresAt) > new Date()
-    }
-    return true
-  },
-  { message: 'Expiry date must be in the future', path: ['expiresAt'] }
-)
+})
+
+// Expiry quick options
+type ExpiryOption = 'none' | '1hour' | 'endofday' | '1week' | 'custom'
+
+function getExpiryDate(option: ExpiryOption, customDate?: string): string | undefined {
+  const now = new Date()
+  switch (option) {
+    case 'none':
+      return undefined
+    case '1hour':
+      return new Date(now.getTime() + 60 * 60 * 1000).toISOString()
+    case 'endofday':
+      const endOfDay = new Date(now)
+      endOfDay.setHours(23, 59, 59, 999)
+      return endOfDay.toISOString()
+    case '1week':
+      return new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000).toISOString()
+    case 'custom':
+      return customDate ? new Date(customDate).toISOString() : undefined
+  }
+}
 
 function CreateAnnouncementForm({
   teamSlug,
@@ -61,9 +74,14 @@ function CreateAnnouncementForm({
   const [body, setBody] = useState(announcement?.body || '')
   const [priority, setPriority] = useState<'INFO' | 'WARNING' | 'URGENT'>(announcement?.priority || 'INFO')
   const [practiceId, setPracticeId] = useState(announcement?.practiceId || '')
-  const [expiresAt, setExpiresAt] = useState(
+
+  // Expiry state - determine initial option based on existing value
+  const [expiryOption, setExpiryOption] = useState<ExpiryOption>(
+    announcement?.expiresAt ? 'custom' : 'none'
+  )
+  const [customExpiryDate, setCustomExpiryDate] = useState(
     announcement?.expiresAt
-      ? new Date(announcement.expiresAt).toISOString().slice(0, 16) // Format for datetime-local input
+      ? new Date(announcement.expiresAt).toISOString().slice(0, 16)
       : ''
   )
 
@@ -75,13 +93,16 @@ function CreateAnnouncementForm({
     e.preventDefault()
     setErrors({})
 
+    // Calculate expiry date from option
+    const expiresAt = getExpiryDate(expiryOption, customExpiryDate)
+
     // Validate form data
     const formData = {
       title: title.trim(),
       body: body.trim(),
       priority,
       practiceId: practiceId || undefined,
-      expiresAt: expiresAt ? new Date(expiresAt).toISOString() : undefined,
+      expiresAt,
     }
 
     const result = formSchema.safeParse(formData)
@@ -264,27 +285,46 @@ function CreateAnnouncementForm({
         </div>
       )}
 
-      {/* Expiry Date (optional) */}
+      {/* Expiry (optional) */}
       <div>
-        <label htmlFor="expiresAt" className="block text-sm font-medium text-zinc-300 mb-1.5">
-          Expiry Date (optional)
+        <label className="block text-sm font-medium text-zinc-300 mb-1.5">
+          Auto-expire (optional)
         </label>
-        <Input
-          id="expiresAt"
-          type="datetime-local"
-          value={expiresAt}
-          onChange={(e) => setExpiresAt(e.target.value)}
-          min={new Date().toISOString().slice(0, 16)}
-          className={cn(
-            "bg-zinc-800/50 border-zinc-700",
-            errors.expiresAt && "border-red-500 focus-visible:ring-red-500"
-          )}
-        />
-        {errors.expiresAt && (
-          <p className="text-sm text-red-400 mt-1">{errors.expiresAt}</p>
+        <div className="flex flex-wrap gap-2 mb-2">
+          {[
+            { value: 'none', label: 'Never' },
+            { value: '1hour', label: 'In 1 hour' },
+            { value: 'endofday', label: 'End of day' },
+            { value: '1week', label: 'In 1 week' },
+            { value: 'custom', label: 'Custom' },
+          ].map((option) => (
+            <button
+              key={option.value}
+              type="button"
+              onClick={() => setExpiryOption(option.value as ExpiryOption)}
+              className={cn(
+                "px-3 py-1.5 text-sm rounded-md border transition-colors",
+                expiryOption === option.value
+                  ? "bg-emerald-500/20 border-emerald-500 text-emerald-400"
+                  : "bg-zinc-800/50 border-zinc-700 text-zinc-400 hover:border-zinc-600"
+              )}
+            >
+              {option.label}
+            </button>
+          ))}
+        </div>
+        {expiryOption === 'custom' && (
+          <Input
+            id="expiresAt"
+            type="datetime-local"
+            value={customExpiryDate}
+            onChange={(e) => setCustomExpiryDate(e.target.value)}
+            min={new Date().toISOString().slice(0, 16)}
+            className="bg-zinc-800/50 border-zinc-700 mt-2"
+          />
         )}
         <p className="text-xs text-zinc-500 mt-1">
-          Leave empty for no automatic expiry.
+          Announcement will be hidden after this time.
         </p>
       </div>
 
