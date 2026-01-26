@@ -12,16 +12,16 @@
 |-------|-------|
 | Milestone | v2.1 UX Refinement |
 | Phase | 20 — Public Issue Reporting |
-| Plan | 03 of 4 |
+| Plan | 04 of 5 |
 | Status | In progress |
-| Last activity | 2026-01-26 — Completed 20-03-PLAN.md |
+| Last activity | 2026-01-26 — Completed 20-04-PLAN.md |
 
 **Progress:**
 ```
 v1.0: [##########] 100% SHIPPED (2026-01-22)
 v1.1: [##########] 100% SHIPPED (2026-01-22) — 9/11 reqs, 2 deferred
 v2.0: [##########] 100% SHIPPED (2026-01-26) — 34/34 requirements
-v2.1: [█████     ] 50% — 3/7 phases complete (partial: Phase 20 plan 03 done)
+v2.1: [█████     ] 50% — 3/7 phases complete (partial: Phase 20 plan 04 done)
 ```
 
 ## v2.1 Scope
@@ -179,6 +179,12 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 - Dynamic import for email template to avoid loading when not needed
 - XSS-safe HTML escaping in email templates for user-provided content
 
+**v2.1 decisions (Phase 20 - Plan 04):**
+- 3x scale factor for print-quality PNG output (equivalent to 300 DPI)
+- QR code section coaches-only since download enables printing physical labels
+- Equipment name included in downloaded PNG for label identification
+- Canvas-based export: SVG to image conversion, then canvas with text overlay
+
 ### Architecture Notes
 
 - **Multi-tenant:** Team-scoped data with JWT claims, application-level filtering
@@ -318,9 +324,9 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
 | Field | Value |
 |-------|-------|
 | Last session | 2026-01-26 |
-| Stopped at | Completed 20-03-PLAN.md |
+| Stopped at | Completed 20-04-PLAN.md |
 | Resume file | None |
 
 ---
 
-*Last updated: 2026-01-26 (Phase 20 in progress — Notifications & severity routing complete)*
+*Last updated: 2026-01-26 (Phase 20 in progress — QR code download for equipment detail complete)*
