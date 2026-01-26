@@ -3,6 +3,7 @@ import { createClient } from '@/lib/supabase/server';
 import { prisma } from '@/lib/prisma';
 import { createDamageReportSchema } from '@/lib/validations/damage-report';
 import { checkRateLimit, getClientIp } from '@/lib/rate-limit';
+import { getUserEmailsByIds } from '@/lib/supabase/admin';
 
 interface RouteParams {
   params: Promise<{ id: string }>;
@@ -30,10 +31,29 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
   try {
     const { id: equipmentId } = await params;
 
-    // Verify equipment exists and get teamId
+    // Parse body first for honeypot check
+    const body = await request.json();
+
+    // Honeypot check - silent rejection (return 201 to not reveal detection)
+    if (body.honeypot && body.honeypot.length > 0) {
+      return NextResponse.json({ success: true, damageReport: { id: 'blocked' } }, { status: 201 });
+    }
+
+    const validationResult = createDamageReportSchema.safeParse(body);
+
+    if (!validationResult.success) {
+      return NextResponse.json(
+        { error: 'Validation failed', details: validationResult.error.flatten() },
+        { status: 400 }
+      );
+    }
+
+    const { location, description, severity, reporterName, category } = validationResult.data;
+
+    // Verify equipment exists and get teamId + team name
     const equipment = await prisma.equipment.findUnique({
       where: { id: equipmentId },
-      select: { id: true, teamId: true, name: true },
+      select: { id: true, teamId: true, name: true, team: { select: { name: true } } },
     });
 
     if (!equipment) {
@@ -46,25 +66,6 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     }
 
     const teamId = equipment.teamId;
-
-    // Parse and validate body
-    const body = await request.json();
-    const validationResult = createDamageReportSchema.safeParse(body);
-
-    if (!validationResult.success) {
-      return NextResponse.json(
-        { error: 'Validation failed', details: validationResult.error.flatten() },
-        { status: 400 }
-      );
-    }
-
-    const { location, description, severity, reporterName, category, honeypot } = validationResult.data;
-
-    // Reject bot submissions (honeypot field must be empty)
-    if (honeypot && honeypot.length > 0) {
-      return NextResponse.json({ error: 'Validation failed' }, { status: 400 });
-    }
-
     const photoUrl = body.photoUrl || null; // Optional, already uploaded to Storage
 
     // Try to get authenticated user (optional)
@@ -115,18 +116,48 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
       notifyUserIds = coaches.map(c => c.userId);
     }
 
-    // Create notifications for each recipient
+    // Create in-app notifications for each recipient
     if (notifyUserIds.length > 0) {
+      const severityPrefix = severity === 'CRITICAL' ? '[CRITICAL] ' : '';
+      const truncatedDesc = description.substring(0, 80) + (description.length > 80 ? '...' : '');
+
       await prisma.notification.createMany({
         data: notifyUserIds.map(userId => ({
           teamId,
           userId,
           type: 'DAMAGE_REPORT',
-          title: `Damage reported: ${equipment.name}`,
-          message: description.substring(0, 100) + (description.length > 100 ? '...' : ''),
+          title: `${severityPrefix}Damage: ${equipment.name}`,
+          message: `${reporterName}: ${truncatedDesc}`,
           linkUrl: `/equipment/${equipment.id}`,
         })),
       });
+    }
+
+    // Send email notification for CRITICAL severity only
+    if (severity === 'CRITICAL' && notifyUserIds.length > 0) {
+      // Get coach emails using admin API (gracefully degrades if not configured)
+      const userEmails = await getUserEmailsByIds(notifyUserIds);
+      const coachEmails = userEmails.map(u => u.email);
+
+      if (coachEmails.length > 0) {
+        try {
+          const { sendCriticalDamageAlert } = await import('@/lib/email/templates/critical-alert');
+          await sendCriticalDamageAlert(coachEmails, {
+            teamName: equipment.team?.name || 'Unknown Team',
+            equipmentName: equipment.name,
+            equipmentId: equipment.id,
+            reporterName,
+            location,
+            description,
+            category: category || undefined,
+            photoUrl: photoUrl || undefined,
+            reportId: damageReport.id,
+          });
+        } catch (emailError) {
+          // Email failures should not fail the API request
+          console.error('Failed to send critical damage email:', emailError);
+        }
+      }
     }
 
     return NextResponse.json(
