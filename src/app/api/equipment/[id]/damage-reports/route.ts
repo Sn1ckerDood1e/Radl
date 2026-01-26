@@ -58,11 +58,17 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
       );
     }
 
-    const { location, description } = validationResult.data;
+    const { location, description, severity, reporterName, category, honeypot } = validationResult.data;
+
+    // Reject bot submissions (honeypot field must be empty)
+    if (honeypot && honeypot.length > 0) {
+      return NextResponse.json({ error: 'Validation failed' }, { status: 400 });
+    }
+
     const photoUrl = body.photoUrl || null; // Optional, already uploaded to Storage
 
     // Try to get authenticated user (optional)
-    let reportedBy = 'anonymous';
+    let reportedBy: string | null = null;
     try {
       const supabase = await createClient();
       const { data: { user } } = await supabase.auth.getUser();
@@ -79,8 +85,11 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
         equipmentId,
         teamId,
         reportedBy,
+        reporterName,
         location,
         description,
+        severity,
+        category: category || null,
         photoUrl,
         status: 'OPEN',
       },

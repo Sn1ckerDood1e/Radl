@@ -55,8 +55,11 @@ export default async function EquipmentDetailPage({ params }: EquipmentDetailPag
   const damageReports = equipment.damageReports.map(r => ({
     id: r.id,
     reportedBy: r.reportedBy,
+    reporterName: r.reporterName,
     location: r.location,
     description: r.description,
+    severity: r.severity,
+    category: r.category,
     photoUrl: r.photoUrl,
     status: r.status,
     resolvedAt: r.resolvedAt?.toISOString() ?? null,

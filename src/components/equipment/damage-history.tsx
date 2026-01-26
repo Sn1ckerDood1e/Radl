@@ -4,9 +4,12 @@ import { useState } from 'react';
 
 interface DamageReport {
   id: string;
-  reportedBy: string;
+  reportedBy: string | null;
+  reporterName: string;
   location: string;
   description: string;
+  severity: 'MINOR' | 'MODERATE' | 'CRITICAL';
+  category: string | null;
   photoUrl: string | null;
   status: 'OPEN' | 'RESOLVED';
   resolvedAt: string | null;
@@ -115,6 +118,22 @@ export function DamageHistory({ damageReports, equipmentId, isCoach }: DamageHis
                   >
                     {report.status === 'OPEN' ? 'Open' : 'Resolved'}
                   </span>
+                  <span
+                    className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${
+                      report.severity === 'CRITICAL'
+                        ? 'bg-red-600/20 text-red-300'
+                        : report.severity === 'MODERATE'
+                        ? 'bg-amber-500/20 text-amber-400'
+                        : 'bg-blue-500/20 text-blue-400'
+                    }`}
+                  >
+                    {report.severity}
+                  </span>
+                  {report.category && (
+                    <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-zinc-700 text-zinc-300">
+                      {report.category}
+                    </span>
+                  )}
                   <span className="text-sm text-zinc-500">{formatDate(report.createdAt)}</span>
                 </div>
 
@@ -140,7 +159,7 @@ export function DamageHistory({ damageReports, equipmentId, isCoach }: DamageHis
                 )}
 
                 <p className="text-xs text-zinc-500 mt-2">
-                  Reported by: {report.reportedBy === 'anonymous' ? 'Anonymous' : 'Team Member'}
+                  Reported by: {report.reporterName}
                 </p>
 
                 {report.status === 'RESOLVED' && report.resolvedAt && (
