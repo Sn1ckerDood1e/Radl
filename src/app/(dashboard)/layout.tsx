@@ -120,7 +120,7 @@ export default async function DashboardLayout({
         <CommandPaletteProvider />
         <div className="min-h-screen bg-[var(--background)] transition-colors">
           <DashboardHeader team={legacyTeam} contexts={contexts} />
-          <main className="container mx-auto px-4 py-8">
+          <main className="flex-1">
             {children}
           </main>
           <Toaster position="bottom-right" richColors closeButton theme="dark" />
