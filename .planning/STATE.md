@@ -12,19 +12,19 @@
 |-------|-------|
 | Milestone | v2.0 Commercial Readiness |
 | Phase | Phase 17: Facility UI Features |
-| Plan | 10 of 11 |
-| Status | In progress |
-| Last activity | 2026-01-26 — Completed 17-09-PLAN.md |
+| Plan | 11 of 11 |
+| Status | Complete |
+| Last activity | 2026-01-26 — Completed 17-11-PLAN.md |
 
 **Progress:**
 ```
 v1.0: [##########] 100% SHIPPED (2026-01-22)
 v1.1: [##########] 100% SHIPPED (2026-01-22) — 9/11 reqs, 2 deferred
-v2.0: [#########-] 95% — Phase 17 in progress (33/34 requirements)
+v2.0: [##########] 100% SHIPPED (2026-01-26) — Phase 17 complete (34/34 requirements)
 ```
 
 **Current Phase Detail:**
-- Phase 17: Facility UI Features — IN PROGRESS (10/11 plans)
+- Phase 17: Facility UI Features — COMPLETE (11/11 plans)
 - Goal: Equipment booking system and facility management UI
 - Plan 01 (Equipment Booking Schema) complete
 - Plan 02 (Facility Dashboard Enhancement) complete
@@ -36,6 +36,7 @@ v2.0: [#########-] 95% — Phase 17 in progress (33/34 requirements)
 - Plan 08 (Facility Settings Page) complete
 - Plan 09 (Club Detail & Subscription Overview) complete
 - Plan 10 (Equipment Booking Integration) complete
+- Plan 11 (End-to-End Verification) complete
 
 **Previous Phases:**
 - Phase 16: UI/UX Polish — COMPLETE (6/6 plans)
@@ -214,6 +215,7 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 - **Equipment panel enhancement:** EquipmentAvailabilityPanel with shared equipment badges and Request buttons
 - **Subscription overview:** SubscriptionOverview component with usage bars (mock data until billing integration)
 - **Club detail page:** Facility admin drill-down with stats, admins, practices, and subscription visibility
+- **E2E verification:** All 6 Phase 17 requirements verified (FAC-03, 05, 06, 07, 08, 09)
 
 ### Tech Debt Tracker
 
@@ -250,9 +252,9 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
 | Field | Value |
 |-------|-------|
 | Last session | 2026-01-26 |
-| Stopped at | Completed 17-09-PLAN.md (Club Detail & Subscription Overview) |
+| Stopped at | Phase 17 complete, v2.0 milestone complete |
 | Resume file | None |
 
 ---
 
-*Last updated: 2026-01-26 (Phase 17 plan 09 complete)*
+*Last updated: 2026-01-26 (Phase 17 complete, v2.0 shipped)*
