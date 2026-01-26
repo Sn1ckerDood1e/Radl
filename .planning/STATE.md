@@ -11,17 +11,17 @@
 | Field | Value |
 |-------|-------|
 | Milestone | v2.1 UX Refinement |
-| Phase | 19 — Announcements System |
-| Plan | 04 of 4 |
-| Status | Phase complete |
-| Last activity | 2026-01-26 — Completed 19-04-PLAN.md |
+| Phase | 20 — Public Issue Reporting |
+| Plan | 01 of 4 |
+| Status | In progress |
+| Last activity | 2026-01-26 — Completed 20-01-PLAN.md |
 
 **Progress:**
 ```
 v1.0: [##########] 100% SHIPPED (2026-01-22)
 v1.1: [##########] 100% SHIPPED (2026-01-22) — 9/11 reqs, 2 deferred
 v2.0: [##########] 100% SHIPPED (2026-01-26) — 34/34 requirements
-v2.1: [████      ] 43% — 2/7 phases complete
+v2.1: [█████     ] 50% — 3/7 phases complete (partial: Phase 20 started)
 ```
 
 ## v2.1 Scope
@@ -162,6 +162,11 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 - Client-side state update on mark-as-read avoids full list refetch
 - Escape key handler for banner dismissal improves keyboard accessibility
 
+**v2.1 decisions (Phase 20 - Plan 01):**
+- reportedBy made optional (null) for public reports while reporterName is always required
+- Default severity is MODERATE to encourage accurate classification without blocking submission
+- Honeypot field validates empty string to detect bots without blocking legitimate users
+
 ### Architecture Notes
 
 - **Multi-tenant:** Team-scoped data with JWT claims, application-level filtering
@@ -301,9 +306,9 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
 | Field | Value |
 |-------|-------|
 | Last session | 2026-01-26 |
-| Stopped at | Completed 19-03-PLAN.md |
+| Stopped at | Completed 20-01-PLAN.md |
 | Resume file | None |
 
 ---
 
-*Last updated: 2026-01-26 (Phase 19 complete — Announcements System with display components)*
+*Last updated: 2026-01-26 (Phase 20 in progress — Public Issue Reporting data foundation complete)*
