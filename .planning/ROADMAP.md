@@ -28,6 +28,10 @@
 - Active state indicators for current section
 - Preserve existing page content, change only the shell/layout
 
+**Plans:** 1 plan
+Plans:
+- [ ] 18-01-PLAN.md — Navigation shell with sidebar (desktop) and bottom nav (mobile)
+
 **Dependencies:** None (foundational change)
 
 ---
