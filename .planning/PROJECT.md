@@ -4,7 +4,7 @@
 
 A multi-tenant SaaS for rowing team operations — practice planning, equipment management, roster coordination, and race-day execution at regattas.
 
-**Current State:** v2.0 shipped. Commercial-ready with facility model, mobile PWA, design system, and hardened security. Ready for production deployment and commercial sale.
+**Current State:** v2.0 shipped. Starting v2.1 UX refinement — RIM feature parity, navigation redesign, practice flow improvements, RC public API.
 
 ## Core Value
 
@@ -93,24 +93,49 @@ A multi-tenant SaaS for rowing team operations — practice planning, equipment 
 | RLS over application filtering | Database-level isolation prevents leaks | Good — connection pooling safe |
 | Wave-based execution | Plans grouped by dependency for parallel execution | Good — fast delivery |
 
-## Next Milestone Goals
+## Current Milestone: v2.1 UX Refinement
+
+**Goal:** Elevate user experience with RIM-inspired features, improved navigation, and better practice workflows.
+
+**Target features:**
+
+1. **RIM Feature Parity**
+   - Announcements — Coach broadcasts to team with priority levels
+   - Public issue reporting — QR-based damage reports (no login required)
+   - Equipment readiness — Calculated status with maintenance workflow
+   - Dashboard analytics — Equipment insights, usage trends, fleet health
+
+2. **Navigation/Layout Redesign**
+   - Desktop: Left sidebar nav → content in center (master-detail pattern)
+   - Mobile: Bottom navigation bar → content in main area
+
+3. **Practice Flow Improvements**
+   - Inline editing — Edit on-page, not separate form screens
+   - Block-based structure — Time blocks with type-specific forms
+   - Improved lineup creation — See available athletes, drag into boats
+   - Workout display — Structured drills within practice blocks
+
+4. **Regatta Central Public API**
+   - Regatta schedules — Upcoming regattas, dates, locations
+   - Foundation for later team-specific OAuth integration
+
+## Future Milestone Goals
 
 v3.0 candidates:
 - Push notifications (NOTIF-01, NOTIF-02)
 - Native mobile apps (iOS, Android)
-- Advanced analytics and reporting
 - Season templates
-- Equipment lifecycle tracking
+- RC team-specific OAuth integration
 
 ## Deferred Items
 
-- **NOTIF-01**: Coach notification for equipment damage
-- **NOTIF-02**: Athlete notification for lineup published
-- Season templates — reusable structures
+- **NOTIF-01**: Push notification for equipment damage (v3.0)
+- **NOTIF-02**: Push notification for lineup published (v3.0)
+- Season templates — reusable structures (v3.0)
 - Email notifications — alternative to push
 - Erg results tracking — Concept2 integration
 - Attendance analytics — reporting and trends
-- Equipment lifecycle tracking — maintenance schedules
+- RC team-specific OAuth — requires credentials (v3.0)
 
 ## Out of Scope
 
@@ -123,4 +148,4 @@ v3.0 candidates:
 - Social features
 
 ---
-*Last updated: 2026-01-26 after v2.0 milestone shipped*
+*Last updated: 2026-01-26 after v2.1 milestone started*

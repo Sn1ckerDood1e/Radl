@@ -4,49 +4,55 @@
 
 **Core Value:** Coaches can plan practices with lineups and equipment, and athletes know where to be and what boat they're in.
 
-**Current Focus:** Between milestones — v2.0 shipped, v3.0 not yet started
+**Current Focus:** v2.1 UX Refinement — RIM feature parity, navigation redesign, practice flow, RC public API
 
 ## Current Position
 
 | Field | Value |
 |-------|-------|
-| Milestone | None (v2.0 shipped) |
-| Phase | — |
+| Milestone | v2.1 UX Refinement |
+| Phase | Not started (defining requirements) |
 | Plan | — |
-| Status | Ready for next milestone |
-| Last activity | 2026-01-26 — Completed and archived v2.0 milestone |
+| Status | Defining requirements |
+| Last activity | 2026-01-26 — Started v2.1 milestone |
 
 **Progress:**
 ```
 v1.0: [##########] 100% SHIPPED (2026-01-22)
 v1.1: [##########] 100% SHIPPED (2026-01-22) — 9/11 reqs, 2 deferred
-v2.0: [##########] 100% SHIPPED (2026-01-26) — Phase 17 complete (34/34 requirements)
+v2.0: [##########] 100% SHIPPED (2026-01-26) — 34/34 requirements
+v2.1: [          ] 0% — Defining requirements
 ```
 
-**Current Phase Detail:**
-- Phase 17: Facility UI Features — COMPLETE (11/11 plans)
-- Goal: Equipment booking system and facility management UI
-- Plan 01 (Equipment Booking Schema) complete
-- Plan 02 (Facility Dashboard Enhancement) complete
-- Plan 03 (Clubs List Page) complete
-- Plan 04 (Facility Equipment Management) complete
-- Plan 05 (Equipment Booking API) complete
-- Plan 06 (Equipment Requests Page) complete
-- Plan 07 (Cross-Club Events) complete
-- Plan 08 (Facility Settings Page) complete
-- Plan 09 (Club Detail & Subscription Overview) complete
-- Plan 10 (Equipment Booking Integration) complete
-- Plan 11 (End-to-End Verification) complete
+## v2.1 Scope
 
-**Previous Phases:**
-- Phase 16: UI/UX Polish — COMPLETE (6/6 plans)
-- Phase 15: Mobile PWA Improvements — COMPLETE (6/6 plans)
-- Phase 14: Design System Foundation — COMPLETE (4/4 plans)
-- Phase 13: Facility Auth Integration — COMPLETE (6/6 plans)
-- Phase 12: Facility Schema Migration — COMPLETE (7/7 plans)
-- Phase 11: MFA & SSO — COMPLETE (12/12 plans)
+**Goal:** Elevate UX with RIM-inspired features, improved navigation, and better practice workflows
 
-## v2.0 Scope
+**Target features:**
+
+1. **RIM Feature Parity**
+   - Announcements — Coach broadcasts with priority levels
+   - Public issue reporting — QR-based damage reports (no login)
+   - Equipment readiness — Calculated status with maintenance workflow
+   - Dashboard analytics — Usage trends, fleet health, insights
+
+2. **Navigation/Layout Redesign**
+   - Desktop: Left sidebar nav → content in center (master-detail)
+   - Mobile: Bottom navigation bar → content in main area
+
+3. **Practice Flow Improvements**
+   - Inline editing — Edit on-page, not separate forms
+   - Block-based structure — Type-specific forms (water ≠ erg)
+   - Improved lineup creation — Drag athletes into boats
+   - Workout display — Structured drills within blocks
+
+4. **Regatta Central Public API**
+   - Regatta schedules — Upcoming regattas, dates, locations
+   - Foundation for later team-specific OAuth
+
+**Inspired by:** RIM (RowReady) Base44 implementation
+
+## v2.0 Scope (Shipped)
 
 **Goal:** Prepare RowOps for commercial sale to rowing organizations
 
