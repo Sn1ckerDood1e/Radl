@@ -207,6 +207,13 @@ enum DamageReportStatus {
   RESOLVED
 }
 
+// Report severity enum for public issue reporting
+enum ReportSeverity {
+  MINOR      // Cosmetic damage, can still use
+  MODERATE   // Functional impact, needs attention
+  CRITICAL   // Unsafe to use, immediate action required
+}
+
 // Side preference enum (for rowers)
 enum Side {
   PORT
@@ -363,17 +370,20 @@ model EquipmentBooking {
 
 // Damage report model for tracking equipment damage
 model DamageReport {
-  id          String             @id @default(uuid())
-  equipmentId String
-  teamId      String // Denormalized for easier RLS
-  reportedBy  String // userId who reported
-  location    String // Where on equipment
-  description String // What's wrong
-  photoUrl    String? // Supabase Storage URL
-  status      DamageReportStatus @default(OPEN)
-  resolvedAt  DateTime?
-  resolvedBy  String?
-  createdAt   DateTime           @default(now())
+  id           String             @id @default(uuid())
+  equipmentId  String
+  teamId       String // Denormalized for easier RLS
+  reportedBy   String? // userId who reported (optional for public reports)
+  reporterName String // Required reporter name for all reports
+  location     String // Where on equipment
+  description  String // What's wrong
+  severity     ReportSeverity     @default(MODERATE)
+  category     String? // Hull, Rigging, Hardware, Other, etc.
+  photoUrl     String? // Supabase Storage URL
+  status       DamageReportStatus @default(OPEN)
+  resolvedAt   DateTime?
+  resolvedBy   String?
+  createdAt    DateTime           @default(now())
 
   equipment Equipment @relation(fields: [equipmentId], references: [id], onDelete: Cascade)
 
