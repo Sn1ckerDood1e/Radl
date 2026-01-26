@@ -195,13 +195,13 @@ export default async function FacilityEquipmentPage({ params }: FacilityEquipmen
                             </div>
                             {/* Availability indicator */}
                             {availability.status === 'damaged' && (
-                              <div className="ml-2">
-                                <AlertTriangle className="h-5 w-5 text-yellow-500" title={availability.reason || ''} />
+                              <div className="ml-2" title={availability.reason || ''}>
+                                <AlertTriangle className="h-5 w-5 text-yellow-500" />
                               </div>
                             )}
                             {availability.status === 'unavailable' && (
-                              <div className="ml-2">
-                                <Ban className="h-5 w-5 text-red-500" title={availability.reason || ''} />
+                              <div className="ml-2" title={availability.reason || ''}>
+                                <Ban className="h-5 w-5 text-red-500" />
                               </div>
                             )}
                           </div>
