@@ -12,9 +12,9 @@
 |-------|-------|
 | Milestone | v2.0 Commercial Readiness |
 | Phase | Phase 17: Facility UI Features |
-| Plan | 9 of 11 |
+| Plan | 10 of 11 |
 | Status | In progress |
-| Last activity | 2026-01-26 — Completed 17-07-PLAN.md |
+| Last activity | 2026-01-26 — Completed 17-10-PLAN.md |
 
 **Progress:**
 ```
@@ -24,7 +24,7 @@ v2.0: [#########-] 95% — Phase 17 in progress (33/34 requirements)
 ```
 
 **Current Phase Detail:**
-- Phase 17: Facility UI Features — IN PROGRESS (9/11 plans)
+- Phase 17: Facility UI Features — IN PROGRESS (10/11 plans)
 - Goal: Equipment booking system and facility management UI
 - Plan 01 (Equipment Booking Schema) complete
 - Plan 02 (Facility Dashboard Enhancement) complete
@@ -34,6 +34,7 @@ v2.0: [#########-] 95% — Phase 17 in progress (33/34 requirements)
 - Plan 06 (Equipment Requests Page) complete
 - Plan 07 (Cross-Club Events) complete
 - Plan 08 (Facility Settings Page) complete
+- Plan 10 (Equipment Booking Integration) complete
 
 **Previous Phases:**
 - Phase 16: UI/UX Polish — COMPLETE (6/6 plans)
@@ -208,6 +209,8 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 - **Cross-club events:** Facility admins can create events that copy to multiple clubs' calendars
 - **Event tracking:** facilityEventId stored in practice notes JSON for grouping
 - **Clubs API:** /api/facility/[facilityId]/clubs endpoint for club selection
+- **Booking dialog:** BookingRequestDialog component with conflict display and notes field
+- **Equipment panel enhancement:** EquipmentAvailabilityPanel with shared equipment badges and Request buttons
 
 ### Tech Debt Tracker
 
@@ -244,9 +247,9 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
 | Field | Value |
 |-------|-------|
 | Last session | 2026-01-26 |
-| Stopped at | Completed 17-07-PLAN.md (Cross-Club Events) |
+| Stopped at | Completed 17-10-PLAN.md (Equipment Booking Integration) |
 | Resume file | None |
 
 ---
 
-*Last updated: 2026-01-26 (Phase 17 plan 07 complete)*
+*Last updated: 2026-01-26 (Phase 17 plan 10 complete)*
