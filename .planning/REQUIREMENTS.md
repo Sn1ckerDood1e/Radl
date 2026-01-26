@@ -9,15 +9,15 @@ Commercial readiness — facility model, mobile PWA, UI/UX polish, security hard
 
 ### Facility Model
 
-- [ ] **FAC-01**: System supports facility → club hierarchy (boathouse owns clubs)
-- [ ] **FAC-02**: Equipment can be owned by facility (shared) or club (exclusive)
-- [ ] **FAC-03**: Club-level subscriptions with facility oversight
-- [ ] **FAC-04**: Tenant-scoped data isolation enforced at database level (RLS)
-- [ ] **FAC-05**: Facility admin can view all clubs under facility
-- [ ] **FAC-06**: Facility admin can manage shared equipment
-- [ ] **FAC-07**: Equipment reservation/booking system for shared equipment
-- [ ] **FAC-08**: Cross-club event scheduling (facility-wide events)
-- [ ] **FAC-09**: Facility dashboard with aggregate statistics
+- [x] **FAC-01**: System supports facility → club hierarchy (boathouse owns clubs)
+- [x] **FAC-02**: Equipment can be owned by facility (shared) or club (exclusive)
+- [x] **FAC-03**: Club-level subscriptions with facility oversight
+- [x] **FAC-04**: Tenant-scoped data isolation enforced at database level (RLS)
+- [x] **FAC-05**: Facility admin can view all clubs under facility
+- [x] **FAC-06**: Facility admin can manage shared equipment
+- [x] **FAC-07**: Equipment reservation/booking system for shared equipment
+- [x] **FAC-08**: Cross-club event scheduling (facility-wide events)
+- [x] **FAC-09**: Facility dashboard with aggregate statistics
 
 ### Mobile PWA
 
@@ -44,14 +44,14 @@ Commercial readiness — facility model, mobile PWA, UI/UX polish, security hard
 
 ### Security & RBAC
 
-- [ ] **SEC-04**: Role hierarchy (FACILITY_ADMIN → CLUB_ADMIN → COACH → ATHLETE → PARENT)
-- [ ] **SEC-05**: Tenant-scoped permissions ("admin of THIS club, not all clubs")
-- [ ] **SEC-06**: Audit logging for sensitive operations (365-day retention)
-- [ ] **SEC-07**: Session management with secure token refresh
-- [ ] **SEC-08**: Multi-factor authentication (MFA) for admin roles
-- [ ] **SEC-09**: SSO/SAML integration for enterprise customers
-- [ ] **SEC-10**: Custom permission grants for edge cases
-- [ ] **SEC-11**: API key management for integrations
+- [x] **SEC-04**: Role hierarchy (FACILITY_ADMIN → CLUB_ADMIN → COACH → ATHLETE → PARENT)
+- [x] **SEC-05**: Tenant-scoped permissions ("admin of THIS club, not all clubs")
+- [x] **SEC-06**: Audit logging for sensitive operations (365-day retention)
+- [x] **SEC-07**: Session management with secure token refresh
+- [x] **SEC-08**: Multi-factor authentication (MFA) for admin roles
+- [x] **SEC-09**: SSO/SAML integration for enterprise customers
+- [x] **SEC-10**: Custom permission grants for edge cases
+- [x] **SEC-11**: API key management for integrations
 
 ## Future Requirements (v3.0+)
 
@@ -119,12 +119,12 @@ Which phases cover which requirements. Updated during roadmap creation.
 | UIX-07 | Phase 16 | Complete |
 | UIX-08 | Phase 16 | Complete |
 | UIX-09 | Phase 16 | Complete |
-| FAC-03 | Phase 17 | Pending |
-| FAC-05 | Phase 17 | Pending |
-| FAC-06 | Phase 17 | Pending |
-| FAC-07 | Phase 17 | Pending |
-| FAC-08 | Phase 17 | Pending |
-| FAC-09 | Phase 17 | Pending |
+| FAC-03 | Phase 17 | Complete |
+| FAC-05 | Phase 17 | Complete |
+| FAC-06 | Phase 17 | Complete |
+| FAC-07 | Phase 17 | Complete |
+| FAC-08 | Phase 17 | Complete |
+| FAC-09 | Phase 17 | Complete |
 
 **Coverage:**
 - v2.0 requirements: 34 total
@@ -135,4 +135,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2026-01-22*
-*Last updated: 2026-01-24 after Phase 15 completion*
+*Last updated: 2026-01-26 after Phase 17 completion — v2.0 milestone complete*
