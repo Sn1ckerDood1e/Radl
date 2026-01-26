@@ -74,6 +74,7 @@ model Team {
   apiKeys           ApiKey[] @relation("ApiKeys")
   clubEquipment     Equipment[] @relation("ClubEquipment")
   equipmentBookings EquipmentBooking[] @relation("ClubBookings")
+  announcements     Announcement[]
 
   @@index([facilityId])
 }
@@ -242,6 +243,13 @@ enum BookingStatus {
   APPROVED   // Confirmed booking
   DENIED     // Request rejected
   CANCELLED  // Booking cancelled by requester
+}
+
+// Announcement priority enum
+enum AnnouncementPriority {
+  INFO
+  WARNING
+  URGENT
 }
 
 // Season status enum
@@ -489,6 +497,7 @@ model Practice {
   blocks            PracticeBlock[]
   usageLogs         EquipmentUsageLog[]
   equipmentBookings EquipmentBooking[]
+  announcements     Announcement[]
 
   @@index([teamId])
   @@index([teamId, seasonId])
@@ -882,4 +891,41 @@ model SsoConfig {
 
   @@index([facilityId])
   @@index([ssoProviderId])
+}
+
+// Announcement model for team broadcasts
+model Announcement {
+  id           String               @id @default(uuid())
+  teamId       String
+  title        String
+  body         String
+  priority     AnnouncementPriority @default(INFO)
+  createdBy    String               // userId who created
+  practiceId   String?
+  expiresAt    DateTime?
+  archivedAt   DateTime?
+  createdAt    DateTime             @default(now())
+  updatedAt    DateTime             @updatedAt
+
+  team         Team                 @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  practice     Practice?            @relation(fields: [practiceId], references: [id], onDelete: SetNull)
+  readReceipts AnnouncementRead[]
+
+  @@index([teamId, archivedAt])
+  @@index([teamId, priority, createdAt])
+  @@index([practiceId])
+}
+
+// AnnouncementRead model for tracking per-user read state
+model AnnouncementRead {
+  id             String       @id @default(uuid())
+  announcementId String
+  userId         String
+  readAt         DateTime     @default(now())
+
+  announcement   Announcement @relation(fields: [announcementId], references: [id], onDelete: Cascade)
+
+  @@unique([announcementId, userId])
+  @@index([userId])
+  @@index([announcementId])
 }
