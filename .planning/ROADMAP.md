@@ -76,11 +76,11 @@ Plans:
 
 **Plans:** 5 plans
 Plans:
-- [ ] 20-01-PLAN.md — Data foundation: schema extension, validation, dependencies
-- [ ] 20-02-PLAN.md — Form enhancements: severity, category, reporter name, honeypot
-- [ ] 20-03-PLAN.md — API and notifications: severity routing, email alerts
-- [ ] 20-04-PLAN.md — Individual QR: download button on equipment detail
-- [ ] 20-05-PLAN.md — Bulk QR export: PDF generation with all equipment
+- [x] 20-01-PLAN.md — Data foundation: schema extension, validation, dependencies
+- [x] 20-02-PLAN.md — Form enhancements: severity, category, reporter name, honeypot
+- [x] 20-03-PLAN.md — API and notifications: severity routing, email alerts
+- [x] 20-04-PLAN.md — Individual QR: download button on equipment detail
+- [x] 20-05-PLAN.md — Bulk QR export: PDF generation with all equipment
 
 **Dependencies:** None (uses existing equipment model)
 
@@ -184,7 +184,7 @@ Phase 24: RC Public API (independent)
 ```
 Phase 18: [##########] 100% — Complete ✓
 Phase 19: [##########] 100% — Complete ✓
-Phase 20: [          ] 0% — Not started
+Phase 20: [##########] 100% — Complete ✓
 Phase 21: [          ] 0% — Not started
 Phase 22: [          ] 0% — Not started
 Phase 23: [          ] 0% — Not started

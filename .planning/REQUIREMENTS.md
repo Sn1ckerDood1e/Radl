@@ -66,9 +66,9 @@
 | ANN-01 | Complete | 19 | Human verified |
 | ANN-02 | Complete | 19 | Human verified |
 | ANN-03 | Complete | 19 | Human verified |
-| ISS-01 | Pending | — | — |
-| ISS-02 | Pending | — | — |
-| ISS-03 | Pending | — | — |
+| ISS-01 | Complete | 20 | 20-VERIFICATION.md |
+| ISS-02 | Complete | 20 | 20-VERIFICATION.md |
+| ISS-03 | Complete | 20 | 20-VERIFICATION.md |
 | EQR-01 | Pending | — | — |
 | EQR-02 | Pending | — | — |
 | EQR-03 | Pending | — | — |
