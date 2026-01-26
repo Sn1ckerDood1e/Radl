@@ -14,7 +14,7 @@
 | Phase | Phase 17: Facility UI Features |
 | Plan | 10 of 11 |
 | Status | In progress |
-| Last activity | 2026-01-26 — Completed 17-10-PLAN.md |
+| Last activity | 2026-01-26 — Completed 17-09-PLAN.md |
 
 **Progress:**
 ```
@@ -34,6 +34,7 @@ v2.0: [#########-] 95% — Phase 17 in progress (33/34 requirements)
 - Plan 06 (Equipment Requests Page) complete
 - Plan 07 (Cross-Club Events) complete
 - Plan 08 (Facility Settings Page) complete
+- Plan 09 (Club Detail & Subscription Overview) complete
 - Plan 10 (Equipment Booking Integration) complete
 
 **Previous Phases:**
@@ -211,6 +212,8 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 - **Clubs API:** /api/facility/[facilityId]/clubs endpoint for club selection
 - **Booking dialog:** BookingRequestDialog component with conflict display and notes field
 - **Equipment panel enhancement:** EquipmentAvailabilityPanel with shared equipment badges and Request buttons
+- **Subscription overview:** SubscriptionOverview component with usage bars (mock data until billing integration)
+- **Club detail page:** Facility admin drill-down with stats, admins, practices, and subscription visibility
 
 ### Tech Debt Tracker
 
@@ -247,9 +250,9 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
 | Field | Value |
 |-------|-------|
 | Last session | 2026-01-26 |
-| Stopped at | Completed 17-10-PLAN.md (Equipment Booking Integration) |
+| Stopped at | Completed 17-09-PLAN.md (Club Detail & Subscription Overview) |
 | Resume file | None |
 
 ---
 
-*Last updated: 2026-01-26 (Phase 17 plan 10 complete)*
+*Last updated: 2026-01-26 (Phase 17 plan 09 complete)*
