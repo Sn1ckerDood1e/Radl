@@ -12,9 +12,9 @@
 |-------|-------|
 | Milestone | v2.0 Commercial Readiness |
 | Phase | Phase 17: Facility UI Features |
-| Plan | 8 of 11 |
+| Plan | 9 of 11 |
 | Status | In progress |
-| Last activity | 2026-01-26 — Completed 17-08-PLAN.md |
+| Last activity | 2026-01-26 — Completed 17-07-PLAN.md |
 
 **Progress:**
 ```
@@ -24,7 +24,7 @@ v2.0: [#########-] 95% — Phase 17 in progress (33/34 requirements)
 ```
 
 **Current Phase Detail:**
-- Phase 17: Facility UI Features — IN PROGRESS (8/11 plans)
+- Phase 17: Facility UI Features — IN PROGRESS (9/11 plans)
 - Goal: Equipment booking system and facility management UI
 - Plan 01 (Equipment Booking Schema) complete
 - Plan 02 (Facility Dashboard Enhancement) complete
@@ -32,6 +32,7 @@ v2.0: [#########-] 95% — Phase 17 in progress (33/34 requirements)
 - Plan 04 (Facility Equipment Management) complete
 - Plan 05 (Equipment Booking API) complete
 - Plan 06 (Equipment Requests Page) complete
+- Plan 07 (Cross-Club Events) complete
 - Plan 08 (Facility Settings Page) complete
 
 **Previous Phases:**
@@ -204,6 +205,9 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 - **Pending request badge:** Equipment list page shows amber badge linking to requests when count > 0
 - **Facility settings API:** GET/PATCH /api/facility/[facilityId]/settings for profile and booking config
 - **Settings page:** Three-section form for Booking Settings, Facility Profile, Contact Info
+- **Cross-club events:** Facility admins can create events that copy to multiple clubs' calendars
+- **Event tracking:** facilityEventId stored in practice notes JSON for grouping
+- **Clubs API:** /api/facility/[facilityId]/clubs endpoint for club selection
 
 ### Tech Debt Tracker
 
@@ -240,9 +244,9 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
 | Field | Value |
 |-------|-------|
 | Last session | 2026-01-26 |
-| Stopped at | Completed 17-08-PLAN.md (Facility Settings Page) |
+| Stopped at | Completed 17-07-PLAN.md (Cross-Club Events) |
 | Resume file | None |
 
 ---
 
-*Last updated: 2026-01-26 (Phase 17 plan 08 complete)*
+*Last updated: 2026-01-26 (Phase 17 plan 07 complete)*
