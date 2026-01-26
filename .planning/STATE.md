@@ -12,16 +12,16 @@
 |-------|-------|
 | Milestone | v2.1 UX Refinement |
 | Phase | 19 — Announcements System |
-| Plan | 03 of 3 |
+| Plan | 04 of 4 |
 | Status | Phase complete |
-| Last activity | 2026-01-26 — Completed 19-03-PLAN.md |
+| Last activity | 2026-01-26 — Completed 19-04-PLAN.md |
 
 **Progress:**
 ```
 v1.0: [##########] 100% SHIPPED (2026-01-22)
 v1.1: [##########] 100% SHIPPED (2026-01-22) — 9/11 reqs, 2 deferred
 v2.0: [##########] 100% SHIPPED (2026-01-26) — 34/34 requirements
-v2.1: [███       ] 29% — 2/7 phases complete
+v2.1: [████      ] 43% — 2/7 phases complete
 ```
 
 ## v2.1 Scope

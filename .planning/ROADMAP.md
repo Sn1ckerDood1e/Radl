@@ -50,10 +50,10 @@ Plans:
 
 **Plans:** 4 plans
 Plans:
-- [ ] 19-01-PLAN.md — Data foundation: schema, CASL, validation
-- [ ] 19-02-PLAN.md — API layer: CRUD endpoints and mark-as-read
-- [ ] 19-03-PLAN.md — Display components: badge, card, list, banner
-- [ ] 19-04-PLAN.md — Page integration: coach management, dashboard, layout banner
+- [x] 19-01-PLAN.md — Data foundation: schema, CASL, validation
+- [x] 19-02-PLAN.md — API layer: CRUD endpoints and mark-as-read
+- [x] 19-03-PLAN.md — Display components: badge, card, list, banner
+- [x] 19-04-PLAN.md — Page integration: coach management, dashboard, layout banner
 
 **Dependencies:** Phase 18 (uses new layout)
 
@@ -172,7 +172,7 @@ Phase 24: RC Public API (independent)
 
 ```
 Phase 18: [##########] 100% — Complete ✓
-Phase 19: [          ] 0% — Not started
+Phase 19: [##########] 100% — Complete ✓
 Phase 20: [          ] 0% — Not started
 Phase 21: [          ] 0% — Not started
 Phase 22: [          ] 0% — Not started

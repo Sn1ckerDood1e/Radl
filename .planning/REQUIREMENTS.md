@@ -63,9 +63,9 @@
 
 | REQ-ID | Status | Phase | Verification |
 |--------|--------|-------|--------------|
-| ANN-01 | Pending | — | — |
-| ANN-02 | Pending | — | — |
-| ANN-03 | Pending | — | — |
+| ANN-01 | Complete | 19 | Human verified |
+| ANN-02 | Complete | 19 | Human verified |
+| ANN-03 | Complete | 19 | Human verified |
 | ISS-01 | Pending | — | — |
 | ISS-02 | Pending | — | — |
 | ISS-03 | Pending | — | — |
