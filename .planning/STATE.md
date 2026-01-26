@@ -12,16 +12,16 @@
 |-------|-------|
 | Milestone | v2.1 UX Refinement |
 | Phase | 20 — Public Issue Reporting |
-| Plan | 04 of 5 |
-| Status | In progress |
-| Last activity | 2026-01-26 — Completed 20-04-PLAN.md |
+| Plan | 05 of 5 |
+| Status | Phase complete |
+| Last activity | 2026-01-26 — Completed 20-05-PLAN.md |
 
 **Progress:**
 ```
 v1.0: [##########] 100% SHIPPED (2026-01-22)
 v1.1: [##########] 100% SHIPPED (2026-01-22) — 9/11 reqs, 2 deferred
 v2.0: [##########] 100% SHIPPED (2026-01-26) — 34/34 requirements
-v2.1: [█████     ] 50% — 3/7 phases complete (partial: Phase 20 plan 04 done)
+v2.1: [██████    ] 57% — 4/7 phases complete (Phase 20 complete)
 ```
 
 ## v2.1 Scope
@@ -185,6 +185,12 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 - Equipment name included in downloaded PNG for label identification
 - Canvas-based export: SVG to image conversion, then canvas with text overlay
 
+**v2.1 decisions (Phase 20 - Plan 05):**
+- Server-side QR generation via qrcode library for consistent quality
+- 12 QR codes per page (3x4 grid) optimized for letter-size printing
+- Error correction level M for print reliability
+- Equipment names truncated to 20 chars to prevent label overflow
+
 ### Architecture Notes
 
 - **Multi-tenant:** Team-scoped data with JWT claims, application-level filtering
@@ -324,9 +330,9 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
 | Field | Value |
 |-------|-------|
 | Last session | 2026-01-26 |
-| Stopped at | Completed 20-04-PLAN.md |
+| Stopped at | Completed 20-05-PLAN.md (Phase 20 complete) |
 | Resume file | None |
 
 ---
 
-*Last updated: 2026-01-26 (Phase 20 in progress — QR code download for equipment detail complete)*
+*Last updated: 2026-01-26 (Phase 20 complete — Public Issue Reporting with bulk QR export)*
