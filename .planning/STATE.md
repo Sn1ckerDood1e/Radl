@@ -12,24 +12,25 @@
 |-------|-------|
 | Milestone | v2.0 Commercial Readiness |
 | Phase | Phase 17: Facility UI Features |
-| Plan | 4 of 11 |
+| Plan | 5 of 11 |
 | Status | In progress |
-| Last activity | 2026-01-25 — Completed 17-04-PLAN.md |
+| Last activity | 2026-01-26 — Completed 17-05-PLAN.md |
 
 **Progress:**
 ```
 v1.0: [##########] 100% SHIPPED (2026-01-22)
 v1.1: [##########] 100% SHIPPED (2026-01-22) — 9/11 reqs, 2 deferred
-v2.0: [#########-] 94% — Phase 17 in progress (32/34 requirements)
+v2.0: [#########-] 95% — Phase 17 in progress (33/34 requirements)
 ```
 
 **Current Phase Detail:**
-- Phase 17: Facility UI Features — IN PROGRESS (4/11 plans)
+- Phase 17: Facility UI Features — IN PROGRESS (5/11 plans)
 - Goal: Equipment booking system and facility management UI
 - Plan 01 (Equipment Booking Schema) complete
 - Plan 02 (Facility Dashboard Enhancement) complete
 - Plan 03 (Clubs List Page) complete
 - Plan 04 (Facility Equipment Management) complete
+- Plan 05 (Equipment Booking API) complete
 
 **Previous Phases:**
 - Phase 16: UI/UX Polish — COMPLETE (6/6 plans)
@@ -194,6 +195,9 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 - **Facility equipment management:** CRUD pages for facility-owned shared equipment with availability indicators
 - **Equipment availability status:** Derived from damage reports and manualUnavailable flags
 - **Clubs list page:** Facility admins can view all clubs with drill-down to club dashboards (full admin access)
+- **Booking helper library:** checkEquipmentAvailability, createEquipmentBooking, approve/deny/cancel functions
+- **Booking API:** GET/POST /api/equipment/bookings, GET/PATCH/DELETE /api/equipment/bookings/[id]
+- **Conflict detection:** Time range overlap algorithm with race condition protection on approval
 
 ### Tech Debt Tracker
 
@@ -229,10 +233,10 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
 
 | Field | Value |
 |-------|-------|
-| Last session | 2026-01-25 |
-| Stopped at | Completed 17-04-PLAN.md (Facility Equipment Management) |
+| Last session | 2026-01-26 |
+| Stopped at | Completed 17-05-PLAN.md (Equipment Booking API) |
 | Resume file | None |
 
 ---
 
-*Last updated: 2026-01-25 (Phase 17 plan 04 complete)*
+*Last updated: 2026-01-26 (Phase 17 plan 05 complete)*
