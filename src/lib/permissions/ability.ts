@@ -58,6 +58,7 @@ export function defineAbilityFor(user: UserContext): AppAbility {
       can('read', 'Season');  // All seasons
       can('read', 'Regatta');  // All regattas
       can('read', 'Entry');  // All entries
+      can('read', 'Announcement');  // All announcements in facility
       can('manage', 'Facility', { id: user.facilityId });  // Can edit own facility profile
       can('view-audit-log', 'AuditLog');  // All audit logs in facility
       can('assign-role', 'Team');
@@ -76,6 +77,7 @@ export function defineAbilityFor(user: UserContext): AppAbility {
       can('read', 'Season', { teamId: user.clubId });  // Club's seasons
       can('read', 'Regatta', { teamId: user.clubId });  // Club's regattas
       can('read', 'Entry');  // Entries (filtered server-side)
+      can('read', 'Announcement', { teamId: user.clubId });  // Club's announcements
       can('view-audit-log', 'AuditLog');  // Audit logs (filtered server-side)
       // NO manage/create/update permissions (read-only drill-down)
       // NO assign-role, invite/remove-member in club drill-down
@@ -95,6 +97,7 @@ export function defineAbilityFor(user: UserContext): AppAbility {
       can('read', 'Season');
       can('read', 'Regatta');
       can('read', 'Entry');
+      can('read', 'Announcement');
       // NOTE: Cannot create/update lineups, practices - must also have COACH role
     }
   }
@@ -115,6 +118,7 @@ export function defineAbilityFor(user: UserContext): AppAbility {
     can('read', 'Season', { teamId: user.clubId });
     can('read', 'Regatta', { teamId: user.clubId });
     can('read', 'Entry');
+    can('read', 'Announcement', { teamId: user.clubId });
     // NOTE: Cannot create/edit lineups, practices - must also have COACH role
   }
 
@@ -128,6 +132,7 @@ export function defineAbilityFor(user: UserContext): AppAbility {
     can('manage', 'Season', { teamId: user.clubId });
     can('manage', 'Regatta', { teamId: user.clubId });
     can('manage', 'Entry');
+    can('manage', 'Announcement', { teamId: user.clubId });
     // Own audit log entries only
     can('view-audit-log', 'AuditLog');  // Filtered server-side to own actions
   }
@@ -140,6 +145,7 @@ export function defineAbilityFor(user: UserContext): AppAbility {
     can('read', 'Season', { teamId: user.clubId });
     can('read', 'Regatta', { teamId: user.clubId });
     can('read', 'Entry');  // Race entries
+    can('read', 'Announcement', { teamId: user.clubId });
     can('update', 'AthleteProfile', { teamMemberId: user.userId });  // Own profile only
   }
 
@@ -150,6 +156,7 @@ export function defineAbilityFor(user: UserContext): AppAbility {
     can('read', 'Lineup');  // Filtered server-side to show only linked athletes
     can('read', 'Regatta', { teamId: user.clubId });
     can('read', 'Entry');
+    can('read', 'Announcement', { teamId: user.clubId });
   }
 
   return build();
