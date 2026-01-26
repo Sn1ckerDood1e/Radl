@@ -12,9 +12,9 @@
 |-------|-------|
 | Milestone | v2.1 UX Refinement |
 | Phase | 19 — Announcements System |
-| Plan | 01 of 3 |
+| Plan | 02 of 3 |
 | Status | In progress |
-| Last activity | 2026-01-26 — Completed 19-01-PLAN.md |
+| Last activity | 2026-01-26 — Completed 19-02-PLAN.md |
 
 **Progress:**
 ```
@@ -149,6 +149,12 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 - Expiry validation enforces future dates only at validation layer, not database
 - Soft delete via archivedAt timestamp instead of hard delete for audit trail
 - Composite index on [teamId, priority, createdAt] optimizes dashboard sorted query
+
+**v2.1 decisions (Phase 19 - Plan 02):**
+- Client-side priority sorting required because Prisma sorts enums alphabetically (INFO, URGENT, WARNING) not business order
+- Practice-linked announcements auto-expire via practice.endTime filter in buildActiveAnnouncementsQuery
+- Upsert pattern for read receipts makes mark-as-read idempotent and prevents duplicate key errors
+- PATCH endpoint supports partial updates allowing single field changes without full object
 
 ### Architecture Notes
 
@@ -289,9 +295,9 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
 | Field | Value |
 |-------|-------|
 | Last session | 2026-01-26 |
-| Stopped at | Completed 19-01-PLAN.md |
+| Stopped at | Completed 19-02-PLAN.md |
 | Resume file | None |
 
 ---
 
-*Last updated: 2026-01-26 (Phase 19 Plan 01 complete — Announcement foundation with models, permissions, and validation)*
+*Last updated: 2026-01-26 (Phase 19 Plan 02 complete — Announcement API with priority sorting and read receipts)*
