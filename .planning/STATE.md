@@ -12,9 +12,9 @@
 |-------|-------|
 | Milestone | v2.0 Commercial Readiness |
 | Phase | Phase 17: Facility UI Features |
-| Plan | 5 of 11 |
+| Plan | 6 of 11 |
 | Status | In progress |
-| Last activity | 2026-01-26 — Completed 17-05-PLAN.md |
+| Last activity | 2026-01-26 — Completed 17-06-PLAN.md |
 
 **Progress:**
 ```
@@ -24,13 +24,14 @@ v2.0: [#########-] 95% — Phase 17 in progress (33/34 requirements)
 ```
 
 **Current Phase Detail:**
-- Phase 17: Facility UI Features — IN PROGRESS (5/11 plans)
+- Phase 17: Facility UI Features — IN PROGRESS (6/11 plans)
 - Goal: Equipment booking system and facility management UI
 - Plan 01 (Equipment Booking Schema) complete
 - Plan 02 (Facility Dashboard Enhancement) complete
 - Plan 03 (Clubs List Page) complete
 - Plan 04 (Facility Equipment Management) complete
 - Plan 05 (Equipment Booking API) complete
+- Plan 06 (Equipment Requests Page) complete
 
 **Previous Phases:**
 - Phase 16: UI/UX Polish — COMPLETE (6/6 plans)
@@ -198,6 +199,8 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 - **Booking helper library:** checkEquipmentAvailability, createEquipmentBooking, approve/deny/cancel functions
 - **Booking API:** GET/POST /api/equipment/bookings, GET/PATCH/DELETE /api/equipment/bookings/[id]
 - **Conflict detection:** Time range overlap algorithm with race condition protection on approval
+- **Equipment requests UI:** EquipmentRequestPanel component with inline deny reason input and optimistic updates
+- **Pending request badge:** Equipment list page shows amber badge linking to requests when count > 0
 
 ### Tech Debt Tracker
 
@@ -234,9 +237,9 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
 | Field | Value |
 |-------|-------|
 | Last session | 2026-01-26 |
-| Stopped at | Completed 17-05-PLAN.md (Equipment Booking API) |
+| Stopped at | Completed 17-06-PLAN.md (Equipment Requests Page) |
 | Resume file | None |
 
 ---
 
-*Last updated: 2026-01-26 (Phase 17 plan 05 complete)*
+*Last updated: 2026-01-26 (Phase 17 plan 06 complete)*
