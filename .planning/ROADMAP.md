@@ -30,7 +30,7 @@
 
 **Plans:** 1 plan
 Plans:
-- [ ] 18-01-PLAN.md — Navigation shell with sidebar (desktop) and bottom nav (mobile)
+- [x] 18-01-PLAN.md — Navigation shell with sidebar (desktop) and bottom nav (mobile)
 
 **Dependencies:** None (foundational change)
 
@@ -164,7 +164,7 @@ Phase 24: RC Public API (independent)
 ## Progress
 
 ```
-Phase 18: [          ] 0% — Not started
+Phase 18: [##########] 100% — Complete ✓
 Phase 19: [          ] 0% — Not started
 Phase 20: [          ] 0% — Not started
 Phase 21: [          ] 0% — Not started

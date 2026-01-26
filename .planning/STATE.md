@@ -13,15 +13,15 @@
 | Milestone | v2.1 UX Refinement |
 | Phase | 18 — Navigation Redesign |
 | Plan | 01 of 1 |
-| Status | In progress |
-| Last activity | 2026-01-26 — Completed 18-01-PLAN.md |
+| Status | Complete |
+| Last activity | 2026-01-26 — Phase 18 complete |
 
 **Progress:**
 ```
 v1.0: [##########] 100% SHIPPED (2026-01-22)
 v1.1: [##########] 100% SHIPPED (2026-01-22) — 9/11 reqs, 2 deferred
 v2.0: [##########] 100% SHIPPED (2026-01-26) — 34/34 requirements
-v2.1: [█         ] 14% — 1/7 phases complete
+v2.1: [██        ] 14% — 1/7 phases complete
 ```
 
 ## v2.1 Scope
@@ -281,9 +281,9 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
 | Field | Value |
 |-------|-------|
 | Last session | 2026-01-26 |
-| Stopped at | Completed Phase 18 Plan 01 (Navigation Redesign) |
+| Stopped at | Phase 18 complete — ready for Phase 19 |
 | Resume file | None |
 
 ---
 
-*Last updated: 2026-01-26 (Phase 18 Plan 01 complete — master-detail navigation with sidebar and bottom nav)*
+*Last updated: 2026-01-26 (Phase 18 complete — master-detail navigation with sidebar and bottom nav)*
