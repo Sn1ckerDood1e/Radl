@@ -12,16 +12,16 @@
 |-------|-------|
 | Milestone | v2.1 UX Refinement |
 | Phase | 18 — Navigation Redesign |
-| Plan | — |
-| Status | Ready to plan Phase 18 |
-| Last activity | 2026-01-26 — v2.1 roadmap and requirements complete |
+| Plan | 01 of 1 |
+| Status | In progress |
+| Last activity | 2026-01-26 — Completed 18-01-PLAN.md |
 
 **Progress:**
 ```
 v1.0: [##########] 100% SHIPPED (2026-01-22)
 v1.1: [##########] 100% SHIPPED (2026-01-22) — 9/11 reqs, 2 deferred
 v2.0: [##########] 100% SHIPPED (2026-01-26) — 34/34 requirements
-v2.1: [          ] 0% — 7 phases, 30 requirements
+v2.1: [█         ] 14% — 1/7 phases complete
 ```
 
 ## v2.1 Scope
@@ -129,6 +129,19 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 - Optional practiceId on bookings allows automatic reservation when creating practices
 - Composite index on (equipmentId, startTime, endTime) enables efficient conflict detection
 
+**v2.1 decisions (Phase 18):**
+- Master-detail layout: sidebar (desktop) + bottom nav (mobile) replaces card navigation
+- Desktop sidebar 256px wide (w-64) for comfortable reading
+- Mobile bottom nav limited to 5 items max (iOS Human Interface Guidelines)
+- Settings excluded from mobile nav (desktop/profile menu access only)
+- Responsive breakpoint at 768px (md:) completely switches layout approach
+- Nested layout pattern: [teamSlug]/layout.tsx handles nav shell, parent handles auth/providers
+- Navigation components receive teamSlug prop for href construction
+- Active detection: exact prop for root pages, startsWith for sections
+- Permission filtering via ability.can() simpler than Can component wrapping
+- h-[calc(100vh-4rem)] accounts for header height of h-16
+- Bottom padding pb-20 (80px) on mobile for fixed nav clearance
+
 ### Architecture Notes
 
 - **Multi-tenant:** Team-scoped data with JWT claims, application-level filtering
@@ -223,6 +236,16 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 - **Club detail page:** Facility admin drill-down with stats, admins, practices, and subscription visibility
 - **E2E verification:** All 6 Phase 17 requirements verified (FAC-03, 05, 06, 07, 08, 09)
 
+**v2.1 additions (implemented in Phase 18):**
+- **Master-detail navigation:** Left sidebar (desktop) and bottom nav bar (mobile) with persistent section access
+- **NavigationSidebar component:** Desktop nav with 5 items, CASL filtering, emerald active states
+- **BottomNavigation component:** Mobile nav with 5 items max, h-16 touch targets, iOS pattern
+- **Team layout shell:** [teamSlug]/layout.tsx wraps all team pages with flex layout and responsive nav
+- **Permission-filtered items:** Equipment and Settings require manage permissions, filtered via ability.can()
+- **Active state detection:** exact match for Home, startsWith for sections with emerald-500 highlight
+- **Responsive architecture:** 768px breakpoint (md:) switches sidebar ↔ bottom nav completely
+- **Content scrolling:** pb-20 md:pb-0 ensures mobile content clears fixed bottom nav
+
 ### Tech Debt Tracker
 
 | Item | Status | Notes |
@@ -258,9 +281,9 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
 | Field | Value |
 |-------|-------|
 | Last session | 2026-01-26 |
-| Stopped at | v2.1 planning complete, ready for Phase 18 |
+| Stopped at | Completed Phase 18 Plan 01 (Navigation Redesign) |
 | Resume file | None |
 
 ---
 
-*Last updated: 2026-01-26 (v2.1 roadmap created with 7 phases, 30 requirements)*
+*Last updated: 2026-01-26 (Phase 18 Plan 01 complete — master-detail navigation with sidebar and bottom nav)*
