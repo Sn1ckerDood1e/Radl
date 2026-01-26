@@ -3,6 +3,8 @@ import Link from 'next/link';
 import { getClaimsForApiRoute } from '@/lib/auth/claims';
 import { prisma } from '@/lib/prisma';
 import { DashboardWithOnboarding } from '@/components/dashboard/dashboard-with-onboarding';
+import { AnnouncementList } from '@/components/announcements/announcement-list';
+import { sortAnnouncementsByPriority, buildActiveAnnouncementsQuery } from '@/lib/utils/announcement-helpers';
 
 interface TeamDashboardPageProps {
   params: Promise<{ teamSlug: string }>;
@@ -50,7 +52,8 @@ export default async function TeamDashboardPage({ params }: TeamDashboardPagePro
   const isCoach = userRoles.includes('COACH');
 
   // Get team info and counts in parallel
-  const [team, equipmentCount, memberCount, pendingInvitationCount, openDamageReportCount] = await Promise.all([
+  const announcementsWhere = buildActiveAnnouncementsQuery(teamId);
+  const [team, equipmentCount, memberCount, pendingInvitationCount, openDamageReportCount, announcementsRaw] = await Promise.all([
     prisma.team.findUnique({
       where: { id: teamId },
       select: {
@@ -73,11 +76,44 @@ export default async function TeamDashboardPage({ params }: TeamDashboardPagePro
     prisma.damageReport.count({
       where: { teamId: teamId, status: 'OPEN' },
     }),
+    prisma.announcement.findMany({
+      where: announcementsWhere,
+      include: {
+        readReceipts: {
+          where: { userId: user.id },
+        },
+        practice: {
+          select: {
+            id: true,
+            name: true,
+            date: true,
+          },
+        },
+      },
+    }),
   ]);
 
   if (!team) {
     redirect('/create-team');
   }
+
+  // Sort and format announcements
+  const sortedAnnouncements = sortAnnouncementsByPriority(announcementsRaw);
+  const announcements = sortedAnnouncements.map((a) => ({
+    id: a.id,
+    title: a.title,
+    body: a.body,
+    priority: a.priority as 'INFO' | 'WARNING' | 'URGENT',
+    createdAt: a.createdAt.toISOString(),
+    isRead: a.readReceipts.length > 0,
+    practice: a.practice
+      ? {
+          id: a.practice.id,
+          name: a.practice.name,
+          date: a.practice.date.toISOString(),
+        }
+      : null,
+  }));
 
   const dashboardContent = (
     <div className="max-w-5xl mx-auto">
@@ -131,6 +167,18 @@ export default async function TeamDashboardPage({ params }: TeamDashboardPagePro
             </svg>
           </div>
         </Link>
+      )}
+
+      {/* Announcements Widget */}
+      {announcements.length > 0 && (
+        <div className="mb-6">
+          <AnnouncementList
+            teamSlug={teamSlug}
+            initialAnnouncements={announcements}
+            showEmpty={false}
+            isCoach={isCoach}
+          />
+        </div>
       )}
 
       {/* Main Navigation Cards */}

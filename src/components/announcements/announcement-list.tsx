@@ -20,12 +20,14 @@ interface AnnouncementListProps {
     practice?: { id: string; name: string; date: string } | null
   }>
   showEmpty?: boolean
+  isCoach?: boolean
 }
 
 function AnnouncementList({
   teamSlug,
   initialAnnouncements,
   showEmpty = true,
+  isCoach = false,
 }: AnnouncementListProps) {
   const [announcements, setAnnouncements] = useState(initialAnnouncements || [])
   const [loading, setLoading] = useState(!initialAnnouncements)
@@ -83,14 +85,24 @@ function AnnouncementList({
           <Megaphone className="h-5 w-5 text-zinc-400" />
           <h2 className="text-lg font-semibold text-white">Announcements</h2>
         </div>
-        {announcements.length > 5 && (
-          <Link
-            href={`/${teamSlug}/announcements`}
-            className="text-sm text-emerald-400 hover:text-emerald-300 transition-colors"
-          >
-            View All
-          </Link>
-        )}
+        <div className="flex items-center gap-3">
+          {announcements.length > 5 && (
+            <Link
+              href={`/${teamSlug}/announcements`}
+              className="text-sm text-emerald-400 hover:text-emerald-300 transition-colors"
+            >
+              View All
+            </Link>
+          )}
+          {isCoach && (
+            <Link
+              href={`/${teamSlug}/announcements`}
+              className="text-sm text-zinc-400 hover:text-zinc-300 transition-colors"
+            >
+              Manage
+            </Link>
+          )}
+        </div>
       </div>
 
       {/* List */}
