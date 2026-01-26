@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { jsPDF } from 'jspdf';
+import QRCode from 'qrcode';
 import { prisma } from '@/lib/prisma';
 import { createClient } from '@/lib/supabase/server';
 
@@ -90,23 +91,22 @@ export async function GET(request: NextRequest) {
       const x = marginX + col * (qrSize + gapX);
       const y = marginY + row * (qrSize + labelHeight + gapY);
 
-      // Generate QR code as SVG string (using simple encoding)
+      // Generate QR code as data URL
       const reportUrl = `${baseUrl}/report/${item.id}`;
+      const qrDataUrl = await QRCode.toDataURL(reportUrl, {
+        width: 500, // High resolution for print quality
+        margin: 1,
+        errorCorrectionLevel: 'M',
+      });
 
-      // Draw placeholder box for QR code (actual QR needs qrcode library - added in Task 2)
-      pdf.setDrawColor(0);
-      pdf.setLineWidth(0.5);
-      pdf.rect(x, y, qrSize, qrSize);
-
-      // Add QR code URL as tiny text (temporary - will be replaced with actual QR)
-      pdf.setFontSize(6);
-      pdf.text(reportUrl, x + 2, y + qrSize / 2, { maxWidth: qrSize - 4 });
+      // Add QR code to PDF
+      pdf.addImage(qrDataUrl, 'PNG', x, y, qrSize, qrSize);
 
       // Equipment name label below QR
       pdf.setFontSize(9);
       pdf.setFont('helvetica', 'bold');
-      const nameLines = pdf.splitTextToSize(item.name, qrSize);
-      pdf.text(nameLines[0], x + qrSize / 2, y + qrSize + 5, { align: 'center' });
+      const truncatedName = item.name.length > 20 ? item.name.substring(0, 18) + '...' : item.name;
+      pdf.text(truncatedName, x + qrSize / 2, y + qrSize + 5, { align: 'center' });
 
       itemIndex++;
     }
