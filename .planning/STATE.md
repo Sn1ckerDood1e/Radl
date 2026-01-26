@@ -11,10 +11,10 @@
 | Field | Value |
 |-------|-------|
 | Milestone | v2.1 UX Refinement |
-| Phase | 18 — Navigation Redesign |
-| Plan | 01 of 1 |
-| Status | Complete |
-| Last activity | 2026-01-26 — Phase 18 complete |
+| Phase | 19 — Announcements System |
+| Plan | 01 of 3 |
+| Status | In progress |
+| Last activity | 2026-01-26 — Completed 19-01-PLAN.md |
 
 **Progress:**
 ```
@@ -141,6 +141,14 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 - Permission filtering via ability.can() simpler than Can component wrapping
 - h-[calc(100vh-4rem)] accounts for header height of h-16
 - Bottom padding pb-20 (80px) on mobile for fixed nav clearance
+
+**v2.1 decisions (Phase 19 - Plan 01):**
+- Announcement priority enum ordered INFO → WARNING → URGENT for display sorting
+- AnnouncementRead uses unique constraint to prevent duplicate read receipts
+- Practice link optional with SetNull on delete to preserve announcement history
+- Expiry validation enforces future dates only at validation layer, not database
+- Soft delete via archivedAt timestamp instead of hard delete for audit trail
+- Composite index on [teamId, priority, createdAt] optimizes dashboard sorted query
 
 ### Architecture Notes
 
@@ -281,9 +289,9 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
 | Field | Value |
 |-------|-------|
 | Last session | 2026-01-26 |
-| Stopped at | Phase 18 complete — ready for Phase 19 |
+| Stopped at | Completed 19-01-PLAN.md |
 | Resume file | None |
 
 ---
 
-*Last updated: 2026-01-26 (Phase 18 complete — master-detail navigation with sidebar and bottom nav)*
+*Last updated: 2026-01-26 (Phase 19 Plan 01 complete — Announcement foundation with models, permissions, and validation)*
