@@ -172,6 +172,24 @@ export function DamageReportForm({ equipmentId, teamId }: DamageReportFormProps)
         />
       </div>
 
+      {/* Reporter Name field */}
+      <div>
+        <label htmlFor="reporterName" className="block text-sm font-medium text-gray-700">
+          Your Name *
+        </label>
+        <input
+          type="text"
+          id="reporterName"
+          {...register('reporterName')}
+          className="mt-1 block w-full h-12 rounded-lg border border-gray-300 px-4 text-base shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+          placeholder="Enter your name"
+          autoComplete="name"
+        />
+        {errors.reporterName && (
+          <p className="mt-1 text-sm text-red-600">{errors.reporterName.message}</p>
+        )}
+      </div>
+
       {/* Location field */}
       <div>
         <label htmlFor="location" className="block text-sm font-medium text-gray-700">
@@ -181,7 +199,7 @@ export function DamageReportForm({ equipmentId, teamId }: DamageReportFormProps)
           type="text"
           id="location"
           {...register('location')}
-          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+          className="mt-1 block w-full h-12 rounded-lg border border-gray-300 px-4 text-base shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
           placeholder="e.g., Port side rigger, Stern section"
         />
         {errors.location && (
@@ -198,12 +216,65 @@ export function DamageReportForm({ equipmentId, teamId }: DamageReportFormProps)
           id="description"
           {...register('description')}
           rows={4}
-          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+          className="mt-1 block w-full rounded-lg border border-gray-300 px-4 py-3 text-base shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
           placeholder="Describe the damage in detail..."
         />
         {errors.description && (
           <p className="mt-1 text-sm text-red-600">{errors.description.message}</p>
         )}
+      </div>
+
+      {/* Severity Radio Buttons */}
+      <fieldset>
+        <legend className="block text-sm font-medium text-gray-700 mb-2">
+          Severity *
+        </legend>
+        <div className="space-y-2">
+          {[
+            { value: 'MINOR', label: 'Minor', desc: 'Cosmetic damage, can still use safely' },
+            { value: 'MODERATE', label: 'Moderate', desc: 'Functional impact, needs attention' },
+            { value: 'CRITICAL', label: 'Critical', desc: 'Unsafe to use, immediate action needed' },
+          ].map((opt) => (
+            <label
+              key={opt.value}
+              className="flex items-start gap-3 p-4 rounded-lg border border-gray-300 cursor-pointer hover:bg-gray-50 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-50"
+            >
+              <input
+                type="radio"
+                value={opt.value}
+                {...register('severity')}
+                className="mt-0.5 w-5 h-5 text-blue-600"
+              />
+              <div>
+                <span className="text-base font-medium">{opt.label}</span>
+                <p className="text-sm text-gray-500">{opt.desc}</p>
+              </div>
+            </label>
+          ))}
+        </div>
+        {errors.severity && (
+          <p className="mt-1 text-sm text-red-600">{errors.severity.message}</p>
+        )}
+      </fieldset>
+
+      {/* Category Dropdown */}
+      <div>
+        <label htmlFor="category" className="block text-sm font-medium text-gray-700">
+          Category (optional)
+        </label>
+        <select
+          id="category"
+          {...register('category')}
+          className="mt-1 block w-full h-12 rounded-lg border border-gray-300 px-4 text-base shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 bg-white"
+        >
+          <option value="">Select a category...</option>
+          <option value="Hull">Hull / Shell</option>
+          <option value="Rigging">Rigging / Oarlocks</option>
+          <option value="Hardware">Hardware / Fittings</option>
+          <option value="Seat/Slides">Seat / Slides</option>
+          <option value="Steering">Rudder / Steering</option>
+          <option value="Other">Other</option>
+        </select>
       </div>
 
       {/* Photo upload */}
