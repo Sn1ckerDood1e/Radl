@@ -48,6 +48,13 @@ Plans:
 - Optional practice linking for context-specific announcements
 - Push notification integration (future: NOTIF-03)
 
+**Plans:** 4 plans
+Plans:
+- [ ] 19-01-PLAN.md — Data foundation: schema, CASL, validation
+- [ ] 19-02-PLAN.md — API layer: CRUD endpoints and mark-as-read
+- [ ] 19-03-PLAN.md — Display components: badge, card, list, banner
+- [ ] 19-04-PLAN.md — Page integration: coach management, dashboard, layout banner
+
 **Dependencies:** Phase 18 (uses new layout)
 
 ---
