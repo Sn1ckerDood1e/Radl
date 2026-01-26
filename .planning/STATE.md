@@ -4,17 +4,17 @@
 
 **Core Value:** Coaches can plan practices with lineups and equipment, and athletes know where to be and what boat they're in.
 
-**Current Focus:** v2.0 Commercial Readiness — facility model, mobile PWA, UI/UX polish, security hardening
+**Current Focus:** Between milestones — v2.0 shipped, v3.0 not yet started
 
 ## Current Position
 
 | Field | Value |
 |-------|-------|
-| Milestone | v2.0 Commercial Readiness |
-| Phase | Phase 17: Facility UI Features |
-| Plan | 11 of 11 |
-| Status | Complete |
-| Last activity | 2026-01-26 — Completed 17-11-PLAN.md |
+| Milestone | None (v2.0 shipped) |
+| Phase | — |
+| Plan | — |
+| Status | Ready for next milestone |
+| Last activity | 2026-01-26 — Completed and archived v2.0 milestone |
 
 **Progress:**
 ```

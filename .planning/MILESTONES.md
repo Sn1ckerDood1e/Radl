@@ -1,23 +1,26 @@
 # Project Milestones: RowOps
 
-## v2.0 Commercial Readiness (In Progress)
+## v2.0 Commercial Readiness (Shipped: 2026-01-26)
 
-**Status:** In Progress
-**Started:** 2026-01-22
-**Phases:** 10-17 (8 phases)
-**Requirements:** 34
+**Delivered:** Commercial-ready platform with facility model, mobile PWA, design system, and hardened security.
 
-**Goal:** Prepare RowOps for commercial sale with facility model, mobile PWA, UI/UX polish, and security hardening.
+**Phases completed:** 10-17 (8 phases, 63 plans)
 
-**Target features:**
-- Facility model (hierarchical tenancy: facility → club → team)
-- Mobile PWA improvements (responsive, touch-friendly, app-like)
-- UI/UX polish (design system, dark mode, onboarding)
-- Security hardening (RBAC, MFA, SSO, audit logging)
+**Key accomplishments:**
+- Facility → club hierarchy with shared equipment and booking system
+- 5-role RBAC with tenant-scoped permissions and audit logging
+- MFA for admins, SSO/SAML for enterprise customers
+- Mobile-first PWA with offline sync, swipe gestures, bottom sheets
+- shadcn/ui design system with dark mode and animations
+- Command palette, keyboard shortcuts, onboarding flow
 
-**Real-world scenario:** Chattanooga Rowing (boathouse) hosts Lookout Rowing Club and Chattanooga Juniors Rowing, sharing some equipment.
+**Stats:**
+- 111,682 lines of TypeScript
+- 8 phases, 63 plans, 250 commits
+- 34/34 requirements implemented
+- 4 days from start to ship (2026-01-22 → 2026-01-26)
 
-**Critical path:** Phase 10 → 12 → 13 → 17
+**Git range:** Phase 10 → Phase 17
 
 ---
 
