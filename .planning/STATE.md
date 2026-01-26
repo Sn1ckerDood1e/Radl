@@ -12,9 +12,9 @@
 |-------|-------|
 | Milestone | v2.1 UX Refinement |
 | Phase | 20 — Public Issue Reporting |
-| Plan | 01 of 4 |
+| Plan | 02 of 4 |
 | Status | In progress |
-| Last activity | 2026-01-26 — Completed 20-01-PLAN.md |
+| Last activity | 2026-01-26 — Completed 20-02-PLAN.md |
 
 **Progress:**
 ```
@@ -167,6 +167,11 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 - Default severity is MODERATE to encourage accurate classification without blocking submission
 - Honeypot field validates empty string to detect bots without blocking legitimate users
 
+**v2.1 decisions (Phase 20 - Plan 02):**
+- Honeypot uses off-screen positioning (-9999px) not display:none for better bot detection
+- Radio buttons styled as cards with p-4 padding for large tap targets
+- Reference number shows first 8 chars of UUID in uppercase for human readability
+
 ### Architecture Notes
 
 - **Multi-tenant:** Team-scoped data with JWT claims, application-level filtering
@@ -306,9 +311,9 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
 | Field | Value |
 |-------|-------|
 | Last session | 2026-01-26 |
-| Stopped at | Completed 20-01-PLAN.md |
+| Stopped at | Completed 20-02-PLAN.md |
 | Resume file | None |
 
 ---
 
-*Last updated: 2026-01-26 (Phase 20 in progress — Public Issue Reporting data foundation complete)*
+*Last updated: 2026-01-26 (Phase 20 in progress — Enhanced form UI complete)*
