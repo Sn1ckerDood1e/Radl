@@ -28,8 +28,12 @@ export function DamageReportForm({ equipmentId, teamId }: DamageReportFormProps)
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<CreateDamageReportInput>({
     resolver: zodResolver(createDamageReportSchema),
+    defaultValues: {
+      honeypot: '', // Start empty, bots will fill it
+    },
   });
 
   const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -156,6 +160,18 @@ export function DamageReportForm({ equipmentId, teamId }: DamageReportFormProps)
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="bg-white rounded-lg shadow p-6 space-y-6">
+      {/* Honeypot - invisible to humans, catches bots */}
+      <div className="absolute -left-[9999px]" aria-hidden="true">
+        <label htmlFor="website" className="sr-only">Leave empty</label>
+        <input
+          type="text"
+          id="website"
+          autoComplete="off"
+          tabIndex={-1}
+          {...register('honeypot')}
+        />
+      </div>
+
       {/* Location field */}
       <div>
         <label htmlFor="location" className="block text-sm font-medium text-gray-700">
