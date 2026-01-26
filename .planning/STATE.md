@@ -12,16 +12,16 @@
 |-------|-------|
 | Milestone | v2.1 UX Refinement |
 | Phase | 19 — Announcements System |
-| Plan | 02 of 3 |
-| Status | In progress |
-| Last activity | 2026-01-26 — Completed 19-02-PLAN.md |
+| Plan | 03 of 3 |
+| Status | Phase complete |
+| Last activity | 2026-01-26 — Completed 19-03-PLAN.md |
 
 **Progress:**
 ```
 v1.0: [##########] 100% SHIPPED (2026-01-22)
 v1.1: [##########] 100% SHIPPED (2026-01-22) — 9/11 reqs, 2 deferred
 v2.0: [##########] 100% SHIPPED (2026-01-26) — 34/34 requirements
-v2.1: [██        ] 14% — 1/7 phases complete
+v2.1: [███       ] 29% — 2/7 phases complete
 ```
 
 ## v2.1 Scope
@@ -155,6 +155,12 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 - Practice-linked announcements auto-expire via practice.endTime filter in buildActiveAnnouncementsQuery
 - Upsert pattern for read receipts makes mark-as-read idempotent and prevents duplicate key errors
 - PATCH endpoint supports partial updates allowing single field changes without full object
+
+**v2.1 decisions (Phase 19 - Plan 03):**
+- CVA badge variants for type-safe priority styling following button.tsx pattern
+- Hydration-safe localStorage pattern prevents SSR/client mismatch (start hidden, read in useEffect)
+- Client-side state update on mark-as-read avoids full list refetch
+- Escape key handler for banner dismissal improves keyboard accessibility
 
 ### Architecture Notes
 
@@ -295,9 +301,9 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
 | Field | Value |
 |-------|-------|
 | Last session | 2026-01-26 |
-| Stopped at | Completed 19-02-PLAN.md |
+| Stopped at | Completed 19-03-PLAN.md |
 | Resume file | None |
 
 ---
 
-*Last updated: 2026-01-26 (Phase 19 Plan 02 complete — Announcement API with priority sorting and read receipts)*
+*Last updated: 2026-01-26 (Phase 19 complete — Announcements System with display components)*
