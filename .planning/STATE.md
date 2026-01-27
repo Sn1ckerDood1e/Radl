@@ -213,6 +213,12 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 - Action prompt appears when OUT_OF_SERVICE or NEEDS_ATTENTION items exist
 - Widget placed between announcements and practices on dashboard per CONTEXT.md guidance
 
+**v2.1 decisions (Phase 21 - Plan 06):**
+- Threshold values validated at API level (1-365 days) using Zod schema
+- Default values provided via nullish coalescing (14, 21, 30) for teams without settings
+- Threshold section placed after Team Colors, before Appearance Settings for logical grouping
+- Success message auto-dismisses after 3 seconds matching existing patterns
+
 ### Architecture Notes
 
 - **Multi-tenant:** Team-scoped data with JWT claims, application-level filtering
@@ -352,9 +358,9 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
 | Field | Value |
 |-------|-------|
 | Last session | 2026-01-27 |
-| Stopped at | Completed 21-05-PLAN.md |
+| Stopped at | Completed 21-06-PLAN.md |
 | Resume file | None |
 
 ---
 
-*Last updated: 2026-01-27 (Phase 21 in progress — Fleet health dashboard widget)*
+*Last updated: 2026-01-27 (Phase 21 in progress — Readiness threshold settings)*
