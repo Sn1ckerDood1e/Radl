@@ -12,16 +12,16 @@
 |-------|-------|
 | Milestone | v2.1 UX Refinement |
 | Phase | 24 — Regatta Central Public API |
-| Plan | 4 of 6 |
+| Plan | 5 of 6 |
 | Status | In progress |
-| Last activity | 2026-01-27 — Completed 24-04-PLAN.md (RC calendar integration) |
+| Last activity | 2026-01-27 — Completed 24-05-PLAN.md (region filter UI) |
 
 **Progress:**
 ```
 v1.0: [##########] 100% SHIPPED (2026-01-22)
 v1.1: [##########] 100% SHIPPED (2026-01-22) — 9/11 reqs, 2 deferred
 v2.0: [##########] 100% SHIPPED (2026-01-26) — 34/34 requirements
-v2.1: [█████████░] 98% — 6/7 phases complete, Phase 24 plan 4/6
+v2.1: [█████████░] 98% — 6/7 phases complete, Phase 24 plan 5/6
 ```
 
 ## v2.1 Scope
@@ -516,14 +516,25 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
 - **Dual indicator support:** Both practice (emerald) and regatta (blue) dots can appear on same day
 - **Click-to-popup:** Clicking RC regatta opens RegattaDetailCard overlay with click-outside dismissal
 
+**v2.1 decisions (Phase 24 - Plan 05):**
+- Blue color scheme for Regatta Central section to match calendar regatta styling
+- REGATTA_REGIONS constant provides 10 common rowing regions with ISO 3166-1 codes
+- Empty selection shows "US by default" message per CONTEXT.md
+- Unsaved changes indicator matches existing settings patterns
+
+**v2.1 additions (implemented in Phase 24 - Plan 05):**
+- **REGATTA_REGIONS constant:** 10 common rowing regions (US, CA, GB, AU, NZ, DE, NL, FR, IT, ES)
+- **Region filter UI:** Checkbox grid in team settings for selecting regatta regions
+- **Settings integration:** regattaRegions loaded from API and saved via PATCH /api/team-settings
+
 ## Session Continuity
 
 | Field | Value |
 |-------|-------|
-| Last session | 2026-01-27 18:57 UTC |
-| Stopped at | Completed 24-04-PLAN.md |
+| Last session | 2026-01-27 19:00 UTC |
+| Stopped at | Completed 24-05-PLAN.md |
 | Resume file | None |
 
 ---
 
-*Last updated: 2026-01-27 (Phase 24 in progress — 24-04 completed, RC calendar integration)*
+*Last updated: 2026-01-27 (Phase 24 in progress — 24-05 completed, region filter UI)*
