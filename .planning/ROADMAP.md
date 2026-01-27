@@ -9,9 +9,9 @@
 
 ## Previous Milestones
 
-- v2.0 Commercial Readiness — Phases 10-17 (shipped 2026-01-26) [→ archive](milestones/v2.0-ROADMAP.md)
-- v1.1 Polish — Phases 6-9 (shipped 2026-01-22) [→ archive](milestones/v1.1-ROADMAP.md)
-- v1.0 MVP — Phases 1-5 (shipped 2026-01-22) [→ archive](milestones/v1.0-ROADMAP.md)
+- v2.0 Commercial Readiness — Phases 10-17 (shipped 2026-01-26) [-> archive](milestones/v2.0-ROADMAP.md)
+- v1.1 Polish — Phases 6-9 (shipped 2026-01-22) [-> archive](milestones/v1.1-ROADMAP.md)
+- v1.0 MVP — Phases 1-5 (shipped 2026-01-22) [-> archive](milestones/v1.0-ROADMAP.md)
 
 ## Phase Structure
 
@@ -99,6 +99,14 @@ Plans:
 - Maintenance workflow: status transitions, photo uploads, resolution notes
 - Maintenance history on equipment detail page
 
+**Plans:** 5 plans
+Plans:
+- [ ] 21-01-PLAN.md — Data foundation: schema extensions (lastInspectedAt, thresholds, resolutionNote)
+- [ ] 21-02-PLAN.md — Readiness calculation: threshold-based status logic
+- [ ] 21-03-PLAN.md — Badge component: ReadinessBadge with CVA variants
+- [ ] 21-04-PLAN.md — UI integration: equipment list/detail, settings form, Mark as Inspected
+- [ ] 21-05-PLAN.md — Dashboard widget: fleet health overview
+
 **Dependencies:** Phase 20 (maintenance alerts feed readiness)
 
 ---
@@ -159,15 +167,15 @@ Plans:
 
 ```
 Phase 18: Navigation Redesign
-    ↓
-    ├── Phase 19: Announcements
-    ├── Phase 22: Practice Flow
-    │
+    |
+    +-- Phase 19: Announcements
+    +-- Phase 22: Practice Flow
+    |
 Phase 20: Public Issue Reporting
-    ↓
+    |
 Phase 21: Equipment Readiness
-    ↓
-Phase 23: Dashboard Enhancements ←── Phase 22
+    |
+Phase 23: Dashboard Enhancements <-- Phase 22
 
 Phase 24: RC Public API (independent)
 ```
@@ -182,10 +190,10 @@ Phase 24: RC Public API (independent)
 ## Progress
 
 ```
-Phase 18: [##########] 100% — Complete ✓
-Phase 19: [##########] 100% — Complete ✓
-Phase 20: [##########] 100% — Complete ✓
-Phase 21: [          ] 0% — Not started
+Phase 18: [##########] 100% — Complete
+Phase 19: [##########] 100% — Complete
+Phase 20: [##########] 100% — Complete
+Phase 21: [          ] 0% — Planned (5 plans)
 Phase 22: [          ] 0% — Not started
 Phase 23: [          ] 0% — Not started
 Phase 24: [          ] 0% — Not started
