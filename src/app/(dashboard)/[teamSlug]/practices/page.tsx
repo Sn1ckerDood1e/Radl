@@ -2,25 +2,11 @@ import Link from 'next/link';
 import { requireTeamBySlug } from '@/lib/auth/authorize';
 import { prisma } from '@/lib/prisma';
 import { EmptyState } from '@/components/ui/empty-state';
-import { Calendar } from 'lucide-react';
+import { PracticeListClient } from '@/components/practices/practice-list-client';
+import { Calendar, Plus, Copy } from 'lucide-react';
 
 interface PracticesPageProps {
   params: Promise<{ teamSlug: string }>;
-}
-
-function formatDate(date: Date): string {
-  return new Date(date).toLocaleDateString('en-US', {
-    weekday: 'short',
-    month: 'short',
-    day: 'numeric',
-  });
-}
-
-function formatTime(date: Date): string {
-  return new Date(date).toLocaleTimeString('en-US', {
-    hour: 'numeric',
-    minute: '2-digit',
-  });
 }
 
 export default async function PracticesPage({ params }: PracticesPageProps) {
@@ -92,15 +78,22 @@ export default async function PracticesPage({ params }: PracticesPageProps) {
           </p>
         </div>
         {isCoach && seasons.length > 0 && (
-          <Link
-            href={`/${teamSlug}/practices/new`}
-            className="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-500 transition-colors"
-          >
-            <svg className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-            </svg>
-            New Practice
-          </Link>
+          <div className="flex items-center gap-2">
+            <Link
+              href={`/${teamSlug}/practices/bulk-create`}
+              className="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium text-zinc-300 bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 transition-colors"
+            >
+              <Copy className="h-4 w-4 mr-2" />
+              Create Multiple
+            </Link>
+            <Link
+              href={`/${teamSlug}/practices/new`}
+              className="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-500 transition-colors"
+            >
+              <Plus className="h-5 w-5 mr-2" />
+              New Practice
+            </Link>
+          </div>
         )}
       </div>
 
@@ -115,54 +108,11 @@ export default async function PracticesPage({ params }: PracticesPageProps) {
 
       {/* Practices list */}
       {practices.length > 0 ? (
-        <div className="space-y-3">
-          {practices.map((practice) => (
-            <Link
-              key={practice.id}
-              href={`/${teamSlug}/practices/${practice.id}`}
-              className="block p-4 bg-zinc-900 border border-zinc-800 rounded-lg hover:border-zinc-700 transition-colors"
-            >
-              <div className="flex items-start justify-between">
-                <div>
-                  <div className="flex items-center gap-3">
-                    <h3 className="text-lg font-medium text-white">{practice.name}</h3>
-                    {practice.status === 'DRAFT' && (
-                      <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-zinc-700 text-zinc-300">
-                        Draft
-                      </span>
-                    )}
-                    {practice.status === 'PUBLISHED' && (
-                      <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-emerald-500/20 text-emerald-400">
-                        Published
-                      </span>
-                    )}
-                  </div>
-                  <p className="text-sm text-zinc-400 mt-1">
-                    {formatDate(practice.date)} &middot; {formatTime(practice.startTime)} - {formatTime(practice.endTime)}
-                  </p>
-                  {practice.season && (
-                    <p className="text-xs text-zinc-500 mt-1">{practice.season.name}</p>
-                  )}
-                </div>
-                <div className="flex items-center gap-2">
-                  {practice.blocks.map((block, idx) => (
-                    <span
-                      key={block.id}
-                      className={`
-                        inline-flex items-center px-2 py-0.5 rounded text-xs font-medium
-                        ${block.type === 'WATER' ? 'bg-blue-500/20 text-blue-400' : ''}
-                        ${block.type === 'LAND' ? 'bg-green-500/20 text-green-400' : ''}
-                        ${block.type === 'ERG' ? 'bg-orange-500/20 text-orange-400' : ''}
-                      `}
-                    >
-                      {block.type}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </Link>
-          ))}
-        </div>
+        <PracticeListClient
+          practices={practices}
+          teamSlug={teamSlug}
+          isCoach={isCoach}
+        />
       ) : (
         <div className="bg-zinc-900 border border-zinc-800 rounded-lg">
           <EmptyState
