@@ -4,6 +4,7 @@ import { prisma } from '@/lib/prisma';
 import { EmptyState } from '@/components/ui/empty-state';
 import { PracticeListClient } from '@/components/practices/practice-list-client';
 import { UnifiedCalendar } from '@/components/calendar/unified-calendar';
+import { SeasonManager } from '@/components/seasons/season-manager';
 import { Calendar, Plus, Copy, CalendarDays, List } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -20,14 +21,19 @@ export default async function PracticesPage({ params, searchParams }: PracticesP
   // Verify user has membership in this team (by URL slug, not JWT claims)
   const { team, isCoach } = await requireTeamBySlug(teamSlug);
 
-  // Get active seasons for this team
-  const seasons = await prisma.season.findMany({
+  // Get all seasons for this team (for SeasonManager)
+  const allSeasons = await prisma.season.findMany({
     where: {
       teamId: team.id,
-      status: 'ACTIVE',
     },
-    orderBy: { startDate: 'desc' },
+    orderBy: [
+      { status: 'asc' }, // ACTIVE before ARCHIVED
+      { startDate: 'desc' },
+    ],
   });
+
+  // Filter to active seasons for practice filtering
+  const activeSeasons = allSeasons.filter(s => s.status === 'ACTIVE');
 
   // Get practices for all active seasons
   // Coaches see all, athletes see only PUBLISHED
@@ -39,8 +45,8 @@ export default async function PracticesPage({ params, searchParams }: PracticesP
     teamId: team.id,
   };
 
-  if (seasons.length > 0) {
-    where.seasonId = { in: seasons.map(s => s.id) };
+  if (activeSeasons.length > 0) {
+    where.seasonId = { in: activeSeasons.map(s => s.id) };
   }
 
   if (!isCoach) {
@@ -63,8 +69,17 @@ export default async function PracticesPage({ params, searchParams }: PracticesP
     ],
   });
 
-  // Prepare seasons data for UnifiedCalendar (only needs id and name)
-  const seasonsForCalendar = seasons.map(s => ({ id: s.id, name: s.name }));
+  // Prepare seasons data for UnifiedCalendar (only needs id and name from active seasons)
+  const seasonsForCalendar = activeSeasons.map(s => ({ id: s.id, name: s.name }));
+
+  // Prepare seasons data for SeasonManager (needs full details)
+  const seasonsForManager = allSeasons.map(s => ({
+    id: s.id,
+    name: s.name,
+    status: s.status,
+    startDate: s.startDate,
+    endDate: s.endDate,
+  }));
 
   return (
     <div className={cn(viewMode === 'calendar' ? 'max-w-6xl' : 'max-w-4xl', 'mx-auto')}>
@@ -86,6 +101,11 @@ export default async function PracticesPage({ params, searchParams }: PracticesP
           </p>
         </div>
         <div className="flex items-center gap-3">
+          {/* Season manager (coaches only) */}
+          {isCoach && (
+            <SeasonManager teamSlug={teamSlug} seasons={seasonsForManager} />
+          )}
+
           {/* View toggle (pill buttons) */}
           <div className="flex items-center p-1 bg-zinc-800 rounded-lg border border-zinc-700">
             <Link
@@ -115,7 +135,7 @@ export default async function PracticesPage({ params, searchParams }: PracticesP
           </div>
 
           {/* Coach actions */}
-          {isCoach && seasons.length > 0 && (
+          {isCoach && activeSeasons.length > 0 && (
             <>
               <Link
                 href={`/${teamSlug}/practices/bulk-create?view=${viewMode}`}
@@ -137,7 +157,7 @@ export default async function PracticesPage({ params, searchParams }: PracticesP
       </div>
 
       {/* Season reminder if no active seasons */}
-      {isCoach && seasons.length === 0 && (
+      {isCoach && activeSeasons.length === 0 && (
         <div className="mb-6 p-4 bg-amber-500/10 border border-amber-500/30 rounded-lg">
           <p className="text-amber-400 text-sm">
             Create a season first before adding practices.
@@ -168,7 +188,7 @@ export default async function PracticesPage({ params, searchParams }: PracticesP
               icon={Calendar}
               title="No practices yet"
               description={isCoach ? "Create your first practice to get started." : "No practices have been published yet."}
-              action={isCoach && seasons.length > 0 ? { label: "New Practice", href: `/${teamSlug}/practices/new` } : undefined}
+              action={isCoach && activeSeasons.length > 0 ? { label: "New Practice", href: `/${teamSlug}/practices/new` } : undefined}
             />
           </div>
         )
