@@ -414,3 +414,185 @@ export async function getUsageTrendsData(
     seasonName: activeSeason.name,
   };
 }
+
+// ============================================================================
+// Athlete Dashboard Queries
+// ============================================================================
+
+/**
+ * Get athlete's next practice with their specific assignment.
+ *
+ * Uses filtered includes to avoid N+1 queries (RESEARCH.md guidance).
+ * If athlete has no assignment in any upcoming practice, returns count of
+ * upcoming practices for display context.
+ *
+ * @param teamId - Team ID
+ * @param userId - User ID (from Supabase auth)
+ * @returns Practice with assignment, or null practice with unassigned count
+ */
+export async function getAthleteNextPractice(
+  teamId: string,
+  userId: string
+): Promise<AthleteNextPracticeData> {
+  // First get athlete's profile ID via TeamMember -> AthleteProfile
+  const teamMember = await prisma.teamMember.findUnique({
+    where: {
+      teamId_userId: {
+        teamId,
+        userId,
+      },
+    },
+    include: {
+      athleteProfile: {
+        select: {
+          id: true,
+        },
+      },
+    },
+  });
+
+  // Handle case where user has no AthleteProfile (they might be coach-only)
+  if (!teamMember?.athleteProfile) {
+    return {
+      practice: null,
+      assignment: null,
+      unassignedPracticeCount: 0,
+    };
+  }
+
+  const athleteProfileId = teamMember.athleteProfile.id;
+  const now = new Date();
+
+  // Query next practice where athlete has at least one assignment
+  // Uses single query with filtered includes (per RESEARCH.md to avoid N+1)
+  const practiceWithAssignment = await prisma.practice.findFirst({
+    where: {
+      teamId,
+      date: {
+        gte: now,
+      },
+      status: 'PUBLISHED',
+      OR: [
+        // Water blocks: athlete in lineup seats
+        {
+          blocks: {
+            some: {
+              lineup: {
+                some: {
+                  seats: {
+                    some: {
+                      athleteId: athleteProfileId,
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        // Land/Erg blocks: athlete in land assignments
+        {
+          blocks: {
+            some: {
+              landAssignments: {
+                some: {
+                  athleteId: athleteProfileId,
+                },
+              },
+            },
+          },
+        },
+      ],
+    },
+    include: {
+      blocks: {
+        include: {
+          lineup: {
+            include: {
+              boat: {
+                select: {
+                  name: true,
+                  boatClass: true,
+                },
+              },
+              seats: {
+                where: {
+                  athleteId: athleteProfileId,
+                },
+              },
+            },
+          },
+          landAssignments: {
+            where: {
+              athleteId: athleteProfileId,
+            },
+          },
+        },
+      },
+    },
+    orderBy: {
+      date: 'asc',
+    },
+  });
+
+  if (practiceWithAssignment) {
+    // Extract the athlete's assignment from the first matching block
+    let assignment: AthleteNextPracticeData['assignment'] = null;
+
+    for (const block of practiceWithAssignment.blocks) {
+      // Check water block assignments
+      for (const lineup of block.lineup) {
+        if (lineup.seats.length > 0) {
+          const seat = lineup.seats[0];
+          assignment = {
+            blockType: block.type as 'WATER' | 'ERG' | 'LAND' | 'MEETING',
+            boatName: lineup.boat?.name,
+            boatClass: lineup.boat?.boatClass ?? undefined,
+            seatPosition: seat.position,
+            seatSide: seat.side === 'NONE' ? null : (seat.side as 'PORT' | 'STARBOARD'),
+          };
+          break;
+        }
+      }
+      if (assignment) break;
+
+      // Check land/erg block assignments
+      if (block.landAssignments.length > 0) {
+        assignment = {
+          blockType: block.type as 'WATER' | 'ERG' | 'LAND' | 'MEETING',
+          groupName: block.title ?? undefined, // Use block title as group name
+        };
+        break;
+      }
+    }
+
+    return {
+      practice: {
+        id: practiceWithAssignment.id,
+        name: practiceWithAssignment.name,
+        date: practiceWithAssignment.date,
+        startTime: practiceWithAssignment.startTime,
+        endTime: practiceWithAssignment.endTime,
+      },
+      assignment,
+      unassignedPracticeCount: 0,
+    };
+  }
+
+  // No practice with assignment found
+  // Count upcoming practices for context ("X practices exist but you're not assigned")
+  const unassignedPracticeCount = await prisma.practice.count({
+    where: {
+      teamId,
+      date: {
+        gte: now,
+      },
+      status: 'PUBLISHED',
+    },
+  });
+
+  return {
+    practice: null,
+    assignment: null,
+    unassignedPracticeCount,
+  };
+}
