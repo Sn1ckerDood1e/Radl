@@ -11,17 +11,17 @@
 | Field | Value |
 |-------|-------|
 | Milestone | v2.1 UX Refinement |
-| Phase | 21 — Equipment Readiness |
-| Plan | 06 of 6 |
-| Status | Phase complete |
-| Last activity | 2026-01-27 — Completed 21-06-PLAN.md |
+| Phase | 22 — Practice Flow Redesign |
+| Plan | 02 of 9 |
+| Status | In progress |
+| Last activity | 2026-01-27 — Completed 22-02-PLAN.md |
 
 **Progress:**
 ```
 v1.0: [##########] 100% SHIPPED (2026-01-22)
 v1.1: [##########] 100% SHIPPED (2026-01-22) — 9/11 reqs, 2 deferred
 v2.0: [##########] 100% SHIPPED (2026-01-26) — 34/34 requirements
-v2.1: [████████  ] 71% — 5/7 phases complete (Phase 21 complete)
+v2.1: [████████  ] 71% — 5/7 phases complete (Phase 22 in progress, 1/9 plans)
 ```
 
 ## v2.1 Scope
@@ -225,6 +225,15 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 - Threshold section placed after Team Colors, before Appearance Settings for logical grouping
 - Success message auto-dismisses after 3 seconds matching existing patterns
 
+**v2.1 decisions (Phase 22 - Plan 02):**
+- useOptimistic for instant UI feedback with automatic rollback on failure
+- Infinity duration on error toasts forces user to dismiss or retry
+- Silent success (no toast) reduces notification fatigue
+- Transparent border by default makes fields look like plain text until interaction
+- Character count shows at 90% threshold in amber for textarea
+- Auto-resize option for dynamic textarea height
+- Time/date inputs use [color-scheme:dark] for proper dark mode pickers
+
 ### Architecture Notes
 
 - **Multi-tenant:** Team-scoped data with JWT claims, application-level filtering
@@ -329,6 +338,13 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 - **Responsive architecture:** 768px breakpoint (md:) switches sidebar ↔ bottom nav completely
 - **Content scrolling:** pb-20 md:pb-0 ensures mobile content clears fixed bottom nav
 
+**v2.1 additions (implemented in Phase 22 - Plan 02):**
+- **useAutosave hook:** React 19 optimistic updates with automatic rollback, silent success, error toasts with retry
+- **InlineTextField:** Transparent-to-editable single-line input with validation, keyboard shortcuts (Enter/Escape)
+- **InlineTextarea:** Multiline input with character count, auto-resize, Cmd/Ctrl+Enter save
+- **Autosave pattern:** Save on blur, Enter (text) or Cmd/Ctrl+Enter (textarea), Escape cancels
+- **Silent success UX:** No toast on successful save reduces notification fatigue
+
 ### Tech Debt Tracker
 
 | Item | Status | Notes |
@@ -364,9 +380,9 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
 | Field | Value |
 |-------|-------|
 | Last session | 2026-01-27 |
-| Stopped at | Completed Phase 21 |
+| Stopped at | Completed 22-02-PLAN.md |
 | Resume file | None |
 
 ---
 
-*Last updated: 2026-01-27 (Phase 21 complete — Equipment Readiness)*
+*Last updated: 2026-01-27 (Phase 22 in progress — Practice Flow Redesign)*
