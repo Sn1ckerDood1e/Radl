@@ -4,6 +4,7 @@ import { prisma } from '@/lib/prisma';
 import { EquipmentListClient } from './equipment-list-client';
 import { EquipmentUsageSummary } from '@/components/equipment/equipment-usage-summary';
 import { QRBulkExportButton } from '@/components/equipment/qr-bulk-export';
+import { calculateMultipleReadinessStatus } from '@/lib/equipment/readiness';
 
 interface EquipmentPageProps {
   params: Promise<{ teamSlug: string }>;
@@ -15,16 +16,42 @@ export default async function EquipmentPage({ params }: EquipmentPageProps) {
   // Verify user has membership in this team (by URL slug, not JWT claims)
   const { team, isCoach } = await requireTeamBySlug(teamSlug);
 
-  // Get all equipment for the team
-  const equipment = await prisma.equipment.findMany({
-    where: { teamId: team.id },
-    orderBy: [
-      { type: 'asc' },
-      { name: 'asc' },
-    ],
-  });
+  // Get all equipment for the team with readiness data
+  const [equipment, settings] = await Promise.all([
+    prisma.equipment.findMany({
+      where: { teamId: team.id },
+      include: {
+        damageReports: {
+          where: { status: 'OPEN' },
+          select: { id: true, severity: true, status: true, location: true },
+        },
+      },
+      orderBy: [
+        { type: 'asc' },
+        { name: 'asc' },
+      ],
+    }),
+    prisma.teamSettings.findUnique({
+      where: { teamId: team.id },
+      select: {
+        readinessInspectSoonDays: true,
+        readinessNeedsAttentionDays: true,
+        readinessOutOfServiceDays: true,
+      },
+    }),
+  ]);
 
-  // Get usage summary data
+  // Build thresholds from settings or use defaults
+  const thresholds = {
+    inspectSoonDays: settings?.readinessInspectSoonDays ?? 14,
+    needsAttentionDays: settings?.readinessNeedsAttentionDays ?? 21,
+    outOfServiceDays: settings?.readinessOutOfServiceDays ?? 30,
+  };
+
+  // Calculate readiness for all equipment
+  const equipmentWithReadiness = calculateMultipleReadinessStatus(equipment, thresholds);
+
+  // Get usage summary data (based on original equipment list)
   const usageLogs = await prisma.equipmentUsageLog.findMany({
     where: { teamId: team.id },
     include: {
@@ -112,7 +139,7 @@ export default async function EquipmentPage({ params }: EquipmentPageProps) {
       />
 
       <EquipmentListClient
-        equipment={equipment.map(e => ({
+        equipment={equipmentWithReadiness.map(e => ({
           id: e.id,
           type: e.type,
           name: e.name,
@@ -123,6 +150,7 @@ export default async function EquipmentPage({ params }: EquipmentPageProps) {
           serialNumber: e.serialNumber,
           yearAcquired: e.yearAcquired,
           notes: e.notes,
+          readiness: e.readiness,
         }))}
         teamSlug={teamSlug}
         isCoach={isCoach}

@@ -16,6 +16,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { EmptyState } from '@/components/ui/empty-state';
 import { Ship } from 'lucide-react';
+import type { EquipmentReadinessResult } from '@/lib/equipment/readiness';
 
 interface Equipment {
   id: string;
@@ -28,6 +29,7 @@ interface Equipment {
   serialNumber: string | null;
   yearAcquired: number | null;
   notes: string | null;
+  readiness: EquipmentReadinessResult;
 }
 
 interface EquipmentListClientProps {
@@ -239,6 +241,7 @@ export function EquipmentListClient({
                         manufacturer={item.manufacturer}
                         status={item.status}
                         boatClass={item.boatClass}
+                        readinessStatus={item.readiness.status}
                         teamSlug={teamSlug}
                         isCoach={isCoach}
                         onEdit={() => router.push(`/${teamSlug}/equipment/${item.id}/edit`)}

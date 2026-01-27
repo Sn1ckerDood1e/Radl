@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { SwipeableListItem } from '@/components/mobile/swipeable-list-item';
+import { ReadinessBadge, type ReadinessStatus } from '@/components/equipment/readiness-badge';
 
 interface EquipmentCardProps {
   id: string;
@@ -9,6 +10,7 @@ interface EquipmentCardProps {
   manufacturer: string | null;
   status: 'ACTIVE' | 'INACTIVE' | 'RETIRED';
   boatClass: string | null;
+  readinessStatus: ReadinessStatus;
   teamSlug: string;
   isCoach: boolean;
   onEdit?: () => void;
@@ -33,6 +35,7 @@ export function EquipmentCard({
   manufacturer,
   status,
   boatClass,
+  readinessStatus,
   teamSlug,
   isCoach,
   onEdit,
@@ -47,12 +50,15 @@ export function EquipmentCard({
       <div className="bg-zinc-800 rounded-lg border border-zinc-700 p-4 hover:border-zinc-600 transition-colors">
         <div className="flex items-start justify-between">
           <div className="flex-1 min-w-0">
-            <Link
-              href={`/${teamSlug}/equipment/${id}`}
-              className="font-medium text-white hover:text-emerald-400 block truncate"
-            >
-              {name}
-            </Link>
+            <div className="flex items-center gap-2 mb-1">
+              <Link
+                href={`/${teamSlug}/equipment/${id}`}
+                className="font-medium text-white hover:text-emerald-400 truncate"
+              >
+                {name}
+              </Link>
+              <ReadinessBadge status={readinessStatus} />
+            </div>
             {manufacturer && (
               <p className="text-sm text-zinc-400 truncate">{manufacturer}</p>
             )}
