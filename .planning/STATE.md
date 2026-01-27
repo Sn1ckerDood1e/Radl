@@ -12,16 +12,16 @@
 |-------|-------|
 | Milestone | v2.1 UX Refinement |
 | Phase | 22 — Practice Flow Redesign |
-| Plan | 12 of 13+ (gap closure) |
-| Status | In progress — executing gap closure plans |
-| Last activity | 2026-01-27 — Completed 22-12-PLAN.md (redirect new practice to bulk-create) |
+| Plan | 13 of 13 |
+| Status | Complete |
+| Last activity | 2026-01-27 — Gap closure complete, phase verified |
 
 **Progress:**
 ```
 v1.0: [##########] 100% SHIPPED (2026-01-22)
 v1.1: [##########] 100% SHIPPED (2026-01-22) — 9/11 reqs, 2 deferred
 v2.0: [##########] 100% SHIPPED (2026-01-26) — 34/34 requirements
-v2.1: [████████░░] 82% — 5/7 phases complete (Phase 22 in progress, 8/9 plans)
+v2.1: [████████░░] 86% — 6/7 phases complete
 ```
 
 ## v2.1 Scope
