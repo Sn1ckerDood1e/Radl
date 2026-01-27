@@ -12,16 +12,16 @@
 |-------|-------|
 | Milestone | v2.1 UX Refinement |
 | Phase | 22 — Practice Flow Redesign |
-| Plan | 01 of 9 |
+| Plan | 04 of 9 |
 | Status | In progress |
-| Last activity | 2026-01-27 — Completed 22-01-PLAN.md |
+| Last activity | 2026-01-27 — Completed 22-04-PLAN.md |
 
 **Progress:**
 ```
 v1.0: [##########] 100% SHIPPED (2026-01-22)
 v1.1: [##########] 100% SHIPPED (2026-01-22) — 9/11 reqs, 2 deferred
 v2.0: [##########] 100% SHIPPED (2026-01-26) — 34/34 requirements
-v2.1: [████████  ] 73% — 5/7 phases complete (Phase 22 in progress, 1/9 plans)
+v2.1: [████████  ] 73% — 5/7 phases complete (Phase 22 in progress, 4/9 plans)
 ```
 
 ## v2.1 Scope
@@ -240,6 +240,15 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 - Character count shows at 90% threshold in amber for textarea
 - Auto-resize option for dynamic textarea height
 - Time/date inputs use [color-scheme:dark] for proper dark mode pickers
+
+**v2.1 decisions (Phase 22 - Plan 04):**
+- Type buttons always visible (no dropdown) per CONTEXT.md "Type buttons visible directly"
+- Both drag handle AND arrow buttons for reordering flexibility per CONTEXT.md
+- 8px activation distance for drag to prevent accidental drags
+- Position numbers 1-based for user-friendly numbering
+- Type-specific color system: blue=water, orange=erg, green=land, purple=meeting
+- Expandable children pattern in InlineBlockEditor for lineup/workout content
+- getBlockTypeConfig helper returns icon, colors, labels for consistent styling
 
 ### Architecture Notes
 
