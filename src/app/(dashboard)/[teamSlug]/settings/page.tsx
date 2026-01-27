@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useTheme } from '@/components/providers/theme-provider';
 import { NotificationSettings } from '@/components/pwa/notification-settings';
 import { RCSettingsSection } from '@/components/regatta-central/rc-settings-section';
+import { REGATTA_REGIONS } from '@/lib/validations/team-settings';
 
 interface Coach {
   userId: string;
@@ -17,6 +18,7 @@ interface TeamSettings {
   readinessInspectSoonDays: number;
   readinessNeedsAttentionDays: number;
   readinessOutOfServiceDays: number;
+  regattaRegions: string[];
 }
 
 interface TeamInfo {
@@ -35,10 +37,12 @@ export default function TeamSettingsPage() {
   const [saving, setSaving] = useState(false);
   const [savingColors, setSavingColors] = useState(false);
   const [savingThresholds, setSavingThresholds] = useState(false);
+  const [savingRegions, setSavingRegions] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [colorSuccess, setColorSuccess] = useState(false);
   const [thresholdSuccess, setThresholdSuccess] = useState(false);
+  const [regionSuccess, setRegionSuccess] = useState(false);
 
   const [coaches, setCoaches] = useState<Coach[]>([]);
   const [settings, setSettings] = useState<TeamSettings>({
@@ -46,12 +50,14 @@ export default function TeamSettingsPage() {
     readinessInspectSoonDays: 14,
     readinessNeedsAttentionDays: 21,
     readinessOutOfServiceDays: 30,
+    regattaRegions: [],
   });
   const [selectedCoaches, setSelectedCoaches] = useState<Set<string>>(new Set());
 
   const [inspectSoonDays, setInspectSoonDays] = useState(14);
   const [needsAttentionDays, setNeedsAttentionDays] = useState(21);
   const [outOfServiceDays, setOutOfServiceDays] = useState(30);
+  const [regattaRegions, setRegattaRegions] = useState<string[]>([]);
 
   const [teamInfo, setTeamInfo] = useState<TeamInfo>({ name: '', primaryColor: '#1a365d', secondaryColor: '#e2e8f0' });
   const [primaryColor, setPrimaryColor] = useState('#1a365d');
@@ -80,6 +86,7 @@ export default function TeamSettingsPage() {
           setInspectSoonDays(data.settings.readinessInspectSoonDays ?? 14);
           setNeedsAttentionDays(data.settings.readinessNeedsAttentionDays ?? 21);
           setOutOfServiceDays(data.settings.readinessOutOfServiceDays ?? 30);
+          setRegattaRegions(data.settings.regattaRegions || []);
         }
 
         if (data.team) {
@@ -206,6 +213,39 @@ export default function TeamSettingsPage() {
     } finally {
       setSavingThresholds(false);
     }
+  };
+
+  const handleSaveRegions = async () => {
+    setSavingRegions(true);
+    setError(null);
+    setRegionSuccess(false);
+
+    try {
+      const response = await fetch('/api/team-settings', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ regattaRegions }),
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error || 'Failed to save regions');
+      }
+
+      setSettings(prev => ({ ...prev, regattaRegions }));
+      setRegionSuccess(true);
+      setTimeout(() => setRegionSuccess(false), 3000);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to save regions');
+    } finally {
+      setSavingRegions(false);
+    }
+  };
+
+  const hasRegionChanges = () => {
+    const currentRegions = settings.regattaRegions || [];
+    if (currentRegions.length !== regattaRegions.length) return true;
+    return !currentRegions.every(r => regattaRegions.includes(r));
   };
 
   if (loading) {
@@ -406,6 +446,81 @@ export default function TeamSettingsPage() {
 
           {thresholdSuccess && (
             <p className="text-sm text-emerald-400">Thresholds saved successfully!</p>
+          )}
+        </div>
+      </div>
+
+      {/* Regatta Central Section */}
+      <div className="bg-zinc-900 rounded-xl border border-zinc-800 p-6 mb-6">
+        <h2 className="text-lg font-semibold text-white mb-2 flex items-center gap-2">
+          <svg className="h-5 w-5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9" />
+          </svg>
+          Regatta Central
+        </h2>
+        <p className="text-sm text-zinc-400 mb-4">
+          Select regions to show upcoming regattas on your calendar.
+        </p>
+
+        {/* Region Success Alert */}
+        {regionSuccess && (
+          <div className="mb-4 bg-blue-500/10 border border-blue-500/30 rounded-lg p-3">
+            <div className="flex items-center gap-2 text-blue-400 text-sm">
+              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+              <p>Regatta regions saved successfully</p>
+            </div>
+          </div>
+        )}
+
+        <div className="space-y-3">
+          <label className="text-sm font-medium text-zinc-300">
+            Regatta Regions
+          </label>
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+            {REGATTA_REGIONS.map((region) => (
+              <label
+                key={region.code}
+                className="flex items-center gap-2 p-2 rounded-lg bg-zinc-800/50 hover:bg-zinc-800 cursor-pointer transition-colors"
+              >
+                <input
+                  type="checkbox"
+                  checked={regattaRegions.includes(region.code)}
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      setRegattaRegions([...regattaRegions, region.code]);
+                    } else {
+                      setRegattaRegions(regattaRegions.filter(r => r !== region.code));
+                    }
+                  }}
+                  className="h-4 w-4 rounded border-zinc-600 bg-zinc-800 text-blue-500 focus:ring-blue-500 focus:ring-offset-zinc-900"
+                />
+                <span className="text-sm text-zinc-300">{region.name}</span>
+              </label>
+            ))}
+          </div>
+          {regattaRegions.length === 0 && (
+            <p className="text-xs text-zinc-500">
+              No regions selected. United States will be used by default.
+            </p>
+          )}
+        </div>
+
+        <div className="mt-4 flex items-center gap-3">
+          <button
+            onClick={handleSaveRegions}
+            disabled={savingRegions || !hasRegionChanges()}
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+              savingRegions || !hasRegionChanges()
+                ? 'bg-zinc-700 text-zinc-500 cursor-not-allowed'
+                : 'bg-blue-600 hover:bg-blue-500 text-white'
+            }`}
+          >
+            {savingRegions ? 'Saving...' : 'Save Regions'}
+          </button>
+          {hasRegionChanges() && (
+            <span className="text-sm text-zinc-500">You have unsaved changes</span>
           )}
         </div>
       </div>
