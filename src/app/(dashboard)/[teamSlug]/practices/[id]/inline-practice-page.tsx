@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft, Trash2, Eye, EyeOff } from 'lucide-react';
@@ -9,7 +9,8 @@ import { cn } from '@/lib/utils';
 import { InlineTextField } from '@/components/shared/inline-text-field';
 import { InlineTextarea } from '@/components/shared/inline-textarea';
 import { SortableBlockList } from '@/components/practices/sortable-block-list';
-import { WaterBlockContent } from '@/components/practices/water-block-content';
+import { WaterBlockSummary } from '@/components/practices/water-block-summary';
+import { PracticeLineupsSection } from '@/components/practices/practice-lineups-section';
 import { ErgBlockContent } from '@/components/practices/erg-block-content';
 import type { BlockType } from '@/generated/prisma';
 import type { BoatClass, WorkoutType } from '@/generated/prisma';
@@ -120,10 +121,22 @@ export function InlinePracticePage({
   boats,
 }: InlinePracticePageProps) {
   const router = useRouter();
+  const lineupsSectionRef = useRef<HTMLDivElement>(null);
   const [blocks, setBlocks] = useState(practice.blocks);
   const [isPublishing, setIsPublishing] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+
+  // Filter water blocks for the lineups section
+  const waterBlocks = useMemo(
+    () => blocks.filter(b => b.type === 'WATER'),
+    [blocks]
+  );
+
+  // Scroll to lineups section
+  const scrollToLineups = useCallback(() => {
+    lineupsSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, []);
 
   // Refresh page data
   const refresh = useCallback(() => {
@@ -259,15 +272,27 @@ export function InlinePracticePage({
   // Render block content based on type
   const renderBlockContent = (block: Block) => {
     if (block.type === 'WATER') {
+      // Water blocks show workout builder + boat assignment summary
       return (
-        <WaterBlockContent
-          blockId={block.id}
-          practiceId={practice.id}
-          athletes={athletes}
-          boats={boats}
-          lineups={block.lineups || []}
-          onRefresh={refresh}
-        />
+        <div className="space-y-4">
+          {/* Workout/piece builder - same as ERG blocks */}
+          <ErgBlockContent
+            blockId={block.id}
+            practiceId={practice.id}
+            blockType="WATER"
+            workout={block.workout || null}
+            onRefresh={refresh}
+          />
+
+          {/* Boat assignments summary - full editing in Lineups section */}
+          <div className="pt-4 border-t border-zinc-800">
+            <WaterBlockSummary
+              lineups={block.lineups || []}
+              boats={boats}
+              onScrollToLineups={scrollToLineups}
+            />
+          </div>
+        </div>
       );
     }
 
@@ -470,6 +495,18 @@ export function InlinePracticePage({
           renderBlockContent={renderBlockContent}
         />
       </div>
+
+      {/* Lineups Section - only if water blocks exist */}
+      {waterBlocks.length > 0 && (
+        <PracticeLineupsSection
+          ref={lineupsSectionRef}
+          practiceId={practice.id}
+          waterBlocks={waterBlocks}
+          athletes={athletes}
+          boats={boats}
+          onRefresh={refresh}
+        />
+      )}
     </div>
   );
 }
