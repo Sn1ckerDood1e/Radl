@@ -188,6 +188,15 @@ Plans:
 - Calendar integration: regattas appear as events
 - Foundation for future team-specific OAuth integration
 
+**Plans:** 6 plans
+Plans:
+- [ ] 24-01-PLAN.md — Data foundation: regattaRegions schema, RC types
+- [ ] 24-02-PLAN.md — API client: extend RC client, cached endpoint
+- [ ] 24-03-PLAN.md — Display components: RegattaDetailCard, RegistrationBadge
+- [ ] 24-04-PLAN.md — Calendar integration: multi-day bars, popup display
+- [ ] 24-05-PLAN.md — Settings UI: region configuration
+- [ ] 24-06-PLAN.md — Final integration and verification
+
 **Dependencies:** None (external integration)
 
 ---
