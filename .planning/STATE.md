@@ -196,6 +196,11 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 - MINOR damage reports get archived after resolution, CRITICAL/MODERATE kept forever
 - Default readiness thresholds: 14 days (yellow), 21 days (amber), 30 days (red)
 
+**v2.1 decisions (Phase 21 - Plan 02):**
+- Readiness calculation priority order: manual override → critical damage → inspection days → moderate damage
+- Null lastInspectedAt treated as OUT_OF_SERVICE with 'No inspection record' reason
+- Generic batch processing types preserve equipment object shape for type safety
+
 **v2.1 decisions (Phase 21 - Plan 03):**
 - ReadinessBadge uses CVA variants with traffic light colors following announcement-priority-badge pattern
 - Inline ReadinessStatus type definition for parallel wave execution (import from library when Plan 02 completes)
@@ -340,9 +345,9 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
 | Field | Value |
 |-------|-------|
 | Last session | 2026-01-27 |
-| Stopped at | Completed 21-03-PLAN.md |
+| Stopped at | Completed 21-02-PLAN.md |
 | Resume file | None |
 
 ---
 
-*Last updated: 2026-01-27 (Phase 21 in progress — Equipment Readiness UI components)*
+*Last updated: 2026-01-27 (Phase 21 in progress — Equipment Readiness calculation logic)*
