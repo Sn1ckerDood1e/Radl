@@ -33,7 +33,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
     const block = await prisma.practiceBlock.findUnique({
       where: { id: blockId },
       include: {
-        lineups: {
+        lineup: {
           include: {
             boat: true,
             seats: {

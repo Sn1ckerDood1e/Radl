@@ -39,8 +39,17 @@ export const createWorkoutSchema = z.object({
   path: ['type']
 });
 
-// Update workout schema (partial)
-export const updateWorkoutSchema = createWorkoutSchema.partial();
+// Update workout schema (partial) - cannot use .partial() on schemas with refinements
+// Instead, define manually without refinements for PATCH endpoints
+export const updateWorkoutSchema = z.object({
+  type: workoutTypeSchema.optional(),
+  notes: z.string().max(500).optional(),
+  visibleToAthletes: z.boolean().optional(),
+  intervals: z.array(workoutIntervalSchema)
+    .min(1, 'At least one interval required')
+    .max(50, 'Maximum 50 intervals (PM5 limit)')
+    .optional(),
+});
 
 // Workout template schemas
 export const createWorkoutTemplateSchema = z.object({
@@ -52,7 +61,15 @@ export const createWorkoutTemplateSchema = z.object({
     .max(50),
 });
 
-export const updateWorkoutTemplateSchema = createWorkoutTemplateSchema.partial();
+export const updateWorkoutTemplateSchema = z.object({
+  name: z.string().min(1, 'Name required').max(100).optional(),
+  type: workoutTypeSchema.optional(),
+  notes: z.string().max(500).optional(),
+  intervals: z.array(workoutIntervalSchema)
+    .min(1)
+    .max(50)
+    .optional(),
+});
 
 // Type exports
 export type WorkoutType = z.infer<typeof workoutTypeSchema>;
