@@ -317,6 +317,7 @@ model Equipment {
   // Manual unavailability for practice scheduling
   manualUnavailable     Boolean         @default(false)
   manualUnavailableNote String?
+  lastInspectedAt       DateTime?  // When equipment was last inspected (null = never)
   // Ownership hierarchy
   ownerType             EquipmentOwnerType @default(TEAM)
   facilityId            String?
@@ -383,6 +384,8 @@ model DamageReport {
   status       DamageReportStatus @default(OPEN)
   resolvedAt   DateTime?
   resolvedBy   String?
+  resolutionNote   String?    // Optional note on how issue was resolved
+  archivedAt       DateTime?  // When report was archived (MINOR reports after resolution)
   createdAt    DateTime           @default(now())
 
   equipment Equipment @relation(fields: [equipmentId], references: [id], onDelete: Cascade)
@@ -435,11 +438,15 @@ model Notification {
 
 // Team settings model for configurable team preferences
 model TeamSettings {
-  id                  String   @id @default(uuid())
-  teamId              String   @unique
-  damageNotifyUserIds String[] // Array of userIds to notify on damage reports
-  createdAt           DateTime @default(now())
-  updatedAt           DateTime @updatedAt
+  id                           String   @id @default(uuid())
+  teamId                       String   @unique
+  damageNotifyUserIds          String[] // Array of userIds to notify on damage reports
+  // Equipment readiness thresholds (days since inspection)
+  readinessInspectSoonDays     Int      @default(14)   // Yellow: approaching inspection
+  readinessNeedsAttentionDays  Int      @default(21)   // Amber: overdue for inspection
+  readinessOutOfServiceDays    Int      @default(30)   // Red: must inspect before use
+  createdAt                    DateTime @default(now())
+  updatedAt                    DateTime @updatedAt
 
   team Team @relation(fields: [teamId], references: [id], onDelete: Cascade)
 
