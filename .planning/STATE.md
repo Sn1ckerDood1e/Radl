@@ -11,10 +11,10 @@
 | Field | Value |
 |-------|-------|
 | Milestone | v2.1 UX Refinement |
-| Phase | 22 — Practice Flow Redesign |
-| Plan | 13 of 13 |
-| Status | Complete |
-| Last activity | 2026-01-27 — Gap closure complete, phase verified |
+| Phase | 23 — Dashboard Enhancements |
+| Plan | 2 of 6 |
+| Status | In progress |
+| Last activity | 2026-01-27 — Completed 23-02 coach dashboard widgets |
 
 **Progress:**
 ```
@@ -450,10 +450,10 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
 
 | Field | Value |
 |-------|-------|
-| Last session | 2026-01-27 14:49 UTC |
-| Stopped at | Completed 22-12-PLAN.md |
+| Last session | 2026-01-27 15:43 UTC |
+| Stopped at | Completed 23-02-PLAN.md |
 | Resume file | None |
 
 ---
 
-*Last updated: 2026-01-27 (Phase 22 gap closure in progress — 22-12 completed, redirect new practice to bulk-create)*
+*Last updated: 2026-01-27 (Phase 23 in progress — 23-02 completed, coach dashboard widgets)*
