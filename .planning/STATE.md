@@ -12,9 +12,9 @@
 |-------|-------|
 | Milestone | v2.1 UX Refinement |
 | Phase | 21 — Equipment Readiness |
-| Plan | 02 of 5 |
+| Plan | 06 of 6 |
 | Status | In progress |
-| Last activity | 2026-01-27 — Completed 21-02-PLAN.md |
+| Last activity | 2026-01-27 — Completed 21-06-PLAN.md |
 
 **Progress:**
 ```
@@ -206,6 +206,13 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 - Inline ReadinessStatus type definition for parallel wave execution (import from library when Plan 02 completes)
 - showIcon/showLabel props enable flexible display modes (full badge, icon-only, label-only)
 
+**v2.1 decisions (Phase 21 - Plan 05):**
+- FleetHealthWidget visible only to coaches (equipment management is coach responsibility)
+- Empty state shows "Add equipment" link when no equipment registered
+- Status order displays issues first: OUT_OF_SERVICE → NEEDS_ATTENTION → INSPECT_SOON → READY
+- Action prompt appears when OUT_OF_SERVICE or NEEDS_ATTENTION items exist
+- Widget placed between announcements and practices on dashboard per CONTEXT.md guidance
+
 ### Architecture Notes
 
 - **Multi-tenant:** Team-scoped data with JWT claims, application-level filtering
@@ -345,9 +352,9 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
 | Field | Value |
 |-------|-------|
 | Last session | 2026-01-27 |
-| Stopped at | Completed 21-02-PLAN.md |
+| Stopped at | Completed 21-05-PLAN.md |
 | Resume file | None |
 
 ---
 
-*Last updated: 2026-01-27 (Phase 21 in progress — Equipment Readiness calculation logic)*
+*Last updated: 2026-01-27 (Phase 21 in progress — Fleet health dashboard widget)*
