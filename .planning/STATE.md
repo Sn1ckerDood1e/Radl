@@ -12,16 +12,16 @@
 |-------|-------|
 | Milestone | v2.1 UX Refinement |
 | Phase | 24 — Regatta Central Public API |
-| Plan | 1 of 6 |
+| Plan | 3 of 6 |
 | Status | In progress |
-| Last activity | 2026-01-27 — Completed 24-01-PLAN.md (data foundation) |
+| Last activity | 2026-01-27 — Completed 24-03-PLAN.md (regatta display components) |
 
 **Progress:**
 ```
 v1.0: [##########] 100% SHIPPED (2026-01-22)
 v1.1: [##########] 100% SHIPPED (2026-01-22) — 9/11 reqs, 2 deferred
 v2.0: [##########] 100% SHIPPED (2026-01-26) — 34/34 requirements
-v2.1: [█████████░] 97% — 6/7 phases complete, Phase 24 plan 1/6
+v2.1: [█████████░] 97% — 6/7 phases complete, Phase 24 plan 3/6
 ```
 
 ## v2.1 Scope
@@ -483,14 +483,25 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
 - RCPublicRegatta separate from RCRegatta to distinguish public vs team-authenticated data
 - Cache metadata via cachedAt/staleAfter supports stale-while-revalidate pattern
 
+**v2.1 decisions (Phase 24 - Plan 03):**
+- Blue color scheme for RegattaDetailCard differentiates from emerald practice cards
+- Status indicator dot uses traffic light colors (blue=upcoming, emerald=in-progress, zinc=completed, red=cancelled)
+- RegistrationBadge uses CVA variants matching existing badge patterns
+- Multi-day events show date range with day count in parentheses
+
+**v2.1 additions (implemented in Phase 24 - Plan 03):**
+- **RegistrationBadge component:** CVA-based badge for OPEN/CLOSED/WAITLIST/NOT_AVAILABLE status display
+- **RegattaDetailCard component:** Popup card with regatta name, date range, location, status, and RC deep link
+- **Regatta color convention:** Blue scheme for regattas vs emerald for practices in calendar UI
+
 ## Session Continuity
 
 | Field | Value |
 |-------|-------|
-| Last session | 2026-01-27 18:41 UTC |
-| Stopped at | Completed 24-01-PLAN.md |
+| Last session | 2026-01-27 18:47 UTC |
+| Stopped at | Completed 24-03-PLAN.md |
 | Resume file | None |
 
 ---
 
-*Last updated: 2026-01-27 (Phase 24 in progress — 24-01 completed, data foundation)*
+*Last updated: 2026-01-27 (Phase 24 in progress — 24-03 completed, regatta display components)*
