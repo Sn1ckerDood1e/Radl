@@ -12,16 +12,16 @@
 |-------|-------|
 | Milestone | v2.1 UX Refinement |
 | Phase | 22 — Practice Flow Redesign |
-| Plan | 02 of 9 |
+| Plan | 01 of 9 |
 | Status | In progress |
-| Last activity | 2026-01-27 — Completed 22-02-PLAN.md |
+| Last activity | 2026-01-27 — Completed 22-01-PLAN.md |
 
 **Progress:**
 ```
 v1.0: [##########] 100% SHIPPED (2026-01-22)
 v1.1: [##########] 100% SHIPPED (2026-01-22) — 9/11 reqs, 2 deferred
 v2.0: [##########] 100% SHIPPED (2026-01-26) — 34/34 requirements
-v2.1: [████████  ] 71% — 5/7 phases complete (Phase 22 in progress, 1/9 plans)
+v2.1: [████████  ] 73% — 5/7 phases complete (Phase 22 in progress, 1/9 plans)
 ```
 
 ## v2.1 Scope
@@ -225,6 +225,13 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 - Threshold section placed after Team Colors, before Appearance Settings for logical grouping
 - Success message auto-dismisses after 3 seconds matching existing patterns
 
+**v2.1 decisions (Phase 22 - Plan 01):**
+- PM5 50-interval limit enforced in validation matches real PM5 ergometer constraints
+- Multiple boats per block via Lineup array relation enables future multi-boat water blocks
+- Workout visibility toggle (visibleToAthletes) allows coaches to hide workout details while building
+- MEETING blocks require no assignments (team meetings don't need athlete/boat assignments)
+- Use findFirst for backward compatibility with existing single-lineup logic after Lineup relation change
+
 **v2.1 decisions (Phase 22 - Plan 02):**
 - useOptimistic for instant UI feedback with automatic rollback on failure
 - Infinity duration on error toasts forces user to dismiss or retry
@@ -338,6 +345,14 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 - **Responsive architecture:** 768px breakpoint (md:) switches sidebar ↔ bottom nav completely
 - **Content scrolling:** pb-20 md:pb-0 ensures mobile content clears fixed bottom nav
 
+**v2.1 additions (implemented in Phase 22 - Plan 01):**
+- **MEETING block type:** Added to BlockType enum for team meetings (no assignments needed)
+- **Workout models:** Workout and WorkoutInterval with PM5 constraints (50 interval max, position ordering)
+- **WorkoutTemplate models:** Reusable workout definitions with WorkoutTemplateInterval for saving and applying
+- **PracticeBlock.title:** Optional title field for block naming (e.g., "Warm-up Row", "5k Erg Test")
+- **Multiple boats per block:** Lineup relation changed from one-to-one to one-to-many (blockId no longer unique)
+- **Workout validation:** Zod schemas with PM5 constraints (split format regex, stroke rate 16-40, 50 interval limit)
+
 **v2.1 additions (implemented in Phase 22 - Plan 02):**
 - **useAutosave hook:** React 19 optimistic updates with automatic rollback, silent success, error toasts with retry
 - **InlineTextField:** Transparent-to-editable single-line input with validation, keyboard shortcuts (Enter/Escape)
@@ -379,8 +394,8 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
 
 | Field | Value |
 |-------|-------|
-| Last session | 2026-01-27 |
-| Stopped at | Completed 22-02-PLAN.md |
+| Last session | 2026-01-27 03:09 UTC |
+| Stopped at | Completed 22-01-PLAN.md |
 | Resume file | None |
 
 ---
