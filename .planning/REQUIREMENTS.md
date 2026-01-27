@@ -69,11 +69,11 @@
 | ISS-01 | Complete | 20 | 20-VERIFICATION.md |
 | ISS-02 | Complete | 20 | 20-VERIFICATION.md |
 | ISS-03 | Complete | 20 | 20-VERIFICATION.md |
-| EQR-01 | Pending | — | — |
-| EQR-02 | Pending | — | — |
-| EQR-03 | Pending | — | — |
+| EQR-01 | Complete | 21 | 21-VERIFICATION.md |
+| EQR-02 | Complete | 21 | 21-VERIFICATION.md |
+| EQR-03 | Complete | 21 | 21-VERIFICATION.md |
 | DASH-01 | Pending | — | — |
-| DASH-02 | Pending | — | — |
+| DASH-02 | Complete | 21 | 21-VERIFICATION.md |
 | DASH-03 | Pending | — | — |
 | NAV-01 | Complete | 18 | 18-VERIFICATION.md |
 | NAV-02 | Complete | 18 | 18-VERIFICATION.md |

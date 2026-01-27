@@ -101,11 +101,12 @@ Plans:
 
 **Plans:** 5 plans
 Plans:
-- [ ] 21-01-PLAN.md — Data foundation: schema extensions (lastInspectedAt, thresholds, resolutionNote)
-- [ ] 21-02-PLAN.md — Readiness calculation: threshold-based status logic
-- [ ] 21-03-PLAN.md — Badge component: ReadinessBadge with CVA variants
-- [ ] 21-04-PLAN.md — UI integration: equipment list/detail, settings form, Mark as Inspected
-- [ ] 21-05-PLAN.md — Dashboard widget: fleet health overview
+- [x] 21-01-PLAN.md — Data foundation: schema extensions (lastInspectedAt, thresholds, resolutionNote)
+- [x] 21-02-PLAN.md — Readiness calculation: threshold-based status logic
+- [x] 21-03-PLAN.md — Badge component: ReadinessBadge with CVA variants
+- [x] 21-04-PLAN.md — UI integration: equipment list/detail, Mark as Inspected
+- [x] 21-05-PLAN.md — Dashboard widget: fleet health overview
+- [x] 21-06-PLAN.md — Settings UI: threshold configuration form
 
 **Dependencies:** Phase 20 (maintenance alerts feed readiness)
 
@@ -193,7 +194,7 @@ Phase 24: RC Public API (independent)
 Phase 18: [##########] 100% — Complete
 Phase 19: [##########] 100% — Complete
 Phase 20: [##########] 100% — Complete
-Phase 21: [          ] 0% — Planned (5 plans)
+Phase 21: [##########] 100% — Complete (6 plans)
 Phase 22: [          ] 0% — Not started
 Phase 23: [          ] 0% — Not started
 Phase 24: [          ] 0% — Not started
