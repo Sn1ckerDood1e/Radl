@@ -14,7 +14,7 @@
 | Phase | 22 — Practice Flow Redesign |
 | Plan | 06 of 9 |
 | Status | In progress |
-| Last activity | 2026-01-27 — Completed 22-06-PLAN.md |
+| Last activity | 2026-01-27 — Completed 22-05-PLAN.md |
 
 **Progress:**
 ```
@@ -257,6 +257,13 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 - Expandable children pattern in InlineBlockEditor for lineup/workout content
 - getBlockTypeConfig helper returns icon, colors, labels for consistent styling
 
+**v2.1 decisions (Phase 22 - Plan 05):**
+- useFieldArray for dynamic interval management follows react-hook-form best practices
+- PM5 warning threshold at 45 intervals (90% of 50 limit) gives advance notice
+- Visibility toggle prominently placed per CONTEXT.md coach control requirement
+- Template dialog uses simple input + buttons pattern (no shadcn Dialog) for lightweight implementation
+- Type assertion used for zodResolver/useForm compatibility with schemas containing .default()
+
 **v2.1 decisions (Phase 22 - Plan 06):**
 - BoatLineupCard provides droppable zone for entire boat
 - SortableContext within each boat enables seat swapping
@@ -418,8 +425,8 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
 
 | Field | Value |
 |-------|-------|
-| Last session | 2026-01-27 03:28 UTC |
-| Stopped at | Completed 22-06-PLAN.md |
+| Last session | 2026-01-27 03:29 UTC |
+| Stopped at | Completed 22-05-PLAN.md |
 | Resume file | None |
 
 ---
