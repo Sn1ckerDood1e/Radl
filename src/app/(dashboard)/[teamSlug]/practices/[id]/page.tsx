@@ -1,8 +1,7 @@
 import { notFound } from 'next/navigation';
-import Link from 'next/link';
 import { requireTeamBySlug } from '@/lib/auth/authorize';
 import { prisma } from '@/lib/prisma';
-import { PracticeDetailClient } from './practice-detail-client';
+import { InlinePracticePage } from './inline-practice-page';
 
 interface PracticeDetailPageProps {
   params: Promise<{ teamSlug: string; id: string }>;
@@ -14,28 +13,38 @@ export default async function PracticeDetailPage({ params }: PracticeDetailPageP
   // Verify user has membership in this team (by URL slug, not JWT claims)
   const { team, isCoach } = await requireTeamBySlug(teamSlug);
 
-  // Get practice with blocks
+  // Fetch practice with blocks, lineups, and workouts
   const practice = await prisma.practice.findFirst({
     where: {
       id,
       teamId: team.id,
     },
     include: {
+      season: { select: { id: true, name: true } },
       blocks: {
+        orderBy: { position: 'asc' },
         include: {
+          // For WATER blocks: fetch all lineups (multiple boats)
           lineup: {
-            take: 1,
             include: {
+              boat: true,
               seats: {
+                orderBy: { position: 'asc' },
                 include: {
                   athlete: {
                     select: { id: true, displayName: true, sidePreference: true },
                   },
                 },
-                orderBy: { position: 'asc' },
               },
             },
           },
+          // For ERG blocks: fetch workout
+          workout: {
+            include: {
+              intervals: { orderBy: { position: 'asc' } },
+            },
+          },
+          // For LAND/ERG blocks: fetch assignments
           landAssignments: {
             include: {
               athlete: {
@@ -44,10 +53,6 @@ export default async function PracticeDetailPage({ params }: PracticeDetailPageP
             },
           },
         },
-        orderBy: { position: 'asc' },
-      },
-      season: {
-        select: { id: true, name: true },
       },
     },
   });
@@ -61,99 +66,103 @@ export default async function PracticeDetailPage({ params }: PracticeDetailPageP
     notFound();
   }
 
-  // Fetch additional data for lineup editor (coaches only)
-  const athletes = isCoach
-    ? await prisma.athleteProfile.findMany({
-        where: {
-          teamMember: { teamId: team.id },
-        },
-        select: { id: true, displayName: true, sidePreference: true },
-        orderBy: { displayName: 'asc' },
-      })
-    : [];
+  // Fetch athletes and boats for lineup building
+  const [athletes, boats] = await Promise.all([
+    prisma.athleteProfile.findMany({
+      where: {
+        teamMember: { teamId: team.id },
+      },
+      select: {
+        id: true,
+        displayName: true,
+        sidePreference: true,
+      },
+      orderBy: { displayName: 'asc' },
+    }),
+    prisma.equipment.findMany({
+      where: {
+        teamId: team.id,
+        type: 'SHELL',
+        status: 'ACTIVE',
+      },
+      select: {
+        id: true,
+        name: true,
+        boatClass: true,
+        manualUnavailable: true,
+      },
+      orderBy: { name: 'asc' },
+    }),
+  ]);
 
-  const boats = isCoach
-    ? await prisma.equipment.findMany({
-        where: {
-          teamId: team.id,
-          type: 'SHELL',
-          status: 'ACTIVE',
-        },
-        include: {
-          damageReports: {
-            where: { status: 'OPEN' },
-          },
-        },
-        orderBy: { name: 'asc' },
-      })
-    : [];
+  // Transform practice for client component
+  const transformedPractice = {
+    id: practice.id,
+    name: practice.name,
+    date: practice.date.toISOString(),
+    startTime: practice.startTime.toISOString(),
+    endTime: practice.endTime.toISOString(),
+    notes: practice.notes,
+    status: practice.status as 'DRAFT' | 'PUBLISHED',
+    season: practice.season,
+    blocks: practice.blocks.map(block => {
+      // Transform lineups for water blocks
+      // Current schema supports multiple lineups per block
+      const lineups = block.lineup.map(lineup => ({
+        id: lineup.id,
+        boatId: lineup.boatId,
+        seats: lineup.seats.map(seat => ({
+          position: seat.position,
+          label: `Seat ${seat.position}`,
+          side: seat.side as 'PORT' | 'STARBOARD' | 'NONE',
+          athleteId: seat.athleteId,
+        })),
+      }));
 
-  // ERG count - for now, we don't track individual ergs in equipment
-  // This would be a team setting or hardcoded based on facility
-  const ergCount = 20; // Default erg capacity
+      return {
+        id: block.id,
+        type: block.type as 'WATER' | 'ERG' | 'LAND' | 'MEETING',
+        title: block.title,
+        notes: block.notes,
+        durationMinutes: block.durationMinutes,
+        category: block.category,
+        lineups,
+        workout: block.workout ? {
+          id: block.workout.id,
+          type: block.workout.type,
+          notes: block.workout.notes,
+          visibleToAthletes: block.workout.visibleToAthletes,
+          intervals: block.workout.intervals.map(interval => ({
+            id: interval.id,
+            position: interval.position,
+            durationType: interval.durationType,
+            duration: interval.duration,
+            targetSplit: interval.targetSplit,
+            targetStrokeRate: interval.targetStrokeRate,
+            restDuration: interval.restDuration,
+            restType: interval.restType,
+          })),
+        } : null,
+      };
+    }),
+  };
+
+  // Transform boats
+  const transformedBoats = boats.map(boat => ({
+    id: boat.id,
+    name: boat.name,
+    boatClass: boat.boatClass,
+    available: !boat.manualUnavailable,
+  }));
 
   return (
-    <div className="max-w-3xl mx-auto">
-      {/* Breadcrumb */}
-      <nav className="mb-6 text-sm">
-        <ol className="flex items-center gap-2 text-zinc-400">
-          <li>
-            <Link href={`/${teamSlug}/practices`} className="hover:text-emerald-400 transition-colors">
-              Practices
-            </Link>
-          </li>
-          <li>/</li>
-          <li className="text-white truncate max-w-[200px]">{practice.name}</li>
-        </ol>
-      </nav>
-
-      <PracticeDetailClient
-        practice={{
-          id: practice.id,
-          name: practice.name,
-          date: practice.date.toISOString(),
-          startTime: practice.startTime.toISOString(),
-          endTime: practice.endTime.toISOString(),
-          notes: practice.notes,
-          status: practice.status,
-          blocks: practice.blocks.map(b => ({
-            id: b.id,
-            type: b.type,
-            position: b.position,
-            durationMinutes: b.durationMinutes,
-            category: b.category,
-            notes: b.notes,
-            lineup: b.lineup.length > 0 ? {
-              id: b.lineup[0].id,
-              boatId: b.lineup[0].boatId,
-              seats: b.lineup[0].seats.map(s => ({
-                position: s.position,
-                side: s.side,
-                athleteId: s.athleteId,
-                athlete: s.athlete,
-              })),
-            } : null,
-            landAssignments: b.landAssignments.map(a => ({
-              athleteId: a.athleteId,
-              athlete: a.athlete,
-            })),
-          })),
-          season: practice.season,
-        }}
+    <div className="max-w-4xl mx-auto">
+      <InlinePracticePage
+        practice={transformedPractice}
         teamSlug={teamSlug}
         isCoach={isCoach}
-        athletes={athletes.map(a => ({
-          id: a.id,
-          displayName: a.displayName,
-          sidePreference: a.sidePreference,
-        }))}
-        boats={boats.map(b => ({
-          id: b.id,
-          name: b.name,
-          boatClass: b.boatClass,
-          available: !b.manualUnavailable && b.damageReports.length === 0,
-        }))}
-        ergCount={ergCount}
+        athletes={athletes}
+        boats={transformedBoats}
       />
     </div>
   );
