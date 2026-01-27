@@ -9,6 +9,10 @@ const updateSettingsSchema = z.object({
   damageNotifyUserIds: z.array(z.string().uuid()).optional(),
   primaryColor: z.string().regex(/^#[0-9A-Fa-f]{6}$/).optional(),
   secondaryColor: z.string().regex(/^#[0-9A-Fa-f]{6}$/).optional(),
+  // Readiness threshold fields
+  readinessInspectSoonDays: z.number().int().min(1).max(365).optional(),
+  readinessNeedsAttentionDays: z.number().int().min(1).max(365).optional(),
+  readinessOutOfServiceDays: z.number().int().min(1).max(365).optional(),
 });
 
 // GET: Get team settings, coaches list, and team info
@@ -44,8 +48,11 @@ export async function GET(request: NextRequest) {
       }),
     ]);
 
-    const settingsResponse = settings || {
-      damageNotifyUserIds: [],
+    const settingsResponse = {
+      damageNotifyUserIds: settings?.damageNotifyUserIds || [],
+      readinessInspectSoonDays: settings?.readinessInspectSoonDays ?? 14,
+      readinessNeedsAttentionDays: settings?.readinessNeedsAttentionDays ?? 21,
+      readinessOutOfServiceDays: settings?.readinessOutOfServiceDays ?? 30,
     };
 
     return NextResponse.json({
@@ -54,9 +61,7 @@ export async function GET(request: NextRequest) {
         primaryColor: team.primaryColor,
         secondaryColor: team.secondaryColor,
       } : null,
-      settings: {
-        damageNotifyUserIds: settingsResponse.damageNotifyUserIds,
-      },
+      settings: settingsResponse,
       coaches: coaches.map(coach => ({
         userId: coach.userId,
         displayName: coach.athleteProfile?.displayName || `Coach (${coach.userId.slice(0, 8)}...)`,
@@ -85,7 +90,7 @@ export async function PATCH(request: NextRequest) {
       );
     }
 
-    const { damageNotifyUserIds, primaryColor, secondaryColor } = validationResult.data;
+    const { damageNotifyUserIds, primaryColor, secondaryColor, readinessInspectSoonDays, readinessNeedsAttentionDays, readinessOutOfServiceDays } = validationResult.data;
 
     // Handle team color updates
     if (primaryColor !== undefined || secondaryColor !== undefined) {
@@ -102,6 +107,25 @@ export async function PATCH(request: NextRequest) {
         success: true,
         team: updateData,
       });
+    }
+
+    // Handle readiness threshold updates
+    if (readinessInspectSoonDays !== undefined || readinessNeedsAttentionDays !== undefined || readinessOutOfServiceDays !== undefined) {
+      const updateData: Record<string, number> = {};
+      if (readinessInspectSoonDays !== undefined) updateData.readinessInspectSoonDays = readinessInspectSoonDays;
+      if (readinessNeedsAttentionDays !== undefined) updateData.readinessNeedsAttentionDays = readinessNeedsAttentionDays;
+      if (readinessOutOfServiceDays !== undefined) updateData.readinessOutOfServiceDays = readinessOutOfServiceDays;
+
+      await prisma.teamSettings.upsert({
+        where: { teamId: claims.team_id },
+        update: updateData,
+        create: {
+          teamId: claims.team_id,
+          ...updateData,
+        },
+      });
+
+      return NextResponse.json({ success: true, settings: updateData });
     }
 
     // Handle notification settings updates
