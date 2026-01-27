@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { DayPicker } from 'react-day-picker';
 import {
   format,
+  formatDistanceToNow,
   startOfMonth,
   endOfMonth,
   addMonths,
@@ -51,8 +52,7 @@ export function UnifiedCalendar({
   // RC regatta state
   const [rcRegattas, setRcRegattas] = useState<RCPublicRegatta[]>([]);
   const [selectedRegatta, setSelectedRegatta] = useState<RCPublicRegatta | null>(null);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_rcCachedAt, setRcCachedAt] = useState<string | null>(null);
+  const [rcCachedAt, setRcCachedAt] = useState<string | null>(null);
 
   // Reactive offline data for fallback
   const offlineSchedules = useOfflineSchedules(teamId);
@@ -274,17 +274,28 @@ export function UnifiedCalendar({
     setSeasonId(newSeasonId);
   };
 
-  // Export schedule
+  // Export schedule (includes RC regattas)
   const handleExport = () => {
-    const exportData = displayEvents.map(e => ({
-      date: e.date,
-      name: e.name,
-      type: e.type === 'practice' ? 'Practice' : 'Regatta',
-      startTime: e.startTime || '',
-      endTime: e.endTime || '',
-      location: e.location || '',
-      status: e.status || '',
-    }));
+    const exportData = [
+      ...displayEvents.map(e => ({
+        date: e.date,
+        name: e.name,
+        type: e.type === 'practice' ? 'Practice' : 'Regatta',
+        startTime: e.startTime || '',
+        endTime: e.endTime || '',
+        location: e.location || '',
+        status: e.status || '',
+      })),
+      ...rcRegattas.map(r => ({
+        date: format(r.startDate, 'yyyy-MM-dd'),
+        name: r.name,
+        type: 'Regatta (RC)',
+        startTime: format(r.startDate, 'HH:mm'),
+        endTime: r.endDate ? format(r.endDate, 'HH:mm') : '',
+        location: r.location || '',
+        status: r.registrationStatus,
+      })),
+    ];
 
     const csv = toCSV(exportData, [
       { key: 'date', header: 'Date' },
@@ -351,6 +362,11 @@ export function UnifiedCalendar({
               isOffline={isOffline}
               className="justify-center"
             />
+            {rcCachedAt && rcRegattas.length > 0 && (
+              <p className="text-xs text-zinc-500 mt-1">
+                Regattas updated {formatDistanceToNow(new Date(rcCachedAt), { addSuffix: true })}
+              </p>
+            )}
           </div>
           <button
             onClick={handleNextMonth}
@@ -634,7 +650,11 @@ export function UnifiedCalendar({
                   d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
                 />
               </svg>
-              <p className="text-zinc-500 text-sm mt-2">No events</p>
+              <p className="text-zinc-500 text-sm mt-2">
+                {rcRegattas.length > 0
+                  ? 'No events on this day. Check the calendar for upcoming regattas.'
+                  : 'No events'}
+              </p>
               {isCoach && selectedDate && (
                 <Link
                   href={`/${teamSlug}/practices/new?date=${format(selectedDate, 'yyyy-MM-dd')}`}
