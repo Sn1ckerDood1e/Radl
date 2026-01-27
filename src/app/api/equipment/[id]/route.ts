@@ -77,9 +77,15 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
     }
 
     // Build update data, clearing note when marking available
-    const updateData = { ...validationResult.data };
+    const updateData: Record<string, any> = { ...validationResult.data };
     if (updateData.manualUnavailable === false) {
       updateData.manualUnavailableNote = null;
+    }
+
+    // Handle markInspected flag
+    if (updateData.markInspected === true) {
+      updateData.lastInspectedAt = new Date();
+      delete updateData.markInspected; // Remove flag, don't try to update this field
     }
 
     // Verify equipment exists and belongs to team
@@ -105,6 +111,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
         weightCategory: updateData.weightCategory,
         manualUnavailable: updateData.manualUnavailable,
         manualUnavailableNote: updateData.manualUnavailableNote,
+        lastInspectedAt: updateData.lastInspectedAt,
       },
       include: {
         damageReports: {

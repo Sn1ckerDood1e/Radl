@@ -47,6 +47,7 @@ export const updateEquipmentSchema = equipmentBaseSchema.partial().extend({
   status: equipmentStatusSchema.optional(),
   manualUnavailable: z.boolean().optional(),
   manualUnavailableNote: z.string().max(500).optional().nullable(),
+  markInspected: z.boolean().optional(),
 });
 
 export type CreateEquipmentFormInput = z.infer<typeof createEquipmentFormSchema>;
