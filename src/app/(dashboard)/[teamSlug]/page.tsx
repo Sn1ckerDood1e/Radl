@@ -1,12 +1,17 @@
 import { redirect } from 'next/navigation';
-import Link from 'next/link';
 import { getClaimsForApiRoute } from '@/lib/auth/claims';
 import { prisma } from '@/lib/prisma';
 import { DashboardWithOnboarding } from '@/components/dashboard/dashboard-with-onboarding';
-import { AnnouncementList } from '@/components/announcements/announcement-list';
+import { CoachDashboard } from '@/components/dashboard/coach-dashboard';
+import { AthleteDashboard } from '@/components/dashboard/athlete-dashboard';
 import { sortAnnouncementsByPriority, buildActiveAnnouncementsQuery } from '@/lib/utils/announcement-helpers';
-import { FleetHealthWidget } from '@/components/equipment/fleet-health-widget';
 import { aggregateFleetHealth } from '@/lib/equipment/readiness';
+import {
+  getTodaysPracticesForCoach,
+  getAttentionItems,
+  getUsageTrendsData,
+  getAthleteNextPractice,
+} from '@/lib/dashboard/queries';
 
 interface TeamDashboardPageProps {
   params: Promise<{ teamSlug: string }>;
@@ -53,263 +58,196 @@ export default async function TeamDashboardPage({ params }: TeamDashboardPagePro
   const userRoles = clubMembership?.roles ?? (teamMember ? [teamMember.role] : []);
   const isCoach = userRoles.includes('COACH');
 
-  // Get team info and data in parallel
-  const announcementsWhere = buildActiveAnnouncementsQuery(teamId);
-  const now = new Date();
-  const [team, openDamageReportCount, announcementsRaw, upcomingPractices, equipment, teamSettings] = await Promise.all([
-    prisma.team.findUnique({
-      where: { id: teamId },
-      select: {
-        id: true,
-        name: true,
-        slug: true,
-        primaryColor: true,
-        secondaryColor: true,
-      },
-    }),
-    prisma.damageReport.count({
-      where: { teamId: teamId, status: 'OPEN' },
-    }),
-    prisma.announcement.findMany({
-      where: announcementsWhere,
-      include: {
-        readReceipts: {
-          where: { userId: user.id },
-        },
-        practice: {
-          select: {
-            id: true,
-            name: true,
-            date: true,
-          },
-        },
-      },
-    }),
-    prisma.practice.findMany({
-      where: {
-        teamId: teamId,
-        date: { gte: now },
-      },
-      orderBy: { date: 'asc' },
-      take: 5,
-      select: {
-        id: true,
-        name: true,
-        date: true,
-        startTime: true,
-        endTime: true,
-      },
-    }),
-    prisma.equipment.findMany({
-      where: { teamId: teamId, status: 'ACTIVE' },
-      include: {
-        damageReports: {
-          where: { status: 'OPEN' },
-          select: { id: true, severity: true, status: true, location: true },
-        },
-      },
-    }),
-    prisma.teamSettings.findUnique({
-      where: { teamId: teamId },
-      select: {
-        readinessInspectSoonDays: true,
-        readinessNeedsAttentionDays: true,
-        readinessOutOfServiceDays: true,
-      },
-    }),
-  ]);
+  // Fetch team info (needed for both roles)
+  const team = await prisma.team.findUnique({
+    where: { id: teamId },
+    select: {
+      id: true,
+      name: true,
+      slug: true,
+    },
+  });
 
   if (!team) {
     redirect('/create-team');
   }
 
-  // Sort and format announcements
-  const sortedAnnouncements = sortAnnouncementsByPriority(announcementsRaw);
-  const announcements = sortedAnnouncements.map((a) => ({
-    id: a.id,
-    title: a.title,
-    body: a.body,
-    priority: a.priority as 'INFO' | 'WARNING' | 'URGENT',
-    createdAt: a.createdAt.toISOString(),
-    isRead: a.readReceipts.length > 0,
-    practice: a.practice
+  // Build announcements query (shared between roles)
+  const announcementsWhere = buildActiveAnnouncementsQuery(teamId);
+
+  if (isCoach) {
+    // Coach: Fetch all dashboard data in parallel
+    const [
+      { todaysPractices, nextPractice },
+      attentionItems,
+      { sparklineData, totalHours, seasonName },
+      announcementsRaw,
+      equipment,
+      teamSettings,
+      openDamageReportCount,
+    ] = await Promise.all([
+      getTodaysPracticesForCoach(teamId),
+      getAttentionItems(teamId, teamSlug),
+      getUsageTrendsData(teamId),
+      prisma.announcement.findMany({
+        where: announcementsWhere,
+        include: {
+          readReceipts: {
+            where: { userId: user.id },
+          },
+          practice: {
+            select: {
+              id: true,
+              name: true,
+              date: true,
+            },
+          },
+        },
+      }),
+      prisma.equipment.findMany({
+        where: { teamId: teamId, status: 'ACTIVE' },
+        include: {
+          damageReports: {
+            where: { status: 'OPEN' },
+            select: { id: true, severity: true, status: true, location: true },
+          },
+        },
+      }),
+      prisma.teamSettings.findUnique({
+        where: { teamId: teamId },
+        select: {
+          readinessInspectSoonDays: true,
+          readinessNeedsAttentionDays: true,
+          readinessOutOfServiceDays: true,
+        },
+      }),
+      prisma.damageReport.count({
+        where: { teamId: teamId, status: 'OPEN' },
+      }),
+    ]);
+
+    // Sort and format announcements
+    const sortedAnnouncements = sortAnnouncementsByPriority(announcementsRaw);
+    const announcements = sortedAnnouncements.map((a) => ({
+      id: a.id,
+      title: a.title,
+      body: a.body,
+      priority: a.priority as 'INFO' | 'WARNING' | 'URGENT',
+      createdAt: a.createdAt.toISOString(),
+      isRead: a.readReceipts.length > 0,
+      practice: a.practice
+        ? {
+            id: a.practice.id,
+            name: a.practice.name,
+            date: a.practice.date.toISOString(),
+          }
+        : null,
+    }));
+
+    // Build thresholds from settings or use defaults
+    const thresholds = {
+      inspectSoonDays: teamSettings?.readinessInspectSoonDays ?? 14,
+      needsAttentionDays: teamSettings?.readinessNeedsAttentionDays ?? 21,
+      outOfServiceDays: teamSettings?.readinessOutOfServiceDays ?? 30,
+    };
+
+    // Aggregate fleet health
+    const fleetHealthCounts = aggregateFleetHealth(equipment, thresholds);
+    const totalEquipment = equipment.length;
+
+    // Transform practice data for TodaysScheduleWidget (needs Date objects)
+    const todaysPracticesForWidget = todaysPractices.map((p) => ({
+      ...p,
+      startTime: p.startTime,
+      endTime: p.endTime,
+    }));
+
+    const nextPracticeForWidget = nextPractice
       ? {
-          id: a.practice.id,
-          name: a.practice.name,
-          date: a.practice.date.toISOString(),
+          id: nextPractice.id,
+          name: nextPractice.name,
+          date: nextPractice.startTime, // Use startTime as date proxy
+          startTime: nextPractice.startTime,
         }
-      : null,
-  }));
+      : null;
 
-  // Build thresholds from settings or use defaults
-  const thresholds = {
-    inspectSoonDays: teamSettings?.readinessInspectSoonDays ?? 14,
-    needsAttentionDays: teamSettings?.readinessNeedsAttentionDays ?? 21,
-    outOfServiceDays: teamSettings?.readinessOutOfServiceDays ?? 30,
-  };
+    return (
+      <DashboardWithOnboarding
+        teamId={team.id}
+        teamName={team.name}
+        isCoach={isCoach}
+      >
+        <CoachDashboard
+          teamSlug={teamSlug}
+          todaysPractices={todaysPracticesForWidget}
+          nextPractice={nextPracticeForWidget}
+          statusCounts={fleetHealthCounts}
+          totalEquipment={totalEquipment}
+          sparklineData={sparklineData}
+          totalUsageHours={totalHours}
+          seasonName={seasonName}
+          attentionItems={attentionItems}
+          announcements={announcements}
+          openDamageReportCount={openDamageReportCount}
+        />
+      </DashboardWithOnboarding>
+    );
+  } else {
+    // Athlete: Fetch only athlete-relevant data in parallel
+    const [
+      { practice: nextPractice, assignment, unassignedPracticeCount },
+      announcementsRaw,
+    ] = await Promise.all([
+      getAthleteNextPractice(teamId, user.id),
+      prisma.announcement.findMany({
+        where: announcementsWhere,
+        include: {
+          readReceipts: {
+            where: { userId: user.id },
+          },
+          practice: {
+            select: {
+              id: true,
+              name: true,
+              date: true,
+            },
+          },
+        },
+      }),
+    ]);
 
-  // Aggregate fleet health
-  const fleetHealthCounts = aggregateFleetHealth(equipment, thresholds);
-  const totalEquipment = equipment.length;
+    // Sort and format announcements
+    const sortedAnnouncements = sortAnnouncementsByPriority(announcementsRaw);
+    const announcements = sortedAnnouncements.map((a) => ({
+      id: a.id,
+      title: a.title,
+      body: a.body,
+      priority: a.priority as 'INFO' | 'WARNING' | 'URGENT',
+      createdAt: a.createdAt.toISOString(),
+      isRead: a.readReceipts.length > 0,
+      practice: a.practice
+        ? {
+            id: a.practice.id,
+            name: a.practice.name,
+            date: a.practice.date.toISOString(),
+          }
+        : null,
+    }));
 
-  const dashboardContent = (
-    <div className="max-w-5xl mx-auto">
-      {/* Welcome Section */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-[var(--text-primary)] mb-2">
-          Welcome back
-        </h1>
-        <p className="text-[var(--text-secondary)]">
-          Here's what's happening with your team
-        </p>
-      </div>
-
-      {/* Alerts Section */}
-      {isCoach && openDamageReportCount > 0 && (
-        <Link
-          href={`/${teamSlug}/equipment`}
-          className="block mb-6 bg-gradient-to-r from-amber-500/20 to-orange-500/20 border border-amber-500/30 rounded-xl p-4 hover:border-amber-500/50 transition-colors group"
-        >
-          <div className="flex items-center gap-4">
-            <div className="h-12 w-12 rounded-full bg-amber-500/20 flex items-center justify-center flex-shrink-0">
-              <svg
-                className="h-6 w-6 text-amber-400"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-                />
-              </svg>
-            </div>
-            <div className="flex-1">
-              <h3 className="font-semibold text-amber-200">
-                {openDamageReportCount} Open Damage Report{openDamageReportCount !== 1 ? 's' : ''}
-              </h3>
-              <p className="text-sm text-amber-300/70">
-                Review and resolve equipment damage reports
-              </p>
-            </div>
-            <svg
-              className="h-5 w-5 text-amber-400 group-hover:translate-x-1 transition-transform"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
-          </div>
-        </Link>
-      )}
-
-      {/* Announcements Widget - Always show for coaches, show for athletes if there are announcements */}
-      {(isCoach || announcements.length > 0) && (
-        <div className="mb-6">
-          <AnnouncementList
-            teamSlug={teamSlug}
-            initialAnnouncements={announcements}
-            showEmpty={isCoach}
-            isCoach={isCoach}
-          />
-        </div>
-      )}
-
-      {/* Fleet Health Widget - Coaches only */}
-      {isCoach && (
-        <div className="mb-6">
-          <FleetHealthWidget
-            teamSlug={teamSlug}
-            statusCounts={fleetHealthCounts}
-            totalEquipment={totalEquipment}
-          />
-        </div>
-      )}
-
-      {/* Upcoming Practices */}
-      <div className="bg-[var(--surface-1)] rounded-xl border border-[var(--border-subtle)]">
-        <div className="flex items-center justify-between p-4 border-b border-[var(--border-subtle)]">
-          <h2 className="text-lg font-semibold text-[var(--text-primary)]">Upcoming Practices</h2>
-          <Link
-            href={`/${teamSlug}/practices`}
-            className="text-sm text-emerald-500 hover:text-emerald-400 font-medium"
-          >
-            View all
-          </Link>
-        </div>
-        {upcomingPractices.length > 0 ? (
-          <div className="divide-y divide-[var(--border-subtle)]">
-            {upcomingPractices.map((practice) => {
-              const practiceDate = new Date(practice.date);
-              const isToday = practiceDate.toDateString() === now.toDateString();
-              const isTomorrow = practiceDate.toDateString() === new Date(now.getTime() + 86400000).toDateString();
-
-              return (
-                <Link
-                  key={practice.id}
-                  href={`/${teamSlug}/practices/${practice.id}`}
-                  className="flex items-center gap-4 p-4 hover:bg-[var(--surface-2)] transition-colors"
-                >
-                  <div className="flex-shrink-0 w-14 text-center">
-                    {isToday ? (
-                      <span className="text-sm font-bold text-emerald-500">Today</span>
-                    ) : isTomorrow ? (
-                      <span className="text-sm font-bold text-blue-400">Tomorrow</span>
-                    ) : (
-                      <>
-                        <div className="text-xs text-[var(--text-muted)] uppercase">
-                          {practiceDate.toLocaleDateString('en-US', { weekday: 'short' })}
-                        </div>
-                        <div className="text-lg font-bold text-[var(--text-primary)]">
-                          {practiceDate.getDate()}
-                        </div>
-                      </>
-                    )}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-medium text-[var(--text-primary)] truncate">
-                      {practice.name || 'Practice'}
-                    </h3>
-                    <p className="text-sm text-[var(--text-muted)]">
-                      {practice.startTime && practice.endTime
-                        ? `${practice.startTime} - ${practice.endTime}`
-                        : practiceDate.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}
-                    </p>
-                  </div>
-                </Link>
-              );
-            })}
-          </div>
-        ) : (
-          <div className="p-8 text-center">
-            <p className="text-[var(--text-muted)] mb-4">No upcoming practices scheduled</p>
-            {isCoach && (
-              <Link
-                href={`/${teamSlug}/practices/new`}
-                className="inline-flex items-center gap-2 text-sm text-emerald-500 hover:text-emerald-400 font-medium"
-              >
-                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                </svg>
-                Create a practice
-              </Link>
-            )}
-          </div>
-        )}
-      </div>
-    </div>
-  );
-
-  return (
-    <DashboardWithOnboarding
-      teamId={team.id}
-      teamName={team.name}
-      isCoach={isCoach}
-    >
-      {dashboardContent}
-    </DashboardWithOnboarding>
-  );
+    return (
+      <DashboardWithOnboarding
+        teamId={team.id}
+        teamName={team.name}
+        isCoach={isCoach}
+      >
+        <AthleteDashboard
+          teamSlug={teamSlug}
+          nextPractice={nextPractice}
+          assignment={assignment}
+          unassignedPracticeCount={unassignedPracticeCount}
+          announcements={announcements}
+        />
+      </DashboardWithOnboarding>
+    );
+  }
 }
