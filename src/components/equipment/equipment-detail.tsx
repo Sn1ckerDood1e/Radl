@@ -1,8 +1,11 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { QRCodeDisplay } from './qr-code-display';
+import { Button } from '@/components/ui/button';
+import type { EquipmentReadinessResult } from '@/lib/equipment/readiness';
 
 interface EquipmentDetailProps {
   equipment: {
@@ -17,6 +20,8 @@ interface EquipmentDetailProps {
     notes: string | null;
     boatClass: string | null;
     weightCategory: string | null;
+    lastInspectedAt: string | null;
+    readiness: EquipmentReadinessResult;
   };
   teamSlug: string;
   isCoach: boolean;
@@ -48,8 +53,10 @@ const statusConfig: Record<string, { label: string; className: string }> = {
 };
 
 export function EquipmentDetail({ equipment, teamSlug, isCoach }: EquipmentDetailProps) {
+  const router = useRouter();
   const [status, setStatus] = useState(equipment.status);
   const [isUpdating, setIsUpdating] = useState(false);
+  const [isMarkingInspected, setIsMarkingInspected] = useState(false);
 
   const handleStatusToggle = async () => {
     const nextStatus = status === 'ACTIVE' ? 'INACTIVE' : status === 'INACTIVE' ? 'RETIRED' : 'ACTIVE';
@@ -72,7 +79,38 @@ export function EquipmentDetail({ equipment, teamSlug, isCoach }: EquipmentDetai
     }
   };
 
+  const handleMarkInspected = async () => {
+    setIsMarkingInspected(true);
+    try {
+      const response = await fetch(`/api/equipment/${equipment.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ markInspected: true }),
+      });
+
+      if (response.ok) {
+        // Refresh the page to show updated inspection date and readiness
+        router.refresh();
+      }
+    } catch (error) {
+      console.error('Failed to mark as inspected:', error);
+    } finally {
+      setIsMarkingInspected(false);
+    }
+  };
+
   const currentStatus = statusConfig[status];
+
+  // Format last inspection date
+  const formatInspectionDate = (dateString: string | null): string => {
+    if (!dateString) return 'Never';
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    });
+  };
 
   return (
     <div className="bg-zinc-900 rounded-xl border border-zinc-800 p-6">
@@ -106,6 +144,31 @@ export function EquipmentDetail({ equipment, teamSlug, isCoach }: EquipmentDetai
       </div>
 
       <div className="space-y-6">
+        {/* Inspection Status */}
+        <div className="space-y-4">
+          <h3 className="text-lg font-medium text-white border-b border-zinc-800 pb-2">Inspection Status</h3>
+          <div className="flex items-center justify-between">
+            <div>
+              <dt className="text-sm font-medium text-zinc-400">Last Inspected</dt>
+              <dd className="text-sm text-zinc-200 mt-1">{formatInspectionDate(equipment.lastInspectedAt)}</dd>
+              {equipment.readiness.reasons.length > 0 && (
+                <dd className="text-xs text-zinc-400 mt-1">
+                  {equipment.readiness.reasons.join(', ')}
+                </dd>
+              )}
+            </div>
+            {isCoach && (
+              <Button
+                onClick={handleMarkInspected}
+                disabled={isMarkingInspected}
+                variant="outline"
+              >
+                {isMarkingInspected ? 'Updating...' : 'Mark as Inspected'}
+              </Button>
+            )}
+          </div>
+        </div>
+
         {/* Equipment Details */}
         <div className="space-y-4">
           <h3 className="text-lg font-medium text-white border-b border-zinc-800 pb-2">Details</h3>

@@ -6,6 +6,8 @@ import { EquipmentDetail } from '@/components/equipment/equipment-detail';
 import { DamageHistory } from '@/components/equipment/damage-history';
 import { UsageHistory } from '@/components/equipment/usage-history';
 import { getUsageLogsForEquipment } from '@/lib/equipment/usage-logger';
+import { calculateReadinessStatus } from '@/lib/equipment/readiness';
+import { ReadinessBadge } from '@/components/equipment/readiness-badge';
 
 interface EquipmentDetailPageProps {
   params: Promise<{ teamSlug: string; id: string }>;
@@ -17,22 +19,51 @@ export default async function EquipmentDetailPage({ params }: EquipmentDetailPag
   // Verify user has membership in this team (by URL slug, not JWT claims)
   const { team, isCoach } = await requireTeamBySlug(teamSlug);
 
-  // Fetch equipment with damage reports
-  const equipment = await prisma.equipment.findFirst({
-    where: {
-      id,
-      teamId: team.id,
-    },
-    include: {
-      damageReports: {
-        orderBy: { createdAt: 'desc' },
+  // Fetch equipment with damage reports and settings for readiness
+  const [equipment, settings] = await Promise.all([
+    prisma.equipment.findFirst({
+      where: {
+        id,
+        teamId: team.id,
       },
-    },
-  });
+      include: {
+        damageReports: {
+          orderBy: { createdAt: 'desc' },
+        },
+      },
+    }),
+    prisma.teamSettings.findUnique({
+      where: { teamId: team.id },
+      select: {
+        readinessInspectSoonDays: true,
+        readinessNeedsAttentionDays: true,
+        readinessOutOfServiceDays: true,
+      },
+    }),
+  ]);
 
   if (!equipment) {
     notFound();
   }
+
+  // Calculate readiness status
+  const thresholds = {
+    inspectSoonDays: settings?.readinessInspectSoonDays ?? 14,
+    needsAttentionDays: settings?.readinessNeedsAttentionDays ?? 21,
+    outOfServiceDays: settings?.readinessOutOfServiceDays ?? 30,
+  };
+
+  const readiness = calculateReadinessStatus({
+    manualUnavailable: equipment.manualUnavailable,
+    manualUnavailableNote: equipment.manualUnavailableNote,
+    lastInspectedAt: equipment.lastInspectedAt,
+    damageReports: equipment.damageReports.filter(r => r.status === 'OPEN').map(r => ({
+      id: r.id,
+      severity: r.severity,
+      status: r.status,
+      location: r.location,
+    })),
+  }, thresholds);
 
   // Fetch usage history
   const usageLogs = await getUsageLogsForEquipment(equipment.id, { limit: 20 });
@@ -50,6 +81,8 @@ export default async function EquipmentDetailPage({ params }: EquipmentDetailPag
     notes: equipment.notes,
     boatClass: equipment.boatClass,
     weightCategory: equipment.weightCategory,
+    lastInspectedAt: equipment.lastInspectedAt?.toISOString() ?? null,
+    readiness,
   };
 
   const damageReports = equipment.damageReports.map(r => ({
@@ -80,9 +113,9 @@ export default async function EquipmentDetailPage({ params }: EquipmentDetailPag
 
   return (
     <div className="max-w-4xl mx-auto">
-      {/* Breadcrumb */}
+      {/* Breadcrumb and Header */}
       <nav className="mb-6">
-        <ol className="flex items-center space-x-2 text-sm text-zinc-400">
+        <ol className="flex items-center space-x-2 text-sm text-zinc-400 mb-4">
           <li>
             <Link href={`/${teamSlug}/equipment`} className="hover:text-emerald-400 transition-colors">
               Equipment
@@ -99,6 +132,10 @@ export default async function EquipmentDetailPage({ params }: EquipmentDetailPag
           </li>
           <li className="text-white font-medium">{equipment.name}</li>
         </ol>
+        <div className="flex items-center gap-3">
+          <h1 className="text-2xl font-bold text-white">{equipment.name}</h1>
+          <ReadinessBadge status={readiness.status} />
+        </div>
       </nav>
 
       <div className="space-y-6">
