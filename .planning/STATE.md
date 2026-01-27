@@ -12,9 +12,9 @@
 |-------|-------|
 | Milestone | v2.1 UX Refinement |
 | Phase | 23 — Dashboard Enhancements |
-| Plan | 3 of 6 |
+| Plan | 4 of 6 |
 | Status | In progress |
-| Last activity | 2026-01-27 — Completed 23-03 athlete and usage widgets |
+| Last activity | 2026-01-27 — Completed 23-04 dashboard layout components |
 
 **Progress:**
 ```
@@ -456,14 +456,20 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
 - **Assignment formatting:** Block-type-specific display (WATER, ERG, LAND, MEETING)
 - **Relative date formatting:** Today/Tomorrow/Weekday countdown pattern
 
+**v2.1 additions (implemented in Phase 23 - Plan 04):**
+- **CoachDashboard:** Priority hero layout composing all coach widgets (Schedule, Fleet, Usage, Quick Actions, Announcements)
+- **AthleteDashboard:** Focused layout with NextPractice hero and conditional announcements
+- **Responsive grid:** 2-column on desktop, stacked on mobile for secondary widgets
+- **Narrower athlete layout:** max-w-3xl vs max-w-5xl for focused view
+
 ## Session Continuity
 
 | Field | Value |
 |-------|-------|
-| Last session | 2026-01-27 15:42 UTC |
-| Stopped at | Completed 23-03-PLAN.md |
+| Last session | 2026-01-27 15:46 UTC |
+| Stopped at | Completed 23-04-PLAN.md |
 | Resume file | None |
 
 ---
 
-*Last updated: 2026-01-27 (Phase 23 in progress — 23-03 completed, athlete and usage widgets)*
+*Last updated: 2026-01-27 (Phase 23 in progress — 23-04 completed, dashboard layout components)*
