@@ -2,7 +2,7 @@
 
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { Users, Calendar, Package, Settings, Home, CalendarDays } from 'lucide-react';
+import { Users, Calendar, Package, Settings, Home } from 'lucide-react';
 import { useAbility } from '@/hooks/use-ability';
 import type { LucideIcon } from 'lucide-react';
 
@@ -36,7 +36,6 @@ export function NavigationSidebar({ teamSlug }: NavigationSidebarProps) {
     { href: `/${teamSlug}`, icon: Home, label: 'Home', exact: true },
     { href: `/${teamSlug}/roster`, icon: Users, label: 'Roster' },
     { href: `/${teamSlug}/practices`, icon: Calendar, label: 'Practices' },
-    { href: `/${teamSlug}/schedule`, icon: CalendarDays, label: 'Schedule' },
     {
       href: `/${teamSlug}/equipment`,
       icon: Package,
