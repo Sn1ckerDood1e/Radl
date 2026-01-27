@@ -130,17 +130,21 @@ Plans:
 - Bulk practice creation with date range and day selection
 - Bulk practice deletion with multi-select
 
-**Plans:** 9 plans
+**Plans:** 13 plans (9 core + 4 gap closure)
 Plans:
-- [ ] 22-01-PLAN.md — Data foundation: MEETING type, Workout/WorkoutTemplate models
-- [ ] 22-02-PLAN.md — Inline editing: useAutosave hook, InlineTextField, InlineTextarea
-- [ ] 22-03-PLAN.md — API layer: PATCH endpoints, workout CRUD, templates
-- [ ] 22-04-PLAN.md — Block components: InlineBlockEditor, BlockTypeButtons, SortableBlockList
-- [ ] 22-05-PLAN.md — Workout builder: PM5-style intervals, templates
-- [ ] 22-06-PLAN.md — Multi-boat lineup: drag between boats, swap behavior
-- [ ] 22-07-PLAN.md — Practice page integration: inline editing, block content
-- [ ] 22-08-PLAN.md — Bulk operations: create multiple, delete selected
-- [ ] 22-09-PLAN.md — Final integration and verification
+- [x] 22-01-PLAN.md — Data foundation: MEETING type, Workout/WorkoutTemplate models
+- [x] 22-02-PLAN.md — Inline editing: useAutosave hook, InlineTextField, InlineTextarea
+- [x] 22-03-PLAN.md — API layer: PATCH endpoints, workout CRUD, templates
+- [x] 22-04-PLAN.md — Block components: InlineBlockEditor, BlockTypeButtons, SortableBlockList
+- [x] 22-05-PLAN.md — Workout builder: PM5-style intervals, templates
+- [x] 22-06-PLAN.md — Multi-boat lineup: drag between boats, swap behavior
+- [x] 22-07-PLAN.md — Practice page integration: inline editing, block content
+- [x] 22-08-PLAN.md — Bulk operations: create multiple, delete selected
+- [x] 22-09-PLAN.md — Final integration and verification
+- [ ] 22-10-PLAN.md — Gap closure: Consolidate practices/schedule pages
+- [ ] 22-11-PLAN.md — Gap closure: Season management UI
+- [ ] 22-12-PLAN.md — Gap closure: Replace new practice form with bulk-create redirect
+- [ ] 22-13-PLAN.md — Gap closure: Workout interval row UI polish
 
 **Dependencies:** Phase 18 (uses new layout patterns)
 
@@ -209,7 +213,7 @@ Phase 18: [##########] 100% — Complete
 Phase 19: [##########] 100% — Complete
 Phase 20: [##########] 100% — Complete
 Phase 21: [##########] 100% — Complete (6 plans)
-Phase 22: [          ] 0% — Planning complete (9 plans)
+Phase 22: [#########░] 90% — Gap closure in progress (9/13 plans complete)
 Phase 23: [          ] 0% — Not started
 Phase 24: [          ] 0% — Not started
 ```
