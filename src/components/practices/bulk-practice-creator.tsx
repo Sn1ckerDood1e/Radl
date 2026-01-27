@@ -27,6 +27,10 @@ interface BulkPracticeCreatorProps {
   seasons: Season[];
   /** Available practice templates */
   templates: PracticeTemplate[];
+  /** Initial date for single-practice creation (from calendar click) */
+  initialDate?: string;
+  /** Initial season ID for pre-selection */
+  initialSeasonId?: string;
 }
 
 type DayOfWeek = 0 | 1 | 2 | 3 | 4 | 5 | 6;
@@ -45,14 +49,34 @@ export function BulkPracticeCreator({
   teamSlug,
   seasons,
   templates,
+  initialDate,
+  initialSeasonId,
 }: BulkPracticeCreatorProps) {
   const router = useRouter();
-  const [startDate, setStartDate] = useState<Date | undefined>();
-  const [endDate, setEndDate] = useState<Date | undefined>();
-  const [selectedDays, setSelectedDays] = useState<DayOfWeek[]>([1, 3, 5]); // Mon, Wed, Fri default
+
+  // Parse initial date if provided (for single-practice creation from calendar)
+  const parsedInitialDate = initialDate ? new Date(initialDate) : undefined;
+  const validInitialDate = parsedInitialDate && !isNaN(parsedInitialDate.getTime())
+    ? parsedInitialDate
+    : undefined;
+
+  // For single-date mode, set both start and end to same date
+  const [startDate, setStartDate] = useState<Date | undefined>(validInitialDate);
+  const [endDate, setEndDate] = useState<Date | undefined>(validInitialDate);
+
+  // If single date provided, select all days of week to ensure that day is included
+  const initialDaysOfWeek: DayOfWeek[] = validInitialDate
+    ? [getDay(validInitialDate) as DayOfWeek]
+    : [1, 3, 5]; // Mon, Wed, Fri default for multi-day mode
+  const [selectedDays, setSelectedDays] = useState<DayOfWeek[]>(initialDaysOfWeek);
+
   const [startTime, setStartTime] = useState('06:00');
   const [endTime, setEndTime] = useState('08:00');
-  const [seasonId, setSeasonId] = useState(seasons[0]?.id || '');
+  // Use initialSeasonId if provided and valid, otherwise first season
+  const validInitialSeasonId = initialSeasonId && seasons.some(s => s.id === initialSeasonId)
+    ? initialSeasonId
+    : seasons[0]?.id || '';
+  const [seasonId, setSeasonId] = useState(validInitialSeasonId);
   const [templateId, setTemplateId] = useState<string>('');
   const [namePattern, setNamePattern] = useState('');
   const [isCreating, setIsCreating] = useState(false);
@@ -180,8 +204,24 @@ export function BulkPracticeCreator({
       : [],
   };
 
+  // Determine if single-date mode (start and end are same date)
+  const isSingleDate = startDate && endDate &&
+    startDate.toDateString() === endDate.toDateString();
+
+  // Dynamic header based on selection
+  const headerText = isSingleDate
+    ? `Create Practice for ${format(startDate, 'MMM d, yyyy')}`
+    : practiceDates.length > 0
+      ? `Create Practices (${practiceDates.length} date${practiceDates.length !== 1 ? 's' : ''})`
+      : 'Create Practices';
+
   return (
     <div className="space-y-6">
+      {/* Dynamic header */}
+      <h1 className="text-2xl font-bold text-white">
+        {headerText}
+      </h1>
+
       {/* Season selector */}
       <div>
         <label className="block text-sm font-medium text-zinc-300 mb-2">

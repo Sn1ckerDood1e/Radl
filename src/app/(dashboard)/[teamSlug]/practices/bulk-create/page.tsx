@@ -7,10 +7,12 @@ import { BulkPracticeCreator } from '@/components/practices/bulk-practice-creato
 
 interface PageProps {
   params: Promise<{ teamSlug: string }>;
+  searchParams: Promise<{ date?: string; seasonId?: string }>;
 }
 
-export default async function BulkCreatePracticesPage({ params }: PageProps) {
+export default async function BulkCreatePracticesPage({ params, searchParams }: PageProps) {
   const { teamSlug } = await params;
+  const { date: dateParam, seasonId: seasonIdParam } = await searchParams;
   const { team, isCoach } = await requireTeamBySlug(teamSlug);
 
   // Only coaches can bulk create
@@ -84,13 +86,12 @@ export default async function BulkCreatePracticesPage({ params }: PageProps) {
       </div>
 
       <div className="bg-zinc-900 rounded-xl border border-zinc-800 p-6">
-        <h1 className="text-2xl font-bold text-white mb-6">
-          Create Multiple Practices
-        </h1>
         <BulkPracticeCreator
           teamSlug={teamSlug}
           seasons={seasons}
           templates={templates}
+          initialDate={dateParam}
+          initialSeasonId={seasonIdParam}
         />
       </div>
     </div>
