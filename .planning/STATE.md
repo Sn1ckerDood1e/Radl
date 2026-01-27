@@ -483,6 +483,17 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
 - RCPublicRegatta separate from RCRegatta to distinguish public vs team-authenticated data
 - Cache metadata via cachedAt/staleAfter supports stale-while-revalidate pattern
 
+**v2.1 additions (implemented in Phase 24 - Plan 02):**
+- **getPublicRegattas method:** RegattaCentralClient extended for multi-region public regatta fetching
+- **/api/regattas/upcoming endpoint:** Cached endpoint with 6-hour TTL via Cache-Control headers
+- **Status mapping helpers:** mapRegattaStatus and mapRegistrationStatus for RC API response transformation
+
+**v2.1 decisions (Phase 24 - Plan 02):**
+- 6-hour cache TTL (21600s) balances freshness with RC rate limit compliance
+- Graceful degradation returns HTTP 200 with error field rather than 500 for resilient clients
+- Default region is 'US' when team has no regattaRegions preference configured
+- Status mapping uses lowercase comparison for robustness against API response variations
+
 **v2.1 decisions (Phase 24 - Plan 03):**
 - Blue color scheme for RegattaDetailCard differentiates from emerald practice cards
 - Status indicator dot uses traffic light colors (blue=upcoming, emerald=in-progress, zinc=completed, red=cancelled)
