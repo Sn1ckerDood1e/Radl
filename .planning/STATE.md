@@ -11,17 +11,17 @@
 | Field | Value |
 |-------|-------|
 | Milestone | v2.1 UX Refinement |
-| Phase | 20 — Public Issue Reporting |
-| Plan | 05 of 5 |
-| Status | Phase complete |
-| Last activity | 2026-01-26 — Completed 20-05-PLAN.md |
+| Phase | 21 — Equipment Readiness |
+| Plan | 01 of 5 |
+| Status | In progress |
+| Last activity | 2026-01-27 — Completed 21-01-PLAN.md |
 
 **Progress:**
 ```
 v1.0: [##########] 100% SHIPPED (2026-01-22)
 v1.1: [##########] 100% SHIPPED (2026-01-22) — 9/11 reqs, 2 deferred
 v2.0: [##########] 100% SHIPPED (2026-01-26) — 34/34 requirements
-v2.1: [██████    ] 57% — 4/7 phases complete (Phase 20 complete)
+v2.1: [███████   ] 71% — 5/7 phases complete (Phase 21 in progress)
 ```
 
 ## v2.1 Scope
@@ -191,6 +191,11 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 - Error correction level M for print reliability
 - Equipment names truncated to 20 chars to prevent label overflow
 
+**v2.1 decisions (Phase 21 - Plan 01):**
+- Equipment with null lastInspectedAt will show OUT_OF_SERVICE status until first inspection
+- MINOR damage reports get archived after resolution, CRITICAL/MODERATE kept forever
+- Default readiness thresholds: 14 days (yellow), 21 days (amber), 30 days (red)
+
 ### Architecture Notes
 
 - **Multi-tenant:** Team-scoped data with JWT claims, application-level filtering
@@ -329,10 +334,10 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
 
 | Field | Value |
 |-------|-------|
-| Last session | 2026-01-26 |
-| Stopped at | Completed 20-05-PLAN.md (Phase 20 complete) |
+| Last session | 2026-01-27 |
+| Stopped at | Completed 21-01-PLAN.md |
 | Resume file | None |
 
 ---
 
-*Last updated: 2026-01-26 (Phase 20 complete — Public Issue Reporting with bulk QR export)*
+*Last updated: 2026-01-27 (Phase 21 in progress — Equipment Readiness schema foundation)*
