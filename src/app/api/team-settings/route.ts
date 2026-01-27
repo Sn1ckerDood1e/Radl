@@ -1,19 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { z } from 'zod';
 import { getClaimsForApiRoute } from '@/lib/auth/claims';
 import { unauthorizedResponse, forbiddenResponse, serverErrorResponse } from '@/lib/errors';
-
-// Schema for updating team settings
-const updateSettingsSchema = z.object({
-  damageNotifyUserIds: z.array(z.string().uuid()).optional(),
-  primaryColor: z.string().regex(/^#[0-9A-Fa-f]{6}$/).optional(),
-  secondaryColor: z.string().regex(/^#[0-9A-Fa-f]{6}$/).optional(),
-  // Readiness threshold fields
-  readinessInspectSoonDays: z.number().int().min(1).max(365).optional(),
-  readinessNeedsAttentionDays: z.number().int().min(1).max(365).optional(),
-  readinessOutOfServiceDays: z.number().int().min(1).max(365).optional(),
-});
+import { updateTeamSettingsSchema } from '@/lib/validations/team-settings';
 
 // GET: Get team settings, coaches list, and team info
 export async function GET(request: NextRequest) {
@@ -53,6 +42,7 @@ export async function GET(request: NextRequest) {
       readinessInspectSoonDays: settings?.readinessInspectSoonDays ?? 14,
       readinessNeedsAttentionDays: settings?.readinessNeedsAttentionDays ?? 21,
       readinessOutOfServiceDays: settings?.readinessOutOfServiceDays ?? 30,
+      regattaRegions: settings?.regattaRegions || [],
     };
 
     return NextResponse.json({
@@ -81,7 +71,7 @@ export async function PATCH(request: NextRequest) {
     if (claims.user_role !== 'COACH') return forbiddenResponse('Only coaches can update team settings');
 
     const body = await request.json();
-    const validationResult = updateSettingsSchema.safeParse(body);
+    const validationResult = updateTeamSettingsSchema.safeParse(body);
 
     if (!validationResult.success) {
       return NextResponse.json(
@@ -90,7 +80,7 @@ export async function PATCH(request: NextRequest) {
       );
     }
 
-    const { damageNotifyUserIds, primaryColor, secondaryColor, readinessInspectSoonDays, readinessNeedsAttentionDays, readinessOutOfServiceDays } = validationResult.data;
+    const { damageNotifyUserIds, primaryColor, secondaryColor, readinessInspectSoonDays, readinessNeedsAttentionDays, readinessOutOfServiceDays, regattaRegions } = validationResult.data;
 
     // Handle team color updates
     if (primaryColor !== undefined || secondaryColor !== undefined) {
@@ -126,6 +116,25 @@ export async function PATCH(request: NextRequest) {
       });
 
       return NextResponse.json({ success: true, settings: updateData });
+    }
+
+    // Handle regatta regions updates
+    if (regattaRegions !== undefined) {
+      const settings = await prisma.teamSettings.upsert({
+        where: { teamId: claims.team_id },
+        update: { regattaRegions },
+        create: {
+          teamId: claims.team_id,
+          regattaRegions,
+        },
+      });
+
+      return NextResponse.json({
+        success: true,
+        settings: {
+          regattaRegions: settings.regattaRegions,
+        },
+      });
     }
 
     // Handle notification settings updates
