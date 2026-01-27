@@ -14,6 +14,9 @@ interface Coach {
 
 interface TeamSettings {
   damageNotifyUserIds: string[];
+  readinessInspectSoonDays: number;
+  readinessNeedsAttentionDays: number;
+  readinessOutOfServiceDays: number;
 }
 
 interface TeamInfo {
@@ -31,13 +34,24 @@ export default function TeamSettingsPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [savingColors, setSavingColors] = useState(false);
+  const [savingThresholds, setSavingThresholds] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [colorSuccess, setColorSuccess] = useState(false);
+  const [thresholdSuccess, setThresholdSuccess] = useState(false);
 
   const [coaches, setCoaches] = useState<Coach[]>([]);
-  const [settings, setSettings] = useState<TeamSettings>({ damageNotifyUserIds: [] });
+  const [settings, setSettings] = useState<TeamSettings>({
+    damageNotifyUserIds: [],
+    readinessInspectSoonDays: 14,
+    readinessNeedsAttentionDays: 21,
+    readinessOutOfServiceDays: 30,
+  });
   const [selectedCoaches, setSelectedCoaches] = useState<Set<string>>(new Set());
+
+  const [inspectSoonDays, setInspectSoonDays] = useState(14);
+  const [needsAttentionDays, setNeedsAttentionDays] = useState(21);
+  const [outOfServiceDays, setOutOfServiceDays] = useState(30);
 
   const [teamInfo, setTeamInfo] = useState<TeamInfo>({ name: '', primaryColor: '#1a365d', secondaryColor: '#e2e8f0' });
   const [primaryColor, setPrimaryColor] = useState('#1a365d');
@@ -61,6 +75,12 @@ export default function TeamSettingsPage() {
         setCoaches(data.coaches);
         setSettings(data.settings);
         setSelectedCoaches(new Set(data.settings.damageNotifyUserIds || []));
+
+        if (data.settings) {
+          setInspectSoonDays(data.settings.readinessInspectSoonDays ?? 14);
+          setNeedsAttentionDays(data.settings.readinessNeedsAttentionDays ?? 21);
+          setOutOfServiceDays(data.settings.readinessOutOfServiceDays ?? 30);
+        }
 
         if (data.team) {
           setTeamInfo(data.team);
@@ -159,6 +179,33 @@ export default function TeamSettingsPage() {
 
   const hasColorChanges = () => {
     return primaryColor !== teamInfo.primaryColor || secondaryColor !== teamInfo.secondaryColor;
+  };
+
+  const handleSaveThresholds = async () => {
+    setSavingThresholds(true);
+    setError(null);
+    setThresholdSuccess(false);
+
+    try {
+      const response = await fetch('/api/team-settings', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          readinessInspectSoonDays: inspectSoonDays,
+          readinessNeedsAttentionDays: needsAttentionDays,
+          readinessOutOfServiceDays: outOfServiceDays,
+        }),
+      });
+
+      if (!response.ok) throw new Error('Failed to save thresholds');
+
+      setThresholdSuccess(true);
+      setTimeout(() => setThresholdSuccess(false), 3000);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to save thresholds');
+    } finally {
+      setSavingThresholds(false);
+    }
   };
 
   if (loading) {
@@ -297,6 +344,70 @@ export default function TeamSettingsPage() {
         >
           {savingColors ? 'Saving...' : 'Save Colors'}
         </button>
+      </div>
+
+      {/* Equipment Readiness Thresholds */}
+      <div className="bg-zinc-800/50 rounded-xl p-6 border border-zinc-700/50 mb-6">
+        <h2 className="text-lg font-semibold text-white mb-4">Equipment Readiness Thresholds</h2>
+        <p className="text-sm text-zinc-400 mb-6">
+          Configure when equipment is flagged for inspection based on days since last inspection.
+        </p>
+
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm text-zinc-300 mb-2">
+              Inspect Soon (yellow) - days
+            </label>
+            <input
+              type="number"
+              min="1"
+              max="365"
+              value={inspectSoonDays}
+              onChange={(e) => setInspectSoonDays(parseInt(e.target.value) || 14)}
+              className="w-full px-3 py-2 bg-zinc-900 border border-zinc-700 rounded-lg text-white focus:outline-none focus:border-emerald-500"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm text-zinc-300 mb-2">
+              Needs Attention (amber) - days
+            </label>
+            <input
+              type="number"
+              min="1"
+              max="365"
+              value={needsAttentionDays}
+              onChange={(e) => setNeedsAttentionDays(parseInt(e.target.value) || 21)}
+              className="w-full px-3 py-2 bg-zinc-900 border border-zinc-700 rounded-lg text-white focus:outline-none focus:border-emerald-500"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm text-zinc-300 mb-2">
+              Out of Service (red) - days
+            </label>
+            <input
+              type="number"
+              min="1"
+              max="365"
+              value={outOfServiceDays}
+              onChange={(e) => setOutOfServiceDays(parseInt(e.target.value) || 30)}
+              className="w-full px-3 py-2 bg-zinc-900 border border-zinc-700 rounded-lg text-white focus:outline-none focus:border-emerald-500"
+            />
+          </div>
+
+          <button
+            onClick={handleSaveThresholds}
+            disabled={savingThresholds}
+            className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 disabled:bg-emerald-600/50 text-white rounded-lg text-sm font-medium transition-colors"
+          >
+            {savingThresholds ? 'Saving...' : 'Save Thresholds'}
+          </button>
+
+          {thresholdSuccess && (
+            <p className="text-sm text-emerald-400">Thresholds saved successfully!</p>
+          )}
+        </div>
       </div>
 
       {/* Appearance Settings */}
