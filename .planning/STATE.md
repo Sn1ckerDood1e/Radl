@@ -12,16 +12,16 @@
 |-------|-------|
 | Milestone | v2.1 UX Refinement |
 | Phase | 22 — Practice Flow Redesign |
-| Plan | 03 of 9 |
+| Plan | 06 of 9 |
 | Status | In progress |
-| Last activity | 2026-01-27 — Completed 22-03-PLAN.md |
+| Last activity | 2026-01-27 — Completed 22-06-PLAN.md |
 
 **Progress:**
 ```
 v1.0: [##########] 100% SHIPPED (2026-01-22)
 v1.1: [##########] 100% SHIPPED (2026-01-22) — 9/11 reqs, 2 deferred
 v2.0: [##########] 100% SHIPPED (2026-01-26) — 34/34 requirements
-v2.1: [████████  ] 73% — 5/7 phases complete (Phase 22 in progress, 3/9 plans)
+v2.1: [████████░░] 78% — 5/7 phases complete (Phase 22 in progress, 6/9 plans)
 ```
 
 ## v2.1 Scope
@@ -257,6 +257,14 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 - Expandable children pattern in InlineBlockEditor for lineup/workout content
 - getBlockTypeConfig helper returns icon, colors, labels for consistent styling
 
+**v2.1 decisions (Phase 22 - Plan 06):**
+- BoatLineupCard provides droppable zone for entire boat
+- SortableContext within each boat enables seat swapping
+- Compact mode reduces space for multi-boat grid layout
+- Seat ID format '{lineupId}-seat-{position}' enables cross-boat parsing
+- Swap behavior: dragging to occupied seat swaps athletes directly
+- Modal boat selector filters already-used boats
+
 ### Architecture Notes
 
 - **Multi-tenant:** Team-scoped data with JWT claims, application-level filtering
@@ -410,8 +418,8 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
 
 | Field | Value |
 |-------|-------|
-| Last session | 2026-01-27 03:22 UTC |
-| Stopped at | Completed 22-03-PLAN.md |
+| Last session | 2026-01-27 03:28 UTC |
+| Stopped at | Completed 22-06-PLAN.md |
 | Resume file | None |
 
 ---
