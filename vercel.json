@@ -6,7 +6,7 @@
     },
     {
       "path": "/api/cron/expire-grants",
-      "schedule": "0 */4 * * *"
+      "schedule": "0 4 * * *"
     }
   ]
 }
