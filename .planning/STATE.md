@@ -12,9 +12,9 @@
 |-------|-------|
 | Milestone | v2.1 UX Refinement |
 | Phase | 23 — Dashboard Enhancements |
-| Plan | 1 of 6 |
+| Plan | 3 of 6 |
 | Status | In progress |
-| Last activity | 2026-01-27 — Completed 23-01 sparkline and aggregations |
+| Last activity | 2026-01-27 — Completed 23-03 athlete and usage widgets |
 
 **Progress:**
 ```
@@ -450,14 +450,20 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
 - **Sparkline component:** Custom SVG polyline visualization for compact trend display
 - **Usage aggregation:** aggregateUsageByWeek and usageToSparklineData utilities with date-fns
 
+**v2.1 additions (implemented in Phase 23 - Plan 03):**
+- **NextPracticeWidget:** Athlete hero widget with assignment display (boat/seat or group) and countdown
+- **UsageTrendsWidget:** Equipment usage sparkline with total hours for coach dashboard
+- **Assignment formatting:** Block-type-specific display (WATER, ERG, LAND, MEETING)
+- **Relative date formatting:** Today/Tomorrow/Weekday countdown pattern
+
 ## Session Continuity
 
 | Field | Value |
 |-------|-------|
-| Last session | 2026-01-27 15:40 UTC |
-| Stopped at | Completed 23-01-PLAN.md |
+| Last session | 2026-01-27 15:42 UTC |
+| Stopped at | Completed 23-03-PLAN.md |
 | Resume file | None |
 
 ---
 
-*Last updated: 2026-01-27 (Phase 23 in progress — 23-01 completed, sparkline and aggregations)*
+*Last updated: 2026-01-27 (Phase 23 in progress — 23-03 completed, athlete and usage widgets)*
