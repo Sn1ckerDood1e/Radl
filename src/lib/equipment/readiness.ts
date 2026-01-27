@@ -225,3 +225,47 @@ function calculateDaysSince(date: Date | null): number | null {
   const diffMs = now.getTime() - date.getTime();
   return Math.floor(diffMs / (1000 * 60 * 60 * 24));
 }
+
+/**
+ * Calculate readiness status for multiple equipment items.
+ * Use for batch processing in list pages and dashboard widgets.
+ *
+ * @param equipmentList - Array of equipment with damage reports
+ * @param thresholds - Team-configured threshold values
+ * @returns Array of equipment with readiness result attached
+ */
+export function calculateMultipleReadinessStatus<T extends EquipmentForReadiness>(
+  equipmentList: T[],
+  thresholds: ReadinessThresholds = DEFAULT_READINESS_THRESHOLDS
+): Array<T & { readiness: EquipmentReadinessResult }> {
+  return equipmentList.map(equipment => ({
+    ...equipment,
+    readiness: calculateReadinessStatus(equipment, thresholds),
+  }));
+}
+
+/**
+ * Aggregate readiness status counts for fleet health overview.
+ *
+ * @param equipmentList - Array of equipment with damage reports
+ * @param thresholds - Team-configured threshold values
+ * @returns Count of equipment in each status category
+ */
+export function aggregateFleetHealth<T extends EquipmentForReadiness>(
+  equipmentList: T[],
+  thresholds: ReadinessThresholds = DEFAULT_READINESS_THRESHOLDS
+): Record<ReadinessStatus, number> {
+  const counts: Record<ReadinessStatus, number> = {
+    READY: 0,
+    INSPECT_SOON: 0,
+    NEEDS_ATTENTION: 0,
+    OUT_OF_SERVICE: 0,
+  };
+
+  for (const equipment of equipmentList) {
+    const { status } = calculateReadinessStatus(equipment, thresholds);
+    counts[status]++;
+  }
+
+  return counts;
+}
