@@ -12,16 +12,16 @@
 |-------|-------|
 | Milestone | v2.1 UX Refinement |
 | Phase | 24 — Regatta Central Public API |
-| Plan | 3 of 6 |
+| Plan | 4 of 6 |
 | Status | In progress |
-| Last activity | 2026-01-27 — Completed 24-03-PLAN.md (regatta display components) |
+| Last activity | 2026-01-27 — Completed 24-04-PLAN.md (RC calendar integration) |
 
 **Progress:**
 ```
 v1.0: [##########] 100% SHIPPED (2026-01-22)
 v1.1: [##########] 100% SHIPPED (2026-01-22) — 9/11 reqs, 2 deferred
 v2.0: [##########] 100% SHIPPED (2026-01-26) — 34/34 requirements
-v2.1: [█████████░] 97% — 6/7 phases complete, Phase 24 plan 3/6
+v2.1: [█████████░] 98% — 6/7 phases complete, Phase 24 plan 4/6
 ```
 
 ## v2.1 Scope
@@ -505,14 +505,25 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
 - **RegattaDetailCard component:** Popup card with regatta name, date range, location, status, and RC deep link
 - **Regatta color convention:** Blue scheme for regattas vs emerald for practices in calendar UI
 
+**v2.1 decisions (Phase 24 - Plan 04):**
+- Spanning bars use CSS ::before at top of day cell, dots use ::after at bottom
+- RC regattas fetched once on mount (not per-month) since API returns all upcoming
+- Blue color (#3b82f6) for RC regattas vs emerald (#10b981) for practices
+
+**v2.1 additions (implemented in Phase 24 - Plan 04):**
+- **RC calendar integration:** Unified calendar displays RC regattas with blue indicators
+- **Multi-day spanning bars:** regatta-span-start/middle/end CSS classes for visual continuity
+- **Dual indicator support:** Both practice (emerald) and regatta (blue) dots can appear on same day
+- **Click-to-popup:** Clicking RC regatta opens RegattaDetailCard overlay with click-outside dismissal
+
 ## Session Continuity
 
 | Field | Value |
 |-------|-------|
-| Last session | 2026-01-27 18:47 UTC |
-| Stopped at | Completed 24-03-PLAN.md |
+| Last session | 2026-01-27 18:57 UTC |
+| Stopped at | Completed 24-04-PLAN.md |
 | Resume file | None |
 
 ---
 
-*Last updated: 2026-01-27 (Phase 24 in progress — 24-03 completed, regatta display components)*
+*Last updated: 2026-01-27 (Phase 24 in progress — 24-04 completed, RC calendar integration)*
