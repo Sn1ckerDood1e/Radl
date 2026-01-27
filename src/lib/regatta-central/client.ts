@@ -5,7 +5,14 @@
 
 import { prisma } from '@/lib/prisma';
 import { encryptToken, decryptToken } from './encryption';
-import type { RCTokenResponse, RCRegattasResponse, RCTeamEntriesResponse } from './types';
+import type {
+  RCTokenResponse,
+  RCRegattasResponse,
+  RCTeamEntriesResponse,
+  RCPublicRegatta,
+  RCRegattaStatus,
+  RCRegistrationStatus,
+} from './types';
 
 const RC_BASE_URL = 'https://api.regattacentral.com';
 const RC_API_URL = `${RC_BASE_URL}/v4.0`;
@@ -135,6 +142,70 @@ export class RegattaCentralClient {
    */
   async getRegattaDetails(regattaId: string): Promise<{ regatta: { id: string; name: string; location?: string; startDate: number; endDate?: number } }> {
     return this.fetch(`/regattas/${regattaId}`);
+  }
+
+  /**
+   * Get public upcoming regattas for specified regions.
+   * Transforms RC API response to RCPublicRegatta format.
+   * @param regions - Array of ISO country codes (e.g., ['US', 'CA'])
+   */
+  async getPublicRegattas(regions: string[]): Promise<RCPublicRegatta[]> {
+    const allRegattas: RCPublicRegatta[] = [];
+
+    for (const region of regions) {
+      try {
+        const response = await this.fetch<RCRegattasResponse>(`/regattas/${region}/upcoming`);
+
+        const transformed = response.regattas.map((r): RCPublicRegatta => ({
+          id: r.id,
+          name: r.name,
+          location: r.location || null,
+          venue: null, // Not in list response
+          startDate: new Date(r.startDate),
+          endDate: r.endDate ? new Date(r.endDate) : null,
+          status: this.mapRegattaStatus(r.status),
+          registrationStatus: this.mapRegistrationStatus(r.status),
+          rcUrl: `https://www.regattacentral.com/regatta/?job_id=${r.id}`,
+          region,
+        }));
+
+        allRegattas.push(...transformed);
+      } catch (error) {
+        console.error(`Failed to fetch regattas for region ${region}:`, error);
+        // Continue with other regions if one fails
+      }
+    }
+
+    // Sort by start date and dedupe by id
+    const uniqueRegattas = Array.from(
+      new Map(allRegattas.map(r => [r.id, r])).values()
+    ).sort((a, b) => a.startDate.getTime() - b.startDate.getTime());
+
+    return uniqueRegattas;
+  }
+
+  /**
+   * Map RC API status string to RCRegattaStatus enum.
+   */
+  private mapRegattaStatus(status: string): RCRegattaStatus {
+    const statusMap: Record<string, RCRegattaStatus> = {
+      'upcoming': 'UPCOMING',
+      'in_progress': 'IN_PROGRESS',
+      'completed': 'COMPLETED',
+      'cancelled': 'CANCELLED',
+    };
+    return statusMap[status.toLowerCase()] || 'UPCOMING';
+  }
+
+  /**
+   * Map RC API status to registration status.
+   * RC API returns combined status; derive registration from it.
+   */
+  private mapRegistrationStatus(status: string): RCRegistrationStatus {
+    if (status.toLowerCase().includes('closed')) return 'CLOSED';
+    if (status.toLowerCase().includes('waitlist')) return 'WAITLIST';
+    if (status.toLowerCase() === 'upcoming') return 'OPEN';
+    return 'NOT_AVAILABLE';
   }
 }
 
