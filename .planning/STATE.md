@@ -12,16 +12,16 @@
 |-------|-------|
 | Milestone | v2.1 UX Refinement |
 | Phase | 22 — Practice Flow Redesign |
-| Plan | 04 of 9 |
+| Plan | 03 of 9 |
 | Status | In progress |
-| Last activity | 2026-01-27 — Completed 22-04-PLAN.md |
+| Last activity | 2026-01-27 — Completed 22-03-PLAN.md |
 
 **Progress:**
 ```
 v1.0: [##########] 100% SHIPPED (2026-01-22)
 v1.1: [##########] 100% SHIPPED (2026-01-22) — 9/11 reqs, 2 deferred
 v2.0: [##########] 100% SHIPPED (2026-01-26) — 34/34 requirements
-v2.1: [████████  ] 73% — 5/7 phases complete (Phase 22 in progress, 4/9 plans)
+v2.1: [████████  ] 73% — 5/7 phases complete (Phase 22 in progress, 3/9 plans)
 ```
 
 ## v2.1 Scope
@@ -241,6 +241,13 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 - Auto-resize option for dynamic textarea height
 - Time/date inputs use [color-scheme:dark] for proper dark mode pickers
 
+**v2.1 decisions (Phase 22 - Plan 03):**
+- PUT uses upsert pattern for workouts: delete existing + create new in transaction
+- Multi-lineup endpoint supports create (new-* ids), update (UUID ids), and delete (omitted ids)
+- Cannot use .partial() on Zod schemas with .refine() - define partial schemas manually
+- Workout endpoints validate block type (ERG or WATER only)
+- Lineups endpoint validates block type (WATER only)
+
 **v2.1 decisions (Phase 22 - Plan 04):**
 - Type buttons always visible (no dropdown) per CONTEXT.md "Type buttons visible directly"
 - Both drag handle AND arrow buttons for reordering flexibility per CONTEXT.md
@@ -403,8 +410,8 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
 
 | Field | Value |
 |-------|-------|
-| Last session | 2026-01-27 03:09 UTC |
-| Stopped at | Completed 22-01-PLAN.md |
+| Last session | 2026-01-27 03:22 UTC |
+| Stopped at | Completed 22-03-PLAN.md |
 | Resume file | None |
 
 ---
