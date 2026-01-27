@@ -1,6 +1,40 @@
 import type { Equipment, DamageReport } from '@/generated/prisma';
 
 /**
+ * Equipment readiness status levels (traffic light pattern).
+ * Order matters: most severe to least severe for priority checks.
+ */
+export type ReadinessStatus = 'OUT_OF_SERVICE' | 'NEEDS_ATTENTION' | 'INSPECT_SOON' | 'READY';
+
+/**
+ * Team-configurable thresholds for readiness calculation.
+ * All values are in days since last inspection.
+ */
+export interface ReadinessThresholds {
+  inspectSoonDays: number;      // Default: 14 - yellow warning
+  needsAttentionDays: number;   // Default: 21 - amber alert
+  outOfServiceDays: number;     // Default: 30 - red/blocked
+}
+
+/**
+ * Default thresholds matching TeamSettings schema defaults.
+ */
+export const DEFAULT_READINESS_THRESHOLDS: ReadinessThresholds = {
+  inspectSoonDays: 14,
+  needsAttentionDays: 21,
+  outOfServiceDays: 30,
+};
+
+/**
+ * Result of readiness calculation including status and context.
+ */
+export interface EquipmentReadinessResult {
+  status: ReadinessStatus;
+  reasons: string[];
+  daysSinceInspection: number | null;
+}
+
+/**
  * Equipment with computed readiness/availability status.
  * Availability is derived from:
  * 1. manualUnavailable flag (coach override)
