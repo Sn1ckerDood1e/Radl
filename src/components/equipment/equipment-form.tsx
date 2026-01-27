@@ -7,8 +7,23 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { createEquipmentFormSchema, type CreateEquipmentFormInput } from '@/lib/validations/equipment';
 import { ShellFields } from './shell-fields';
 
+interface Equipment {
+  id: string;
+  type: 'SHELL' | 'OAR' | 'LAUNCH' | 'OTHER';
+  name: string;
+  manufacturer: string | null;
+  serialNumber: string | null;
+  yearAcquired: number | null;
+  purchasePrice: number | { toNumber: () => number } | null;
+  notes: string | null;
+  boatClass: string | null;
+  weightCategory: string | null;
+}
+
 interface EquipmentFormProps {
   teamSlug: string;
+  /** Equipment data for editing (omit for create mode) */
+  equipment?: Equipment;
 }
 
 const equipmentTypes = [
@@ -24,8 +39,9 @@ const equipmentTypes = [
  *
  * @param teamSlug - Current team's slug for navigation after successful creation
  */
-export function EquipmentForm({ teamSlug }: EquipmentFormProps) {
+export function EquipmentForm({ teamSlug, equipment }: EquipmentFormProps) {
   const router = useRouter();
+  const isEditMode = !!equipment;
 
   // --- Form State ---
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -38,9 +54,25 @@ export function EquipmentForm({ teamSlug }: EquipmentFormProps) {
     formState: { errors },
   } = useForm<CreateEquipmentFormInput>({
     resolver: zodResolver(createEquipmentFormSchema),
-    defaultValues: {
-      type: 'SHELL',
-    },
+    defaultValues: equipment
+      ? {
+          type: equipment.type,
+          name: equipment.name,
+          manufacturer: equipment.manufacturer || undefined,
+          serialNumber: equipment.serialNumber || undefined,
+          yearAcquired: equipment.yearAcquired || undefined,
+          purchasePrice: equipment.purchasePrice
+            ? (typeof equipment.purchasePrice === 'object' && 'toNumber' in equipment.purchasePrice
+                ? equipment.purchasePrice.toNumber()
+                : equipment.purchasePrice as number)
+            : undefined,
+          notes: equipment.notes || undefined,
+          boatClass: equipment.boatClass as any || undefined,
+          weightCategory: equipment.weightCategory as any || undefined,
+        }
+      : {
+          type: 'SHELL',
+        },
   });
 
   const selectedType = watch('type');
@@ -87,8 +119,12 @@ export function EquipmentForm({ teamSlug }: EquipmentFormProps) {
         }
       }
 
-      const response = await fetch('/api/equipment', {
-        method: 'POST',
+      const url = isEditMode
+        ? `/api/equipment/${equipment.id}`
+        : '/api/equipment';
+
+      const response = await fetch(url, {
+        method: isEditMode ? 'PATCH' : 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(cleanData),
       });
@@ -96,11 +132,11 @@ export function EquipmentForm({ teamSlug }: EquipmentFormProps) {
       const result = await response.json();
 
       if (!response.ok) {
-        throw new Error(result.error || 'Failed to create equipment');
+        throw new Error(result.error || `Failed to ${isEditMode ? 'update' : 'create'} equipment`);
       }
 
-      // Redirect to equipment list
-      router.push(`/${teamSlug}/equipment`);
+      // Redirect to equipment detail or list
+      router.push(isEditMode ? `/${teamSlug}/equipment/${equipment.id}` : `/${teamSlug}/equipment`);
       router.refresh();
     } catch (error) {
       setSubmitError(error instanceof Error ? error.message : 'An error occurred');
@@ -270,7 +306,9 @@ export function EquipmentForm({ teamSlug }: EquipmentFormProps) {
           disabled={isSubmitting}
           className="flex-1 py-2 px-4 border border-transparent rounded-lg text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-zinc-900 focus:ring-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
         >
-          {isSubmitting ? 'Adding...' : 'Add Equipment'}
+          {isSubmitting
+            ? (isEditMode ? 'Saving...' : 'Adding...')
+            : (isEditMode ? 'Save Changes' : 'Add Equipment')}
         </button>
       </div>
     </form>
