@@ -12,16 +12,16 @@
 |-------|-------|
 | Milestone | v2.1 UX Refinement |
 | Phase | 23 — Dashboard Enhancements |
-| Plan | 5 of 6 |
-| Status | In progress |
-| Last activity | 2026-01-27 — Completed 23-05 dashboard queries |
+| Plan | 6 of 6 |
+| Status | Complete |
+| Last activity | 2026-01-27 — Phase 23 complete, all 6 plans executed |
 
 **Progress:**
 ```
 v1.0: [##########] 100% SHIPPED (2026-01-22)
 v1.1: [##########] 100% SHIPPED (2026-01-22) — 9/11 reqs, 2 deferred
 v2.0: [##########] 100% SHIPPED (2026-01-26) — 34/34 requirements
-v2.1: [████████░░] 86% — 6/7 phases complete
+v2.1: [█████████░] 96% — 6/7 phases complete (Phase 23 done)
 ```
 
 ## v2.1 Scope
