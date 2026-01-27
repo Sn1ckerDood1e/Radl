@@ -151,16 +151,26 @@ Plans:
 ---
 
 ### Phase 23: Dashboard Enhancements
-**Goal:** Add analytics, fleet health overview, and today's practices widget
+**Goal:** Add role-specific dashboards with Today's Schedule hero, usage trends, and context-aware quick actions
 
 **Requirements:** DASH-01, DASH-02, DASH-03
 
 **Scope:**
-- Today's practices widget: scheduled practices with time, coach, athlete count
-- Fleet health overview: aggregate readiness across all equipment
-- Equipment usage trends: charts showing usage over time
-- Quick actions: create practice, report issue, view schedule
-- Coach vs athlete dashboard variations
+- Today's practices widget (hero): scheduled practices with time, athlete count
+- Fleet health overview: aggregate readiness across all equipment (already exists from Phase 21)
+- Equipment usage trends: sparkline showing hours over time (coach-only)
+- Quick actions: context-aware attention items (equipment needing inspection, practices needing lineups)
+- Separate coach and athlete dashboard layouts optimized for each role
+- Athlete dashboard: next practice with their boat/seat assignment, announcements only
+
+**Plans:** 6 plans
+Plans:
+- [ ] 23-01-PLAN.md — Foundation: Sparkline component, usage aggregation utilities
+- [ ] 23-02-PLAN.md — Coach widgets: TodaysScheduleWidget, QuickActionsWidget
+- [ ] 23-03-PLAN.md — Athlete widgets: NextPracticeWidget, UsageTrendsWidget
+- [ ] 23-04-PLAN.md — Dashboard layouts: CoachDashboard, AthleteDashboard components
+- [ ] 23-05-PLAN.md — Data queries: dashboard-specific fetching functions
+- [ ] 23-06-PLAN.md — Page integration: role-based routing, parallel data fetching
 
 **Dependencies:** Phase 21 (fleet health), Phase 22 (practice data)
 
@@ -214,7 +224,7 @@ Phase 19: [##########] 100% — Complete
 Phase 20: [##########] 100% — Complete
 Phase 21: [##########] 100% — Complete (6 plans)
 Phase 22: [##########] 100% — Complete (13 plans)
-Phase 23: [          ] 0% — Not started
+Phase 23: [          ] 0% — Planning complete (6 plans)
 Phase 24: [          ] 0% — Not started
 ```
 
