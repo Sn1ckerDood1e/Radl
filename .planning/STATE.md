@@ -12,16 +12,16 @@
 |-------|-------|
 | Milestone | v2.1 UX Refinement |
 | Phase | 24 — Regatta Central Public API |
-| Plan | 5 of 6 |
-| Status | In progress |
-| Last activity | 2026-01-27 — Completed 24-05-PLAN.md (region filter UI) |
+| Plan | 6 of 6 |
+| Status | Complete |
+| Last activity | 2026-01-27 — All 7 phases complete, ready for milestone audit |
 
 **Progress:**
 ```
 v1.0: [##########] 100% SHIPPED (2026-01-22)
 v1.1: [##########] 100% SHIPPED (2026-01-22) — 9/11 reqs, 2 deferred
 v2.0: [##########] 100% SHIPPED (2026-01-26) — 34/34 requirements
-v2.1: [█████████░] 98% — 6/7 phases complete, Phase 24 plan 5/6
+v2.1: [##########] 100% — 7/7 phases complete, ready for audit
 ```
 
 ## v2.1 Scope
@@ -527,14 +527,25 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
 - **Region filter UI:** Checkbox grid in team settings for selecting regatta regions
 - **Settings integration:** regattaRegions loaded from API and saved via PATCH /api/team-settings
 
+**v2.1 decisions (Phase 24 - Plan 06):**
+- Stale indicator uses formatDistanceToNow for human-readable cache age
+- Export CSV includes RC regattas with 'Regatta (RC)' type identifier
+- Empty state guides users to check calendar when day has no events
+
+**v2.1 additions (implemented in Phase 24 - Plan 06):**
+- **Stale data indicator:** Shows when RC regattas were last fetched
+- **Export RC regattas:** CSV export includes RC regattas with type, location, status
+- **Empty state messaging:** Guides users when selected day has no events but regattas exist
+- **Phase 24 verification:** All 4 requirements (RC-01 through RC-04) satisfied
+
 ## Session Continuity
 
 | Field | Value |
 |-------|-------|
-| Last session | 2026-01-27 19:00 UTC |
-| Stopped at | Completed 24-05-PLAN.md |
+| Last session | 2026-01-27 19:15 UTC |
+| Stopped at | Milestone v2.1 complete, ready for audit |
 | Resume file | None |
 
 ---
 
-*Last updated: 2026-01-27 (Phase 24 in progress — 24-05 completed, region filter UI)*
+*Last updated: 2026-01-27 (v2.1 milestone complete — all 7 phases executed, ready for audit)*
