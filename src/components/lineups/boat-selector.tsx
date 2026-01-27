@@ -37,6 +37,8 @@ export function BoatSelector({
   const compatibleBoats = boats.filter(boat => {
     if (!boat.available) return false;
     if (!boat.boatClass) return false;
+    // If requiredCapacity is 0, show all boats (multi-boat builder mode)
+    if (requiredCapacity === 0) return true;
     const capacity = getCapacityForBoatClass(boat.boatClass);
     return capacity === requiredCapacity;
   });
@@ -68,7 +70,9 @@ export function BoatSelector({
 
       {compatibleBoats.length === 0 && (
         <p className="text-amber-400 text-sm">
-          No compatible {requiredCapacity}-seat boats available
+          {requiredCapacity === 0
+            ? 'No available boats found'
+            : `No compatible ${requiredCapacity}-seat boats available`}
         </p>
       )}
 
