@@ -12,16 +12,16 @@
 |-------|-------|
 | Milestone | v2.1 UX Refinement |
 | Phase | 22 — Practice Flow Redesign |
-| Plan | 07 of 9 |
+| Plan | 08 of 9 |
 | Status | In progress |
-| Last activity | 2026-01-27 — Completed 22-07-PLAN.md |
+| Last activity | 2026-01-27 — Completed 22-08-PLAN.md |
 
 **Progress:**
 ```
 v1.0: [##########] 100% SHIPPED (2026-01-22)
 v1.1: [##########] 100% SHIPPED (2026-01-22) — 9/11 reqs, 2 deferred
 v2.0: [##########] 100% SHIPPED (2026-01-26) — 34/34 requirements
-v2.1: [████████░░] 80% — 5/7 phases complete (Phase 22 in progress, 7/9 plans)
+v2.1: [████████░░] 82% — 5/7 phases complete (Phase 22 in progress, 8/9 plans)
 ```
 
 ## v2.1 Scope
@@ -278,6 +278,14 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 - max-w-4xl for practice page to accommodate multi-boat lineup grid
 - renderBlockContent callback pattern for type-specific expansion content
 
+**v2.1 decisions (Phase 22 - Plan 08):**
+- Max 100 practices per bulk operation for performance
+- Template blocks copied to each practice in transaction
+- Day-of-week toggles default to Mon/Wed/Fri (common rowing schedule)
+- Quick preset buttons for 4-week and 8-week ranges
+- Selection mode toggle separates viewing from bulk selection
+- Click on practice card toggles selection when in selection mode
+
 ### Architecture Notes
 
 - **Multi-tenant:** Team-scoped data with JWT claims, application-level filtering
@@ -431,8 +439,8 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
 
 | Field | Value |
 |-------|-------|
-| Last session | 2026-01-27 13:09 UTC |
-| Stopped at | Completed 22-07-PLAN.md |
+| Last session | 2026-01-27 13:15 UTC |
+| Stopped at | Completed 22-08-PLAN.md |
 | Resume file | None |
 
 ---
