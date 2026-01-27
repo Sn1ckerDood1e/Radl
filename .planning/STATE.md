@@ -4,80 +4,52 @@
 
 **Core Value:** Coaches can plan practices with lineups and equipment, and athletes know where to be and what boat they're in.
 
-**Current Focus:** v2.1 UX Refinement — RIM feature parity, navigation redesign, practice flow, RC public API
+**Current Focus:** Between milestones — v2.1 shipped, ready for next milestone
 
 ## Current Position
 
 | Field | Value |
 |-------|-------|
-| Milestone | v2.1 UX Refinement |
-| Phase | 24 — Regatta Central Public API |
-| Plan | 6 of 6 |
-| Status | Complete |
-| Last activity | 2026-01-27 — All 7 phases complete, ready for milestone audit |
+| Milestone | Between milestones |
+| Phase | N/A |
+| Plan | N/A |
+| Status | Ready for next milestone |
+| Last activity | 2026-01-27 — v2.1 shipped |
 
 **Progress:**
 ```
 v1.0: [##########] 100% SHIPPED (2026-01-22)
 v1.1: [##########] 100% SHIPPED (2026-01-22) — 9/11 reqs, 2 deferred
 v2.0: [##########] 100% SHIPPED (2026-01-26) — 34/34 requirements
-v2.1: [##########] 100% — 7/7 phases complete, ready for audit
+v2.1: [##########] 100% SHIPPED (2026-01-27) — 30/30 requirements
 ```
 
-## v2.1 Scope
-
-**Goal:** Elevate UX with RIM-inspired features, improved navigation, and better practice workflows
-
-**Target features:**
-
-1. **RIM Feature Parity**
-   - Announcements — Coach broadcasts with priority levels
-   - Public issue reporting — QR-based damage reports (no login)
-   - Equipment readiness — Calculated status with maintenance workflow
-   - Dashboard analytics — Usage trends, fleet health, insights
-
-2. **Navigation/Layout Redesign**
-   - Desktop: Left sidebar nav → content in center (master-detail)
-   - Mobile: Bottom navigation bar → content in main area
-
-3. **Practice Flow Improvements**
-   - Inline editing — Edit on-page, not separate forms
-   - Block-based structure — Type-specific forms (water ≠ erg)
-   - Improved lineup creation — Drag athletes into boats
-   - Workout display — Structured drills within blocks
-
-4. **Regatta Central Public API**
-   - Regatta schedules — Upcoming regattas, dates, locations
-   - Foundation for later team-specific OAuth
-
-**Inspired by:** RIM (RowReady) Base44 implementation
-
-## v2.0 Scope (Shipped)
-
-**Goal:** Prepare RowOps for commercial sale to rowing organizations
-
-**Phases:** 10-17 (8 phases total)
-
-**Target features:**
-1. **Facility Model** — Facility-level tenancy with shared equipment between clubs
-2. **Mobile PWA** — Responsive, touch-friendly, app-like, architect for native
-3. **UI/UX Polish** — Modern design + intuitive workflows
-4. **Security Hardening** — Roles audit, permissions, multi-tenant confidence
-
-**Real-world scenario:** Chattanooga Rowing (boathouse) hosts Lookout Rowing Club and Chattanooga Juniors. Each club has subscription, some boats are shared.
-
-**Phase structure:**
-- Phase 10-11: Security foundation (RBAC, MFA, SSO)
-- Phase 12-13: Facility model (schema, auth integration)
-- Phase 14: Design system foundation
-- Phase 15: Mobile PWA improvements (parallel with 13-14)
-- Phase 16: UI/UX polish
-- Phase 17: Facility UI features
-
-**Critical path:** Phase 10 → 12 → 13 → 17
-**Parallel opportunities:** Phase 15 (Mobile) can run with Phases 13-14
-
 ## Shipped Milestones
+
+### v2.1 UX Refinement (2026-01-27)
+
+**Delivered:** 30 requirements across 7 phases (18-24)
+
+**Features:**
+- Navigation/Layout redesign — desktop sidebar + mobile bottom nav
+- Announcements — coach broadcasts with priority levels
+- Public issue reporting — QR-based damage reports (no login required)
+- Equipment readiness — calculated status with maintenance workflow
+- Practice flow — inline editing, block structure, drag-drop lineups
+- Dashboard enhancements — role-specific widgets, usage trends
+- Regatta Central integration — calendar display with caching
+
+**Audit:** Passed (30/30 requirements, 7/7 phases, 6/6 integrations, 5/5 flows)
+
+### v2.0 Commercial Readiness (2026-01-26)
+
+**Delivered:** 34 requirements across 8 phases (10-17)
+
+**Features:**
+- Facility model — shared equipment between clubs
+- Mobile PWA — responsive, touch-friendly, offline-first
+- UI/UX Polish — shadcn/ui, command palette, keyboard shortcuts
+- Security — RBAC, MFA, SSO, API keys
 
 ### v1.1 Polish (2026-01-22)
 
@@ -102,201 +74,6 @@ v2.1: [##########] 100% — 7/7 phases complete, ready for audit
 
 See `.planning/PROJECT.md` for full decision table with outcomes.
 
-**v2.0 decisions:**
-- Security foundation first (all features depend on stable hierarchical auth)
-- Expand-migrate-contract for schema (backward compatibility for team-only installs)
-- JWT claims extension (minimal change to existing auth)
-- shadcn/ui over full framework (copy-paste ownership, no runtime dependency)
-- Mobile parallel with auth (no dependency, can run simultaneously)
-- Facility UI last (requires complete foundation)
-- No-inheritance RBAC: FACILITY_ADMIN cannot create lineups without explicit COACH role
-- Zinc color scheme for shadcn/ui (matches existing --surface palette)
-- Map shadcn variables to existing theme rather than replace (--color-primary uses --team-primary, not new variable)
-- Preserve original CSS structure, use @theme inline for Tailwind v4 mapping only
-- Use class-variance-authority for component variant management (type-safe with IntelliSense)
-- Enable ESLint deprecation tracking for component migration safety
-- Include mobile touch target styles for WCAG 2.5.5 compliance (44px minimum)
-- ThemeToggle uses DropdownMenu pattern for compact header integration (icon button trigger with sr-only label)
-- Use shadcn skeleton component for consistent pulse animation across loading states
-- EmptyState component supports both href (Link) and onClick action patterns for flexibility
-- Loading skeletons mirror actual content layout dimensions to prevent visual shift on load
-- Empty states show contextual action buttons only to coaches based on isCoach check
-- cmdk library via shadcn for command palette (Linear/Notion pattern for power users)
-- G+key navigation shortcuts timeout after 1 second for sequence completion
-- Keyboard shortcuts excluded from input fields to prevent typing conflicts (except Escape)
-- ? key opens shortcuts overlay following GitHub/Gmail pattern for global help
-- BookingStatus includes CANCELLED state separate from DENIED for requester vs admin actions
-- Optional practiceId on bookings allows automatic reservation when creating practices
-- Composite index on (equipmentId, startTime, endTime) enables efficient conflict detection
-
-**v2.1 decisions (Phase 18):**
-- Master-detail layout: sidebar (desktop) + bottom nav (mobile) replaces card navigation
-- Desktop sidebar 256px wide (w-64) for comfortable reading
-- Mobile bottom nav limited to 5 items max (iOS Human Interface Guidelines)
-- Settings excluded from mobile nav (desktop/profile menu access only)
-- Responsive breakpoint at 768px (md:) completely switches layout approach
-- Nested layout pattern: [teamSlug]/layout.tsx handles nav shell, parent handles auth/providers
-- Navigation components receive teamSlug prop for href construction
-- Active detection: exact prop for root pages, startsWith for sections
-- Permission filtering via ability.can() simpler than Can component wrapping
-- h-[calc(100vh-4rem)] accounts for header height of h-16
-- Bottom padding pb-20 (80px) on mobile for fixed nav clearance
-
-**v2.1 decisions (Phase 19 - Plan 01):**
-- Announcement priority enum ordered INFO → WARNING → URGENT for display sorting
-- AnnouncementRead uses unique constraint to prevent duplicate read receipts
-- Practice link optional with SetNull on delete to preserve announcement history
-- Expiry validation enforces future dates only at validation layer, not database
-- Soft delete via archivedAt timestamp instead of hard delete for audit trail
-- Composite index on [teamId, priority, createdAt] optimizes dashboard sorted query
-
-**v2.1 decisions (Phase 19 - Plan 02):**
-- Client-side priority sorting required because Prisma sorts enums alphabetically (INFO, URGENT, WARNING) not business order
-- Practice-linked announcements auto-expire via practice.endTime filter in buildActiveAnnouncementsQuery
-- Upsert pattern for read receipts makes mark-as-read idempotent and prevents duplicate key errors
-- PATCH endpoint supports partial updates allowing single field changes without full object
-
-**v2.1 decisions (Phase 19 - Plan 03):**
-- CVA badge variants for type-safe priority styling following button.tsx pattern
-- Hydration-safe localStorage pattern prevents SSR/client mismatch (start hidden, read in useEffect)
-- Client-side state update on mark-as-read avoids full list refetch
-- Escape key handler for banner dismissal improves keyboard accessibility
-
-**v2.1 decisions (Phase 20 - Plan 01):**
-- reportedBy made optional (null) for public reports while reporterName is always required
-- Default severity is MODERATE to encourage accurate classification without blocking submission
-- Honeypot field validates empty string to detect bots without blocking legitimate users
-
-**v2.1 decisions (Phase 20 - Plan 02):**
-- Honeypot uses off-screen positioning (-9999px) not display:none for better bot detection
-- Radio buttons styled as cards with p-4 padding for large tap targets
-- Reference number shows first 8 chars of UUID in uppercase for human readability
-
-**v2.1 decisions (Phase 20 - Plan 03):**
-- Silent honeypot rejection returns 201 to not reveal detection to bots
-- Email gracefully degrades when RESEND_API_KEY or SUPABASE_SERVICE_ROLE_KEY not configured
-- Supabase admin client created for user email lookup via service role
-- Dynamic import for email template to avoid loading when not needed
-- XSS-safe HTML escaping in email templates for user-provided content
-
-**v2.1 decisions (Phase 20 - Plan 04):**
-- 3x scale factor for print-quality PNG output (equivalent to 300 DPI)
-- QR code section coaches-only since download enables printing physical labels
-- Equipment name included in downloaded PNG for label identification
-- Canvas-based export: SVG to image conversion, then canvas with text overlay
-
-**v2.1 decisions (Phase 20 - Plan 05):**
-- Server-side QR generation via qrcode library for consistent quality
-- 12 QR codes per page (3x4 grid) optimized for letter-size printing
-- Error correction level M for print reliability
-- Equipment names truncated to 20 chars to prevent label overflow
-
-**v2.1 decisions (Phase 21 - Plan 01):**
-- Equipment with null lastInspectedAt will show OUT_OF_SERVICE status until first inspection
-- MINOR damage reports get archived after resolution, CRITICAL/MODERATE kept forever
-- Default readiness thresholds: 14 days (yellow), 21 days (amber), 30 days (red)
-
-**v2.1 decisions (Phase 21 - Plan 02):**
-- Readiness calculation priority order: manual override → critical damage → inspection days → moderate damage
-- Null lastInspectedAt treated as OUT_OF_SERVICE with 'No inspection record' reason
-- Generic batch processing types preserve equipment object shape for type safety
-
-**v2.1 decisions (Phase 21 - Plan 03):**
-- ReadinessBadge uses CVA variants with traffic light colors following announcement-priority-badge pattern
-- Inline ReadinessStatus type definition for parallel wave execution (import from library when Plan 02 completes)
-- showIcon/showLabel props enable flexible display modes (full badge, icon-only, label-only)
-
-**v2.1 decisions (Phase 21 - Plan 04):**
-- Readiness calculated server-side with settings thresholds before passing to client
-- ReadinessBadge positioned next to equipment name on list cards for visibility
-- Mark as Inspected triggers page refresh to show updated status (server-driven)
-- markInspected API flag converted to lastInspectedAt Date, not stored as field
-
-**v2.1 decisions (Phase 21 - Plan 05):**
-- FleetHealthWidget visible only to coaches (equipment management is coach responsibility)
-- Empty state shows "Add equipment" link when no equipment registered
-- Status order displays issues first: OUT_OF_SERVICE → NEEDS_ATTENTION → INSPECT_SOON → READY
-- Action prompt appears when OUT_OF_SERVICE or NEEDS_ATTENTION items exist
-- Widget placed between announcements and practices on dashboard per CONTEXT.md guidance
-
-**v2.1 decisions (Phase 21 - Plan 06):**
-- Threshold values validated at API level (1-365 days) using Zod schema
-- Default values provided via nullish coalescing (14, 21, 30) for teams without settings
-- Threshold section placed after Team Colors, before Appearance Settings for logical grouping
-- Success message auto-dismisses after 3 seconds matching existing patterns
-
-**v2.1 decisions (Phase 22 - Plan 01):**
-- PM5 50-interval limit enforced in validation matches real PM5 ergometer constraints
-- Multiple boats per block via Lineup array relation enables future multi-boat water blocks
-- Workout visibility toggle (visibleToAthletes) allows coaches to hide workout details while building
-- MEETING blocks require no assignments (team meetings don't need athlete/boat assignments)
-- Use findFirst for backward compatibility with existing single-lineup logic after Lineup relation change
-
-**v2.1 decisions (Phase 22 - Plan 02):**
-- useOptimistic for instant UI feedback with automatic rollback on failure
-- Infinity duration on error toasts forces user to dismiss or retry
-- Silent success (no toast) reduces notification fatigue
-- Transparent border by default makes fields look like plain text until interaction
-- Character count shows at 90% threshold in amber for textarea
-- Auto-resize option for dynamic textarea height
-- Time/date inputs use [color-scheme:dark] for proper dark mode pickers
-
-**v2.1 decisions (Phase 22 - Plan 03):**
-- PUT uses upsert pattern for workouts: delete existing + create new in transaction
-- Multi-lineup endpoint supports create (new-* ids), update (UUID ids), and delete (omitted ids)
-- Cannot use .partial() on Zod schemas with .refine() - define partial schemas manually
-- Workout endpoints validate block type (ERG or WATER only)
-- Lineups endpoint validates block type (WATER only)
-
-**v2.1 decisions (Phase 22 - Plan 04):**
-- Type buttons always visible (no dropdown) per CONTEXT.md "Type buttons visible directly"
-- Both drag handle AND arrow buttons for reordering flexibility per CONTEXT.md
-- 8px activation distance for drag to prevent accidental drags
-- Position numbers 1-based for user-friendly numbering
-- Type-specific color system: blue=water, orange=erg, green=land, purple=meeting
-- Expandable children pattern in InlineBlockEditor for lineup/workout content
-- getBlockTypeConfig helper returns icon, colors, labels for consistent styling
-
-**v2.1 decisions (Phase 22 - Plan 05):**
-- useFieldArray for dynamic interval management follows react-hook-form best practices
-- PM5 warning threshold at 45 intervals (90% of 50 limit) gives advance notice
-- Visibility toggle prominently placed per CONTEXT.md coach control requirement
-- Template dialog uses simple input + buttons pattern (no shadcn Dialog) for lightweight implementation
-- Type assertion used for zodResolver/useForm compatibility with schemas containing .default()
-
-**v2.1 decisions (Phase 22 - Plan 06):**
-- BoatLineupCard provides droppable zone for entire boat
-- SortableContext within each boat enables seat swapping
-- Compact mode reduces space for multi-boat grid layout
-- Seat ID format '{lineupId}-seat-{position}' enables cross-boat parsing
-- Swap behavior: dragging to occupied seat swaps athletes directly
-- Modal boat selector filters already-used boats
-
-**v2.1 decisions (Phase 22 - Plan 07):**
-- Wrapper components (WaterBlockContent, ErgBlockContent) handle API calls while child components remain pure
-- Server transforms nested Prisma data to flat client-friendly structures
-- max-w-4xl for practice page to accommodate multi-boat lineup grid
-- renderBlockContent callback pattern for type-specific expansion content
-
-**v2.1 decisions (Phase 22 - Plan 08):**
-- Max 100 practices per bulk operation for performance
-- Template blocks copied to each practice in transaction
-- Day-of-week toggles default to Mon/Wed/Fri (common rowing schedule)
-- Quick preset buttons for 4-week and 8-week ranges
-- Selection mode toggle separates viewing from bulk selection
-- Click on practice card toggles selection when in selection mode
-
-**v2.1 decisions (Phase 22 - Plan 11):**
-- SeasonManager uses Drawer for mobile-friendly bottom sheet management
-- Season management always visible for coaches (not conditional on zero seasons)
-- Confirmation dialog before archive with explanation about practices remaining
-- Fetch all seasons (active + archived) for manager, filter active for practice list
-
-**v2.1 decisions (Phase 22 - Plan 12):**
-- Redirect /practices/new to /practices/bulk-create for unified flow
-- Single-date mode auto-selects only that day's day-of-week for correct date inclusion
-- Dynamic header shows context: 'Create Practice for [date]' vs 'Create Practices (N dates)'
-
 ### Architecture Notes
 
 - **Multi-tenant:** Team-scoped data with JWT claims, application-level filtering
@@ -306,115 +83,10 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 - **External API:** Regatta Central v4 (OAuth2, per-team keys)
 - **Toast notifications:** Sonner (dark theme, bottom-right, rich colors)
 - **Data export:** CSV with proper escaping, immediate download
-
-**v2.0 additions (implemented in Phase 10):**
 - **RBAC:** @casl/ability + @casl/prisma + @casl/react for isomorphic permissions
-- **Audit logging:** 13 auditable actions with 365-day retention
-- **API keys:** sk_ prefix, SHA-256 hash, admin UI for management
-- **Multi-club:** ClubMembership model with roles[] array, cookie-based context
-
-**v2.0 additions (implemented in Phase 12):**
-- **Facility model:** Facility table with profile fields (location, contact, branding, billing)
-- **FacilityMembership:** Facility-level roles with FACILITY_ADMIN support
-- **Equipment ownership:** EquipmentOwnerType enum (FACILITY, CLUB, TEAM) with hierarchy fields
-- **RLS helpers:** 8 functions for JWT claim extraction and role checking (facility_id, club_id, has_role, has_any_role)
-- **JWT claims hook:** custom_access_token_hook injects facility_id, club_id, user_roles with TeamMember fallback
-- **Data migration:** SQL to create Facility wrappers for Teams and set Equipment ownership
-- **RLS policies:** 13 policies for Facility, FacilityMembership, Equipment with hierarchical visibility
-- **Facility context helpers:** Cookie-based facility context with DB and JWT fallback chain in claims helper
-
-**v2.0 additions (implemented in Phase 13):**
-- **viewMode permissions:** FACILITY_ADMIN permissions scope based on viewMode (facility vs club drill-down)
-- **Extended UserContext:** facilityId and viewMode fields for hierarchical access control
-- **Facility subject:** Added to CASL subjects for facility profile management
-- **Context switch API:** Unified /api/context/switch endpoint for facility and club view switching
-- **ViewMode derivation:** Computed from cookie state in getClaimsForApiRoute (facilityId + clubId combination)
-- **Context validation:** Auto-recovery for invalid club/facility cookies with first-available membership fallback
-- **Login restoration:** validateAndRecoverContext and restoreLastContext for continuity across sessions
-- **Context switcher UI:** ContextSwitcher component with facility and club views, JWT refresh, router cache invalidation
-- **Available contexts API:** /api/context/available returns facility, clubs, currentContext
-- **Dashboard layout integration:** AbilityProvider wrapping dashboard children, SSR context hydration for header
-- **Onboarding flow:** /onboarding page for users without memberships
-
-**v2.0 additions (implemented in Phase 14):**
-- **Design system foundation:** shadcn/ui with Tailwind v4, zinc color scheme
-- **CSS variable mapping:** shadcn namespace mapped to existing theme (--color-card uses --surface-2, --color-primary uses --team-primary)
-- **Component utilities:** cn() function for className composition with clsx + tailwind-merge
-- **Animation library:** tw-animate-css for Tailwind v4 animation support
-- **Core components:** Button, Dialog, Select, Input, DropdownMenu with Radix UI primitives
-- **Variant system:** class-variance-authority for type-safe component variants
-- **Mobile accessibility:** WCAG 2.5.5 touch targets (44px minimum on mobile)
-- **Component migration tracking:** ESLint @deprecated rule for safe migrations
-
-**v2.0 additions (implemented in Phase 15):**
-- **Touch gestures:** @use-gesture/react for mobile touch interactions
-- **Bottom sheets:** vaul-based Drawer component for mobile menus and action sheets
-- **View transitions:** Next.js experimental.viewTransition for smooth page navigation
-- **Sync status:** useSyncStatus hook combining online/pending/syncing/error states with triggerSync action
-- **Network indicator:** SyncStatusIndicator component with dropdown details (hidden when online with no pending)
-- **Swipe gestures:** useSwipeGesture hook wrapping useDrag for horizontal swipe-to-reveal
-- **Swipeable lists:** SwipeableListItem component for mobile swipe actions (delete/edit)
-- **Media queries:** useMediaQuery hook with SSR support for responsive detection
-- **Responsive menus:** ResponsiveMenu component adapting Drawer (mobile) and DropdownMenu (desktop)
-
-**v2.0 additions (implemented in Phase 16):**
-- **Loading skeletons:** Skeleton component with pulse animation, loading.tsx files for roster/equipment/practices
-- **Empty states:** EmptyState component with icon, title, description, and optional action (applied to 6 list pages)
-- **Command palette:** cmdk-based command palette with Cmd+K access, navigation items, and action shortcuts
-- **Keyboard shortcuts:** G+key navigation (G+R, G+P, G+E, G+S) and shortcuts overlay with ? key
-- **URL-based team lookup:** requireTeamBySlug helper for consistent team context from URL slug (fixes JWT claim mismatch)
-- **Team colors deferred:** Dynamic team colors temporarily disabled (stored in DB, using fixed emerald) — revisit in future phase
-
-**v2.0 additions (implemented in Phase 17):**
-- **Equipment booking:** EquipmentBooking model with time ranges and approval workflow (PENDING → APPROVED/DENIED/CANCELLED)
-- **Booking configuration:** Facility.bookingWindowDays field for advance booking limits (default 30 days)
-- **Booking notifications:** EQUIPMENT_REQUEST notification type for booking request alerts
-- **Facility dashboard:** Card grid navigation with aggregate statistics (clubs, athletes, equipment, events)
-- **Navigation pattern:** Facility dashboard follows club dashboard pattern with large clickable cards
-- **Shared equipment count:** Includes both facility-owned and club isShared equipment
-- **Facility equipment management:** CRUD pages for facility-owned shared equipment with availability indicators
-- **Equipment availability status:** Derived from damage reports and manualUnavailable flags
-- **Clubs list page:** Facility admins can view all clubs with drill-down to club dashboards (full admin access)
-- **Booking helper library:** checkEquipmentAvailability, createEquipmentBooking, approve/deny/cancel functions
-- **Booking API:** GET/POST /api/equipment/bookings, GET/PATCH/DELETE /api/equipment/bookings/[id]
-- **Conflict detection:** Time range overlap algorithm with race condition protection on approval
-- **Equipment requests UI:** EquipmentRequestPanel component with inline deny reason input and optimistic updates
-- **Pending request badge:** Equipment list page shows amber badge linking to requests when count > 0
-- **Facility settings API:** GET/PATCH /api/facility/[facilityId]/settings for profile and booking config
-- **Settings page:** Three-section form for Booking Settings, Facility Profile, Contact Info
-- **Cross-club events:** Facility admins can create events that copy to multiple clubs' calendars
-- **Event tracking:** facilityEventId stored in practice notes JSON for grouping
-- **Clubs API:** /api/facility/[facilityId]/clubs endpoint for club selection
-- **Booking dialog:** BookingRequestDialog component with conflict display and notes field
-- **Equipment panel enhancement:** EquipmentAvailabilityPanel with shared equipment badges and Request buttons
-- **Subscription overview:** SubscriptionOverview component with usage bars (mock data until billing integration)
-- **Club detail page:** Facility admin drill-down with stats, admins, practices, and subscription visibility
-- **E2E verification:** All 6 Phase 17 requirements verified (FAC-03, 05, 06, 07, 08, 09)
-
-**v2.1 additions (implemented in Phase 18):**
-- **Master-detail navigation:** Left sidebar (desktop) and bottom nav bar (mobile) with persistent section access
-- **NavigationSidebar component:** Desktop nav with 5 items, CASL filtering, emerald active states
-- **BottomNavigation component:** Mobile nav with 5 items max, h-16 touch targets, iOS pattern
-- **Team layout shell:** [teamSlug]/layout.tsx wraps all team pages with flex layout and responsive nav
-- **Permission-filtered items:** Equipment and Settings require manage permissions, filtered via ability.can()
-- **Active state detection:** exact match for Home, startsWith for sections with emerald-500 highlight
-- **Responsive architecture:** 768px breakpoint (md:) switches sidebar ↔ bottom nav completely
-- **Content scrolling:** pb-20 md:pb-0 ensures mobile content clears fixed bottom nav
-
-**v2.1 additions (implemented in Phase 22 - Plan 01):**
-- **MEETING block type:** Added to BlockType enum for team meetings (no assignments needed)
-- **Workout models:** Workout and WorkoutInterval with PM5 constraints (50 interval max, position ordering)
-- **WorkoutTemplate models:** Reusable workout definitions with WorkoutTemplateInterval for saving and applying
-- **PracticeBlock.title:** Optional title field for block naming (e.g., "Warm-up Row", "5k Erg Test")
-- **Multiple boats per block:** Lineup relation changed from one-to-one to one-to-many (blockId no longer unique)
-- **Workout validation:** Zod schemas with PM5 constraints (split format regex, stroke rate 16-40, 50 interval limit)
-
-**v2.1 additions (implemented in Phase 22 - Plan 02):**
-- **useAutosave hook:** React 19 optimistic updates with automatic rollback, silent success, error toasts with retry
-- **InlineTextField:** Transparent-to-editable single-line input with validation, keyboard shortcuts (Enter/Escape)
-- **InlineTextarea:** Multiline input with character count, auto-resize, Cmd/Ctrl+Enter save
-- **Autosave pattern:** Save on blur, Enter (text) or Cmd/Ctrl+Enter (textarea), Escape cancels
-- **Silent success UX:** No toast on successful save reduces notification fatigue
+- **Design system:** shadcn/ui with Tailwind v4, zinc color scheme
+- **Mobile:** @use-gesture/react, vaul for touch interactions
+- **Drag-drop:** @dnd-kit for lineups
 
 ### Tech Debt Tracker
 
@@ -425,127 +97,14 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 | Push notifications | DEFERRED | NOTIF-01, NOTIF-02 for future milestone |
 | Dynamic team colors | DEFERRED | Color settings stored in DB, UI uses fixed emerald colors |
 
-**v2.0 mitigation:**
-- Component migration tracking (Phase 14) to prevent drift
-- RLS connection pooling tests (Phase 12) to prevent leaks
-- Tenant-aware cache keys (Phase 15) to prevent cross-tenant data exposure
-
-### Patterns Established
-
-See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
-
-### Research Flags for v2.0
-
-**Phases needing deeper research during planning:**
-- **Phase 13:** Custom Access Token Hook with Supabase Edge Functions (memory/timeout constraints)
-- **Phase 17:** Equipment reservation conflict detection (partial boat availability logic)
-
-**Standard patterns (skip research-phase):**
-- **Phase 11:** MFA with Supabase Auth, SSO/SAML integration
-- **Phase 14:** shadcn/ui installation
-- **Phase 15:** PWA offline-first, touch gestures
-- **Phase 16:** Standard UI/UX patterns
-
-**v2.1 additions (implemented in Phase 23 - Plan 01):**
-- **Sparkline component:** Custom SVG polyline visualization for compact trend display
-- **Usage aggregation:** aggregateUsageByWeek and usageToSparklineData utilities with date-fns
-
-**v2.1 additions (implemented in Phase 23 - Plan 03):**
-- **NextPracticeWidget:** Athlete hero widget with assignment display (boat/seat or group) and countdown
-- **UsageTrendsWidget:** Equipment usage sparkline with total hours for coach dashboard
-- **Assignment formatting:** Block-type-specific display (WATER, ERG, LAND, MEETING)
-- **Relative date formatting:** Today/Tomorrow/Weekday countdown pattern
-
-**v2.1 additions (implemented in Phase 23 - Plan 04):**
-- **CoachDashboard:** Priority hero layout composing all coach widgets (Schedule, Fleet, Usage, Quick Actions, Announcements)
-- **AthleteDashboard:** Focused layout with NextPractice hero and conditional announcements
-- **Responsive grid:** 2-column on desktop, stacked on mobile for secondary widgets
-- **Narrower athlete layout:** max-w-3xl vs max-w-5xl for focused view
-
-**v2.1 additions (implemented in Phase 23 - Plan 05):**
-- **Dashboard queries:** Centralized data fetching functions in src/lib/dashboard/queries.ts
-- **getTodaysPracticesForCoach:** Today's practices with athlete counts, fallback to next practice
-- **getAttentionItems:** Equipment needing inspection and practices needing lineups
-- **getUsageTrendsData:** Season usage aggregated by week for sparkline
-- **getAthleteNextPractice:** Athlete's next practice with boat/seat or group assignment
-- **Date string comparison:** Uses toISOString().split('T')[0] for timezone-safe today check
-- **Filtered includes:** Prisma where clause within includes for efficient athlete queries
-
-**v2.1 additions (implemented in Phase 24 - Plan 01):**
-- **regattaRegions field:** TeamSettings extended with String[] for RC region filtering preferences
-- **RC public types:** RCPublicRegatta, RCRegattaStatus, RCRegistrationStatus for upcoming regatta display
-- **RCUpcomingRegattasResponse:** Cache metadata pattern with cachedAt/staleAfter timestamps
-- **Team settings validation:** Centralized schema in src/lib/validations/team-settings.ts with ISO 3166-1 region codes
-
-**v2.1 decisions (Phase 24 - Plan 01):**
-- Region codes use ISO 3166-1 alpha-2 standard (US, CA, GB) matching RC API expectations
-- regattaRegions field defaults to empty array for teams without preference
-- RCPublicRegatta separate from RCRegatta to distinguish public vs team-authenticated data
-- Cache metadata via cachedAt/staleAfter supports stale-while-revalidate pattern
-
-**v2.1 additions (implemented in Phase 24 - Plan 02):**
-- **getPublicRegattas method:** RegattaCentralClient extended for multi-region public regatta fetching
-- **/api/regattas/upcoming endpoint:** Cached endpoint with 6-hour TTL via Cache-Control headers
-- **Status mapping helpers:** mapRegattaStatus and mapRegistrationStatus for RC API response transformation
-
-**v2.1 decisions (Phase 24 - Plan 02):**
-- 6-hour cache TTL (21600s) balances freshness with RC rate limit compliance
-- Graceful degradation returns HTTP 200 with error field rather than 500 for resilient clients
-- Default region is 'US' when team has no regattaRegions preference configured
-- Status mapping uses lowercase comparison for robustness against API response variations
-
-**v2.1 decisions (Phase 24 - Plan 03):**
-- Blue color scheme for RegattaDetailCard differentiates from emerald practice cards
-- Status indicator dot uses traffic light colors (blue=upcoming, emerald=in-progress, zinc=completed, red=cancelled)
-- RegistrationBadge uses CVA variants matching existing badge patterns
-- Multi-day events show date range with day count in parentheses
-
-**v2.1 additions (implemented in Phase 24 - Plan 03):**
-- **RegistrationBadge component:** CVA-based badge for OPEN/CLOSED/WAITLIST/NOT_AVAILABLE status display
-- **RegattaDetailCard component:** Popup card with regatta name, date range, location, status, and RC deep link
-- **Regatta color convention:** Blue scheme for regattas vs emerald for practices in calendar UI
-
-**v2.1 decisions (Phase 24 - Plan 04):**
-- Spanning bars use CSS ::before at top of day cell, dots use ::after at bottom
-- RC regattas fetched once on mount (not per-month) since API returns all upcoming
-- Blue color (#3b82f6) for RC regattas vs emerald (#10b981) for practices
-
-**v2.1 additions (implemented in Phase 24 - Plan 04):**
-- **RC calendar integration:** Unified calendar displays RC regattas with blue indicators
-- **Multi-day spanning bars:** regatta-span-start/middle/end CSS classes for visual continuity
-- **Dual indicator support:** Both practice (emerald) and regatta (blue) dots can appear on same day
-- **Click-to-popup:** Clicking RC regatta opens RegattaDetailCard overlay with click-outside dismissal
-
-**v2.1 decisions (Phase 24 - Plan 05):**
-- Blue color scheme for Regatta Central section to match calendar regatta styling
-- REGATTA_REGIONS constant provides 10 common rowing regions with ISO 3166-1 codes
-- Empty selection shows "US by default" message per CONTEXT.md
-- Unsaved changes indicator matches existing settings patterns
-
-**v2.1 additions (implemented in Phase 24 - Plan 05):**
-- **REGATTA_REGIONS constant:** 10 common rowing regions (US, CA, GB, AU, NZ, DE, NL, FR, IT, ES)
-- **Region filter UI:** Checkbox grid in team settings for selecting regatta regions
-- **Settings integration:** regattaRegions loaded from API and saved via PATCH /api/team-settings
-
-**v2.1 decisions (Phase 24 - Plan 06):**
-- Stale indicator uses formatDistanceToNow for human-readable cache age
-- Export CSV includes RC regattas with 'Regatta (RC)' type identifier
-- Empty state guides users to check calendar when day has no events
-
-**v2.1 additions (implemented in Phase 24 - Plan 06):**
-- **Stale data indicator:** Shows when RC regattas were last fetched
-- **Export RC regattas:** CSV export includes RC regattas with type, location, status
-- **Empty state messaging:** Guides users when selected day has no events but regattas exist
-- **Phase 24 verification:** All 4 requirements (RC-01 through RC-04) satisfied
-
 ## Session Continuity
 
 | Field | Value |
 |-------|-------|
-| Last session | 2026-01-27 19:15 UTC |
-| Stopped at | Milestone v2.1 complete, ready for audit |
+| Last session | 2026-01-27 19:30 UTC |
+| Stopped at | v2.1 archived, ready for next milestone |
 | Resume file | None |
 
 ---
 
-*Last updated: 2026-01-27 (v2.1 milestone complete — all 7 phases executed, ready for audit)*
+*Last updated: 2026-01-27 (v2.1 shipped and archived)*

@@ -4,7 +4,7 @@
 
 A multi-tenant SaaS for rowing team operations — practice planning, equipment management, roster coordination, and race-day execution at regattas.
 
-**Current State:** v2.0 shipped. Starting v2.1 UX refinement — RIM feature parity, navigation redesign, practice flow improvements, RC public API.
+**Current State:** v2.1 shipped. UX refinements complete — RIM feature parity, navigation redesign, practice flow improvements, RC public API integration.
 
 ## Core Value
 
@@ -12,9 +12,43 @@ A multi-tenant SaaS for rowing team operations — practice planning, equipment 
 
 ## Shipped Capabilities
 
+### v2.1 UX Refinement (2026-01-27)
+
+**30 requirements delivered across 7 phases:**
+
+**Navigation/Layout (6 requirements)**
+- Desktop sidebar with master-detail pattern
+- Mobile bottom navigation bar
+- Responsive breakpoint at 768px
+- Active state indicators
+
+**RIM Feature Parity (12 requirements)**
+- Announcements — Coach broadcasts with priority levels (info, warning, urgent)
+- Public issue reporting — QR code damage reports without login
+- Equipment readiness — Calculated status with traffic-light badges
+- Maintenance workflow — Resolution notes, inspection tracking
+- Fleet health dashboard widget
+
+**Practice Flow (8 requirements)**
+- Inline editing — Edit practice details on-page
+- Block-based structure — Water, erg, land, meeting blocks
+- Type-specific forms — Lineups for water, workouts for erg
+- Drag-drop lineups — Athletes into boat seats with @dnd-kit
+- Workout builder — PM5-style intervals with templates
+- Bulk operations — Create/delete multiple practices
+
+**RC Public API (4 requirements)**
+- Regatta schedules fetched from RC API
+- Calendar integration with blue indicators
+- Multi-day spanning bars
+- 6-hour caching with stale-while-revalidate
+
 ### v2.0 Commercial Readiness (2026-01-26)
 
 **34 requirements delivered across 8 phases:**
+
+<details>
+<summary>v2.0 Details</summary>
 
 **Facility Model (9 requirements)**
 - Facility → club hierarchy with shared equipment ownership
@@ -40,6 +74,8 @@ A multi-tenant SaaS for rowing team operations — practice planning, equipment 
 - Tenant-scoped permissions with audit logging
 - MFA for admin roles, SSO/SAML for enterprise
 - API key management for integrations
+
+</details>
 
 ### v1.1 Polish (2026-01-22)
 
@@ -73,8 +109,9 @@ A multi-tenant SaaS for rowing team operations — practice planning, equipment 
 - Serwist (service worker) + Dexie.js (IndexedDB)
 - CASL (permissions) + Supabase Auth (sessions)
 - @use-gesture/react + vaul (mobile interactions)
+- @dnd-kit (drag-drop lineups)
 
-**LOC:** ~111,682 TypeScript
+**LOC:** ~115,000 TypeScript
 
 **Architecture:**
 - Multi-tenant: Facility → Club → Team hierarchy
@@ -92,32 +129,8 @@ A multi-tenant SaaS for rowing team operations — practice planning, equipment 
 | shadcn/ui with Tailwind v4 | Copy-paste ownership, no runtime dependency | Good — flexible theming |
 | RLS over application filtering | Database-level isolation prevents leaks | Good — connection pooling safe |
 | Wave-based execution | Plans grouped by dependency for parallel execution | Good — fast delivery |
-
-## Current Milestone: v2.1 UX Refinement
-
-**Goal:** Elevate user experience with RIM-inspired features, improved navigation, and better practice workflows.
-
-**Target features:**
-
-1. **RIM Feature Parity**
-   - Announcements — Coach broadcasts to team with priority levels
-   - Public issue reporting — QR-based damage reports (no login required)
-   - Equipment readiness — Calculated status with maintenance workflow
-   - Dashboard analytics — Equipment insights, usage trends, fleet health
-
-2. **Navigation/Layout Redesign**
-   - Desktop: Left sidebar nav → content in center (master-detail pattern)
-   - Mobile: Bottom navigation bar → content in main area
-
-3. **Practice Flow Improvements**
-   - Inline editing — Edit on-page, not separate form screens
-   - Block-based structure — Time blocks with type-specific forms
-   - Improved lineup creation — See available athletes, drag into boats
-   - Workout display — Structured drills within practice blocks
-
-4. **Regatta Central Public API**
-   - Regatta schedules — Upcoming regattas, dates, locations
-   - Foundation for later team-specific OAuth integration
+| Block-based practices | Flexible structure for varied training sessions | Good — cleaner than monolithic form |
+| @dnd-kit for lineups | React 19 compatible, accessible, performant | Good — smooth drag-drop experience |
 
 ## Future Milestone Goals
 
@@ -126,6 +139,7 @@ v3.0 candidates:
 - Native mobile apps (iOS, Android)
 - Season templates
 - RC team-specific OAuth integration
+- Email digest notifications
 
 ## Deferred Items
 
@@ -148,4 +162,4 @@ v3.0 candidates:
 - Social features
 
 ---
-*Last updated: 2026-01-26 after v2.1 milestone started*
+*Last updated: 2026-01-27 after v2.1 milestone shipped*
