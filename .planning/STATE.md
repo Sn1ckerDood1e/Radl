@@ -12,9 +12,9 @@
 |-------|-------|
 | Milestone | v2.1 UX Refinement |
 | Phase | 22 — Practice Flow Redesign |
-| Plan | 13 of 13+ (gap closure) |
+| Plan | 10 of 13+ (gap closure) |
 | Status | In progress — executing gap closure plans |
-| Last activity | 2026-01-27 — Completed 22-13-PLAN.md (workout interval row polish) |
+| Last activity | 2026-01-27 — Completed 22-10-PLAN.md (practice page consolidation) |
 
 **Progress:**
 ```
@@ -439,8 +439,8 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
 
 | Field | Value |
 |-------|-------|
-| Last session | 2026-01-27 14:45 UTC |
-| Stopped at | Completed 22-13-PLAN.md |
+| Last session | 2026-01-27 14:46 UTC |
+| Stopped at | Completed 22-10-PLAN.md |
 | Resume file | None |
 
 ---
