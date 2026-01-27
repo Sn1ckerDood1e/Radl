@@ -12,9 +12,9 @@
 |-------|-------|
 | Milestone | v2.1 UX Refinement |
 | Phase | 22 — Practice Flow Redesign |
-| Plan | 10 of 13+ (gap closure) |
+| Plan | 11 of 13+ (gap closure) |
 | Status | In progress — executing gap closure plans |
-| Last activity | 2026-01-27 — Completed 22-10-PLAN.md (practice page consolidation) |
+| Last activity | 2026-01-27 — Completed 22-11-PLAN.md (season management UI) |
 
 **Progress:**
 ```
@@ -286,6 +286,12 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 - Selection mode toggle separates viewing from bulk selection
 - Click on practice card toggles selection when in selection mode
 
+**v2.1 decisions (Phase 22 - Plan 11):**
+- SeasonManager uses Drawer for mobile-friendly bottom sheet management
+- Season management always visible for coaches (not conditional on zero seasons)
+- Confirmation dialog before archive with explanation about practices remaining
+- Fetch all seasons (active + archived) for manager, filter active for practice list
+
 ### Architecture Notes
 
 - **Multi-tenant:** Team-scoped data with JWT claims, application-level filtering
@@ -440,7 +446,7 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
 | Field | Value |
 |-------|-------|
 | Last session | 2026-01-27 14:46 UTC |
-| Stopped at | Completed 22-10-PLAN.md |
+| Stopped at | Completed 22-11-PLAN.md |
 | Resume file | None |
 
 ---
