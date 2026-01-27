@@ -12,9 +12,9 @@
 |-------|-------|
 | Milestone | v2.1 UX Refinement |
 | Phase | 23 — Dashboard Enhancements |
-| Plan | 2 of 6 |
+| Plan | 1 of 6 |
 | Status | In progress |
-| Last activity | 2026-01-27 — Completed 23-02 coach dashboard widgets |
+| Last activity | 2026-01-27 — Completed 23-01 sparkline and aggregations |
 
 **Progress:**
 ```
@@ -446,14 +446,18 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
 - **Phase 15:** PWA offline-first, touch gestures
 - **Phase 16:** Standard UI/UX patterns
 
+**v2.1 additions (implemented in Phase 23 - Plan 01):**
+- **Sparkline component:** Custom SVG polyline visualization for compact trend display
+- **Usage aggregation:** aggregateUsageByWeek and usageToSparklineData utilities with date-fns
+
 ## Session Continuity
 
 | Field | Value |
 |-------|-------|
-| Last session | 2026-01-27 15:43 UTC |
-| Stopped at | Completed 23-02-PLAN.md |
+| Last session | 2026-01-27 15:40 UTC |
+| Stopped at | Completed 23-01-PLAN.md |
 | Resume file | None |
 
 ---
 
-*Last updated: 2026-01-27 (Phase 23 in progress — 23-02 completed, coach dashboard widgets)*
+*Last updated: 2026-01-27 (Phase 23 in progress — 23-01 completed, sparkline and aggregations)*
