@@ -38,9 +38,9 @@ model Facility {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
-  clubs         Team[]   @relation("FacilityClubs")
-  equipment     Equipment[]  @relation("FacilityEquipment")
-  memberships   FacilityMembership[]
+  clubs              Team[]               @relation("FacilityClubs")
+  equipment          Equipment[]          @relation("FacilityEquipment")
+  memberships        FacilityMembership[]
 
   @@index([slug])
 }
@@ -58,7 +58,7 @@ model Team {
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 
-  facility          Facility? @relation("FacilityClubs", fields: [facilityId], references: [id])
+  facility          Facility?                @relation("FacilityClubs", fields: [facilityId], references: [id])
   members           TeamMember[]
   invitations       Invitation[]
   equipment         Equipment[]
@@ -70,11 +70,12 @@ model Team {
   lineupTemplates   LineupTemplate[]
   regattas          Regatta[]
   rcConnection      RegattaCentralConnection?
-  clubMemberships   ClubMembership[] @relation("ClubMemberships")
-  apiKeys           ApiKey[] @relation("ApiKeys")
-  clubEquipment     Equipment[] @relation("ClubEquipment")
-  equipmentBookings EquipmentBooking[] @relation("ClubBookings")
+  clubMemberships   ClubMembership[]         @relation("ClubMemberships")
+  apiKeys           ApiKey[]                 @relation("ApiKeys")
+  clubEquipment     Equipment[]              @relation("ClubEquipment")
+  equipmentBookings EquipmentBooking[]       @relation("ClubBookings")
   announcements     Announcement[]
+  workoutTemplates  WorkoutTemplate[]
 
   @@index([facilityId])
 }
@@ -290,6 +291,15 @@ enum BlockType {
   WATER
   LAND
   ERG
+  MEETING
+}
+
+// Workout type enum (PM5-style workouts)
+enum WorkoutType {
+  SINGLE_TIME
+  SINGLE_DISTANCE
+  INTERVALS
+  VARIABLE_INTERVALS
 }
 
 // Seat side enum (for sweep boats)
@@ -527,13 +537,15 @@ model PracticeBlock {
   practiceId      String
   position        Int       // 0, 1, 2... for ordering
   type            BlockType
+  title           String?   // Block title (e.g., "Warm-up Row", "5k Erg Test")
   durationMinutes Int?      // Optional, blocks are ordered not time-slotted
   category        String?   // e.g., "steady-state", "intervals", "technique"
   notes           String?   // Block-specific notes
 
   practice        Practice         @relation(fields: [practiceId], references: [id], onDelete: Cascade)
-  lineup          Lineup?
+  lineup          Lineup[]
   landAssignments LandAssignment[]
+  workout         Workout?
 
   @@index([practiceId, position])
 }
@@ -586,10 +598,79 @@ model BlockTemplate {
   @@index([teamId, type])
 }
 
+// Workout model for PM5-style workout definitions attached to blocks
+model Workout {
+  id                String        @id @default(uuid())
+  blockId           String        @unique  // One workout per block
+  type              WorkoutType
+  notes             String?
+  visibleToAthletes Boolean       @default(true)  // Coach controls visibility
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+
+  block             PracticeBlock @relation(fields: [blockId], references: [id], onDelete: Cascade)
+  intervals         WorkoutInterval[]
+
+  @@index([blockId])
+}
+
+// Workout interval model for PM5-style intervals
+model WorkoutInterval {
+  id               String    @id @default(uuid())
+  workoutId        String
+  position         Int       // Order within workout (0-49, PM5 limit is 50)
+  durationType     String    // 'time' or 'distance'
+  duration         Int       // Seconds for time, meters for distance
+  targetSplit      String?   // "2:05.0" format for erg
+  targetStrokeRate Int?      // SPM for water workouts (16-40)
+  restDuration     Int       @default(0)  // Rest seconds after interval
+  restType         String    @default("time")  // 'time' or 'undefined'
+
+  workout          Workout   @relation(fields: [workoutId], references: [id], onDelete: Cascade)
+
+  @@unique([workoutId, position])
+  @@index([workoutId])
+}
+
+// Workout template model for reusable workout definitions
+model WorkoutTemplate {
+  id        String        @id @default(uuid())
+  teamId    String
+  name      String
+  type      WorkoutType
+  notes     String?
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  team      Team                      @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  intervals WorkoutTemplateInterval[]
+
+  @@index([teamId])
+  @@index([teamId, type])
+}
+
+// Workout template interval model
+model WorkoutTemplateInterval {
+  id               String           @id @default(uuid())
+  templateId       String
+  position         Int
+  durationType     String
+  duration         Int
+  targetSplit      String?
+  targetStrokeRate Int?
+  restDuration     Int              @default(0)
+  restType         String           @default("time")
+
+  template         WorkoutTemplate  @relation(fields: [templateId], references: [id], onDelete: Cascade)
+
+  @@unique([templateId, position])
+  @@index([templateId])
+}
+
 // Lineup model for water blocks - assigns athletes to boat positions
 model Lineup {
   id        String   @id @default(uuid())
-  blockId   String   @unique // One lineup per block
+  blockId   String   // Multiple lineups allowed per block (multiple boats)
   boatId    String?  // Optional, nullable until boat assigned
   notes     String?
   createdAt DateTime @default(now())
