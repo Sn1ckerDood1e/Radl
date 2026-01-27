@@ -3,14 +3,19 @@ import { requireTeamBySlug } from '@/lib/auth/authorize';
 import { prisma } from '@/lib/prisma';
 import { EmptyState } from '@/components/ui/empty-state';
 import { PracticeListClient } from '@/components/practices/practice-list-client';
-import { Calendar, Plus, Copy } from 'lucide-react';
+import { UnifiedCalendar } from '@/components/calendar/unified-calendar';
+import { Calendar, Plus, Copy, CalendarDays, List } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface PracticesPageProps {
   params: Promise<{ teamSlug: string }>;
+  searchParams: Promise<{ view?: string; seasonId?: string }>;
 }
 
-export default async function PracticesPage({ params }: PracticesPageProps) {
+export default async function PracticesPage({ params, searchParams }: PracticesPageProps) {
   const { teamSlug } = await params;
+  const { view = 'list', seasonId } = await searchParams;
+  const viewMode = view === 'calendar' ? 'calendar' : 'list';
 
   // Verify user has membership in this team (by URL slug, not JWT claims)
   const { team, isCoach } = await requireTeamBySlug(teamSlug);
@@ -58,8 +63,11 @@ export default async function PracticesPage({ params }: PracticesPageProps) {
     ],
   });
 
+  // Prepare seasons data for UnifiedCalendar (only needs id and name)
+  const seasonsForCalendar = seasons.map(s => ({ id: s.id, name: s.name }));
+
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className={cn(viewMode === 'calendar' ? 'max-w-6xl' : 'max-w-4xl', 'mx-auto')}>
       <div className="flex items-center justify-between mb-8">
         <div>
           <div className="flex items-center gap-3 mb-2">
@@ -77,24 +85,55 @@ export default async function PracticesPage({ params }: PracticesPageProps) {
             {isCoach ? 'Manage practice schedules' : 'View upcoming practices'}
           </p>
         </div>
-        {isCoach && seasons.length > 0 && (
-          <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
+          {/* View toggle (pill buttons) */}
+          <div className="flex items-center p-1 bg-zinc-800 rounded-lg border border-zinc-700">
             <Link
-              href={`/${teamSlug}/practices/bulk-create`}
-              className="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium text-zinc-300 bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 transition-colors"
+              href={`/${teamSlug}/practices?view=list`}
+              className={cn(
+                'inline-flex items-center px-3 py-1.5 rounded-md text-sm font-medium transition-colors',
+                viewMode === 'list'
+                  ? 'bg-zinc-700 text-white'
+                  : 'text-zinc-400 hover:text-zinc-200'
+              )}
             >
-              <Copy className="h-4 w-4 mr-2" />
-              Create Multiple
+              <List className="h-4 w-4" />
+              <span className="sr-only">List view</span>
             </Link>
             <Link
-              href={`/${teamSlug}/practices/new`}
-              className="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-500 transition-colors"
+              href={`/${teamSlug}/practices?view=calendar`}
+              className={cn(
+                'inline-flex items-center px-3 py-1.5 rounded-md text-sm font-medium transition-colors',
+                viewMode === 'calendar'
+                  ? 'bg-zinc-700 text-white'
+                  : 'text-zinc-400 hover:text-zinc-200'
+              )}
             >
-              <Plus className="h-5 w-5 mr-2" />
-              New Practice
+              <CalendarDays className="h-4 w-4" />
+              <span className="sr-only">Calendar view</span>
             </Link>
           </div>
-        )}
+
+          {/* Coach actions */}
+          {isCoach && seasons.length > 0 && (
+            <>
+              <Link
+                href={`/${teamSlug}/practices/bulk-create?view=${viewMode}`}
+                className="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium text-zinc-300 bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 transition-colors"
+              >
+                <Copy className="h-4 w-4 mr-2" />
+                Create Multiple
+              </Link>
+              <Link
+                href={`/${teamSlug}/practices/new?view=${viewMode}`}
+                className="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-500 transition-colors"
+              >
+                <Plus className="h-5 w-5 mr-2" />
+                New Practice
+              </Link>
+            </>
+          )}
+        </div>
       </div>
 
       {/* Season reminder if no active seasons */}
@@ -106,22 +145,33 @@ export default async function PracticesPage({ params }: PracticesPageProps) {
         </div>
       )}
 
-      {/* Practices list */}
-      {practices.length > 0 ? (
-        <PracticeListClient
-          practices={practices}
+      {/* View content based on viewMode */}
+      {viewMode === 'calendar' ? (
+        <UnifiedCalendar
           teamSlug={teamSlug}
+          teamId={team.id}
           isCoach={isCoach}
+          seasons={seasonsForCalendar}
+          initialSeasonId={seasonId}
         />
       ) : (
-        <div className="bg-zinc-900 border border-zinc-800 rounded-lg">
-          <EmptyState
-            icon={Calendar}
-            title="No practices yet"
-            description={isCoach ? "Create your first practice to get started." : "No practices have been published yet."}
-            action={isCoach && seasons.length > 0 ? { label: "New Practice", href: `/${teamSlug}/practices/new` } : undefined}
+        /* List view */
+        practices.length > 0 ? (
+          <PracticeListClient
+            practices={practices}
+            teamSlug={teamSlug}
+            isCoach={isCoach}
           />
-        </div>
+        ) : (
+          <div className="bg-zinc-900 border border-zinc-800 rounded-lg">
+            <EmptyState
+              icon={Calendar}
+              title="No practices yet"
+              description={isCoach ? "Create your first practice to get started." : "No practices have been published yet."}
+              action={isCoach && seasons.length > 0 ? { label: "New Practice", href: `/${teamSlug}/practices/new` } : undefined}
+            />
+          </div>
+        )
       )}
     </div>
   );
