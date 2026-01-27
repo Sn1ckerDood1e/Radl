@@ -11,17 +11,17 @@
 | Field | Value |
 |-------|-------|
 | Milestone | v2.1 UX Refinement |
-| Phase | 23 — Dashboard Enhancements |
-| Plan | 6 of 6 |
-| Status | Complete |
-| Last activity | 2026-01-27 — Phase 23 complete, all 6 plans executed |
+| Phase | 24 — Regatta Central Public API |
+| Plan | 1 of 6 |
+| Status | In progress |
+| Last activity | 2026-01-27 — Completed 24-01-PLAN.md (data foundation) |
 
 **Progress:**
 ```
 v1.0: [##########] 100% SHIPPED (2026-01-22)
 v1.1: [##########] 100% SHIPPED (2026-01-22) — 9/11 reqs, 2 deferred
 v2.0: [##########] 100% SHIPPED (2026-01-26) — 34/34 requirements
-v2.1: [█████████░] 96% — 6/7 phases complete (Phase 23 done)
+v2.1: [█████████░] 97% — 6/7 phases complete, Phase 24 plan 1/6
 ```
 
 ## v2.1 Scope
@@ -471,14 +471,26 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
 - **Date string comparison:** Uses toISOString().split('T')[0] for timezone-safe today check
 - **Filtered includes:** Prisma where clause within includes for efficient athlete queries
 
+**v2.1 additions (implemented in Phase 24 - Plan 01):**
+- **regattaRegions field:** TeamSettings extended with String[] for RC region filtering preferences
+- **RC public types:** RCPublicRegatta, RCRegattaStatus, RCRegistrationStatus for upcoming regatta display
+- **RCUpcomingRegattasResponse:** Cache metadata pattern with cachedAt/staleAfter timestamps
+- **Team settings validation:** Centralized schema in src/lib/validations/team-settings.ts with ISO 3166-1 region codes
+
+**v2.1 decisions (Phase 24 - Plan 01):**
+- Region codes use ISO 3166-1 alpha-2 standard (US, CA, GB) matching RC API expectations
+- regattaRegions field defaults to empty array for teams without preference
+- RCPublicRegatta separate from RCRegatta to distinguish public vs team-authenticated data
+- Cache metadata via cachedAt/staleAfter supports stale-while-revalidate pattern
+
 ## Session Continuity
 
 | Field | Value |
 |-------|-------|
-| Last session | 2026-01-27 15:47 UTC |
-| Stopped at | Completed 23-05-PLAN.md |
+| Last session | 2026-01-27 18:41 UTC |
+| Stopped at | Completed 24-01-PLAN.md |
 | Resume file | None |
 
 ---
 
-*Last updated: 2026-01-27 (Phase 23 in progress — 23-05 completed, dashboard queries)*
+*Last updated: 2026-01-27 (Phase 24 in progress — 24-01 completed, data foundation)*
