@@ -64,8 +64,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Check if block already has a lineup
-    const existingLineup = await prisma.lineup.findUnique({
+    // Check if block already has a lineup (findFirst for current single-lineup logic)
+    const existingLineup = await prisma.lineup.findFirst({
       where: { blockId },
     });
 

@@ -6,7 +6,7 @@ import { BoatClass } from '@/generated/prisma';
 import { getSeatsForBoatClass } from '@/lib/lineup/position-labels';
 
 // Define types for different block scenarios
-type BlockType = 'WATER' | 'LAND' | 'ERG';
+type BlockType = 'WATER' | 'LAND' | 'ERG' | 'MEETING';
 
 interface Athlete {
   id: string;

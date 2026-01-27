@@ -24,6 +24,7 @@ const blockTypes: { value: BlockType; label: string; description: string }[] = [
   { value: 'WATER', label: 'Water', description: 'On-water rowing session' },
   { value: 'LAND', label: 'Land', description: 'Land-based training' },
   { value: 'ERG', label: 'Erg', description: 'Ergometer workout' },
+  { value: 'MEETING', label: 'Meeting', description: 'Team meeting or discussion' },
 ];
 
 export function BlockEditor({ blocks, onChange }: BlockEditorProps) {

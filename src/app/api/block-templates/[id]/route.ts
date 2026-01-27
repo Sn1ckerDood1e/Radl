@@ -56,7 +56,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
     // Build update object
     const updateData: {
       name?: string;
-      type?: 'WATER' | 'LAND' | 'ERG';
+      type?: 'WATER' | 'LAND' | 'ERG' | 'MEETING';
       durationMinutes?: number | null;
       category?: string | null;
       notes?: string | null;

@@ -38,8 +38,8 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 
     if (!block) return notFoundResponse('Block');
 
-    // Get lineup if exists
-    const lineup = await prisma.lineup.findUnique({
+    // Get lineup if exists (findFirst for backward compat - single lineup)
+    const lineup = await prisma.lineup.findFirst({
       where: { blockId },
       include: {
         seats: {
@@ -159,8 +159,8 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
 
     // Use transaction to replace lineup
     const lineup = await prisma.$transaction(async (tx) => {
-      // Check if lineup exists with seats to determine new athletes
-      const existing = await tx.lineup.findUnique({
+      // Check if lineup exists with seats to determine new athletes (findFirst for backward compat)
+      const existing = await tx.lineup.findFirst({
         where: { blockId },
         include: {
           seats: {
@@ -177,7 +177,7 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
       // If exists, delete it (and its usage logs will be handled after)
       if (existing) {
         await tx.lineup.delete({
-          where: { blockId },
+          where: { id: existing.id },
         });
       }
 

@@ -20,6 +20,7 @@ function getBlockSummary(blocks: Array<{ type: BlockType }>): string {
     WATER: 0,
     LAND: 0,
     ERG: 0,
+    MEETING: 0,
   };
 
   blocks.forEach((block) => {
@@ -30,6 +31,7 @@ function getBlockSummary(blocks: Array<{ type: BlockType }>): string {
   if (counts.WATER > 0) parts.push(`${counts.WATER} Water`);
   if (counts.LAND > 0) parts.push(`${counts.LAND} Land`);
   if (counts.ERG > 0) parts.push(`${counts.ERG} Erg`);
+  if (counts.MEETING > 0) parts.push(`${counts.MEETING} Meeting`);
 
   return parts.join(', ');
 }

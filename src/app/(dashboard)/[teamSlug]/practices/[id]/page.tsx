@@ -24,6 +24,7 @@ export default async function PracticeDetailPage({ params }: PracticeDetailPageP
       blocks: {
         include: {
           lineup: {
+            take: 1,
             include: {
               seats: {
                 include: {
@@ -122,10 +123,10 @@ export default async function PracticeDetailPage({ params }: PracticeDetailPageP
             durationMinutes: b.durationMinutes,
             category: b.category,
             notes: b.notes,
-            lineup: b.lineup ? {
-              id: b.lineup.id,
-              boatId: b.lineup.boatId,
-              seats: b.lineup.seats.map(s => ({
+            lineup: b.lineup.length > 0 ? {
+              id: b.lineup[0].id,
+              boatId: b.lineup[0].boatId,
+              seats: b.lineup[0].seats.map(s => ({
                 position: s.position,
                 side: s.side,
                 athleteId: s.athleteId,

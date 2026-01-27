@@ -30,6 +30,7 @@ const blockTypeConfig: Record<BlockType, { label: string; bgColor: string; borde
   WATER: { label: 'Water', bgColor: 'bg-blue-500/10', borderColor: 'border-blue-500/30', textColor: 'text-blue-400' },
   LAND: { label: 'Land', bgColor: 'bg-green-500/10', borderColor: 'border-green-500/30', textColor: 'text-green-400' },
   ERG: { label: 'Erg', bgColor: 'bg-orange-500/10', borderColor: 'border-orange-500/30', textColor: 'text-orange-400' },
+  MEETING: { label: 'Meeting', bgColor: 'bg-purple-500/10', borderColor: 'border-purple-500/30', textColor: 'text-purple-400' },
 };
 
 export function TemplateDetailClient({ template, teamSlug }: TemplateDetailClientProps) {

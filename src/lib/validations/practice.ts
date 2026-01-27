@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 // Enums matching Prisma schema
-export const blockTypeSchema = z.enum(['WATER', 'LAND', 'ERG']);
+export const blockTypeSchema = z.enum(['WATER', 'LAND', 'ERG', 'MEETING']);
 export const practiceStatusSchema = z.enum(['DRAFT', 'PUBLISHED']);
 
 // Block schemas

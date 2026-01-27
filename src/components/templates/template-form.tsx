@@ -18,7 +18,7 @@ const templateFormSchema = z.object({
   defaultStartTime: z.string().regex(timeFormatRegex, 'Use HH:MM format'),
   defaultEndTime: z.string().regex(timeFormatRegex, 'Use HH:MM format'),
   blocks: z.array(z.object({
-    type: z.enum(['WATER', 'LAND', 'ERG']),
+    type: z.enum(['WATER', 'LAND', 'ERG', 'MEETING']),
     durationMinutes: z.number().positive().optional().nullable(),
     category: z.string().optional().nullable(),
     notes: z.string().optional().nullable(),
