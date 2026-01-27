@@ -12,9 +12,9 @@
 |-------|-------|
 | Milestone | v2.1 UX Refinement |
 | Phase | 22 — Practice Flow Redesign |
-| Plan | 11 of 13+ (gap closure) |
+| Plan | 12 of 13+ (gap closure) |
 | Status | In progress — executing gap closure plans |
-| Last activity | 2026-01-27 — Completed 22-11-PLAN.md (season management UI) |
+| Last activity | 2026-01-27 — Completed 22-12-PLAN.md (redirect new practice to bulk-create) |
 
 **Progress:**
 ```
@@ -292,6 +292,11 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 - Confirmation dialog before archive with explanation about practices remaining
 - Fetch all seasons (active + archived) for manager, filter active for practice list
 
+**v2.1 decisions (Phase 22 - Plan 12):**
+- Redirect /practices/new to /practices/bulk-create for unified flow
+- Single-date mode auto-selects only that day's day-of-week for correct date inclusion
+- Dynamic header shows context: 'Create Practice for [date]' vs 'Create Practices (N dates)'
+
 ### Architecture Notes
 
 - **Multi-tenant:** Team-scoped data with JWT claims, application-level filtering
@@ -445,10 +450,10 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
 
 | Field | Value |
 |-------|-------|
-| Last session | 2026-01-27 14:46 UTC |
-| Stopped at | Completed 22-11-PLAN.md |
+| Last session | 2026-01-27 14:49 UTC |
+| Stopped at | Completed 22-12-PLAN.md |
 | Resume file | None |
 
 ---
 
-*Last updated: 2026-01-27 (Phase 22 gap closure in progress — Practice Flow Redesign)*
+*Last updated: 2026-01-27 (Phase 22 gap closure in progress — 22-12 completed, redirect new practice to bulk-create)*
