@@ -12,9 +12,9 @@
 |-------|-------|
 | Milestone | v2.1 UX Refinement |
 | Phase | 23 — Dashboard Enhancements |
-| Plan | 4 of 6 |
+| Plan | 5 of 6 |
 | Status | In progress |
-| Last activity | 2026-01-27 — Completed 23-04 dashboard layout components |
+| Last activity | 2026-01-27 — Completed 23-05 dashboard queries |
 
 **Progress:**
 ```
@@ -462,14 +462,23 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
 - **Responsive grid:** 2-column on desktop, stacked on mobile for secondary widgets
 - **Narrower athlete layout:** max-w-3xl vs max-w-5xl for focused view
 
+**v2.1 additions (implemented in Phase 23 - Plan 05):**
+- **Dashboard queries:** Centralized data fetching functions in src/lib/dashboard/queries.ts
+- **getTodaysPracticesForCoach:** Today's practices with athlete counts, fallback to next practice
+- **getAttentionItems:** Equipment needing inspection and practices needing lineups
+- **getUsageTrendsData:** Season usage aggregated by week for sparkline
+- **getAthleteNextPractice:** Athlete's next practice with boat/seat or group assignment
+- **Date string comparison:** Uses toISOString().split('T')[0] for timezone-safe today check
+- **Filtered includes:** Prisma where clause within includes for efficient athlete queries
+
 ## Session Continuity
 
 | Field | Value |
 |-------|-------|
-| Last session | 2026-01-27 15:46 UTC |
-| Stopped at | Completed 23-04-PLAN.md |
+| Last session | 2026-01-27 15:47 UTC |
+| Stopped at | Completed 23-05-PLAN.md |
 | Resume file | None |
 
 ---
 
-*Last updated: 2026-01-27 (Phase 23 in progress — 23-04 completed, dashboard layout components)*
+*Last updated: 2026-01-27 (Phase 23 in progress — 23-05 completed, dashboard queries)*
