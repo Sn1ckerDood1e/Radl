@@ -12,9 +12,9 @@
 |-------|-------|
 | Milestone | v2.1 UX Refinement |
 | Phase | 21 — Equipment Readiness |
-| Plan | 01 of 5 |
+| Plan | 02 of 5 |
 | Status | In progress |
-| Last activity | 2026-01-27 — Completed 21-01-PLAN.md |
+| Last activity | 2026-01-27 — Completed 21-02-PLAN.md |
 
 **Progress:**
 ```
@@ -196,6 +196,11 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 - MINOR damage reports get archived after resolution, CRITICAL/MODERATE kept forever
 - Default readiness thresholds: 14 days (yellow), 21 days (amber), 30 days (red)
 
+**v2.1 decisions (Phase 21 - Plan 03):**
+- ReadinessBadge uses CVA variants with traffic light colors following announcement-priority-badge pattern
+- Inline ReadinessStatus type definition for parallel wave execution (import from library when Plan 02 completes)
+- showIcon/showLabel props enable flexible display modes (full badge, icon-only, label-only)
+
 ### Architecture Notes
 
 - **Multi-tenant:** Team-scoped data with JWT claims, application-level filtering
@@ -335,9 +340,9 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full pattern documentation.
 | Field | Value |
 |-------|-------|
 | Last session | 2026-01-27 |
-| Stopped at | Completed 21-01-PLAN.md |
+| Stopped at | Completed 21-03-PLAN.md |
 | Resume file | None |
 
 ---
 
-*Last updated: 2026-01-27 (Phase 21 in progress — Equipment Readiness schema foundation)*
+*Last updated: 2026-01-27 (Phase 21 in progress — Equipment Readiness UI components)*
