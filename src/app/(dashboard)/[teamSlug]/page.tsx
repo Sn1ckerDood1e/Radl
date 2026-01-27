@@ -5,6 +5,8 @@ import { prisma } from '@/lib/prisma';
 import { DashboardWithOnboarding } from '@/components/dashboard/dashboard-with-onboarding';
 import { AnnouncementList } from '@/components/announcements/announcement-list';
 import { sortAnnouncementsByPriority, buildActiveAnnouncementsQuery } from '@/lib/utils/announcement-helpers';
+import { FleetHealthWidget } from '@/components/equipment/fleet-health-widget';
+import { aggregateFleetHealth } from '@/lib/equipment/readiness';
 
 interface TeamDashboardPageProps {
   params: Promise<{ teamSlug: string }>;
@@ -54,7 +56,7 @@ export default async function TeamDashboardPage({ params }: TeamDashboardPagePro
   // Get team info and data in parallel
   const announcementsWhere = buildActiveAnnouncementsQuery(teamId);
   const now = new Date();
-  const [team, openDamageReportCount, announcementsRaw, upcomingPractices] = await Promise.all([
+  const [team, openDamageReportCount, announcementsRaw, upcomingPractices, equipment, teamSettings] = await Promise.all([
     prisma.team.findUnique({
       where: { id: teamId },
       select: {
@@ -98,6 +100,23 @@ export default async function TeamDashboardPage({ params }: TeamDashboardPagePro
         endTime: true,
       },
     }),
+    prisma.equipment.findMany({
+      where: { teamId: teamId, status: 'ACTIVE' },
+      include: {
+        damageReports: {
+          where: { status: 'OPEN' },
+          select: { id: true, severity: true, status: true, location: true },
+        },
+      },
+    }),
+    prisma.teamSettings.findUnique({
+      where: { teamId: teamId },
+      select: {
+        readinessInspectSoonDays: true,
+        readinessNeedsAttentionDays: true,
+        readinessOutOfServiceDays: true,
+      },
+    }),
   ]);
 
   if (!team) {
@@ -121,6 +140,17 @@ export default async function TeamDashboardPage({ params }: TeamDashboardPagePro
         }
       : null,
   }));
+
+  // Build thresholds from settings or use defaults
+  const thresholds = {
+    inspectSoonDays: teamSettings?.readinessInspectSoonDays ?? 14,
+    needsAttentionDays: teamSettings?.readinessNeedsAttentionDays ?? 21,
+    outOfServiceDays: teamSettings?.readinessOutOfServiceDays ?? 30,
+  };
+
+  // Aggregate fleet health
+  const fleetHealthCounts = aggregateFleetHealth(equipment, thresholds);
+  const totalEquipment = equipment.length;
 
   const dashboardContent = (
     <div className="max-w-5xl mx-auto">
@@ -184,6 +214,17 @@ export default async function TeamDashboardPage({ params }: TeamDashboardPagePro
             initialAnnouncements={announcements}
             showEmpty={isCoach}
             isCoach={isCoach}
+          />
+        </div>
+      )}
+
+      {/* Fleet Health Widget - Coaches only */}
+      {isCoach && (
+        <div className="mb-6">
+          <FleetHealthWidget
+            teamSlug={teamSlug}
+            statusCounts={fleetHealthCounts}
+            totalEquipment={totalEquipment}
           />
         </div>
       )}
