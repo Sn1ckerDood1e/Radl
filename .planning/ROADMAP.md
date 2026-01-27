@@ -127,6 +127,20 @@ Plans:
 - Athlete availability indicators
 - Workout structure within blocks: intervals, pieces, steady state
 - Block reordering via drag
+- Bulk practice creation with date range and day selection
+- Bulk practice deletion with multi-select
+
+**Plans:** 9 plans
+Plans:
+- [ ] 22-01-PLAN.md — Data foundation: MEETING type, Workout/WorkoutTemplate models
+- [ ] 22-02-PLAN.md — Inline editing: useAutosave hook, InlineTextField, InlineTextarea
+- [ ] 22-03-PLAN.md — API layer: PATCH endpoints, workout CRUD, templates
+- [ ] 22-04-PLAN.md — Block components: InlineBlockEditor, BlockTypeButtons, SortableBlockList
+- [ ] 22-05-PLAN.md — Workout builder: PM5-style intervals, templates
+- [ ] 22-06-PLAN.md — Multi-boat lineup: drag between boats, swap behavior
+- [ ] 22-07-PLAN.md — Practice page integration: inline editing, block content
+- [ ] 22-08-PLAN.md — Bulk operations: create multiple, delete selected
+- [ ] 22-09-PLAN.md — Final integration and verification
 
 **Dependencies:** Phase 18 (uses new layout patterns)
 
@@ -195,7 +209,7 @@ Phase 18: [##########] 100% — Complete
 Phase 19: [##########] 100% — Complete
 Phase 20: [##########] 100% — Complete
 Phase 21: [##########] 100% — Complete (6 plans)
-Phase 22: [          ] 0% — Not started
+Phase 22: [          ] 0% — Planning complete (9 plans)
 Phase 23: [          ] 0% — Not started
 Phase 24: [          ] 0% — Not started
 ```
