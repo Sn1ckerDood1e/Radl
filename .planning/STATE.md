@@ -12,9 +12,9 @@
 |-------|-------|
 | Milestone | v2.2 Security Audit |
 | Phase | Phase 25 - API Authentication & JWT Security |
-| Plan | 03 complete, continuing |
+| Plan | 01 complete, continuing |
 | Status | In progress |
-| Last activity | 2026-01-28 - Completed 25-03-PLAN.md (Session Management Audit) |
+| Last activity | 2026-01-28 - Completed 25-01-PLAN.md (API Authentication Audit) |
 
 **Progress:**
 ```
@@ -22,7 +22,7 @@ v1.0: [##########] 100% SHIPPED (2026-01-22)
 v1.1: [##########] 100% SHIPPED (2026-01-22) — 9/11 reqs, 2 deferred
 v2.0: [##########] 100% SHIPPED (2026-01-26) — 34/34 requirements
 v2.1: [##########] 100% SHIPPED (2026-01-27) — 30/30 requirements
-v2.2: [#         ]  10% IN PROGRESS (Phases 25-27) — 3/35 requirements audited
+v2.2: [#         ]  11% IN PROGRESS (Phases 25-27) — 4/35 requirements audited
 ```
 
 ## Shipped Milestones
@@ -152,6 +152,7 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 
 | Requirement | Status | Notes |
 |-------------|--------|-------|
+| AUTH-01: API Authentication | PASS | 88 routes audited, all protected or justified |
 | AUTH-05: Session Persistence | PASS | httpOnly cookies + middleware refresh |
 | AUTH-06: Logout Implementation | FAIL | No logout functionality exists (CRITICAL) |
 | AUTH-07: Token Refresh | PASS | Automatic via getUser() |
@@ -162,10 +163,10 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 
 | Field | Value |
 |-------|-------|
-| Last session | 2026-01-28T22:45:44Z |
-| Stopped at | Completed 25-03-PLAN.md (Session Management Audit) |
+| Last session | 2026-01-28T23:15:00Z |
+| Stopped at | Completed 25-01-PLAN.md (API Authentication Audit) |
 | Resume file | None |
 
 ---
 
-*Last updated: 2026-01-28 (Phase 25-03 complete)*
+*Last updated: 2026-01-28 (Phase 25-01 complete)*
