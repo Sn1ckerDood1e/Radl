@@ -21,17 +21,14 @@ export default function OnboardingPage() {
         </p>
         <div className="flex flex-col gap-3">
           <Link
-            href="/clubs/join"
+            href="/create-team"
             className="w-full py-2 px-4 bg-[var(--accent)] text-white rounded-lg text-center font-medium hover:opacity-90 transition-opacity"
           >
-            Join a Club
+            Create a Team
           </Link>
-          <Link
-            href="/clubs/create"
-            className="w-full py-2 px-4 border border-[var(--border)] text-[var(--text-primary)] rounded-lg text-center font-medium hover:bg-[var(--surface-2)] transition-colors"
-          >
-            Create a Club
-          </Link>
+          <p className="text-sm text-[var(--text-secondary)] text-center">
+            Have an invite code? Ask your coach or admin to send you an invite link.
+          </p>
         </div>
       </div>
     </div>
