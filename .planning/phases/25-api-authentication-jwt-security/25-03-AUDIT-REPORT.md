@@ -364,6 +364,98 @@ curl -X GET "http://localhost:3000/api/practices" \
 
 ---
 
+## Edge Cases and Known Behaviors
+
+### Session Synchronization Across Tabs
+
+**How it works:**
+- All tabs share the same cookies (browser behavior)
+- When Token A refreshes via middleware, new cookie is written
+- Token A is valid, Token B in another tab is also valid (same cookie)
+- Context switch in one tab affects ALL tabs after refresh
+
+**Test:**
+```
+1. Open Tab A, log in
+2. Open Tab B (same app)
+3. In Tab A, switch context to Club X
+4. In Tab B, refresh page
+5. Expected: Tab B now shows Club X context
+```
+
+### Browser Cookie Settings Impact
+
+**Potential Issues:**
+- If browser blocks third-party cookies: May affect Supabase SSR
+- If cookies disabled: App will not work (no session storage)
+- Incognito mode: Session lost on window close
+
+**Test for cookie-blocking browsers:**
+```
+1. Enable "Block third-party cookies" in browser settings
+2. Try to log in
+3. Expected: Login should still work (first-party cookies)
+4. If fails: Report as compatibility issue
+```
+
+### Context Switch JWT Refresh
+
+**Code reference:** `src/components/layout/context-switcher.tsx` line 124
+
+```typescript
+await supabase.auth.refreshSession();
+```
+
+**Why needed:**
+- JWT contains custom claims (club_id, facility_id)
+- When switching contexts, claims must be updated
+- refreshSession() forces new JWT with updated claims
+
+**Test:**
+```
+1. Log in, note initial clubId in JWT (DevTools > Application > Cookies)
+2. Switch to different club via context switcher
+3. Check JWT claims again
+4. Expected: clubId in JWT should match new club
+```
+
+### Session Expiry Behavior
+
+**Access Token (~1 hour):**
+- Automatically refreshed by middleware on any request
+- User never notices unless completely idle > 1 hour between requests
+
+**Refresh Token (~30 days default, configurable in Supabase):**
+- When refresh token expires, user must re-authenticate
+- No automatic recovery possible
+
+**Test for refresh token expiry (requires waiting or mocking):**
+```
+1. Log in
+2. Clear only access token cookie (keep refresh token)
+3. Make request
+4. Expected: New access token issued automatically
+
+Alternative (to test full expiry):
+1. Change Supabase project settings to short refresh token lifetime
+2. Wait for expiry
+3. Make request
+4. Expected: 401/redirect to login
+```
+
+### API Key vs Session Authentication
+
+**Documented in:** `src/middleware.ts` lines 81-107
+
+When request has `Authorization: Bearer sk_...`:
+- API key authentication is used
+- No session cookies required
+- Club context comes from API key, not cookies
+
+This is separate from session management and tested in AUTH-01/AUTH-02.
+
+---
+
 ## Summary of Findings
 
 ### Compliant
