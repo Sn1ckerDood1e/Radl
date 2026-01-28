@@ -49,3 +49,4 @@ yarn-error.log*
 # Generated service worker (built at compile time)
 public/sw.js
 public/sw.js.map
+.env*.local
