@@ -4,7 +4,7 @@
 
 **Core Value:** Coaches can plan practices with lineups and equipment, and athletes know where to be and what boat they're in.
 
-**Current Focus:** v2.2 Security Audit - Phase 25 in progress
+**Current Focus:** v2.2 Security Audit - Phase 25 complete, Phase 26 next
 
 ## Current Position
 
@@ -22,7 +22,7 @@ v1.0: [##########] 100% SHIPPED (2026-01-22)
 v1.1: [##########] 100% SHIPPED (2026-01-22) — 9/11 reqs, 2 deferred
 v2.0: [##########] 100% SHIPPED (2026-01-26) — 34/34 requirements
 v2.1: [##########] 100% SHIPPED (2026-01-27) — 30/30 requirements
-v2.2: [##        ]  20% IN PROGRESS (Phases 25-27) — 7/35 requirements audited
+v2.2: [###       ]  33% IN PROGRESS (Phases 25-27) — 7/35 requirements complete
 ```
 
 ## Shipped Milestones
@@ -172,4 +172,4 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 
 ---
 
-*Last updated: 2026-01-28 (Phase 25-02 complete)*
+*Last updated: 2026-01-28 (Phase 25 complete)*

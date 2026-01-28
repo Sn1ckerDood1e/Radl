@@ -69,7 +69,7 @@ Navigation redesign, RIM feature parity, practice flow improvements, RC public A
 
 ---
 
-#### Phase 25: API Authentication & JWT Security
+#### ✅ Phase 25: API Authentication & JWT Security — COMPLETE
 
 **Goal:** All API routes are secured with verified JWT authentication and proper session management
 
@@ -77,19 +77,20 @@ Navigation redesign, RIM feature parity, practice flow improvements, RC public A
 
 **Requirements:** AUTH-01, AUTH-02, AUTH-03, AUTH-04, AUTH-05, AUTH-06, AUTH-07
 
-**Success Criteria** (what must be TRUE):
-1. No API route accepts requests without valid JWT authentication
-2. Expired JWT tokens are rejected with proper error responses
-3. User can log in, maintain session across browser refresh, and log out cleanly
-4. JWT signature verification catches tampered tokens
-5. Token refresh flow extends sessions without requiring re-authentication
+**Delivered:**
+- 88 API routes audited (all protected or justified public)
+- JWT signature verification via getUser() on every request
+- Expired/tampered tokens rejected server-side
+- Session persistence via httpOnly cookies + middleware refresh
+- Logout functionality with cookie cleanup
 
-**Plans:** 3 plans in 1 wave (all parallel)
+**Plans:** 4 plans (3 audit + 1 gap closure)
 
 Plans:
-- [ ] 25-01-PLAN.md — API route authentication audit (AUTH-01)
-- [ ] 25-02-PLAN.md — JWT security testing (AUTH-02, AUTH-03, AUTH-04)
-- [ ] 25-03-PLAN.md — Session management testing (AUTH-05, AUTH-06, AUTH-07)
+- [x] 25-01-PLAN.md — API route authentication audit (AUTH-01)
+- [x] 25-02-PLAN.md — JWT security testing (AUTH-02, AUTH-03, AUTH-04)
+- [x] 25-03-PLAN.md — Session management testing (AUTH-05, AUTH-06, AUTH-07)
+- [x] 25-04-PLAN.md — Logout implementation (AUTH-06 gap closure)
 
 ---
 
@@ -148,10 +149,10 @@ Phases execute in numeric order: 25 → 26 → 27
 
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
-| 25. API Authentication & JWT Security | v2.2 | 0/3 | Planned | - |
+| 25. API Authentication & JWT Security | v2.2 | 4/4 | ✅ Complete | 2026-01-28 |
 | 26. RBAC & Tenant Isolation | v2.2 | 0/TBD | Not started | - |
 | 27. Secrets, Logging & Rate Limiting | v2.2 | 0/TBD | Not started | - |
 
 ---
 
-*Last updated: 2026-01-28 (Phase 25 plans created)*
+*Last updated: 2026-01-28 (Phase 25 complete)*

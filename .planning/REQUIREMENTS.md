@@ -7,15 +7,15 @@
 
 Security audit requirements to validate the app before beta testing.
 
-### API Authentication
+### API Authentication ✅
 
-- [ ] **AUTH-01**: All API routes require authentication (no unprotected endpoints)
-- [ ] **AUTH-02**: JWT signatures are verified on every request
-- [ ] **AUTH-03**: JWT expiration is enforced (expired tokens rejected)
-- [ ] **AUTH-04**: JWT claims are validated against expected structure
-- [ ] **AUTH-05**: Session persistence works correctly across browser refresh
-- [ ] **AUTH-06**: Logout properly invalidates session
-- [ ] **AUTH-07**: Token refresh works without re-authentication
+- [x] **AUTH-01**: All API routes require authentication (no unprotected endpoints)
+- [x] **AUTH-02**: JWT signatures are verified on every request
+- [x] **AUTH-03**: JWT expiration is enforced (expired tokens rejected)
+- [x] **AUTH-04**: JWT claims are validated against expected structure
+- [x] **AUTH-05**: Session persistence works correctly across browser refresh
+- [x] **AUTH-06**: Logout properly invalidates session
+- [x] **AUTH-07**: Token refresh works without re-authentication
 
 ### RBAC Permissions
 
@@ -87,13 +87,13 @@ Deferred to future milestones:
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| AUTH-01 | Phase 25 | Pending |
-| AUTH-02 | Phase 25 | Pending |
-| AUTH-03 | Phase 25 | Pending |
-| AUTH-04 | Phase 25 | Pending |
-| AUTH-05 | Phase 25 | Pending |
-| AUTH-06 | Phase 25 | Pending |
-| AUTH-07 | Phase 25 | Pending |
+| AUTH-01 | Phase 25 | Complete |
+| AUTH-02 | Phase 25 | Complete |
+| AUTH-03 | Phase 25 | Complete |
+| AUTH-04 | Phase 25 | Complete |
+| AUTH-05 | Phase 25 | Complete |
+| AUTH-06 | Phase 25 | Complete |
+| AUTH-07 | Phase 25 | Complete |
 | RBAC-01 | Phase 26 | Pending |
 | RBAC-02 | Phase 26 | Pending |
 | RBAC-03 | Phase 26 | Pending |
@@ -130,4 +130,4 @@ Deferred to future milestones:
 
 ---
 *Requirements defined: 2026-01-28*
-*Last updated: 2026-01-28 after initial definition*
+*Last updated: 2026-01-28 (Phase 25 complete — 7/35 requirements)*
