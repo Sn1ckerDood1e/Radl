@@ -4,7 +4,7 @@
 
 **Core Value:** Coaches can plan practices with lineups and equipment, and athletes know where to be and what boat they're in.
 
-**Current Focus:** v2.2 Security Audit - Phase 25 ready for planning
+**Current Focus:** v2.2 Security Audit - Phase 25 in progress
 
 ## Current Position
 
@@ -12,9 +12,9 @@
 |-------|-------|
 | Milestone | v2.2 Security Audit |
 | Phase | Phase 25 - API Authentication & JWT Security |
-| Plan | Ready for plan-phase |
-| Status | Roadmap created |
-| Last activity | 2026-01-28 — v2.2 roadmap created |
+| Plan | 03 complete, continuing |
+| Status | In progress |
+| Last activity | 2026-01-28 - Completed 25-03-PLAN.md (Session Management Audit) |
 
 **Progress:**
 ```
@@ -22,7 +22,7 @@ v1.0: [##########] 100% SHIPPED (2026-01-22)
 v1.1: [##########] 100% SHIPPED (2026-01-22) — 9/11 reqs, 2 deferred
 v2.0: [##########] 100% SHIPPED (2026-01-26) — 34/34 requirements
 v2.1: [##########] 100% SHIPPED (2026-01-27) — 30/30 requirements
-v2.2: [          ]   0% IN PROGRESS (Phases 25-27) — 35/35 requirements
+v2.2: [#         ]  10% IN PROGRESS (Phases 25-27) — 3/35 requirements audited
 ```
 
 ## Shipped Milestones
@@ -148,14 +148,24 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 - Phase 26 likely needs deeper research for facility-shared equipment RLS policies
 - Standard patterns for Phase 25 and Phase 27 (no additional research needed)
 
+## Phase 25 Audit Findings
+
+| Requirement | Status | Notes |
+|-------------|--------|-------|
+| AUTH-05: Session Persistence | PASS | httpOnly cookies + middleware refresh |
+| AUTH-06: Logout Implementation | FAIL | No logout functionality exists (CRITICAL) |
+| AUTH-07: Token Refresh | PASS | Automatic via getUser() |
+
+**Critical Issue:** AUTH-06 - Users cannot log out. Requires remediation.
+
 ## Session Continuity
 
 | Field | Value |
 |-------|-------|
-| Last session | 2026-01-28 |
-| Stopped at | v2.2 roadmap created, ready for plan-phase |
+| Last session | 2026-01-28T22:45:44Z |
+| Stopped at | Completed 25-03-PLAN.md (Session Management Audit) |
 | Resume file | None |
 
 ---
 
-*Last updated: 2026-01-28 (v2.2 roadmap created)*
+*Last updated: 2026-01-28 (Phase 25-03 complete)*
