@@ -12,9 +12,9 @@
 |-------|-------|
 | Milestone | v2.2 Security Audit |
 | Phase | Phase 25 - API Authentication & JWT Security |
-| Plan | 01 complete, continuing |
+| Plan | 02 complete, continuing |
 | Status | In progress |
-| Last activity | 2026-01-28 - Completed 25-01-PLAN.md (API Authentication Audit) |
+| Last activity | 2026-01-28 - Completed 25-02-PLAN.md (JWT Security Audit) |
 
 **Progress:**
 ```
@@ -22,7 +22,7 @@ v1.0: [##########] 100% SHIPPED (2026-01-22)
 v1.1: [##########] 100% SHIPPED (2026-01-22) — 9/11 reqs, 2 deferred
 v2.0: [##########] 100% SHIPPED (2026-01-26) — 34/34 requirements
 v2.1: [##########] 100% SHIPPED (2026-01-27) — 30/30 requirements
-v2.2: [#         ]  11% IN PROGRESS (Phases 25-27) — 4/35 requirements audited
+v2.2: [##        ]  20% IN PROGRESS (Phases 25-27) — 7/35 requirements audited
 ```
 
 ## Shipped Milestones
@@ -153,6 +153,9 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 | Requirement | Status | Notes |
 |-------------|--------|-------|
 | AUTH-01: API Authentication | PASS | 88 routes audited, all protected or justified |
+| AUTH-02: JWT Signature Verification | PASS | getUser() called before getSession() in all auth paths |
+| AUTH-03: Expired Token Rejection | PASS | Supabase getUser() handles server-side validation |
+| AUTH-04: Claims Validation | PASS | CustomJwtPayload interface defines expected structure |
 | AUTH-05: Session Persistence | PASS | httpOnly cookies + middleware refresh |
 | AUTH-06: Logout Implementation | FAIL | No logout functionality exists (CRITICAL) |
 | AUTH-07: Token Refresh | PASS | Automatic via getUser() |
@@ -163,10 +166,10 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 
 | Field | Value |
 |-------|-------|
-| Last session | 2026-01-28T23:15:00Z |
-| Stopped at | Completed 25-01-PLAN.md (API Authentication Audit) |
+| Last session | 2026-01-28T22:55:00Z |
+| Stopped at | Completed 25-02-PLAN.md (JWT Security Audit) |
 | Resume file | None |
 
 ---
 
-*Last updated: 2026-01-28 (Phase 25-01 complete)*
+*Last updated: 2026-01-28 (Phase 25-02 complete)*
