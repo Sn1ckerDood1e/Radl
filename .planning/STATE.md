@@ -12,9 +12,9 @@
 |-------|-------|
 | Milestone | v2.2 Security Audit |
 | Phase | Phase 25 - API Authentication & JWT Security |
-| Plan | 02 complete, continuing |
-| Status | In progress |
-| Last activity | 2026-01-28 - Completed 25-02-PLAN.md (JWT Security Audit) |
+| Plan | 04 complete (gap closure) |
+| Status | Phase 25 complete |
+| Last activity | 2026-01-28 - Completed 25-04-PLAN.md (Logout Implementation) |
 
 **Progress:**
 ```
@@ -157,17 +157,17 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 | AUTH-03: Expired Token Rejection | PASS | Supabase getUser() handles server-side validation |
 | AUTH-04: Claims Validation | PASS | CustomJwtPayload interface defines expected structure |
 | AUTH-05: Session Persistence | PASS | httpOnly cookies + middleware refresh |
-| AUTH-06: Logout Implementation | FAIL | No logout functionality exists (CRITICAL) |
+| AUTH-06: Logout Implementation | PASS | POST /api/auth/logout + settings button (25-04) |
 | AUTH-07: Token Refresh | PASS | Automatic via getUser() |
 
-**Critical Issue:** AUTH-06 - Users cannot log out. Requires remediation.
+**Status:** All 7 AUTH requirements now PASS. Phase 25 complete.
 
 ## Session Continuity
 
 | Field | Value |
 |-------|-------|
-| Last session | 2026-01-28T22:55:00Z |
-| Stopped at | Completed 25-02-PLAN.md (JWT Security Audit) |
+| Last session | 2026-01-28T23:15:00Z |
+| Stopped at | Completed 25-04-PLAN.md (Logout Implementation - gap closure) |
 | Resume file | None |
 
 ---
