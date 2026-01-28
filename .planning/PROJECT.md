@@ -4,7 +4,19 @@
 
 A multi-tenant SaaS for rowing team operations — practice planning, equipment management, roster coordination, and race-day execution at regattas.
 
-**Current State:** v2.1 shipped. UX refinements complete — RIM feature parity, navigation redesign, practice flow improvements, RC public API integration.
+**Current State:** v2.2 in progress. Security audit before beta testing.
+
+## Current Milestone: v2.2 Security Audit
+
+**Goal:** Validate security architecture before beta testing
+
+**Target features:**
+- API authentication verification (all routes secured)
+- RBAC permission boundaries (5-role hierarchy tested)
+- Tenant isolation (facility → club → team data separation)
+- Secrets management (no exposure in client code)
+- Audit logging (security events captured)
+- Rate limiting (brute force prevention)
 
 ## Core Value
 
