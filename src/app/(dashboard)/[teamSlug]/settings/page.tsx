@@ -58,6 +58,7 @@ export default function TeamSettingsPage() {
   const [needsAttentionDays, setNeedsAttentionDays] = useState(21);
   const [outOfServiceDays, setOutOfServiceDays] = useState(30);
   const [regattaRegions, setRegattaRegions] = useState<string[]>([]);
+  const [loggingOut, setLoggingOut] = useState(false);
 
   const [teamInfo, setTeamInfo] = useState<TeamInfo>({ name: '', primaryColor: '#1a365d', secondaryColor: '#e2e8f0' });
   const [primaryColor, setPrimaryColor] = useState('#1a365d');
@@ -246,6 +247,28 @@ export default function TeamSettingsPage() {
     const currentRegions = settings.regattaRegions || [];
     if (currentRegions.length !== regattaRegions.length) return true;
     return !currentRegions.every(r => regattaRegions.includes(r));
+  };
+
+  const handleLogout = async () => {
+    setLoggingOut(true);
+    setError(null);
+
+    try {
+      const response = await fetch('/api/auth/logout', {
+        method: 'POST',
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error || 'Failed to sign out');
+      }
+
+      // Redirect to login page
+      router.push('/login');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to sign out');
+      setLoggingOut(false);
+    }
   };
 
   if (loading) {
@@ -619,6 +642,24 @@ export default function TeamSettingsPage() {
           </svg>
           Security Settings
         </Link>
+      </div>
+
+      {/* Account Section */}
+      <div className="bg-zinc-900 rounded-xl border border-zinc-800 p-6 mb-6">
+        <h2 className="text-lg font-semibold text-white mb-2">Account</h2>
+        <p className="text-sm text-zinc-400 mb-4">
+          Sign out of your RowOps account on this device.
+        </p>
+        <button
+          onClick={handleLogout}
+          disabled={loggingOut}
+          className="inline-flex items-center gap-2 px-4 py-2 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 rounded-lg transition-colors disabled:opacity-50"
+        >
+          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+          </svg>
+          {loggingOut ? 'Signing out...' : 'Sign Out'}
+        </button>
       </div>
 
       {/* Regatta Central Settings Section */}
