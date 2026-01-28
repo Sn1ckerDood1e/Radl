@@ -84,11 +84,12 @@ Navigation redesign, RIM feature parity, practice flow improvements, RC public A
 4. JWT signature verification catches tampered tokens
 5. Token refresh flow extends sessions without requiring re-authentication
 
-**Plans:** TBD
+**Plans:** 3 plans in 1 wave (all parallel)
 
 Plans:
-- [ ] 25-01: TBD
-- [ ] 25-02: TBD
+- [ ] 25-01-PLAN.md — API route authentication audit (AUTH-01)
+- [ ] 25-02-PLAN.md — JWT security testing (AUTH-02, AUTH-03, AUTH-04)
+- [ ] 25-03-PLAN.md — Session management testing (AUTH-05, AUTH-06, AUTH-07)
 
 ---
 
@@ -147,10 +148,10 @@ Phases execute in numeric order: 25 → 26 → 27
 
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
-| 25. API Authentication & JWT Security | v2.2 | 0/TBD | Not started | - |
+| 25. API Authentication & JWT Security | v2.2 | 0/3 | Planned | - |
 | 26. RBAC & Tenant Isolation | v2.2 | 0/TBD | Not started | - |
 | 27. Secrets, Logging & Rate Limiting | v2.2 | 0/TBD | Not started | - |
 
 ---
 
-*Last updated: 2026-01-28 (v2.2 Security Audit roadmap created)*
+*Last updated: 2026-01-28 (Phase 25 plans created)*
