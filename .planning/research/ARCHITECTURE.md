@@ -1,1281 +1,759 @@
-# Architecture Research: v2.0 Commercial Readiness
+# Security Audit Architecture
 
-**Domain:** Multi-tenant SaaS for rowing team operations
-**Researched:** 2026-01-22
-**Overall confidence:** HIGH
+**Project:** RowOps Multi-Tenant SaaS
+**Architecture:** Next.js 16 App Router + Supabase Auth + Prisma 6 + PostgreSQL
+**Researched:** 2026-01-28
 
 ## Executive Summary
 
-RowOps v2.0 introduces four major architectural enhancements to an existing Next.js 16 + Prisma 6 + Supabase application: facility-level multi-tenancy, mobile-first PWA improvements, design system integration, and RBAC hardening. The current architecture uses application-level tenant filtering with JWT claims (team_id), Serwist service workers with Dexie.js IndexedDB for offline capabilities, and server-side multi-tenant data isolation.
+This document defines the security audit structure for RowOps, a multi-tenant rowing team management SaaS. The architecture employs defense-in-depth with three isolation layers: database-level RLS, middleware authentication, and application-level CASL permissions. The audit must verify tenant isolation at each layer, test authorization bypass vectors, and validate JWT claim integrity.
 
-**Key architectural decisions:**
-1. **Facility Model**: Extend JWT claims to support hierarchical tenancy (facility_id, club_id, team_id) while maintaining backward compatibility with existing team-only architecture
-2. **Mobile PWA**: Enhance existing Serwist/Dexie setup with mobile-first responsive components, 44px touch targets, and improved offline sync patterns
-3. **UI/UX**: Adopt Shadcn/UI with CVA (Class Variance Authority) for consistent, accessible component variants on top of existing Tailwind CSS
-4. **RBAC**: Implement Supabase custom claims via Auth Hooks for hierarchical permissions (Facility Admin → Coach → Athlete → Parent) with Prisma Client Extensions for automatic tenant filtering
+**Critical vulnerability context:** CVE-2025-29927 (CVSS 9.1) affects Next.js 11.1.4-15.2.2 self-hosted deployments, allowing middleware bypass via `x-middleware-subrequest` header manipulation. While this codebase uses Next.js 16, the audit must verify no similar bypass vectors exist.
 
-## Current Architecture Summary
+## Audit Layers
 
-### Technology Stack
-- **Framework**: Next.js 16 App Router with React 19
-- **Database**: PostgreSQL (Supabase) with Prisma 6 ORM
-- **Authentication**: Supabase Auth with JWT claims (team_id, user_role)
-- **Offline**: Serwist 9 service worker + Dexie.js 4 IndexedDB
-- **UI**: Tailwind CSS 4 with Lucide icons, dnd-kit for drag-drop
-- **State**: React Hook Form + Zod validation, Sonner toasts
+Security in this architecture operates across six distinct layers, each requiring specific audit techniques.
 
-### Current Multi-Tenancy Model
-- **Pattern**: Shared database with application-level tenant filtering
-- **Isolation**: Every table has `teamId` field, enforced in middleware and queries
-- **Claims**: JWT contains `team_id` and `user_role` (COACH, ATHLETE, PARENT)
-- **Verification**: `getUser()` validates JWT, database fallback for stale claims
-- **Queries**: Manual `where: { teamId }` filtering in Prisma queries
+### Layer 1: Edge Middleware (First Defense)
 
-### Current Data Model (Simplified)
-```
-Team (current tenant root)
-├── TeamMember (userId + role)
-├── Season
-│   ├── Practice → PracticeBlock → Lineup
-│   └── Regatta → Entry → EntryLineup
-├── Equipment (shells, oars, launches)
-└── AthleteProfile
-```
+**Location:** `/src/middleware.ts`
 
-### Current Authentication Flow
-1. User authenticates via Supabase Auth
-2. Middleware calls `getUser()` to verify JWT authenticity
-3. API routes use `getClaimsForApiRoute()` to extract team_id from JWT
-4. Database fallback queries TeamMember if JWT claims are stale
-5. All Prisma queries manually filter by teamId
+**What to audit:**
+- Authentication verification using `supabase.auth.getUser()` (NOT `getSession()` - susceptible to JWT forgery)
+- Public route allowlist (`/login`, `/signup`, `/auth/callback`, `/join/*`, `/report/*`, `/api/equipment/*`)
+- API key authentication for `/api/*` routes (Bearer token with `sk_` prefix)
+- JWT token refresh mechanism
+- Cookie handling and security flags
 
-### Current Offline Architecture
-- **Service Worker**: Serwist 9 with precaching and runtime caching strategies
-- **Local Storage**: Dexie.js IndexedDB for practices, lineups, equipment, regattas
-- **Sync Pattern**: Read from IndexedDB first, write to server when online
-- **Background Sync**: Service worker queues mutations when offline
-- **Push Notifications**: Web Push for race alerts and lineup changes
-
-## Facility Model Integration
-
-### Problem Statement
-Current architecture assumes Team is the tenant root. Real-world rowing organizations have facilities (boathouses) hosting multiple clubs, with equipment shared at facility-level or exclusive to clubs. Example: Chattanooga Rowing (facility) hosts Lookout Rowing Club and Chattanooga Juniors Rowing, sharing some boats but each club having exclusive equipment.
-
-### Recommended Schema Evolution
-
-#### New Hierarchy
-```
-Facility (boathouse/foundation)
-├── Club (paying subscriber, has teams)
-│   ├── Team (organizational unit within club)
-│   │   ├── Season → Practice → etc.
-│   │   └── TeamMember
-│   └── Equipment (club-exclusive)
-└── Equipment (facility-shared)
-```
-
-#### Database Schema Changes
-
-**Phase 1: Add Facility and Club models** (backward compatible)
-```prisma
-model Facility {
-  id        String   @id @default(uuid())
-  name      String   // e.g., "Chattanooga Rowing"
-  slug      String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  clubs      Club[]
-  equipment  Equipment[] // Facility-owned shared equipment
-}
-
-model Club {
-  id         String   @id @default(uuid())
-  facilityId String
-  name       String   // e.g., "Lookout Rowing Club"
-  slug       String   @unique
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-
-  facility   Facility @relation(fields: [facilityId], references: [id])
-  teams      Team[]
-  equipment  Equipment[] // Club-exclusive equipment
-
-  @@index([facilityId])
-}
-
-// Extend existing Team model
-model Team {
-  id      String  @id @default(uuid())
-  clubId  String? // Nullable for backward compatibility
-  // ... existing fields ...
-
-  club    Club?   @relation(fields: [clubId], references: [id])
-  // ... existing relations ...
-
-  @@index([clubId])
-}
-
-// Extend existing Equipment model
-model Equipment {
-  id         String  @id @default(uuid())
-  teamId     String? // Null if facility/club-owned
-  clubId     String? // Null if facility-owned
-  facilityId String? // Null if team/club-owned
-  ownerType  EquipmentOwnerType // FACILITY | CLUB | TEAM
-  // ... existing fields ...
-
-  team       Team?     @relation(fields: [teamId], references: [id])
-  club       Club?     @relation(fields: [clubId], references: [id])
-  facility   Facility? @relation(fields: [facilityId], references: [id])
-
-  @@index([facilityId])
-  @@index([clubId])
-  @@index([teamId])
-}
-
-enum EquipmentOwnerType {
-  FACILITY // Shared across all clubs at facility
-  CLUB     // Exclusive to club, shared across teams
-  TEAM     // Exclusive to team (existing behavior)
-}
-```
-
-**Rationale:**
-- Nullable foreign keys allow gradual migration from team-only to facility hierarchy
-- EquipmentOwnerType explicitly models ownership level
-- Existing team-only installations continue working (clubId, facilityId = null)
-
-### JWT Claims Changes
-
-#### Extended Claims Structure
-```typescript
-export interface CustomJwtPayload {
-  sub: string;
-  email: string;
-  // Hierarchical tenant identifiers
-  facility_id: string | null;
-  club_id: string | null;
-  team_id: string | null;
-  // User role with facility admin addition
-  user_role: 'FACILITY_ADMIN' | 'COACH' | 'ATHLETE' | 'PARENT' | null;
-  // Active context for multi-team users
-  active_team_id: string | null;
-}
-```
-
-**Implementation via Supabase Auth Hooks:**
-- Use Custom Access Token Hook to populate facility_id, club_id, team_id from TeamMember → Team → Club → Facility
-- Hook queries database on token issuance/refresh
-- Claims stored in JWT, available to RLS policies via `current_setting('request.jwt.claims', true)`
-
-**Source:** [Supabase Custom Claims & RBAC](https://supabase.com/docs/guides/database/postgres/custom-claims-and-role-based-access-control-rbac), [Custom Access Token Hook](https://supabase.com/docs/guides/auth/auth-hooks/custom-access-token-hook)
-
-### Query Pattern Changes
-
-#### Current Pattern (manual filtering)
-```typescript
-const practices = await prisma.practice.findMany({
-  where: { teamId: claims.team_id }
-});
-```
-
-#### Recommended Pattern (Prisma Client Extensions with automatic filtering)
-```typescript
-// Extend Prisma client with automatic tenant filtering
-const createTenantClient = (claims: CustomJwtPayload) => {
-  return prisma.$extends({
-    query: {
-      $allModels: {
-        async findMany({ args, query }) {
-          // Automatically inject tenant filters based on model
-          args.where = { ...args.where, teamId: claims.team_id };
-          return query(args);
-        },
-        // Similar for findFirst, update, delete, etc.
-      },
-    },
-  });
-};
-```
-
-**Benefits:**
-- Automatic tenant filtering prevents accidental data leaks
-- Type-safe with full TypeScript support
-- Centralized tenant logic reduces query boilerplate
-
-**Source:** [Prisma Client Extensions](https://www.prisma.io/blog/client-extensions-preview-8t3w27xkrxxn), [Multi-tenant Prisma patterns](https://zenstack.dev/blog/multi-tenant)
-
-### Migration Strategy
-
-#### Phase 1: Schema Extension (backward compatible)
-1. Add Facility, Club models with nullable relationships
-2. Keep existing Team-based queries working
-3. Add equipment ownership type field
-
-#### Phase 2: Data Migration
-```sql
--- Create default facility for existing teams
-INSERT INTO "Facility" (id, name, slug)
-SELECT
-  uuid_generate_v4(),
-  'Default Facility',
-  'default-facility'
-WHERE NOT EXISTS (SELECT 1 FROM "Facility");
-
--- Create default club per team
-INSERT INTO "Club" (id, "facilityId", name, slug)
-SELECT
-  uuid_generate_v4(),
-  (SELECT id FROM "Facility" WHERE slug = 'default-facility'),
-  t.name || ' Club',
-  t.slug || '-club'
-FROM "Team" t
-WHERE t."clubId" IS NULL;
-
--- Link existing teams to clubs
-UPDATE "Team" t
-SET "clubId" = c.id
-FROM "Club" c
-WHERE c.slug = t.slug || '-club'
-  AND t."clubId" IS NULL;
-
--- Mark existing equipment as team-owned
-UPDATE "Equipment"
-SET
-  "ownerType" = 'TEAM'
-WHERE "ownerType" IS NULL;
-```
-
-#### Phase 3: Auth Hook Implementation
-1. Create Supabase Edge Function for Custom Access Token Hook
-2. Query TeamMember → Team → Club → Facility on token issuance
-3. Populate facility_id, club_id, team_id in JWT claims
-4. Update getClaimsForApiRoute() to handle new claims structure
-
-#### Phase 4: Query Refactoring
-1. Implement Prisma Client Extension for automatic filtering
-2. Refactor equipment queries to respect ownerType hierarchy
-3. Update authorization helpers to check facility/club/team access
-
-## Mobile PWA Integration
-
-### Current State
-- Serwist 9 service worker with precaching
-- Dexie.js IndexedDB for offline data
-- Basic responsive layout with Tailwind CSS
-- dnd-kit for drag-and-drop lineups
-
-### Mobile-First Architecture Enhancements
-
-#### 1. Responsive Design System
-
-**Implement Breakpoint-First Component Variants**
-```typescript
-// Use CVA for mobile-first responsive variants
-import { cva } from "class-variance-authority";
-
-const buttonVariants = cva(
-  "rounded font-medium transition-colors",
-  {
-    variants: {
-      size: {
-        sm: "h-9 px-3 text-sm",      // Mobile default
-        md: "h-10 px-4 text-base",   // Tablet
-        lg: "h-11 px-8 text-lg",     // Desktop
-      },
-      variant: {
-        primary: "bg-blue-600 text-white hover:bg-blue-700",
-        secondary: "bg-gray-200 text-gray-900 hover:bg-gray-300",
-      },
-    },
-    defaultVariants: {
-      size: "sm",
-      variant: "primary",
-    },
-  }
-);
-```
-
-**Touch Target Standards:**
-- Minimum 44x44px touch targets (WCAG 2.1 AAA, iOS HIG)
-- Minimum 48x48dp on Android (Material Design)
-- 11mm (42px) targets at screen top, 12mm (46px) at screen bottom (rage tap prevention)
-- Minimum 8px spacing between interactive elements
-
-**Source:** [Accessible Touch Target Sizes](https://www.smashingmagazine.com/2023/04/accessible-tap-target-sizes-rage-taps-clicks/), [LogRocket Touch Targets Guide](https://blog.logrocket.com/ux-design/all-accessible-touch-target-sizes/)
-
-#### 2. Touch-Optimized Drag & Drop
-
-**Current dnd-kit Configuration Issues:**
-```typescript
-// Problem: Default pointer sensor doesn't work well on mobile
-<DndContext sensors={sensors}>
-```
-
-**Recommended Mobile-Optimized Configuration:**
-```typescript
-import {
-  DndContext,
-  PointerSensor,
-  TouchSensor,
-  useSensor,
-  useSensors,
-} from '@dnd-kit/core';
-
-const sensors = useSensors(
-  useSensor(PointerSensor, {
-    activationConstraint: {
-      distance: 8, // Prevent accidental drags
-    },
-  }),
-  useSensor(TouchSensor, {
-    activationConstraint: {
-      delay: 250,      // Long-press to activate (ms)
-      tolerance: 5,    // Movement tolerance (px)
-    },
-  })
-);
-
-// Apply touch-action CSS to draggables
-<div style={{ touchAction: 'manipulation' }}>
-  <Draggable id={athlete.id} />
-</div>
-```
-
-**Key Improvements:**
-- Touch sensor with delay prevents accidental drag on scroll
-- `touch-action: manipulation` prevents browser zoom gestures
-- Distance constraint prevents rage taps
-
-**Source:** [dnd-kit Touch Sensor Docs](https://docs.dndkit.com/api-documentation/sensors/touch), [dnd-kit mobile issues](https://github.com/clauderic/dnd-kit/issues/435)
-
-#### 3. Offline Sync Enhancements
-
-**Current Pattern:** Basic IndexedDB caching with manual sync
-
-**Recommended Pattern:** Queue-Store-Detect-Sync with Conflict Resolution
-```typescript
-// Sync queue in Dexie
-class AppDatabase extends Dexie {
-  practices!: Dexie.Table<Practice, string>;
-  syncQueue!: Dexie.Table<SyncOperation, number>;
-
-  constructor() {
-    super('rowops');
-    this.version(1).stores({
-      practices: 'id, teamId, date',
-      syncQueue: '++id, timestamp, retryCount', // Auto-increment ID
-    });
-  }
-}
-
-interface SyncOperation {
-  id?: number;
-  type: 'CREATE' | 'UPDATE' | 'DELETE';
-  resource: 'practice' | 'lineup' | 'equipment';
-  resourceId: string;
-  data: any;
-  timestamp: number;
-  retryCount: number;
-}
-
-// Queue mutations when offline
-async function createPractice(data: PracticeInput) {
-  const practice = { id: nanoid(), ...data };
-
-  // Write to IndexedDB first (optimistic UI)
-  await db.practices.add(practice);
-
-  // Queue sync operation
-  await db.syncQueue.add({
-    type: 'CREATE',
-    resource: 'practice',
-    resourceId: practice.id,
-    data: practice,
-    timestamp: Date.now(),
-    retryCount: 0,
-  });
-
-  // Attempt immediate sync if online
-  if (navigator.onLine) {
-    await processSyncQueue();
-  }
-}
-
-// Background sync processing
-async function processSyncQueue() {
-  const operations = await db.syncQueue.orderBy('timestamp').toArray();
-
-  for (const op of operations) {
-    try {
-      await fetch(`/api/${op.resource}`, {
-        method: 'POST',
-        body: JSON.stringify(op.data),
-      });
-
-      // Remove from queue on success
-      await db.syncQueue.delete(op.id!);
-    } catch (error) {
-      // Increment retry count, exponential backoff
-      await db.syncQueue.update(op.id!, {
-        retryCount: op.retryCount + 1,
-      });
-    }
-  }
-}
-```
-
-**Sync Strategies:**
-- **Immediate sync**: Attempt on mutation if online
-- **Periodic sync**: Service worker triggers every 5 minutes when online
-- **Manual sync**: User-triggered "Refresh" button
-- **Conflict resolution**: Server timestamp wins, local changes merged if compatible
-
-**Source:** [Dexie.js Sync Patterns](https://app.studyraid.com/en/read/11356/355148/synchronization-patterns), [Offline-First IndexedDB 2025](https://blog.logrocket.com/offline-first-frontend-apps-2025-indexeddb-sqlite/)
-
-#### 4. Progressive Enhancement for Mobile
-
-**Service Worker Strategy:**
-```javascript
-// sw.js - Enhanced Serwist configuration
-import { Serwist } from 'serwist';
-import { CacheFirst, NetworkFirst, StaleWhileRevalidate } from 'serwist';
-
-const serwist = new Serwist({
-  precacheEntries: self.__SW_MANIFEST,
-  skipWaiting: true,
-  clientsClaim: true,
-  runtimeCaching: [
-    {
-      urlPattern: /^https:\/\/api\.rowops\.com\/practices/,
-      handler: new NetworkFirst({
-        cacheName: 'practices-cache',
-        networkTimeoutSeconds: 3, // Fallback to cache after 3s
-      }),
-    },
-    {
-      urlPattern: /^https:\/\/api\.rowops\.com\/equipment/,
-      handler: new StaleWhileRevalidate({
-        cacheName: 'equipment-cache',
-      }),
-    },
-    {
-      urlPattern: /^https:\/\/.*\.(png|jpg|jpeg|svg|gif)$/,
-      handler: new CacheFirst({
-        cacheName: 'images-cache',
-        plugins: [
-          {
-            maxEntries: 50,
-            maxAgeSeconds: 30 * 24 * 60 * 60, // 30 days
-          },
-        ],
-      }),
-    },
-  ],
-});
-
-serwist.addEventListeners();
-```
-
-**Mobile Performance Optimizations:**
-- Network timeout fallback (3s) for flaky cellular connections
-- Image caching with LRU eviction (50 max entries)
-- StaleWhileRevalidate for equipment (rarely changes, always shows stale data immediately)
-
-**Source:** [Serwist API Documentation](https://serwist.pages.dev/docs/serwist/core), [Build Next.js 16 PWA with Offline Support](https://blog.logrocket.com/nextjs-16-pwa-offline-support)
-
-## UI/UX Integration
-
-### Design System Strategy
-
-#### Recommended Approach: Shadcn/UI + CVA
-
-**Why Shadcn/UI:**
-- Copy-paste components (no runtime dependency, full ownership)
-- Built on Radix UI (battle-tested accessibility, touch-friendly)
-- Tailwind CSS integration (matches existing stack)
-- CVA for type-safe variant management
-- Responsive and mobile-first by default
-
-**Architecture:**
-```
-src/
-├── components/
-│   ├── ui/              # Shadcn/UI primitives (copied, owned)
-│   │   ├── button.tsx
-│   │   ├── dialog.tsx
-│   │   ├── dropdown-menu.tsx
-│   │   └── ... (30+ components)
-│   ├── practice/        # Domain components (existing)
-│   ├── lineup/
-│   └── equipment/
-├── lib/
-│   └── utils.ts         # cn() helper for merging Tailwind classes
-└── styles/
-    └── globals.css      # Tailwind + Shadcn theme variables
-```
-
-**Installation:**
+**Verification approach:**
 ```bash
-npx shadcn-ui@latest init
-npx shadcn-ui@latest add button dialog dropdown-menu
+# Test 1: Unauthenticated access to protected routes
+curl http://localhost:3000/dashboard
+# Expected: 302 redirect to /login
+
+# Test 2: Public route access without auth
+curl http://localhost:3000/report/[equipment-id]
+# Expected: 200 OK (anonymous access allowed)
+
+# Test 3: API key authentication
+curl -H "Authorization: Bearer sk_test_invalid" http://localhost:3000/api/practices
+# Expected: 401 Invalid API key
+
+# Test 4: CVE-2025-29927 bypass attempt
+curl -H "x-middleware-subrequest: 1" http://localhost:3000/dashboard
+# Expected: Should NOT bypass auth (verify Next.js 16+ immunity)
 ```
 
-**Theme Configuration (globals.css):**
-```css
-@layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-    --primary: 221.2 83.2% 53.3%;      /* Rowing blue */
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96.1%;
-    --accent: 210 40% 96.1%;
-    --destructive: 0 84.2% 60.2%;
-    --border: 214.3 31.8% 91.4%;
-    --radius: 0.5rem;
-  }
+**Known vulnerabilities:**
+- Middleware can be bypassed through URL rewrites or client-side navigation if not properly configured
+- `getSession()` is vulnerable to JWT forgery - code correctly uses `getUser()`
+- API key validation happens in middleware but permissions checked in route handlers (correct defense-in-depth)
 
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --primary: 217.2 91.2% 59.8%;
-    /* ... dark mode values ... */
-  }
-}
-```
+**Audit checklist:**
+- [ ] Verify `getUser()` used everywhere, never `getSession()`
+- [ ] Test all public routes for unintended data exposure
+- [ ] Verify API key rotation and revocation works
+- [ ] Test middleware bypass vectors (rewrites, client navigation, header manipulation)
+- [ ] Confirm cookie security flags (HttpOnly, Secure, SameSite)
+- [ ] Verify middleware matcher excludes static assets correctly
 
-**Component Variant Example:**
+### Layer 2: JWT Claims & Custom Access Token Hook
+
+**Location:** `/supabase/migrations/00003_custom_access_token_hook.sql`, `/supabase/migrations/00006_facility_access_token_hook.sql`
+
+**What to audit:**
+- Custom access token hook injects `team_id`, `facility_id`, `club_id`, `user_role` into JWT
+- Hook runs as `SECURITY DEFINER` - privilege escalation vector if compromised
+- Claims sourced from `TeamMember`, `ClubMembership`, `FacilityMembership` tables
+- Token signature verification and expiration validation
+
+**JWT claims structure:**
 ```typescript
-// components/ui/button.tsx (Shadcn-generated, then customized)
-import { cva, type VariantProps } from "class-variance-authority";
-
-const buttonVariants = cva(
-  "inline-flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50",
-  {
-    variants: {
-      variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90",
-        destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
-        outline: "border border-input bg-background hover:bg-accent",
-        ghost: "hover:bg-accent hover:text-accent-foreground",
-      },
-      size: {
-        sm: "h-9 min-w-[44px] px-3 text-sm",     // 44px min for touch
-        md: "h-10 min-w-[48px] px-4",            // 48px recommended
-        lg: "h-11 min-w-[48px] px-8",
-        icon: "h-10 w-10",                       // Square touch target
-      },
-    },
-    defaultVariants: {
-      variant: "default",
-      size: "md",
-    },
-  }
-);
-
-export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {}
-
-export function Button({ className, variant, size, ...props }: ButtonProps) {
-  return (
-    <button
-      className={cn(buttonVariants({ variant, size, className }))}
-      {...props}
-    />
-  );
+interface JWTClaims {
+  sub: string;              // user_id (Supabase auth.users.id)
+  team_id?: string;         // Legacy single-team claim
+  club_id: string;          // Current club context
+  facility_id?: string;     // Facility if applicable
+  user_role: string;        // Legacy single-role claim
+  roles: string[];          // Array of roles (CASL uses this)
+  exp: number;              // Expiration timestamp
+  iat: number;              // Issued at timestamp
 }
 ```
 
-**Mobile-Specific Enhancements:**
-- All interactive elements meet 44px minimum touch target
-- `focus-visible` for keyboard navigation (accessibility)
-- `disabled:pointer-events-none` prevents rage taps on disabled buttons
-- Icon buttons are square (10x10 = 40px, meets minimum with padding)
-
-**Source:** [Shadcn/UI Docs](https://ui.shadcn.com/), [CVA Documentation](https://cva.style/docs), [Shadcn vs Radix comparison 2026](https://javascript.plainenglish.io/shadcn-ui-vs-radix-ui-vs-tailwind-ui-which-should-you-choose-in-2025-b8b4cadeaa25)
-
-#### Migration Strategy
-
-**Phase 1: Install Shadcn/UI Infrastructure**
-1. Initialize Shadcn with `npx shadcn-ui@latest init`
-2. Configure theme colors in globals.css
-3. Add Button, Dialog, DropdownMenu primitives
-
-**Phase 2: Refactor High-Traffic Components**
-1. Replace custom buttons with Shadcn Button (practices, lineups)
-2. Replace custom modals with Shadcn Dialog
-3. Replace custom dropdowns with DropdownMenu
-
-**Phase 3: Build Domain Component Library**
-1. Create composite components (PracticeCard, LineupEditor)
-2. Use Shadcn primitives as building blocks
-3. Maintain domain logic separation
-
-**Phase 4: Mobile Polish**
-1. Audit all interactive elements for 44px touch targets
-2. Add touch-action CSS to draggable elements
-3. Test on physical devices (iOS Safari, Android Chrome)
-
-#### Component Inventory (Recommended Shadcn Components)
-
-| Shadcn Component | RowOps Use Case | Priority |
-|------------------|-----------------|----------|
-| Button | Primary actions (Save, Publish, Create) | High |
-| Dialog | Practice editor, lineup assignment | High |
-| DropdownMenu | Equipment actions, roster management | High |
-| Calendar | Date picker for practices, regattas | High |
-| Popover | Quick equipment details, athlete info | Medium |
-| Sheet | Mobile navigation drawer | Medium |
-| Tabs | Season view, regatta timeline | Medium |
-| Alert | Offline warnings, damage reports | Medium |
-| Badge | Equipment status, athlete eligibility | Low |
-| Card | Practice list, equipment inventory | Low |
-
-## Security/RBAC Integration
-
-### Current Authorization Model
-
-**Roles:**
+**Verification approach:**
 ```typescript
-enum Role {
-  COACH   // Full team control
-  ATHLETE // View schedules, assignments
-  PARENT  // Read-only, linked to athlete
-}
+// Test JWT claim manipulation
+// 1. Decode JWT and modify club_id claim
+// 2. Re-sign with guessed secret (should fail)
+// 3. Attempt to use modified token
+// Expected: 401 Unauthorized due to invalid signature
+
+// Test claim injection
+// 1. Create user in Team A
+// 2. Extract JWT, modify team_id to Team B
+// 3. Make API request with modified JWT
+// Expected: Rejected due to signature validation
+
+// Test stale claims
+// 1. Remove user from club
+// 2. Use existing JWT before expiration
+// Expected: Should fail at RLS layer (not in JWT)
 ```
 
-**Limitations:**
-- No facility-level admin role
-- No club-level permissions
-- No per-resource permissions (e.g., edit equipment but not lineups)
-- Role checks scattered across codebase
+**Known vulnerabilities:**
+- JWT claims are cached until expiration - membership changes not reflected until token refresh
+- HS256 algorithm susceptible to weak secret attacks (verify Supabase uses RS256 or strong HS256 secret)
+- Custom hook runs with elevated privileges - SQL injection in hook would bypass all security
 
-### Recommended Hierarchical RBAC
+**Audit checklist:**
+- [ ] Verify JWT signature algorithm (prefer RS256 over HS256)
+- [ ] Test JWT claim tampering with modified club_id/facility_id
+- [ ] Verify token expiration respected (test with expired JWT)
+- [ ] Check custom hook SQL for injection vulnerabilities
+- [ ] Test membership removal - verify stale JWT fails at RLS layer
+- [ ] Confirm `aud`, `iss`, `exp`, `nbf` claims validated
+- [ ] Test none algorithm attack (JWT with "alg": "none")
 
-#### 1. Extended Role Hierarchy
+### Layer 3: Row Level Security (Database Isolation)
 
-```typescript
-enum Role {
-  FACILITY_ADMIN // Manages facility equipment, oversees clubs
-  CLUB_ADMIN     // Manages club subscription, club equipment
-  COACH          // Manages team practices, lineups, roster
-  ATHLETE        // Views own schedule, assignments
-  PARENT         // Views child's schedule (read-only)
-}
+**Location:** `/supabase/migrations/00002_rls_policies.sql`, `/supabase/migrations/00008_facility_rls_policies.sql`
 
-interface Permission {
-  resource: 'equipment' | 'practice' | 'lineup' | 'roster' | 'regatta';
-  action: 'create' | 'read' | 'update' | 'delete';
-  scope: 'facility' | 'club' | 'team' | 'self';
-}
-```
+**What to audit:**
+- All tables have RLS enabled (`ALTER TABLE ... ENABLE ROW LEVEL SECURITY`)
+- Policies use `auth.uid()` to get current user from JWT
+- Helper functions `get_user_team_id()`, `get_user_role()` for policy enforcement
+- Multi-tenant isolation: `WHERE team_id = get_user_team_id()`
+- Facility-level access patterns for shared equipment
+- Service role bypass (connection pooling uses service role - must not leak data)
 
-**Hierarchical Inheritance:**
-```
-FACILITY_ADMIN
-├── Full access to facility equipment
-├── Read access to all club/team data
-└── Inherits: CLUB_ADMIN permissions for all clubs
-
-CLUB_ADMIN
-├── Manages club equipment, subscription
-├── Read access to all team data in club
-└── Inherits: COACH permissions for all teams in club
-
-COACH
-├── Full access to team practices, lineups, roster
-├── Read access to facility/club equipment
-└── Inherits: ATHLETE permissions for visibility
-
-ATHLETE
-├── Read access to own schedule, assignments
-└── Read access to team equipment
-
-PARENT
-└── Read access to child's schedule
-```
-
-**Source:** [RBAC Hierarchical Model](https://www.zluri.com/blog/role-based-access-control), [Distributed Permission Hierarchy](https://www.linkedin.com/pulse/distributed-levels-permission-hierarchy-rbac-rajesh-kumar)
-
-#### 2. Supabase RLS Policies
-
-**Equipment Access Policy Example:**
+**RLS policy structure:**
 ```sql
--- Facility admins can manage facility equipment
-CREATE POLICY "facility_admin_equipment_access"
-ON "Equipment"
-FOR ALL
+-- Example: Practice table RLS
+CREATE POLICY "Users can view own team practices"
+ON "Practice" FOR SELECT
 TO authenticated
-USING (
-  "facilityId" IN (
-    SELECT f.id
-    FROM "Facility" f
-    JOIN "Club" c ON c."facilityId" = f.id
-    JOIN "Team" t ON t."clubId" = c.id
-    JOIN "TeamMember" tm ON tm."teamId" = t.id
-    WHERE tm."userId" = auth.uid()
-      AND tm."role" = 'FACILITY_ADMIN'
-  )
-)
-WITH CHECK (
-  "facilityId" IN (
-    SELECT f.id
-    FROM "Facility" f
-    JOIN "Club" c ON c."facilityId" = f.id
-    JOIN "Team" t ON t."clubId" = c.id
-    JOIN "TeamMember" tm ON tm."teamId" = t.id
-    WHERE tm."userId" = auth.uid()
-      AND tm."role" = 'FACILITY_ADMIN'
-  )
-);
+USING (team_id = public.get_user_team_id());
 
--- Club admins can manage club equipment
-CREATE POLICY "club_admin_equipment_access"
-ON "Equipment"
-FOR ALL
+CREATE POLICY "Coaches can create practices"
+ON "Practice" FOR INSERT
 TO authenticated
-USING (
-  "clubId" IN (
-    SELECT c.id
-    FROM "Club" c
-    JOIN "Team" t ON t."clubId" = c.id
-    JOIN "TeamMember" tm ON tm."teamId" = t.id
-    WHERE tm."userId" = auth.uid()
-      AND tm."role" IN ('CLUB_ADMIN', 'FACILITY_ADMIN')
-  )
-)
 WITH CHECK (
-  "clubId" IN (
-    SELECT c.id
-    FROM "Club" c
-    JOIN "Team" t ON t."clubId" = c.id
-    JOIN "TeamMember" tm ON tm."teamId" = t.id
-    WHERE tm."userId" = auth.uid()
-      AND tm."role" IN ('CLUB_ADMIN', 'FACILITY_ADMIN')
-  )
-);
-
--- Coaches can manage team equipment
-CREATE POLICY "coach_equipment_access"
-ON "Equipment"
-FOR ALL
-TO authenticated
-USING (
-  "teamId" IN (
-    SELECT tm."teamId"
-    FROM "TeamMember" tm
-    WHERE tm."userId" = auth.uid()
-      AND tm."role" IN ('COACH', 'CLUB_ADMIN', 'FACILITY_ADMIN')
-  )
-)
-WITH CHECK (
-  "teamId" IN (
-    SELECT tm."teamId"
-    FROM "TeamMember" tm
-    WHERE tm."userId" = auth.uid()
-      AND tm."role" IN ('COACH', 'CLUB_ADMIN', 'FACILITY_ADMIN')
-  )
-);
-
--- All team members can read equipment
-CREATE POLICY "team_member_equipment_read"
-ON "Equipment"
-FOR SELECT
-TO authenticated
-USING (
-  "teamId" IN (
-    SELECT tm."teamId"
-    FROM "TeamMember" tm
-    WHERE tm."userId" = auth.uid()
-  )
-  OR "clubId" IN (
-    SELECT t."clubId"
-    FROM "Team" t
-    JOIN "TeamMember" tm ON tm."teamId" = t.id
-    WHERE tm."userId" = auth.uid()
-  )
-  OR "facilityId" IN (
-    SELECT c."facilityId"
-    FROM "Club" c
-    JOIN "Team" t ON t."clubId" = c.id
-    JOIN "TeamMember" tm ON tm."teamId" = t.id
-    WHERE tm."userId" = auth.uid()
-  )
+  team_id = public.get_user_team_id()
+  AND public.get_user_role() IN ('COACH', 'CLUB_ADMIN')
 );
 ```
 
-**Benefits of RLS:**
-- Enforcement at database level (defense in depth)
-- Automatic filtering when using Supabase client
-- Prevents accidental data leaks even if application code has bugs
+**Verification approach:**
+```sql
+-- Test 1: Cross-tenant data access (should fail)
+-- Connect as User A (team_id = 'aaa')
+SELECT * FROM "Practice" WHERE team_id = 'bbb';
+-- Expected: Empty result set (RLS filters out)
 
-**Source:** [Supabase RLS Documentation](https://supabase.com/docs/guides/database/postgres/row-level-security), [Supabase RBAC Guide](https://supabase.com/docs/guides/database/postgres/custom-claims-and-role-based-access-control-rbac)
+-- Test 2: Direct table access bypass attempt
+SET ROLE authenticated;
+SELECT * FROM "Practice";
+-- Expected: Only own team's practices visible
 
-#### 3. Middleware Authorization
+-- Test 3: Helper function bypass
+SELECT * FROM "Practice" WHERE team_id IN (
+  SELECT id FROM "Team" -- Attempt to see all teams
+);
+-- Expected: RLS still enforces team_id filter
 
-**Current Middleware:**
-- Only checks authentication (user logged in)
-- No role-based route protection
-
-**Recommended Middleware Pattern (Next.js 16):**
-```typescript
-// Note: Next.js 16 renames middleware.ts to proxy.ts
-// src/proxy.ts
-
-import { createServerClient } from '@supabase/ssr';
-import { NextResponse, type NextRequest } from 'next/server';
-import { jwtDecode } from 'jwt-decode';
-import type { CustomJwtPayload } from '@/lib/auth/claims';
-
-// Role-based route protection
-const roleRoutes = {
-  '/facility': ['FACILITY_ADMIN'],
-  '/club': ['FACILITY_ADMIN', 'CLUB_ADMIN'],
-  '/team': ['FACILITY_ADMIN', 'CLUB_ADMIN', 'COACH'],
-  '/practices': ['FACILITY_ADMIN', 'CLUB_ADMIN', 'COACH', 'ATHLETE'],
-  '/lineups': ['FACILITY_ADMIN', 'CLUB_ADMIN', 'COACH', 'ATHLETE'],
-  '/equipment': ['FACILITY_ADMIN', 'CLUB_ADMIN', 'COACH', 'ATHLETE'],
-};
-
-export async function proxy(request: NextRequest) {
-  // ... authentication logic (existing) ...
-
-  const {
-    data: { user, session },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    // Redirect to login (existing logic)
-  }
-
-  // Decode JWT for role-based access control
-  if (session) {
-    const claims = jwtDecode<CustomJwtPayload>(session.access_token);
-    const { pathname } = request.nextUrl;
-
-    // Check role-based route protection
-    for (const [route, allowedRoles] of Object.entries(roleRoutes)) {
-      if (pathname.startsWith(route)) {
-        if (!claims.user_role || !allowedRoles.includes(claims.user_role)) {
-          const url = request.nextUrl.clone();
-          url.pathname = '/unauthorized';
-          return NextResponse.redirect(url);
-        }
-      }
-    }
-  }
-
-  return supabaseResponse;
-}
-
-export const config = {
-  matcher: [
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
-  ],
-};
+-- Test 4: Service role bypass (connection pooling concern)
+SET ROLE service_role;
+SELECT * FROM "Practice";
+-- Expected: ALL practices visible (by design, but API must filter)
 ```
 
-**Migration Note:** Next.js 16 renames `middleware.ts` to `proxy.ts` and the exported function to `proxy`. Update existing code accordingly.
+**Known vulnerabilities:**
+- RLS policies disabled on any table = complete tenant isolation failure
+- Helper functions using `LIMIT 1` - multi-club users may get wrong club
+- Service role bypasses RLS - API routes using Prisma must not leak this access
+- RLS performance: Complex policies can DoS database (check query plans)
+- JWT claim staleness: User removed from team still has access until token expires
 
-**Source:** [Next.js 16 Auth Guide](https://nextjs.org/docs/app/guides/authentication), [Next.js 16 Changes](https://auth0.com/blog/whats-new-nextjs-16/)
+**Audit checklist:**
+- [ ] Verify RLS enabled on ALL tables (check with pg_catalog query)
+- [ ] Test cross-tenant queries with different user JWTs
+- [ ] Verify helper functions handle multi-club memberships correctly
+- [ ] Test Prisma queries - confirm RLS still applies (not bypassed by pooling)
+- [ ] Check query performance with EXPLAIN ANALYZE on RLS policies
+- [ ] Test anonymous access routes (`/report/*` - should NOT have RLS or use special policy)
+- [ ] Verify equipment booking conflicts across clubs (facility-shared equipment)
 
-#### 4. Server Action Authorization
+### Layer 4: API Route Authorization (CASL Abilities)
 
-**Current Pattern:** No explicit authorization in Server Actions
+**Location:** `/src/lib/auth/get-auth-context.ts`, `/src/lib/permissions/ability.ts`, `/src/app/api/**/*.ts`
 
-**Recommended Pattern (Data Access Layer):**
+**What to audit:**
+- `getAuthContext()` creates CASL ability from JWT claims
+- Every API route calls `getAuthContext()` before data access
+- CASL rules defined per role: FACILITY_ADMIN, CLUB_ADMIN, COACH, ATHLETE, PARENT
+- `accessibleBy()` filters Prisma queries based on abilities
+- No role inheritance - FACILITY_ADMIN cannot create lineups without COACH role
+- View mode semantics: 'facility' (read-only), 'club' (scoped read-only), null (full access)
+
+**Authorization flow:**
 ```typescript
-// lib/dal/equipment.ts - Data Access Layer
-'use server';
+// API route pattern
+export async function GET(request: NextRequest) {
+  // 1. Get auth context (includes CASL ability)
+  const result = await getAuthContext(request);
+  if (!result.success) {
+    return unauthorizedResponse(); // 401 or 403
+  }
 
-import { prisma } from '@/lib/prisma';
-import { requireRole } from '@/lib/auth/authorize';
+  // 2. Check permission
+  if (!result.context.ability.can('read', 'Practice')) {
+    return forbiddenResponse();
+  }
 
-export async function createEquipment(data: EquipmentInput) {
-  // Verify user has COACH or higher role
-  const { claims } = await requireRole(['COACH', 'CLUB_ADMIN', 'FACILITY_ADMIN']);
-
-  // Create equipment scoped to user's team/club/facility
-  return prisma.equipment.create({
-    data: {
-      ...data,
-      teamId: data.ownerType === 'TEAM' ? claims.team_id : null,
-      clubId: data.ownerType === 'CLUB' ? claims.club_id : null,
-      facilityId: data.ownerType === 'FACILITY' ? claims.facility_id : null,
-    },
-  });
-}
-
-export async function updateEquipment(id: string, data: EquipmentInput) {
-  const { user, claims } = await requireRole(['COACH', 'CLUB_ADMIN', 'FACILITY_ADMIN']);
-
-  // Verify user has access to this equipment
-  const equipment = await prisma.equipment.findUnique({ where: { id } });
-  if (!equipment) throw new Error('Equipment not found');
-
-  const hasAccess =
-    (equipment.ownerType === 'TEAM' && equipment.teamId === claims.team_id) ||
-    (equipment.ownerType === 'CLUB' && equipment.clubId === claims.club_id) ||
-    (equipment.ownerType === 'FACILITY' && equipment.facilityId === claims.facility_id);
-
-  if (!hasAccess) throw new Error('Unauthorized');
-
-  return prisma.equipment.update({ where: { id }, data });
-}
-
-export async function listEquipment() {
-  const { claims } = await requireAuth();
-
-  // Return equipment accessible to user's team/club/facility
-  return prisma.equipment.findMany({
+  // 3. Query with accessibleBy filter
+  const practices = await prisma.practice.findMany({
     where: {
-      OR: [
-        { teamId: claims.team_id },           // Team-owned
-        { clubId: claims.club_id },           // Club-owned (shared across teams)
-        { facilityId: claims.facility_id },   // Facility-owned (shared across clubs)
-      ],
-    },
+      AND: [
+        accessibleBy(result.context.ability).Practice,
+        { teamId: result.context.clubId }
+      ]
+    }
   });
+
+  return NextResponse.json({ practices });
 }
 ```
 
-**Benefits:**
-- Centralized authorization logic (Single Responsibility Principle)
-- Server Actions perform their own auth checks (defense in depth)
-- Type-safe with TypeScript
-- Easier to audit and test
+**Verification approach:**
+```bash
+# Test 1: ATHLETE tries to create practice (should fail)
+curl -H "Cookie: sb-auth-token=[athlete-jwt]" \
+  -X POST http://localhost:3000/api/practices \
+  -d '{"name":"Test","seasonId":"..."}'
+# Expected: 403 Forbidden
 
-**Source:** [Next.js Auth Guide - DAL Pattern](https://nextjs.org/docs/app/guides/authentication), [Next.js RBAC Patterns](https://clerk.com/blog/nextjs-role-based-access-control)
+# Test 2: COACH accesses another club's practice (should fail)
+curl -H "Cookie: sb-auth-token=[coach-jwt]" \
+  http://localhost:3000/api/practices/[other-club-practice-id]
+# Expected: 404 Not Found (RLS filtered, not 403)
 
-## Build Order
+# Test 3: FACILITY_ADMIN tries to create lineup without COACH role (should fail)
+curl -H "Cookie: sb-auth-token=[facility-admin-jwt]" \
+  -X POST http://localhost:3000/api/lineups \
+  -d '{"blockId":"..."}'
+# Expected: 403 Forbidden (no COACH role)
 
-### Recommended Phase Structure
+# Test 4: API key with ATHLETE permissions
+curl -H "Authorization: Bearer sk_test_athlete_key" \
+  http://localhost:3000/api/practices
+# Expected: 200 OK with practices (read-only)
 
-#### Phase 1: Foundation (Security & Infrastructure)
-**Goal:** Harden auth and prepare architecture for hierarchy
-
-**Tasks:**
-1. Rename middleware.ts to proxy.ts (Next.js 16 migration)
-2. Implement Prisma Client Extensions for automatic tenant filtering
-3. Add Data Access Layer (DAL) for Server Actions
-4. Audit existing authorization gaps
-5. Write integration tests for auth flows
-
-**Rationale:** Security changes must come first. All subsequent features depend on hierarchical auth working correctly.
-
-**Dependencies:** None (can start immediately)
-
----
-
-#### Phase 2: Facility Model Schema
-**Goal:** Add database schema for facility/club hierarchy
-
-**Tasks:**
-1. Add Facility, Club models to Prisma schema
-2. Add nullable clubId to Team model
-3. Add ownerType, facilityId, clubId to Equipment model
-4. Generate and run Prisma migration
-5. Create backward-compatible data migration (default facility/club)
-
-**Rationale:** Schema changes are foundation for all facility features. Backward-compatible approach allows existing installations to continue working.
-
-**Dependencies:** Phase 1 complete (need auth patterns stable)
-
----
-
-#### Phase 3: Facility Auth Integration
-**Goal:** Enable facility/club hierarchy in JWT claims
-
-**Tasks:**
-1. Create Supabase Custom Access Token Hook (Edge Function)
-2. Update CustomJwtPayload interface (facility_id, club_id)
-3. Update getClaimsForApiRoute() to handle hierarchy
-4. Update requireRole() to support FACILITY_ADMIN, CLUB_ADMIN
-5. Implement RLS policies for Equipment, Practice, etc.
-
-**Rationale:** Auth must understand hierarchy before UI can use it.
-
-**Dependencies:** Phase 2 complete (schema exists for hook to query)
-
----
-
-#### Phase 4: Mobile PWA Improvements
-**Goal:** Improve mobile experience and offline capabilities
-
-**Tasks:**
-1. Audit touch targets (minimum 44px)
-2. Configure dnd-kit TouchSensor with activation constraints
-3. Implement sync queue pattern in Dexie.js
-4. Add conflict resolution for offline mutations
-5. Test on physical iOS/Android devices
-
-**Rationale:** Mobile improvements are independent of facility model. Can proceed in parallel with Phase 3.
-
-**Dependencies:** Phase 1 complete (need stable auth), no facility dependency
-
----
-
-#### Phase 5: Design System Integration
-**Goal:** Add Shadcn/UI component library and CVA variants
-
-**Tasks:**
-1. Initialize Shadcn/UI (`npx shadcn-ui@latest init`)
-2. Configure theme colors in globals.css
-3. Add Button, Dialog, DropdownMenu components
-4. Refactor high-traffic components (PracticeEditor, LineupEditor)
-5. Build composite domain components using Shadcn primitives
-
-**Rationale:** Design system changes are mostly visual. Can proceed in parallel with Phases 3-4.
-
-**Dependencies:** None (can start anytime), but benefits from Phase 4 (touch target awareness)
-
----
-
-#### Phase 6: Facility UI Features
-**Goal:** Build facility/club management UI
-
-**Tasks:**
-1. Create facility admin dashboard
-2. Build club management interface
-3. Add equipment ownership selector (FACILITY / CLUB / TEAM)
-4. Update equipment list to show owner badges
-5. Add "Switch Team" dropdown for multi-team users
-
-**Rationale:** UI features require all foundation work complete.
-
-**Dependencies:** Phases 2, 3, 5 complete (schema, auth, design system ready)
-
----
-
-#### Phase 7: Integration Testing & Polish
-**Goal:** Test end-to-end scenarios and fix gaps
-
-**Tasks:**
-1. Test multi-facility scenario (Chattanooga Rowing example)
-2. Test offline sync queue with conflicts
-3. Test role-based access control for all roles
-4. Audit accessibility (WCAG 2.1 AAA touch targets)
-5. Performance testing on mobile devices
-
-**Rationale:** Integration testing ensures all pieces work together correctly.
-
-**Dependencies:** All phases complete
-
----
-
-### Parallel Execution Opportunities
-
-**Can run in parallel:**
-- Phase 4 (Mobile PWA) + Phase 3 (Facility Auth) — independent concerns
-- Phase 5 (Design System) + Phase 3/4 — visual changes, no auth/data dependency
-
-**Must be sequential:**
-- Phase 1 → Phase 2 → Phase 3 → Phase 6 (facility model chain)
-- Phase 2 → Phase 6 (UI needs schema)
-- Phase 3 → Phase 6 (UI needs auth)
-
-### Critical Path
-1. Phase 1 (Security foundation) — **blocking all work**
-2. Phase 2 (Schema) — **blocking facility features**
-3. Phase 3 (Facility auth) — **blocking facility UI**
-4. Phase 6 (Facility UI) — **final delivery**
-
-Estimated timeline: 6-8 weeks with parallel work on Phases 4-5.
-
-## Integration Points with Existing Components
-
-### High-Impact Refactors
-
-#### 1. Equipment Component
-**Current:** Single equipment list, team-scoped
-
-**New:**
-- Badge showing owner (FACILITY / CLUB / TEAM)
-- Filter by owner type
-- Facility/club admins see all equipment
-- Team members see team + club + facility equipment
-
-**Changes:**
-- Update EquipmentList query to include hierarchy
-- Add OwnerBadge component
-- Update EquipmentForm with ownerType selector
-
----
-
-#### 2. Practice/Lineup Editor
-**Current:** Manual drag-drop, desktop-optimized
-
-**New:**
-- Touch-friendly drag handles (44px minimum)
-- Long-press activation (250ms delay)
-- Responsive layout (stacked on mobile, side-by-side on desktop)
-- Equipment picker shows facility/club/team equipment
-
-**Changes:**
-- Add TouchSensor to dnd-kit
-- Update drag handle size (min 44px)
-- Refactor layout with Shadcn Sheet for mobile drawer
-
----
-
-#### 3. Navigation
-**Current:** Single team context
-
-**New:**
-- Multi-team dropdown if user belongs to multiple teams
-- Facility admin sees all clubs/teams
-- Role badge in header (FACILITY_ADMIN / COACH / etc.)
-
-**Changes:**
-- Add TeamSwitcher component (Shadcn DropdownMenu)
-- Update navigation guards for role-based routes
-- Add facility/club navigation for admins
-
----
-
-#### 4. Offline Sync
-**Current:** Basic IndexedDB caching
-
-**New:**
-- Sync queue for mutations
-- Conflict resolution (server timestamp wins)
-- Retry with exponential backoff
-- User-visible sync status indicator
-
-**Changes:**
-- Add syncQueue table in Dexie
-- Update mutation hooks to queue operations
-- Add SyncStatusBadge component (online/offline/syncing)
-
-## Data Flow Changes
-
-### Current Flow (Team-Only)
-```
-User → Supabase Auth → JWT (team_id) → Middleware →
-API Route → Prisma (where: { teamId }) → PostgreSQL
+# Test 5: Parent accessing non-linked athlete
+curl -H "Cookie: sb-auth-token=[parent-jwt]" \
+  http://localhost:3000/api/athletes/[unlinked-athlete-id]
+# Expected: 403 Forbidden or 404 Not Found
 ```
 
-### New Flow (Hierarchical)
+**Known vulnerabilities:**
+- Route handler forgets to call `getAuthContext()` - bypasses all authorization
+- CASL ability defined but not enforced in query (`can()` check but no `accessibleBy()` filter)
+- Direct Prisma query without `accessibleBy()` - leaks cross-tenant data despite RLS
+- API key permissions inherit creator's roles - revocation doesn't update active keys
+- Missing permission checks on DELETE/UPDATE operations (only checking CREATE/READ)
+
+**Audit checklist:**
+- [ ] Verify ALL API routes call `getAuthContext()` at entry point
+- [ ] Check CASL `can()` permissions match HTTP method (GET=read, POST=create, etc.)
+- [ ] Verify `accessibleBy()` used in ALL Prisma queries
+- [ ] Test role boundaries (ATHLETE cannot manage, COACH can, etc.)
+- [ ] Verify multi-role users get combined permissions correctly
+- [ ] Test API key permissions match creator's current roles (or fail if revoked)
+- [ ] Check nested resource access (e.g., lineup -> practice -> club ownership chain)
+- [ ] Test viewMode restrictions for FACILITY_ADMIN (read-only in drill-down)
+
+### Layer 5: Prisma Query Layer (ORM Security)
+
+**Location:** `/src/lib/prisma.ts`, all API route Prisma queries
+
+**What to audit:**
+- All queries include `teamId` or `clubId` filter (defense-in-depth with RLS)
+- No use of `$queryRawUnsafe` or `$executeRawUnsafe` with user input
+- Prisma parameterized queries prevent SQL injection
+- Connection pooling uses service role (bypasses RLS) - must filter in application
+- JSON field queries (metadata, customFields) - potential NoSQL injection
+
+**Security patterns:**
+```typescript
+// SAFE: Parameterized query
+const practices = await prisma.practice.findMany({
+  where: {
+    teamId: context.clubId,  // Always scope to tenant
+    id: practiceId           // User input is parameterized
+  }
+});
+
+// UNSAFE: Raw query with user input
+const practices = await prisma.$queryRawUnsafe(
+  `SELECT * FROM "Practice" WHERE id = '${practiceId}'` // SQL injection!
+);
+
+// SAFE: Raw query with Prisma.sql
+const practices = await prisma.$queryRaw`
+  SELECT * FROM "Practice" WHERE id = ${practiceId}
+`;
+
+// VULNERABLE: NoSQL-style operator injection
+const filter = JSON.parse(request.body); // User controls filter
+const practices = await prisma.practice.findMany({
+  where: filter  // Attacker could inject: { teamId: { not: "aaa" } }
+});
+
+// SAFE: Whitelist allowed filters
+const { seasonId, startDate } = z.object({
+  seasonId: z.string().uuid().optional(),
+  startDate: z.string().datetime().optional()
+}).parse(request.body);
+const practices = await prisma.practice.findMany({
+  where: {
+    teamId: context.clubId,
+    seasonId: seasonId,
+    date: startDate ? { gte: new Date(startDate) } : undefined
+  }
+});
 ```
-User → Supabase Auth →
-Custom Access Token Hook (queries Facility/Club/Team) →
-JWT (facility_id, club_id, team_id, user_role) →
-Proxy (role-based route protection) →
-API Route → Prisma Client Extension (automatic filtering) →
-RLS Policies (defense in depth) → PostgreSQL
+
+**Verification approach:**
+```bash
+# Test 1: SQL injection via practice name
+curl -X POST http://localhost:3000/api/practices \
+  -d '{"name":"Test'; DROP TABLE \"Practice\"; --","seasonId":"..."}'
+# Expected: Practice created with literal string (parameterized)
+
+# Test 2: Operator injection via filter
+curl -X GET 'http://localhost:3000/api/practices?filter={"teamId":{"not":"actual-id"}}'
+# Expected: 400 Bad Request (filter not whitelisted) OR empty results (RLS enforces)
+
+# Test 3: Time-based blind SQL injection (ORM leak)
+curl 'http://localhost:3000/api/practices?sort={"date":"asc","name":"pg_sleep(5)"}'
+# Expected: Fast response (Prisma prevents, but test anyway)
+
+# Test 4: JSON field injection
+curl -X POST http://localhost:3000/api/seasons/[id]/eligibility \
+  -d '{"customFields":{"$ne":null}}'
+# Expected: Validation error (JSON structure not validated)
 ```
 
-**Key Changes:**
-1. **Auth Hook** populates hierarchical claims
-2. **Proxy** (renamed from middleware) checks role-based routes
-3. **Prisma Extension** automatically filters by tenant
-4. **RLS Policies** provide database-level enforcement
+**Known vulnerabilities:**
+- Prisma operator injection through unvalidated filter objects (NoSQL-style attacks)
+- Raw query usage with string interpolation (SQL injection)
+- ORM leak attacks (time-based blind SQL through sort/filter parameters)
+- JSON field queries without schema validation (nested injection)
+- Missing tenant scoping on queries (relies only on RLS, not defense-in-depth)
 
-## Migration Risks & Mitigations
+**Audit checklist:**
+- [ ] Search codebase for `$queryRawUnsafe` and `$executeRawUnsafe` usage
+- [ ] Verify all user input validated with Zod schemas before Prisma queries
+- [ ] Check ALL queries include `teamId` or `clubId` filter (even with RLS)
+- [ ] Test filter/sort parameters for operator injection
+- [ ] Verify JSON field queries (customFields, metadata) have validation
+- [ ] Check relationship traversals don't leak cross-tenant data
+- [ ] Test performance of complex queries (DoS via expensive filters)
 
-### Risk 1: Breaking Existing Installations
-**Impact:** High — existing team-only users can't access app
+### Layer 6: Client-Side Security (Defense Against Client Manipulation)
 
-**Mitigation:**
-- Nullable foreign keys (clubId, facilityId)
-- Default facility/club migration for existing teams
-- Feature flag for facility features (off by default)
-- Backward-compatible JWT claims (team_id still works)
+**Location:** `/src/app/**/*.tsx` (React Server Components and Client Components)
+
+**What to audit:**
+- Server Components fetch data directly (no client-side data exposure)
+- Client Components receive only necessary data via props
+- No sensitive data in client-side props (tokens, secrets, unfiltered data)
+- API calls from client use fetch with credentials (cookies)
+- No authorization logic in client code (server validates everything)
+
+**Verification approach:**
+```javascript
+// Test 1: Inspect React component props in DevTools
+// Look for: JWT tokens, API keys, unfiltered user lists, other tenant data
+// Expected: Only user's own data or public data in props
+
+// Test 2: Intercept API calls and replay with modified parameters
+const response = await fetch('/api/practices/[other-club-id]', {
+  method: 'GET',
+  credentials: 'include'
+});
+// Expected: 404 or 403 (server validates ownership)
+
+// Test 3: Modify client-side JavaScript to call unauthorized endpoints
+// Use browser console to call internal API functions
+// Expected: Server still enforces authorization
+
+// Test 4: Check for hardcoded secrets in client bundles
+// Search JS bundle for: API keys, JWT secrets, database credentials
+grep -r "sk_" .next/static/
+// Expected: No secrets found
+```
+
+**Known vulnerabilities:**
+- Server Components accidentally expose sensitive data in props
+- Client Components make assumptions about authorization (server must validate)
+- Environment variables with `NEXT_PUBLIC_` prefix exposed to client
+- Overly broad type signatures leak data structure (TypeScript types)
+
+**Audit checklist:**
+- [ ] Review Server Component data fetching - confirm no over-fetching
+- [ ] Check Client Component props - no sensitive data (use DevTools)
+- [ ] Verify no authorization checks in client code (all server-side)
+- [ ] Search for `NEXT_PUBLIC_` env vars - confirm none are secrets
+- [ ] Test API calls with modified parameters (client can't be trusted)
+- [ ] Check for secrets in compiled JavaScript bundles
+
+## Audit Order (Recommended Sequence)
+
+The audit should proceed in this order to catch the most critical issues first and understand dependency chains.
+
+### Phase 1: Foundation Verification (Day 1)
+
+**Goal:** Confirm baseline security mechanisms are in place and functioning.
+
+1. **RLS Enabled Check**
+   - Query pg_catalog to list all tables and RLS status
+   - Verify EVERY table in public schema has RLS enabled
+   - Check for tables with policies but RLS disabled (policy=true, enabled=false)
+
+2. **Middleware Authentication**
+   - Review middleware.ts line-by-line
+   - Verify `getUser()` used, not `getSession()`
+   - Test public route allowlist (try accessing protected routes)
+   - Confirm API key validation works
+
+3. **JWT Configuration**
+   - Extract JWT from browser (cookies or localStorage)
+   - Decode and inspect claims structure
+   - Verify signature algorithm (should be RS256 or strong HS256)
+   - Test token expiration handling
+
+4. **Environment Variables**
+   - Review .env.example and actual .env
+   - Verify no secrets use `NEXT_PUBLIC_` prefix
+   - Check database URL uses connection pooling (not direct)
+   - Confirm VAPID keys, API keys stored securely
+
+**Deliverable:** Foundation security checklist with pass/fail for each item.
+
+### Phase 2: Tenant Isolation Testing (Day 2-3)
+
+**Goal:** Verify users from Tenant A cannot access Tenant B's data under any circumstance.
+
+1. **RLS Policy Testing**
+   - Create two test tenants (Club A, Club B)
+   - Create test users in each club with various roles
+   - Execute cross-tenant queries with each user's JWT
+   - Verify empty result sets (not 403 errors - RLS filters silently)
+   - Test direct table access via SQL console
+
+2. **API Route Tenant Scoping**
+   - For each API route, test with other club's resource IDs
+   - Expected: 404 Not Found or empty response (not 403)
+   - Test nested resources (lineup -> practice -> club ownership chain)
+   - Verify pagination doesn't leak cross-tenant data
+
+3. **Multi-Club User Testing**
+   - Create user with memberships in Club A and Club B
+   - Switch active club context via `/api/clubs/switch`
+   - Verify data access updates to new club's scope
+   - Test that old club's data no longer accessible
+
+4. **Facility-Shared Equipment**
+   - Test shared equipment visibility across clubs
+   - Verify booking conflicts prevent double-booking
+   - Confirm club-specific equipment not visible to other clubs
+   - Test equipment ownership transfer (facility -> club)
+
+**Deliverable:** Tenant isolation test report with attempted bypass vectors and results.
+
+### Phase 3: Authorization Bypass Testing (Day 4-5)
+
+**Goal:** Attempt to bypass authorization at each layer using known attack vectors.
+
+1. **JWT Manipulation**
+   - Decode JWT, modify claims (club_id, roles), re-encode
+   - Attempt to use modified JWT (should fail signature validation)
+   - Test "none" algorithm attack (`{"alg":"none"}`)
+   - Try weak HMAC secrets (if HS256 used)
+   - Test expired JWTs (should be rejected)
+
+2. **CASL Permission Bypass**
+   - ATHLETE user attempts to create practice (should fail)
+   - COACH user tries to assign FACILITY_ADMIN role (should fail)
+   - PARENT user accesses non-linked athlete data (should fail)
+   - FACILITY_ADMIN attempts lineup creation without COACH role (should fail)
+   - Test permission grant expiration (temporary elevated access)
+
+3. **API Route Direct Access**
+   - Identify routes that might skip `getAuthContext()` check
+   - Test with no authentication (should 401)
+   - Test with API key lacking required permissions (should 403)
+   - Try accessing admin routes with non-admin key
+
+4. **Middleware Bypass Vectors**
+   - Test CVE-2025-29927 attack (x-middleware-subrequest header)
+   - Try URL rewrites to skip middleware matching
+   - Test client-side navigation bypassing middleware
+   - Attempt to access static files with sensitive names
+
+**Deliverable:** Authorization bypass test report with attack vectors and mitigation verification.
+
+### Phase 4: Data Injection & Input Validation (Day 6)
+
+**Goal:** Test for SQL injection, NoSQL injection, and input validation failures.
+
+1. **SQL Injection Testing**
+   - Test all text inputs with SQL injection payloads
+   - Search codebase for `$queryRawUnsafe` usage
+   - Verify Prisma parameterization working correctly
+   - Test time-based blind SQL injection (ORM leak)
+
+2. **Operator Injection (NoSQL-style)**
+   - Send Prisma operator objects in filter parameters
+   - Example: `{"teamId": {"not": "actual-id"}}`
+   - Verify filters are whitelisted, not raw from user input
+   - Test JSON field queries (customFields, metadata)
+
+3. **Input Validation**
+   - Test API routes with missing required fields
+   - Send invalid UUIDs, dates, enums
+   - Verify Zod schema validation rejects bad input
+   - Test oversized inputs (DoS via large payloads)
+
+4. **API Route Enumeration**
+   - Attempt to access API routes not in public documentation
+   - Test for information disclosure in error messages
+   - Verify 404 vs 403 responses don't leak information
+   - Check for verbose error messages exposing stack traces
+
+**Deliverable:** Input validation test report with injection attempts and validation effectiveness.
+
+### Phase 5: API Key & Session Security (Day 7)
+
+**Goal:** Verify API key management, session handling, and token security.
+
+1. **API Key Lifecycle**
+   - Create API key with COACH permissions
+   - Verify key works for authorized actions
+   - Revoke key, verify immediate invalidation
+   - Test key expiration (if configured)
+   - Verify key creator role change propagates
+
+2. **Session Management**
+   - Test session expiration behavior
+   - Verify logout invalidates session
+   - Test concurrent sessions (same user, multiple devices)
+   - Check session fixation vulnerabilities
+   - Verify CSRF protection on state-changing operations
+
+3. **MFA Security**
+   - Test MFA enrollment flow
+   - Verify backup codes work for recovery
+   - Test MFA bypass attempts (remove factor, use old code)
+   - Verify MFA required for FACILITY_ADMIN and CLUB_ADMIN
+
+4. **SSO/SAML Security**
+   - Test SSO configuration (if enabled)
+   - Verify role mapping from IdP groups
+   - Test SSO bypass attempts (direct login with password)
+   - Check for XML signature wrapping attacks (SAML)
+
+**Deliverable:** API key and session security report with token lifecycle verification.
+
+### Phase 6: Comprehensive Integration Testing (Day 8-9)
+
+**Goal:** Test realistic attack scenarios combining multiple vectors.
+
+1. **Privilege Escalation Scenarios**
+   - ATHLETE creates lineup by exploiting race condition
+   - PARENT gains COACH access via invitation manipulation
+   - Expired permission grant allows continued elevated access
+   - Multi-club user leverages club switch to access wrong data
+
+2. **Data Exfiltration Scenarios**
+   - Paginate through all practices attempting to access other clubs
+   - Use export API to dump data with manipulated filters
+   - Leverage equipment usage logs to infer other clubs' schedules
+   - Access audit logs to see other users' actions
+
+3. **Denial of Service Scenarios**
+   - Create 10,000 practices to overwhelm database
+   - Send complex RLS queries to cause timeouts
+   - Upload large images to damage report endpoints
+   - Request all audit logs for all time (expensive query)
+
+4. **Cross-Tenant Conflict Scenarios**
+   - Book same equipment slot from two clubs simultaneously
+   - Create practices with overlapping times for shared equipment
+   - Manipulate facility settings from club admin role
+   - Transfer equipment ownership to wrong club
+
+**Deliverable:** Integration test scenarios report with realistic attack simulations.
+
+### Phase 7: Verification & Documentation (Day 10)
+
+**Goal:** Confirm all findings, document issues, verify fixes.
+
+1. **Issue Cataloging**
+   - Categorize findings by severity (Critical, High, Medium, Low)
+   - Document reproduction steps for each issue
+   - Assign OWASP Top 10 or CWE classifications
+   - Provide remediation recommendations
+
+2. **Regression Testing**
+   - Re-run all tests from previous phases
+   - Verify no new issues introduced by fixes
+   - Test edge cases discovered during audit
+   - Confirm defense-in-depth working at all layers
+
+3. **Documentation Review**
+   - Verify security documentation exists for developers
+   - Check that RLS policies are documented
+   - Confirm API key usage guidelines are clear
+   - Review access control matrix (role -> permission mapping)
+
+4. **Compliance Check**
+   - Verify audit logging captures security events
+   - Confirm data retention policies enforced (365 days)
+   - Check GDPR compliance (data export, deletion)
+   - Verify SOC 2 requirements met (access controls, logging)
+
+**Deliverable:** Final security audit report with executive summary, findings, and remediation roadmap.
+
+## Verification Approach
+
+Each layer requires different verification techniques.
+
+### Automated Testing Tools
+
+**RLS Policy Testing:**
+```bash
+# Install pgTAP for database unit tests
+CREATE EXTENSION pgtap;
+
+-- Example RLS test
+SELECT plan(1);
+SET ROLE authenticated;
+SET request.jwt.claims TO '{"sub": "user-a", "team_id": "team-a"}';
+SELECT is(
+  (SELECT count(*) FROM "Practice" WHERE team_id = 'team-b'),
+  0::bigint,
+  'User from Team A cannot see Team B practices'
+);
+```
+
+**JWT Security Testing:**
+```bash
+# Use jwt.io or jwt-cli to decode/modify tokens
+npm install -g jwt-cli
+
+# Decode JWT
+jwt decode [token]
+
+# Test none algorithm attack
+jwt encode --alg=none --payload='{"sub":"user-id","team_id":"other-team"}' --no-sign
+```
+
+**API Authorization Testing:**
+```bash
+# Use Postman or Bruno for API testing
+# Create test collection with:
+# 1. Valid requests (should succeed)
+# 2. Invalid tenant access (should fail)
+# 3. Insufficient permissions (should fail)
+# 4. Missing authentication (should fail)
+
+# Automated API security testing
+npm install -g @apisec/scanner
+apisec scan --spec openapi.json --auth-token [jwt]
+```
+
+**CASL Policy Testing:**
+```typescript
+// Unit test CASL abilities
+import { defineAbilityFor } from '@/lib/permissions/ability';
+
+describe('CASL Authorization', () => {
+  it('ATHLETE cannot create practices', () => {
+    const ability = defineAbilityFor({
+      userId: 'athlete-1',
+      clubId: 'club-a',
+      roles: ['ATHLETE'],
+      viewMode: null
+    });
+    expect(ability.can('create', 'Practice')).toBe(false);
+  });
+
+  it('COACH can create practices in own club', () => {
+    const ability = defineAbilityFor({
+      userId: 'coach-1',
+      clubId: 'club-a',
+      roles: ['COACH'],
+      viewMode: null
+    });
+    expect(ability.can('create', 'Practice')).toBe(true);
+  });
+});
+```
+
+## References & Sources
+
+This security audit architecture is based on current industry best practices and specific research for Next.js, Supabase, and multi-tenant SaaS applications.
+
+### Next.js Security
+
+- [Complete Next.js security guide 2025: authentication, API protection & best practices](https://www.turbostarter.dev/blog/complete-nextjs-security-guide-2025-authentication-api-protection-and-best-practices) - Comprehensive coverage of Next.js App Router security patterns
+- [How to Think About Security in Next.js](https://nextjs.org/blog/security-nextjs-server-components-actions) - Official Next.js security guidance
+- [Next.js security checklist](https://blog.arcjet.com/next-js-security-checklist/) - Detailed audit checklist for Next.js applications
+- **Critical:** CVE-2025-29927 (CVSS 9.1) - Middleware bypass vulnerability affecting Next.js 11.1.4-15.2.2. Patched in 15.2.3+, 14.2.25+, 13.5.9+, 12.3.5+.
+
+### Supabase RLS & Authentication
+
+- [Row Level Security | Supabase Docs](https://supabase.com/docs/guides/database/postgres/row-level-security) - Official RLS documentation and best practices
+- [Supabase RLS Security Audit and Fixes with MCP](https://docs.continue.dev/guides/supabase-mcp-database-workflow) - Automated RLS audit workflow
+- [Enforcing Row Level Security in Supabase: Multi-Tenant Architecture](https://dev.to/blackie360/-enforcing-row-level-security-in-supabase-a-deep-dive-into-lockins-multi-tenant-architecture-4hd2) - Real-world multi-tenant RLS implementation
+- [Token Security and Row Level Security](https://supabase.com/docs/guides/auth/oauth-server/token-security) - JWT security in Supabase context
+
+### Multi-Tenant Security
+
+- [Implementing Secure Multi-Tenancy in SaaS Applications](https://dzone.com/articles/secure-multi-tenancy-saas-developer-checklist) - Developer checklist for tenant isolation
+- [Ensuring Tenant Data Isolation in Multi-Tenant SaaS Systems](https://www.tenupsoft.com/blog/strategies-for-tenant-data-isolation-in-multi-tenant-based-saas-applications.html) - Strategies for tenant data isolation
+- [Architecting Secure Multi-Tenant Data Isolation](https://medium.com/@justhamade/architecting-secure-multi-tenant-data-isolation-d8f36cb0d25e) - Architecture patterns for isolation
+- [Security practices in AWS multi-tenant SaaS environments](https://aws.amazon.com/blogs/security/security-practices-in-aws-multi-tenant-saas-environments/) - Cloud-specific security practices
+
+### Authorization & CASL
+
+- [CASL - Isomorphic Authorization JavaScript library](https://casl.js.org/) - Official CASL documentation
+- [Frontend Authorization with Next.js and CASL](https://www.permit.io/blog/frontend-authorization-with-nextjs-and-casl-tutorial) - Step-by-step CASL integration
+- **Security Alert:** [AI Agents Are Becoming Authorization Bypass Paths](https://thehackernews.com/2026/01/ai-agents-are-becoming-privilege.html) - Emerging authorization bypass risks (January 2026)
+
+### Prisma & Database Security
+
+- [How Prisma ORM Prevents SQL Injections](https://medium.com/@farrelshevaa/how-prisma-orm-prevents-sql-injections-aligning-with-owasp-best-practices-6ff62c35ba1b) - Prisma's SQL injection protections
+- [Prisma and PostgreSQL vulnerable to NoSQL injection](https://www.aikido.dev/blog/prisma-and-postgresql-vulnerable-to-nosql-injection) - Operator injection vulnerabilities in Prisma
+- [Prisma Raw Query Leads to SQL Injection? Yes and No](https://www.nodejs-security.com/blog/prisma-raw-query-sql-injection) - Safe vs unsafe raw query usage
+- [plORMbing your Prisma ORM with Time-based Attacks](https://www.elttam.com/blog/plorming-your-primsa-orm/) - ORM leak vulnerabilities
+
+### JWT Security
+
+- [JWT Vulnerabilities List: 2026 Security Risks & Mitigation Guide](https://redsentry.com/resources/blog/jwt-vulnerabilities-list-2026-security-risks-mitigation-guide) - Current JWT vulnerabilities and mitigations
+- [JWT Security Best Practices: Checklist for APIs](https://curity.io/resources/learn/jwt-best-practices/) - Comprehensive JWT security checklist
+- [JWT Security: Common Vulnerabilities and Prevention](https://www.apisec.ai/blog/jwt-security-vulnerabilities-prevention) - JWT-specific attack vectors
+
+### API Penetration Testing
+
+- [API Penetration Testing: A Complete Guide for 2026](https://www.practical-devsecops.com/api-penetration-testing/) - Modern API pentesting methodology
+- [API Security Testing in 2026: Step by Step Guide](https://www.testingxperts.com/blog/api-security-testing/) - Systematic API security testing approach
+- [API Penetration Testing: Objective, Methodology & Use Cases](https://www.vaadata.com/blog/api-penetration-testing-objective-methodology-black-box-grey-box-and-white-box-tests/) - Different testing approaches for APIs
 
 ---
 
-### Risk 2: Offline Sync Conflicts
-**Impact:** Medium — users lose data if conflict resolution fails
-
-**Mitigation:**
-- Server timestamp always wins (simple, predictable)
-- Local changes merged if compatible (e.g., different fields)
-- Conflict log table for manual resolution
-- User notification on conflict (toast message)
-
----
-
-### Risk 3: Performance with RLS Policies
-**Impact:** Medium — complex RLS queries may slow down API
-
-**Mitigation:**
-- Index all foreign keys (facilityId, clubId, teamId)
-- Use Prisma Client Extension for application-level filtering (faster than RLS)
-- Enable RLS as defense-in-depth, not primary filter
-- Monitor query performance with pg_stat_statements
-
----
-
-### Risk 4: Mobile Touch UX Regressions
-**Impact:** Low-Medium — drag-drop breaks on mobile
-
-**Mitigation:**
-- Test on physical devices (iOS Safari, Android Chrome)
-- Use TouchSensor with delay (250ms) to prevent accidental drags
-- Add touch-action: manipulation CSS
-- Fallback to click-to-assign if drag fails
-
----
-
-### Risk 5: Shadcn/UI Component Ownership
-**Impact:** Low — components become outdated, need manual updates
-
-**Mitigation:**
-- Treat Shadcn components as project code (not dependency)
-- Version control all copied components
-- Review Shadcn changelog quarterly for security/accessibility fixes
-- Consider Radix UI stability concerns (team shifted to Base UI)
-
-**Note:** Radix UI team has shifted focus to Base UI. Monitor Radix stability for long-term projects. Shadcn/UI may migrate to Base UI in future.
-
-**Source:** [Shadcn/UI vs Radix Comparison 2026](https://saasindie.com/blog/shadcn-vs-radix-themes-comparison)
-
-## Sources
-
-### Multi-Tenant Architecture
-- [Designing Your Postgres Database for Multi-tenancy | Crunchy Data](https://www.crunchydata.com/blog/designing-your-postgres-database-for-multi-tenancy)
-- [Multi-Tenancy Implementation Approaches With Prisma and ZenStack](https://zenstack.dev/blog/multi-tenant)
-- [Prisma Client Just Became a Lot More Flexible: Prisma Client Extensions](https://www.prisma.io/blog/client-extensions-preview-8t3w27xkrxxn)
-- [Multi-Tenancy with Prisma: A New Approach](https://medium.com/@kz-d/multi-tenancy-with-prisma-a-new-approach-to-making-where-required-1e93a3783d9d)
-
-### Supabase Auth & RBAC
-- [Custom Claims & Role-based Access Control (RBAC) | Supabase Docs](https://supabase.com/docs/guides/database/postgres/custom-claims-and-role-based-access-control-rbac)
-- [Custom Access Token Hook | Supabase Docs](https://supabase.com/docs/guides/auth/auth-hooks/custom-access-token-hook)
-- [Row Level Security | Supabase Docs](https://supabase.com/docs/guides/database/postgres/row-level-security)
-- [Building Role-Based Access Control (RBAC) with Supabase RLS](https://medium.com/@lakshaykapoor08/building-role-based-access-control-rbac-with-supabase-row-level-security-c82eb1865dfd)
-
-### Next.js & Authentication
-- [Guides: Authentication | Next.js](https://nextjs.org/docs/app/guides/authentication)
-- [Next.js 16: What's New for Authentication and Authorization](https://auth0.com/blog/whats-new-nextjs-16/)
-- [Implement Role-Based Access Control in Next.js 15](https://clerk.com/blog/nextjs-role-based-access-control)
-
-### Mobile PWA & Touch UX
-- [Build a Next.js 16 PWA with true offline support - LogRocket](https://blog.logrocket.com/nextjs-16-pwa-offline-support)
-- [Accessible Touch Target Sizes Cheatsheet — Smashing Magazine](https://www.smashingmagazine.com/2023/04/accessible-tap-target-sizes-rage-taps-clicks/)
-- [All accessible touch target sizes - LogRocket](https://blog.logrocket.com/ux-design/all-accessible-touch-target-sizes/)
-- [Optimizing NEXT.js Apps for Mobile Devices: Responsive Design and Touch Gestures](https://clouddevs.com/next/optimizing-for-mobile-devices/)
-
-### Offline-First & IndexedDB
-- [Dexie.js - Offline-First Database with Cloud Sync](https://dexie.org/)
-- [Synchronization patterns - Mastering Dexie.js](https://app.studyraid.com/en/read/11356/355148/synchronization-patterns)
-- [Offline-first frontend apps in 2025: IndexedDB and SQLite](https://blog.logrocket.com/offline-first-frontend-apps-2025-indexeddb-sqlite/)
-- [Serwist Documentation](https://serwist.pages.dev/docs/serwist/core)
-
-### Drag & Drop Mobile
-- [dnd-kit – a modern drag and drop toolkit for React](https://dndkit.com/)
-- [Touch | @dnd-kit – Documentation](https://docs.dndkit.com/api-documentation/sensors/touch)
-- [Top 5 Drag-and-Drop Libraries for React in 2026](https://puckeditor.com/blog/top-5-drag-and-drop-libraries-for-react)
-
-### Design Systems
-- [shadcn/ui - The Foundation for your Design System](https://ui.shadcn.com/)
-- [Class Variance Authority Documentation](https://cva.style/docs)
-- [ShadCN UI vs Radix UI vs Tailwind UI, Which Should You Choose in 2025?](https://javascript.plainenglish.io/shadcn-ui-vs-radix-ui-vs-tailwind-ui-which-should-you-choose-in-2025-b8b4cadeaa25)
-- [Radix Themes vs shadcn/ui: Complete Developer Comparison 2026](https://saasindie.com/blog/shadcn-vs-radix-themes-comparison)
-
-### RBAC Patterns
-- [Role-Based Access Control: A Comprehensive Guide | 2026 | Zluri](https://www.zluri.com/blog/role-based-access-control)
-- [How to Design an RBAC (Role-Based Access Control) System](https://www.nocobase.com/en/blog/how-to-design-rbac-role-based-access-control-system)
-- [Distributed Levels of Permission Hierarchy - Implementation of RBAC](https://www.linkedin.com/pulse/distributed-levels-permission-hierarchy-rbac-rajesh-kumar)
+**Audit confidence level:** HIGH (based on architecture review and current security research)
+**Estimated audit duration:** 10 days (1 security engineer)
+**Recommended audit frequency:** Semi-annual (every 6 months) + after major architecture changes

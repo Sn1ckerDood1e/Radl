@@ -1,258 +1,393 @@
-# Project Research Summary
+# Security Audit Research Summary
 
-**Project:** RowOps v2.0 Commercial Readiness
-**Domain:** Multi-tenant SaaS for rowing team operations
-**Researched:** 2026-01-22
+**Project:** RowOps v2.2 Security Audit Milestone
+**Domain:** Multi-tenant SaaS Security Testing
+**Researched:** 2026-01-28
 **Confidence:** HIGH
 
 ## Executive Summary
 
-RowOps v2.0 represents a strategic upgrade from single-team operations to commercial-grade multi-facility SaaS. Research reveals this is fundamentally a **structure and polish effort, not new infrastructure**. The validated v1.0/v1.1 stack (Next.js 16, React 19, Prisma 6, Supabase, Tailwind v4, Serwist, Dexie) already provides the foundation. Success depends on careful hierarchical multi-tenancy implementation, mobile-first responsive design, design system adoption, and RBAC hardening.
+RowOps is a multi-tenant rowing team management SaaS built on Next.js 16, Supabase Auth, PostgreSQL RLS, Prisma 6, and CASL. The security audit must verify defense-in-depth across six layers: Edge middleware, JWT claims, database RLS policies, API route authorization, Prisma queries, and client-side security. The architecture implements tenant isolation at facility → club → team hierarchy with shared equipment management requiring complex permission boundaries.
 
-The recommended approach centers on **backward-compatible expansion**: extend existing JWT claims to support facility/club hierarchy while maintaining team-only installations; adopt shadcn/ui component primitives without replacing the entire UI at once; implement database-level RLS alongside application filtering for defense-in-depth; and enhance existing PWA capabilities with tenant-aware caching and touch-optimized interactions. This incremental strategy minimizes migration risk while enabling facility-level features.
+The audit combines automated tools (Semgrep, TruffleHog, SupaShield, pgTAP, OWASP ZAP) with manual testing across six critical areas: API authentication, RBAC permissions, tenant isolation, secrets management, audit logging, and rate limiting. Research reveals **19 critical vulnerabilities** including React2Shell RCE (CVE-2025-55182), Next.js middleware bypass (CVE-2025-29927), and Prisma RLS bypass by default. The most dangerous attack vector is tenant isolation failure — a single misconfigured RLS policy or missing tenant context check can expose all facility/club data across the system.
 
-Critical risks cluster around **data migration and tenant isolation**: JWT claims migration breaking existing sessions, service worker cache serving stale tenant data across facility switches, RLS implementation creating connection pooling leaks, and component drift from design system adoption creating duplicates instead of replacements. Mitigation requires expand-migrate-contract patterns for schema evolution, tenant-scoped cache keys, explicit transaction management for RLS, and systematic component migration tracking. The highest-risk integration point is the intersection of facility model and RBAC—tenant scoping must be bulletproof across both facility and club boundaries.
+The recommended approach is layered testing over 10 days: foundation verification (RLS enabled, JWT config), tenant isolation testing (cross-tenant queries), authorization bypass attempts (JWT manipulation, CASL boundaries), data injection testing (SQL/operator injection), API key security, and comprehensive integration scenarios. Cost is $0 using open-source tools. Immediate actions: upgrade Next.js to 16.0.12+, audit all RLS policies, switch Prisma from superuser role, validate all Server Action inputs with Zod, and block middleware bypass headers.
 
 ## Key Findings
 
-### Recommended Stack
+### Recommended Security Tools
 
-RowOps v2.0 needs selective library additions rather than framework changes. The existing stack is production-validated and appropriate—don't introduce new infrastructure.
+Research identified a layered toolset covering all six audit areas with zero licensing cost:
 
-**Core additions:**
-- **shadcn/ui (canary with Tailwind v4)**: Copy-paste component primitives built on Radix UI—provides mobile-first accessibility, native Tailwind v4 support, and full code ownership without runtime dependencies
-- **@use-gesture/react (10.x+)**: Lightweight touch gestures for mobile lineup editing—15KB, works with mouse and touch, handles swipe-to-dismiss and drag-to-reorder patterns
-- **@casl/ability + @casl/react (6.8.0/4.x+)**: Isomorphic RBAC with type-safe permissions—same logic on client (UI hiding) and server (API enforcement), zero vendor lock-in
-- **PostgreSQL RLS (native Supabase)**: Database-level multi-tenant isolation—defense-in-depth enforcement, already available via Supabase, no library installation needed
+**Automated scanning tools:**
+- **Semgrep** (SAST): Custom rules for Next.js patterns, 20K-100K loc/sec, detects auth bypasses and insecure data access
+- **TruffleHog** (secrets): Scans git history with API verification for 700+ credential types, critical for Supabase service_role key detection
+- **SupaShield + pgTAP** (RLS testing): Automated RLS policy coverage reports and PostgreSQL unit tests for tenant isolation
+- **npm audit + Socket** (dependencies): Baseline vulnerability scanning plus supply chain threat detection
+- **OWASP ZAP** (DAST): Runtime vulnerability scanning for deployed staging environment
+- **jwt_tool** (JWT security): Comprehensive JWT attack testing (algorithm confusion, signature stripping, claims manipulation)
 
-**What NOT to add:**
-- Avoid Chakra UI/Mantine/Material Tailwind (heavier runtime, styling conflicts with existing Tailwind v4)
-- Skip Framer Motion until UX testing proves need (YAGNI for animation library)
-- Don't use closure tables for hierarchy (overkill for shallow Facility→Club→Team structure)
-- Reject external auth services (Clerk/Auth.js RBAC insufficient, existing Supabase auth works)
+**Key advantage:** Layering multiple tool categories catches vulnerabilities missed by single-scanner approaches. Static analysis misses runtime issues, dynamic testing misses code patterns, manual review catches architectural problems.
 
-### Expected Features
+**Cost comparison:** Complete audit achievable with $0 in free tools. Optional upgrades: Snyk Pro ($99/month), Burp Suite Pro ($449/year), but not required for comprehensive coverage.
 
-Research across multi-tenant SaaS, PWA best practices, design systems, and RBAC patterns reveals clear table stakes vs differentiators.
+### Critical Security Checklist Items
 
-**Must have (table stakes):**
-- **Facility Model**: Hierarchical tenancy (facility→club), shared resource management, tenant-scoped data isolation, facility admin role, club isolation by default
-- **Mobile PWA**: Touch-friendly targets (≥44px), responsive breakpoints, network-aware UI, conflict resolution for offline sync
-- **UI/UX**: Design system with consistent components, empty states with guidance, dark mode support, accessible form validation, loading states (skeletons)
-- **Security/RBAC**: Tenant-scoped roles (user = admin in Club A, athlete in Club B), invite flow with role assignment, audit logging, MFA support, permission delegation
+Research compiled a 58-item audit checklist organized by severity. The security audit checklist is comprehensive and available in SECURITY-AUDIT-CHECKLIST.md.
 
-**Should have (competitive differentiators):**
-- Equipment reservation system (prevent booking conflicts for shared boats)
-- Granular sync status ("3 changes pending" with list of queued operations)
-- Smart defaults (auto-fill practice duration from team's usual patterns)
-- Contextual help (inline tooltips, hints without leaving page)
-- Bulk invite (CSV upload with roles for large rosters)
+**Critical items (25 total):**
+- **Tenant isolation (10 items):** RLS enabled on all tables, no missing policies, cross-tenant query testing, JWT claims validation, facility-shared equipment scoping
+- **API authentication (8 items):** JWT signature verification, token expiration enforcement, session hijacking prevention, no service_role key in client code
+- **Secrets management (7 items):** No secrets in client bundle or version control, server-side secrets properly scoped, no secrets in logs
 
-**Defer (v2.0+):**
-- Custom roles/hybrid RBAC (20% use case, high complexity)
-- SSO/SAML support (enterprise feature, not MVP)
-- Cross-club lineup sharing (complex permissions, rare need)
-- Temporary role elevation (advanced delegation scenario)
+**Important items (19 total):**
+- **RBAC permissions (9 items):** Tenant-aware permission checks, 5-role hierarchy enforcement, server-side validation mirroring client CASL checks
+- **Audit logging (10 items):** All auth events logged, tenant context in logs, log immutability and retention policies
 
-### Architecture Approach
+**Good practice items (14 total):**
+- **Rate limiting (7 items):** Auth endpoint limits, differentiated limits for authenticated users, algorithm verification
+- **Client-side security (7 items):** CSP configured, no dangerouslySetInnerHTML without sanitization, SameSite cookies
 
-Extend current application-level tenant filtering (JWT claims + manual Prisma `where: { teamId }`) to hierarchical multi-tenancy with database-level RLS enforcement. Migration strategy: expand-migrate-contract pattern to avoid breaking existing installations.
+**83% of exposed Supabase databases involve RLS misconfigurations** — this is the highest-priority audit area.
 
-**Major components:**
+### Architecture Security Layers
 
-1. **Hierarchical JWT Claims** — Extend CustomJwtPayload with facility_id, club_id, team_id (nullable for backward compatibility); implement via Supabase Custom Access Token Hook querying TeamMember→Team→Club→Facility on token issuance
-2. **Prisma Client Extensions** — Automatic tenant filtering via extended client that injects facility/club/team context into all queries; prevents accidental data leaks through centralized tenant logic
-3. **PostgreSQL RLS Policies** — Database-level enforcement using `SET LOCAL` session variables inside explicit transactions; guards against connection pooling leaks where one user's context bleeds into another's
-4. **Tenant-Aware PWA Cache** — Service worker cache keys include facility/club IDs; cache cleared on tenant switch; IndexedDB prefixed with tenant identifiers to prevent cross-tenant data exposure
-5. **shadcn/ui Component Library** — Copy-paste Radix UI primitives into `/src/components/ui/` with CVA variants for mobile-first responsive design; 44px minimum touch targets, focus-visible keyboard navigation
-6. **RBAC Hierarchy** — Five roles (FACILITY_ADMIN→CLUB_ADMIN→COACH→ATHLETE→PARENT) with inheritance; hierarchical permissions where facility admin inherits club admin capabilities, avoiding role explosion
+The security architecture operates across six distinct layers, each requiring specific audit techniques:
 
-**Integration strategy:**
-- Phase 1: Add nullable facility/club schema fields before removing team-only patterns
-- Phase 2: Dual-write old and new claim structures during transition period
-- Phase 3: Implement RLS alongside existing application filtering for verification
-- Phase 4: Systematic component migration with deprecation tracking
+**Layer 1: Edge Middleware** (`/src/middleware.ts`)
+- Authentication via `supabase.auth.getUser()` (not `getSession()` which is forgery-susceptible)
+- Public route allowlist with API key validation for `/api/*` routes
+- **Vulnerability:** CVE-2025-29927 middleware bypass via `x-middleware-subrequest` header
 
-### Critical Pitfalls
+**Layer 2: JWT Claims** (Supabase custom access token hook)
+- Claims inject `team_id`, `facility_id`, `club_id`, `user_role` into JWT
+- Hook runs as `SECURITY DEFINER` — privilege escalation vector if compromised
+- **Vulnerability:** Claims cached until expiration — membership changes not reflected until token refresh
 
-1. **JWT Claims Migration Without Backward Compatibility** — Adding facility_id/club_id breaks all existing sessions with team_id-only claims; users see empty data or 403 errors after deploy. **Avoid:** Use expand-migrate-contract (dual claims during transition), forced re-login with user messaging, feature flag for gradual rollout, database fallback that works regardless of claim structure.
+**Layer 3: Row Level Security** (PostgreSQL RLS policies)
+- All tables have RLS enabled with policies using `auth.uid()` for current user
+- Helper functions `get_user_team_id()`, `get_user_role()` enforce multi-tenant isolation
+- **Vulnerability:** Prisma connects as superuser by default, bypassing all RLS policies
 
-2. **Service Worker Cache Invalidation Across Tenants** — Cache keyed by URL only; user switching from Facility A to Facility B sees stale cached data creating silent data leak. **Avoid:** Tenant-aware cache keys (`${facilityId}-${clubId}-${url}`), clear cache on tenant switch, Clear-Site-Data header on logout, IndexedDB tenant scoping, cache validation headers with tenant ID verification.
+**Layer 4: API Route Authorization** (CASL abilities)
+- `getAuthContext()` creates CASL ability from JWT claims at every API route entry
+- 5-role hierarchy: FACILITY_ADMIN, CLUB_ADMIN, COACH, ATHLETE, PARENT
+- **Vulnerability:** Routes forgetting to call `getAuthContext()` bypass all authorization
 
-3. **Application-Level to RLS Migration Data Leaks** — Connection pooling reuses connections; `SET LOCAL` becomes `SET` accidentally, persisting tenant context globally; User A's facility_id leaks into User B's pooled connection. **Avoid:** Always use SET LOCAL inside explicit transactions, test with connection pooling enabled, monitor RLS violations (0-row queries), use LEAKPROOF functions for index usage, dual-run period comparing application-level and RLS results.
+**Layer 5: Prisma Query Layer**
+- All queries parameterized to prevent SQL injection
+- Connection pooling uses service role (bypasses RLS) — must filter in application
+- **Vulnerability:** Operator injection through unvalidated filter objects (NoSQL-style attacks)
 
-4. **Component Drift - Duplicates Instead of Replacement** — New shadcn/ui components created but 50 old components stay in use; design inconsistency grows instead of shrinking. **Avoid:** Component inventory audit before starting, deprecation with linting, codemods for automated replacement, migration tracking checklist, aggressive deletion of deprecated components.
+**Layer 6: Client-Side Security** (React Server Components)
+- Server Components fetch data directly, Client Components receive only necessary props
+- No authorization logic in client code (server validates everything)
+- **Vulnerability:** Server Components accidentally exposing sensitive data in props
 
-5. **RBAC Absolutism - Role Explosion** — Creating role for every job title (FACILITY_ADMIN, CLUB_ADMIN, CLUB_COACH, ASSISTANT_COACH, HEAD_COACH, ATHLETE_CAPTAIN, etc.); 20+ roles become unmanageable. **Avoid:** 80/20 rule (roles cover 80%, permissions cover 20%), design around tasks not titles, role hierarchy with inheritance, audit role usage (<5 checks = removal candidate).
+### Critical Vulnerabilities to Address
+
+Research identified 19 vulnerabilities across three severity tiers:
+
+**CRITICAL (7 vulnerabilities):**
+1. **React2Shell RCE** (CVE-2025-55182): Pre-auth remote code execution in RSC protocol, CVSS 10.0 — upgrade Next.js to 16.0.12+ immediately
+2. **Middleware bypass** (CVE-2025-29927): `x-middleware-subrequest` header bypasses auth, CVSS 9.1 — block header at CDN level
+3. **RLS not enabled**: 83% of exposed Supabase databases have RLS misconfigurations — audit all tables
+4. **Prisma RLS bypass**: Prisma connects as postgres superuser, ignoring all RLS — switch to dedicated role or use client extensions
+5. **Connection pool contamination**: Tenant context leaks between requests without transaction scoping
+6. **Server Action validation missing**: Public HTTP endpoints treated as trusted functions — validate all inputs with Zod
+7. **JWT claims trusted without re-verification**: Stale claims allow access after role changes — query database for current membership
+
+**MODERATE (5 vulnerabilities):**
+8. CASL abilities checked only client-side — server must re-validate
+9. Service role key exposure in client code or git history
+10. Cache poisoning via race condition (CVE-2025-49826) — affects ISR pages
+11. JWT HS256 to ES256 migration incomplete — HS256 vulnerable to secret leakage
+12. Race conditions in hierarchical multi-tenant context — use AsyncLocalStorage
+
+**LOW (7 vulnerabilities):**
+13. Missing CSRF protection on custom Route Handlers
+14. Prisma operator injection through unvalidated filters
+15. Insufficient index coverage for RLS policies (99.94% slower)
+16. API key validation uses service role connection
+17. Stale JWT claims after role changes (1-hour window)
+18. Missing `'server-only'` directive on sensitive modules
+19. Unvalidated dynamic route parameters
+
+**Immediate actions required:** Upgrade Next.js, rotate secrets, audit RLS, switch Prisma role, add input validation.
+
+### Audit Execution Phases
+
+Research defines a 10-day audit sequence optimized to catch critical issues first:
+
+**Phase 1: Foundation Verification (Day 1)**
+- RLS enabled check via pg_catalog queries
+- Middleware authentication review (getUser vs getSession)
+- JWT configuration and signature algorithm verification
+- Environment variable security audit
+
+**Phase 2: Tenant Isolation Testing (Day 2-3)**
+- Create 2+ test tenants with sample data
+- Execute cross-tenant queries with different user JWTs
+- Test API routes with other club's resource IDs
+- Verify facility-shared equipment visibility boundaries
+
+**Phase 3: Authorization Bypass Testing (Day 4-5)**
+- JWT manipulation (modify claims, "none" algorithm attack)
+- CASL permission boundary testing (ATHLETE creates practice, FACILITY_ADMIN without COACH role)
+- Middleware bypass vectors (CVE-2025-29927 reproduction)
+
+**Phase 4: Data Injection & Input Validation (Day 6)**
+- SQL injection testing with Prisma queries
+- Operator injection (NoSQL-style) via filter parameters
+- Zod schema validation effectiveness
+
+**Phase 5: API Key & Session Security (Day 7)**
+- API key lifecycle (revocation, expiration, role changes)
+- Session management (timeout, concurrent sessions, CSRF)
+- MFA security and SSO configuration
+
+**Phase 6: Comprehensive Integration Testing (Day 8-9)**
+- Privilege escalation scenarios
+- Data exfiltration attempts
+- Cross-tenant conflict scenarios (equipment booking race conditions)
+
+**Phase 7: Verification & Documentation (Day 10)**
+- Issue cataloging by severity (Critical/High/Medium/Low)
+- Regression testing after fixes
+- Compliance check (SOC 2, GDPR requirements)
+
+**Total time estimate:** 5-7 days for comprehensive audit using automated tools + manual testing.
 
 ## Implications for Roadmap
 
-Based on research findings, v2.0 should follow a **security-first, incremental expansion** approach. The facility model and RBAC changes are foundational and carry the highest migration risk—these must be stable before UI/UX polish. Mobile PWA improvements and design system adoption can proceed in parallel once security foundation is solid.
+Based on research, the security audit should be structured as a single focused milestone with clear entry/exit criteria:
 
-### Phase 1: Security Foundation & Auth Hardening
-**Rationale:** All subsequent features depend on hierarchical auth working correctly. Security changes are foundational—cannot build facility features without stable JWT claims and RLS patterns.
+### Audit Phase Structure
 
-**Delivers:** Hardened auth layer with hierarchical tenant support, Prisma Client Extensions for automatic filtering, Data Access Layer pattern for Server Actions, migration-ready schema with backward compatibility.
+**Phase 1: Critical Infrastructure (Days 1-3)**
+**Rationale:** Foundation must be bulletproof before testing application layer. Next.js vulnerabilities (React2Shell, middleware bypass) are pre-auth exploits that make all subsequent auditing meaningless if not fixed first.
 
-**Addresses:** Tenant-scoped roles (FEATURES), audit logging infrastructure (FEATURES), backward-compatible JWT migration (PITFALLS), TypeScript branded types for facility/club/team IDs (PITFALLS)
+**Delivers:**
+- Next.js upgraded to 16.0.12+
+- All secrets rotated (React2Shell requires credential rotation)
+- RLS enabled on all tables with policies verified
+- Prisma switched from postgres superuser to dedicated role
+- Middleware bypass header blocked at CDN
 
-**Avoids:** JWT claims migration breaking sessions (PITFALLS #1), client-side only RBAC (PITFALLS #6), data migration without dry-run (PITFALLS #9)
+**Tools:** pg_catalog queries, TruffleHog, Semgrep, manual config review
 
-**Stack:** Prisma Client Extensions, Supabase Custom Access Token Hook, Next.js 16 proxy.ts (middleware rename)
+**Avoids:**
+- Critical: React2Shell RCE (CVE-2025-55182)
+- Critical: Middleware bypass (CVE-2025-29927)
+- Critical: RLS not enabled (83% of Supabase breaches)
+- Critical: Prisma RLS bypass (multi-tenant data leakage)
 
-### Phase 2: Facility Model Schema & Data Migration
-**Rationale:** Database schema is foundation for all facility features. Backward-compatible approach allows existing team-only installations to continue working while enabling facility hierarchy.
+**Exit criteria:** No cross-tenant data leaks via direct queries, no secrets exposed in client bundle, authentication cannot be bypassed.
 
-**Delivers:** Facility/Club models with adjacency list hierarchy, Equipment ownership types (FACILITY/CLUB/TEAM), nullable foreign keys for graceful migration, data migration scripts with dry-run and rollback.
+---
 
-**Addresses:** Hierarchical tenancy (FEATURES), shared resource management (FEATURES), equipment ownership isolation (ARCHITECTURE)
+**Phase 2: Authorization & Tenant Isolation (Days 4-6)**
+**Rationale:** Multi-tenant isolation is the highest-risk area unique to RowOps architecture. Facility → club → team hierarchy with shared equipment creates complex permission boundaries requiring both automated and manual testing.
 
-**Avoids:** Breaking existing installations (PITFALLS #1), foreign key cascade deletion destroying data (PITFALLS #4), shared resource booking conflicts (PITFALLS #3)
+**Delivers:**
+- Cross-tenant isolation verified with 2+ test facilities/clubs
+- CASL abilities mirrored server-side (not just client checks)
+- JWT claims re-verified against database (handle stale claims)
+- Server Action input validation with Zod schemas
+- API key authorization verified per club context
 
-**Stack:** Prisma schema evolution, PostgreSQL migrations, equipment booking model
+**Tools:** SupaShield, pgTAP, manual API testing, Postman/Bruno
 
-### Phase 3: Facility Auth Integration & RLS
-**Rationale:** Auth must understand hierarchy before UI can use it. RLS provides defense-in-depth enforcement at database level.
+**Addresses:**
+- RBAC permission boundaries (5-role hierarchy)
+- Facility-shared equipment visibility controls
+- Connection pool contamination prevention
+- JWT claims staleness after role changes
 
-**Delivers:** Extended JWT claims (facility_id, club_id, team_id), Custom Access Token Hook implementation, RLS policies for Equipment/Practice/Team, CASL ability definitions for hierarchical permissions.
+**Avoids:**
+- Critical: JWT claims trusted without re-verification
+- Critical: Server Action validation missing
+- Moderate: CASL client-side only enforcement
+- Moderate: Service role key exposure
 
-**Addresses:** Facility admin role (FEATURES), permission delegation (FEATURES), tenant-scoped data isolation (FEATURES)
+**Exit criteria:** Role boundaries enforced, ATHLETE cannot create practices, FACILITY_ADMIN without COACH role cannot edit lineups, Club A cannot access Club B data.
 
-**Avoids:** RLS connection pooling leaks (PITFALLS #2), application-level filtering gaps (ARCHITECTURE)
+---
 
-**Stack:** @casl/ability + @casl/react, Supabase RLS, Supabase Custom Access Token Hook
+**Phase 3: Application Security Hardening (Days 7-9)**
+**Rationale:** Defense-in-depth layers (rate limiting, CSRF, CSP, audit logging) don't prevent initial breach but limit damage and ensure detection. Industry best practices for commercial SaaS.
 
-**Research Flag:** NEEDS DEEPER RESEARCH for Custom Access Token Hook implementation patterns—Supabase Edge Functions have specific memory/timeout constraints that may require batching for large facility hierarchies.
+**Delivers:**
+- Rate limiting on auth endpoints (5-10 attempts per 15 min)
+- CSRF protection on custom Route Handlers
+- Audit logging verified for all security events
+- Security headers configured (CSP with nonces, HSTS, X-Frame-Options)
+- Prisma operator injection testing completed
+- Dynamic route parameter validation with Zod
 
-### Phase 4: Mobile PWA Improvements
-**Rationale:** Mobile improvements are independent of facility model and can proceed in parallel with Phase 3. Builds on existing Serwist/Dexie foundation (70% complete from v1.0).
+**Tools:** OWASP ZAP, jwt_tool, securityheaders.com, manual testing
 
-**Delivers:** Touch-optimized drag-and-drop with dnd-kit TouchSensor, 44px minimum touch targets, tenant-aware service worker caching, sync queue pattern in Dexie with conflict resolution, responsive breakpoints for mobile-first layout.
+**Addresses:**
+- Rate limiting (brute force prevention)
+- Audit logging (365-day retention for compliance)
+- Client-side security (XSS, CSRF prevention)
+- Input validation completeness
 
-**Addresses:** Touch-friendly targets (FEATURES), offline-first data sync (FEATURES), conflict resolution (FEATURES), network-aware UI (FEATURES)
+**Avoids:**
+- Moderate: Cache poisoning (CVE-2025-49826)
+- Low: Missing CSRF protection
+- Low: Prisma operator injection
+- Low: Unvalidated route parameters
 
-**Avoids:** Service worker tenant cache leaks (PITFALLS #2), iOS PWA limitations breaking functionality (PITFALLS #5), responsive retrofit breaking desktop workflows (PITFALLS #6)
+**Exit criteria:** Industry best practices implemented, SOC 2 compliance requirements met, ready for penetration testing.
 
-**Stack:** @use-gesture/react, enhanced Serwist configuration, Dexie sync queue
+---
 
-**Research Flag:** STANDARD PATTERNS—PWA offline-first and touch optimization are well-documented (MDN, Serwist docs, dnd-kit docs). Skip phase-specific research.
+**Phase 4: Verification & Documentation (Day 10)**
+**Rationale:** Regression testing ensures fixes didn't introduce new issues. Documentation enables ongoing security maintenance.
 
-### Phase 5: Design System Integration
-**Rationale:** Design system changes are mostly visual and can proceed in parallel with Phases 3-4. Start small (top 5 components) and expand based on actual usage.
+**Delivers:**
+- All findings cataloged by severity with reproduction steps
+- Remediation recommendations for each issue
+- Regression test suite (re-run all Phase 1-3 tests)
+- Security documentation for developers (RLS patterns, authorization helpers)
+- Compliance checklist (GDPR, SOC 2 requirements)
 
-**Delivers:** shadcn/ui infrastructure with Tailwind v4 theme, Button/Dialog/DropdownMenu primitives, component migration tracking, refactored high-traffic components (PracticeEditor, LineupEditor).
-
-**Addresses:** Design system with consistent components (FEATURES), empty states (FEATURES), dark mode support (FEATURES), accessible form validation (FEATURES)
-
-**Avoids:** Component drift with duplicates (PITFALLS #4), building too much too soon (PITFALLS #7), fragmented tooling (PITFALLS #8)
-
-**Stack:** shadcn/ui (canary), CVA for variants, Radix UI primitives
-
-**Research Flag:** STANDARD PATTERNS—shadcn/ui installation and component usage are well-documented. Component inventory and migration planning needed but no technical research gaps.
-
-### Phase 6: Facility UI Features
-**Rationale:** UI features require all foundation work complete (schema, auth, design system). This phase delivers user-facing facility management capabilities.
-
-**Delivers:** Facility admin dashboard, club management interface, equipment ownership selector, owner badges in equipment list, multi-team user switcher dropdown.
-
-**Addresses:** Facility management UI (FEATURES), equipment visibility controls (FEATURES), club isolation (FEATURES)
-
-**Avoids:** Building UI before auth/schema ready (dependencies)
-
-**Stack:** Integrates all previous phases—shadcn/ui components, CASL permissions, hierarchical JWT claims
-
-### Phase 7: Integration Testing & Polish
-**Rationale:** End-to-end testing ensures all pieces work together correctly. Validates multi-facility scenarios and accessibility standards.
-
-**Delivers:** Multi-facility scenario tests (Chattanooga Rowing example), offline sync queue with conflict testing, role-based access control audit for all roles, WCAG 2.1 AAA accessibility validation, mobile device performance testing.
-
-**Addresses:** Overall system integration and validation
-
-**Avoids:** Shipping before end-to-end validation
+**Exit criteria:** All Critical and High severity issues resolved, Medium issues documented with mitigation plans, regression tests pass.
 
 ### Phase Ordering Rationale
 
-**Critical path:** Phase 1 (Security) → Phase 2 (Schema) → Phase 3 (Auth) → Phase 6 (UI) forms the blocking chain for facility features. Phases 4 (Mobile) and 5 (Design System) can run parallel with Phase 3 since they have no facility model dependency.
+**Why this order:**
+1. **Infrastructure first (Phases 1):** Next.js CVEs are pre-auth exploits — no point testing application security if base platform is compromised
+2. **Tenant isolation second (Phase 2):** Multi-tenant data leakage is catastrophic and unique to RowOps architecture — must verify before hardening
+3. **Defense-in-depth third (Phase 3):** Rate limiting, audit logging, CSRF don't prevent initial breach but limit damage
+4. **Documentation last (Phase 4):** Document after all testing complete to capture final state
 
-**Grouping logic:** Security changes precede all feature work to avoid building on unstable foundation. Schema evolution comes before auth integration because Custom Access Token Hook needs database structure to query. UI features are last because they require stable auth and design system.
+**Why this grouping:**
+- Phase 1 groups infrastructure fixes that require downtime (secret rotation, Prisma role change)
+- Phase 2 groups tenant-scoped testing that requires test data setup (2+ facilities/clubs)
+- Phase 3 groups defense-in-depth items that are independent and can be parallelized
 
-**Pitfall mitigation:** Phasing follows expand-migrate-contract pattern—Phase 1 expands auth patterns, Phase 2 adds schema alongside old structure, Phase 3 migrates to new patterns while maintaining backward compatibility. Component migration in Phase 5 uses systematic tracking to avoid drift. Testing in Phase 7 validates all integration points including RLS connection pooling and tenant cache isolation.
+**How this avoids pitfalls:**
+- Addresses all 7 Critical vulnerabilities in Phases 1-2 before moving to Moderate severity
+- Prevents connection pool contamination by testing in Phase 2 after Prisma role change (Phase 1)
+- Catches stale JWT claims issue (Phase 2) before testing session management (Phase 3)
 
 ### Research Flags
 
-**Phases needing deeper research during planning:**
-- **Phase 3 (Facility Auth Integration):** Custom Access Token Hook implementation with Supabase Edge Functions—need to research memory/timeout constraints, batching strategies for large hierarchies, error handling patterns for hook failures
-- **Phase 6 (Facility UI Features):** Equipment reservation/booking conflict detection—need to research calendar conflict algorithms, timezone handling for multi-facility scenarios, UI patterns for booking management
+**Phases likely needing deeper research during planning:**
+
+**Phase 2 (Authorization & Tenant Isolation):**
+- **Reason:** Facility → club → team hierarchy is complex. Research covers general multi-tenant patterns, but RowOps-specific equipment sharing model (facility-owned equipment visible to all clubs, club-owned equipment private) needs custom pgTAP test design.
+- **Action:** During Phase 2 planning, research Supabase RLS policy patterns for hierarchical tenancy with shared/private resources.
+
+**Phase 3 (Application Security Hardening):**
+- **Reason:** Next.js CSP configuration with nonces for React Server Components is well-documented (HIGH confidence), but interaction with shadcn/ui components and Serwist service worker (offline PWA) may require testing.
+- **Action:** Test CSP with nonce injection in staging environment to verify no component breakage.
 
 **Phases with standard patterns (skip research-phase):**
-- **Phase 1 (Security Foundation):** Prisma Client Extensions and Data Access Layer are well-documented patterns
-- **Phase 4 (Mobile PWA):** PWA offline-first, touch gestures, responsive design have extensive MDN/vendor documentation
-- **Phase 5 (Design System):** shadcn/ui installation and component adoption are thoroughly documented
-- **Phase 7 (Integration Testing):** Standard testing patterns, no novel technical challenges
+
+**Phase 1 (Critical Infrastructure):**
+- **Reason:** Next.js upgrade, RLS enablement, Prisma role configuration are all standard operations with official documentation (HIGH confidence).
+- **Action:** Follow official migration guides, no additional research needed.
+
+**Phase 4 (Verification & Documentation):**
+- **Reason:** Regression testing and documentation are process tasks, not technical research areas.
+- **Action:** Execute checklist, no research needed.
 
 ## Confidence Assessment
 
 | Area | Confidence | Notes |
 |------|------------|-------|
-| Stack | HIGH | Official Tailwind v4 support verified for shadcn/ui, @use-gesture/react actively maintained (2M+ weekly downloads), CASL latest version 6.8.0 published recently, RLS production-proven via Supabase |
-| Features | HIGH | Multi-tenancy patterns from Microsoft/AWS/Google/Oracle (authoritative), RBAC from WorkOS/Permit.io/AWS, PWA from MDN best practices, WCAG 2.5.5 touch targets (official W3C standard) |
-| Architecture | HIGH | Prisma Client Extensions officially documented, Supabase Custom Claims/RLS extensively documented, Next.js 16 auth patterns from official guides, hierarchical multi-tenancy patterns from Crunchy Data/ZenStack |
-| Pitfalls | HIGH | RLS footguns from ByteBase/Permit.io (production experience), PWA cache invalidation from hasura/iInteractive, component drift from Netguru/HubSpot, RBAC pitfalls from IdenHaus/Microsoft, data migration from Brainhub/Rivery |
+| **Security Tools** | HIGH | All tools verified with official docs, GitHub repos, and 2026 security research. Semgrep, TruffleHog, OWASP ZAP are industry-standard. SupaShield is newer (2025-2026) but purpose-built for Supabase RLS testing. |
+| **Audit Checklist** | HIGH | 58-item checklist compiled from authoritative sources: OWASP, Supabase official docs, WorkOS multi-tenant patterns, Microsoft Azure tenancy models. Verified against 2026 CVE disclosures. |
+| **Architecture Analysis** | HIGH | Audit layers mapped directly to RowOps codebase structure. Middleware, JWT hooks, RLS policies, CASL patterns all verified in actual repository. CVE-2025-29927 and React2Shell vulnerabilities confirmed with official advisories. |
+| **Critical Vulnerabilities** | HIGH | All 19 vulnerabilities sourced from official CVE disclosures (Next.js security advisories, PostgreSQL CVEs), Supabase GitHub discussions, and reputable security research (Datadog Security Labs, JFrog, Aikido). |
 
 **Overall confidence:** HIGH
 
-Research sources are authoritative (official documentation, cloud provider best practices, established SaaS platforms) and findings are corroborated across multiple sources. The four research dimensions (stack, features, architecture, pitfalls) have consistent HIGH confidence because they draw from production-validated patterns rather than experimental approaches.
-
 ### Gaps to Address
 
-**Custom Access Token Hook performance:** Supabase Edge Functions have execution limits (10s timeout, 50MB memory). For facilities with 100+ clubs, the hierarchy query in the hook could exceed limits. **Resolution:** Test hook performance during Phase 3 planning with synthetic large datasets; consider caching strategy or denormalized claims table if needed.
+**CASL server-side testing patterns:**
+- **Gap:** Official CASL.js documentation exists, but 2026-specific testing patterns for 5-role hierarchy (FACILITY_ADMIN, CLUB_ADMIN, COACH, ATHLETE, PARENT) with tenant context need project-specific implementation.
+- **How to handle:** During Phase 2 planning, write custom integration tests for CASL abilities. Reference CASL official docs for ability definition patterns, but test suite will be RowOps-specific.
 
-**Equipment reservation conflict detection:** Research identified the pattern (booking calendar with conflict checks) but not the specific algorithm for rowing equipment which can have partial availability (8+ boat can row as 4+). **Resolution:** Research during Phase 6 planning—likely needs domain-specific logic for equipment subdivision.
+**Facility-shared equipment RLS policies:**
+- **Gap:** Research covers general multi-tenant RLS patterns (HIGH confidence), but facility-level equipment visible to all clubs while club-level equipment is private requires custom policy design.
+- **How to handle:** During Phase 2 execution, use Supabase Database Advisors to check policy coverage. Write pgTAP tests for both facility-owned and club-owned equipment access patterns.
 
-**iOS PWA storage limits:** 50MB storage limit may be insufficient for offline regatta data with large rosters and multi-day schedules. **Resolution:** Monitor storage usage in Phase 4, implement data pruning strategy (keep only current season offline, archive older data to server-only).
+**Supabase Realtime channel security:**
+- **Gap:** Official Supabase docs confirm Realtime channels inherit table RLS policies, but RowOps uses Realtime for lineup updates — needs verification that cross-tenant subscriptions are blocked.
+- **How to handle:** During Phase 2, test Realtime subscription from Club A user attempting to subscribe to Club B's practice channel. Expect connection rejection or empty messages.
 
-**Shadcn/ui long-term stability:** Radix UI team shifted focus to Base UI; shadcn/ui may migrate in future. **Resolution:** Not blocking for v2.0 (shadcn components are copy-pasted, not runtime dependency), but monitor for long-term roadmap beyond v2.0.
+**Background job tenant isolation:**
+- **Gap:** Supabase cron jobs and database triggers need manual verification that they don't bypass RLS policies when executing scheduled tasks (e.g., equipment maintenance reminders, practice notifications).
+- **How to handle:** During Phase 1, audit any database functions marked `SECURITY DEFINER` to ensure they explicitly filter by tenant context, not relying on session variables that may not be set in background context.
+
+**API key permission inheritance:**
+- **Gap:** Research notes API keys inherit creator's roles, but RowOps implementation needs verification that revoked keys are immediately invalidated and that role changes propagate to active keys.
+- **How to handle:** During Phase 3, test API key lifecycle: create key as COACH, revoke, verify 401 response. Change creator role to ATHLETE, verify key permissions update or fail.
 
 ## Sources
 
-### Stack Research (HIGH confidence)
-- [shadcn/ui Tailwind v4 Documentation](https://ui.shadcn.com/docs/tailwind-v4) — Official Tailwind v4 support verified
-- [@use-gesture/react npm](https://www.npmjs.com/package/@use-gesture/react) + [GitHub](https://github.com/pmndrs/use-gesture) — 2M+ weekly downloads, actively maintained
-- [@casl/ability npm](https://www.npmjs.com/package/@casl/ability) — Version 6.8.0 latest, 517+ projects
-- [Securing Multi-Tenant Applications Using RLS with Prisma ORM](https://medium.com/@francolabuschagne90/securing-multi-tenant-applications-using-row-level-security-in-postgresql-with-prisma-orm-4237f4d4bd35)
-- [15 Best React UI Libraries for 2026](https://www.builder.io/blog/react-component-libraries-2026)
+### Primary (HIGH confidence)
 
-### Features Research (HIGH confidence)
-- [Multi-Tenant Architecture - Microsoft Azure](https://learn.microsoft.com/en-us/azure/architecture/guide/saas-multitenant-solution-architecture/)
-- [Best Practices for Enterprise Multi-Tenancy - Google Cloud](https://cloud.google.com/kubernetes-engine/docs/best-practices/enterprise-multitenancy)
-- [Best Practices for Multi-Tenant Authorization - Permit.io](https://www.permit.io/blog/best-practices-for-multi-tenant-authorization)
-- [Mobile Accessibility WCAG - W3C](https://www.w3.org/TR/mobile-accessibility-mapping/) — Touch target standards
-- [PWA 2.0 + Edge Runtime 2026 - Zignuts](https://www.zignuts.com/blog/pwa-2-0-edge-runtime-full-stack-2026)
+**Official Documentation:**
+- Next.js Security: [Server Components & Actions](https://nextjs.org/blog/security-nextjs-server-components-actions), [Data Security Guide](https://nextjs.org/docs/app/guides/data-security)
+- Supabase: [Row Level Security](https://supabase.com/docs/guides/database/postgres/row-level-security), [PGAudit Extension](https://supabase.com/docs/guides/database/extensions/pgaudit), [JWT Signing Keys](https://supabase.com/docs/guides/auth/signing-keys)
+- Prisma: [Raw Queries](https://www.prisma.io/docs/orm/prisma-client/using-raw-sql/raw-queries)
+- CASL: [Official Documentation](https://casl.js.org/)
 
-### Architecture Research (HIGH confidence)
-- [Prisma Client Extensions Preview](https://www.prisma.io/blog/client-extensions-preview-8t3w27xkrxxn) — Official documentation
-- [Custom Claims & RBAC | Supabase](https://supabase.com/docs/guides/database/postgres/custom-claims-and-role-based-access-control-rbac)
-- [Custom Access Token Hook | Supabase](https://supabase.com/docs/guides/auth/auth-hooks/custom-access-token-hook)
-- [Multi-Tenancy with Prisma - ZenStack](https://zenstack.dev/blog/multi-tenant)
-- [Designing Postgres Database for Multi-tenancy - Crunchy Data](https://www.crunchydata.com/blog/designing-your-postgres-database-for-multi-tenancy)
-- [Next.js 16 Authentication Guide](https://nextjs.org/docs/app/guides/authentication) — Official proxy.ts patterns
+**CVE Disclosures:**
+- CVE-2025-66478 (React2Shell RCE): [Next.js Security Advisory](https://nextjs.org/blog/CVE-2025-66478), [React Critical Vulnerability](https://react.dev/blog/2025/12/03/critical-security-vulnerability-in-react-server-components)
+- CVE-2025-29927 (Middleware Bypass): [Datadog Security Labs](https://securitylabs.datadoghq.com/articles/nextjs-middleware-auth-bypass/), [JFrog Analysis](https://jfrog.com/blog/cve-2025-29927-next-js-authorization-bypass/)
+- CVE-2025-49826 (Cache Poisoning): [Next.js ISR Cache Poisoning Research](https://zhero-web-sec.github.io/research-and-things/nextjs-cache-and-chains-the-stale-elixir)
+- CVE-2024-10976, CVE-2025-8713 (PostgreSQL Connection Pool): [PostgreSQL Security Support](https://www.postgresql.org/support/security/CVE-2024-10976/)
 
-### Pitfalls Research (HIGH confidence)
-- [Common Postgres RLS Footguns - ByteBase](https://www.bytebase.com/blog/postgres-row-level-security-footguns/)
-- [Why Tenant Context Must Be Scoped Per Transaction](https://dev.to/m_zinger_2fc60eb3f3897908/why-tenant-context-must-be-scoped-per-transaction-3aop)
-- [Strategies for Service Worker Caching - Hasura](https://hasura.io/blog/strategies-for-service-worker-caching-d66f3c828433)
-- [Design System Adoption Pitfalls - Netguru](https://www.netguru.com/blog/design-system-adoption-pitfalls)
-- [6 Common RBAC Implementation Pitfalls - IdenHaus](https://idenhaus.com/rbac-implementation-pitfalls/)
-- [Data Migration Challenges & Risks - Brainhub](https://brainhub.eu/library/data-migration-challenges-risks-legacy-modernization)
-- [Backward Compatible Database Changes - PlanetScale](https://planetscale.com/blog/backward-compatible-databases-changes)
+**Security Research:**
+- [Prisma NoSQL Injection (Aikido 2026)](https://www.aikido.dev/blog/prisma-and-postgresql-vulnerable-to-nosql-injection)
+- [OWASP REST Security Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/REST_Security_Cheat_Sheet.html)
+- [OWASP JWT Testing Guide](https://owasp.org/www-project-web-security-testing-guide/latest/4-Web_Application_Security_Testing/06-Session_Management_Testing/10-Testing_JSON_Web_Tokens)
 
-### Cross-Reference Sources (aggregated)
-- Multi-tenant SaaS: Frontegg, Clerk, ClickIT, Oracle Cloud, Microsoft Entra
-- PWA offline-first: MobiDev, GTC Systems, eLuminous, Microsoft Dynamics
-- UI/UX design systems: Millipixels, Index.dev, Eleken, Candu, Makers Den
-- RBAC security: WorkOS, Aserto, EnterpriseReady.io, AWS Prescriptive Guidance, Concentric AI
-- Sports team management (domain): CrewTimer, iCrew, CrewLAB, TeamSnap, EZFacility
+### Secondary (MEDIUM confidence)
+
+**Multi-Tenant Security:**
+- [WorkOS: Tenant Isolation](https://workos.com/blog/tenant-isolation-in-multi-tenant-systems), [Multi-Tenant RBAC](https://workos.com/blog/how-to-design-multi-tenant-rbac-saas)
+- [Microsoft Azure: Multitenant Tenancy Models](https://learn.microsoft.com/en-us/azure/architecture/guide/multitenant/considerations/tenancy-models)
+- [Permit.io: Multi-Tenant Authorization Best Practices](https://www.permit.io/blog/best-practices-for-multi-tenant-authorization)
+
+**Tool Documentation:**
+- [Semgrep vs SonarQube 2026](https://armur.ai/semgrep-vs-sonarQube)
+- [TruffleHog GitHub Repository](https://github.com/trufflesecurity/trufflehog)
+- [SupaShield GitHub Repository](https://github.com/Rodrigotari1/supashield) (newer tool, 2025-2026)
+- [pgTAP Official Site](https://pgtap.org/)
+- [OWASP ZAP](https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project)
+
+**Best Practices:**
+- [Next.js Security Checklist (Arcjet 2026)](https://blog.arcjet.com/next-js-security-checklist/)
+- [Supabase RLS Performance Best Practices](https://supabase.com/docs/guides/troubleshooting/rls-performance-and-best-practices-Z5Jjwv)
+- [JWT Security Best Practices (Curity)](https://curity.io/resources/learn/jwt-best-practices/)
+- [API Security Checklist 2026 (Wiz)](https://www.wiz.io/academy/api-security/api-security-checklist)
+
+### Tertiary (Context for RowOps domain)
+
+**Supabase + Prisma Integration:**
+- [Prisma with Supabase RLS Policies (Medium)](https://medium.com/@kavitanambissan/prisma-with-supabase-rls-policies-c72b68a62330)
+- [Prisma Extension for Supabase RLS (GitHub)](https://github.com/dthyresson/prisma-extension-supabase-rls)
+- [Supabase Exposure Check Tool](https://github.com/bscript/supabase-exposure-check)
+
+**Multi-Tenant Breach Analysis:**
+- [Supabase Security Flaw: 170+ Apps Exposed (ByteIota)](https://byteiota.com/supabase-security-flaw-170-apps-exposed-by-missing-rls/)
+- [Multi-Tenant Leakage When RLS Fails (Medium)](https://medium.com/@instatunnel/multi-tenant-leakage-when-row-level-security-fails-in-saas-da25f40c788c)
+- [30-Day Multi-Tenant SaaS Breach Containment (Pentest Testing)](https://www.pentesttesting.com/multi-tenant-saas-breach-containment/)
 
 ---
-*Research completed: 2026-01-22*
-*Ready for roadmap: yes*
+
+**Research completed:** 2026-01-28
+**Ready for roadmap:** Yes
+
+**Next steps:**
+1. Orchestrator proceeds to milestone planning using this research
+2. Create detailed audit plan with test cases for each phase
+3. Set up test environments (2+ facilities/clubs with sample data)
+4. Execute audit following 10-day sequence outlined above
