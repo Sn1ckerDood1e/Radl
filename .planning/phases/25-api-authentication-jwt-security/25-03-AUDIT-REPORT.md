@@ -171,6 +171,54 @@ A proper logout implementation should:
 4. Redirect to `/login` page
 5. Optionally: Call `cache-manager.ts` `clearTeamData()` to clear cached data
 
+### Proposed Implementation
+
+#### Option A: API Route + Client Component (Recommended)
+
+**1. Create logout API route:** `src/app/api/auth/logout/route.ts`
+```typescript
+import { createClient } from '@/lib/supabase/server';
+import { clearCurrentClubId } from '@/lib/auth/club-context';
+import { clearCurrentFacilityId } from '@/lib/auth/facility-context';
+import { NextResponse } from 'next/server';
+
+export async function POST() {
+  const supabase = await createClient();
+
+  // Sign out from Supabase (clears auth cookies)
+  await supabase.auth.signOut();
+
+  // Clear application context cookies
+  await clearCurrentClubId();
+  await clearCurrentFacilityId();
+
+  return NextResponse.json({ success: true });
+}
+```
+
+**2. Add logout button to settings page or navigation**
+
+#### Option B: Client-Side Only (Simpler but less complete)
+
+```typescript
+// Client component logout handler
+async function handleLogout() {
+  const supabase = createClient();
+  await supabase.auth.signOut();
+
+  // Clear context cookies via API
+  await fetch('/api/auth/logout', { method: 'POST' });
+
+  window.location.href = '/login';
+}
+```
+
+### Recommended Location for Logout Button
+
+Based on current navigation structure, add logout to:
+1. **Settings page** (`src/app/(dashboard)/[teamSlug]/settings/page.tsx`) - Add "Log Out" section at bottom
+2. **Or** Add user dropdown menu to header with logout option
+
 ---
 
 ## AUTH-07: Token Refresh
