@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { nanoid } from 'nanoid';
+import { logAuditEvent, type AuditContext } from '@/lib/audit/logger';
 
 /**
  * Generate an 8-character alphanumeric error reference ID.
@@ -21,10 +22,36 @@ export function unauthorizedResponse(): NextResponse {
 }
 
 /**
- * Standard 403 Forbidden response.
+ * Standard 403 Forbidden response with optional audit logging.
  * @param message - Optional custom message, defaults to 'Forbidden'
+ * @param auditContext - Optional context for audit logging (clubId, userId required for logging)
+ * @param targetInfo - Optional target info for audit log (targetType, targetId)
  */
-export function forbiddenResponse(message?: string): NextResponse {
+export function forbiddenResponse(
+  message?: string,
+  auditContext?: Pick<AuditContext, 'clubId' | 'userId' | 'ipAddress'>,
+  targetInfo?: { targetType: string; targetId?: string }
+): NextResponse {
+  // Log PERMISSION_DENIED if context provided
+  if (auditContext?.clubId && auditContext?.userId) {
+    logAuditEvent(
+      {
+        clubId: auditContext.clubId,
+        userId: auditContext.userId,
+        ipAddress: auditContext.ipAddress,
+      },
+      {
+        action: 'PERMISSION_DENIED',
+        targetType: targetInfo?.targetType || 'Unknown',
+        targetId: targetInfo?.targetId,
+        metadata: { message: message || 'Forbidden' },
+      }
+    ).catch((err) => {
+      // Fire-and-forget, but log errors
+      console.error('[audit] Failed to log PERMISSION_DENIED:', err);
+    });
+  }
+
   return NextResponse.json(
     { error: message || 'Forbidden' },
     { status: 403 }
