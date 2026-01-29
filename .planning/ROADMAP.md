@@ -123,6 +123,14 @@ Navigation redesign, RIM feature parity, practice flow improvements, RC public A
 
 **Dependencies:** None (foundational)
 
+**Plans:** 4 plans
+
+Plans:
+- [ ] 32-01-PLAN.md — Safe area configuration (viewport-fit, bottom nav padding)
+- [ ] 32-02-PLAN.md — Color migration (emerald -> teal)
+- [ ] 32-03-PLAN.md — PWA manifest and icons
+- [ ] 32-04-PLAN.md — Header branding and crest placeholder
+
 **Requirements:**
 - SAFE-01: Viewport uses viewport-fit=cover for edge-to-edge
 - SAFE-02: Content respects safe-area-inset-* for notched devices
@@ -217,7 +225,7 @@ Navigation redesign, RIM feature parity, practice flow improvements, RC public A
 
 | Phase | Name | Requirements | Status |
 |-------|------|--------------|--------|
-| 32 | Safe Areas & Branding | 8 | Pending |
+| 32 | Safe Areas & Branding | 8 | Planned |
 | 33 | Legal Pages | 4 | Pending |
 | 34 | UX Polish | 11 | Pending |
 | 35 | Device-Specific | 6 | Pending |
@@ -226,4 +234,4 @@ Navigation redesign, RIM feature parity, practice flow improvements, RC public A
 
 ---
 
-*Last updated: 2026-01-29 (v3.0 Production Polish roadmap created)*
+*Last updated: 2026-01-29 (Phase 32 planned)*
