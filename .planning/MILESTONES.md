@@ -1,4 +1,4 @@
-# Project Milestones: RowOps
+# Project Milestones: Radl
 
 ## v2.0 Commercial Readiness (Shipped: 2026-01-26)
 

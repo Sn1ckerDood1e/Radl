@@ -47,7 +47,7 @@ human_verification:
 |----------|----------|--------|---------|
 | `next.config.ts` | Serwist integration | VERIFIED | Contains `withSerwist` wrapper with `swSrc: "src/app/sw.ts"` |
 | `src/app/sw.ts` | Service worker entry point | VERIFIED | 78 lines, includes runtimeCaching, push handlers |
-| `public/manifest.json` | PWA manifest | VERIFIED | Contains RowOps name, icons, display:standalone |
+| `public/manifest.json` | PWA manifest | VERIFIED | Contains Radl name, icons, display:standalone |
 | `src/components/pwa/register-sw.tsx` | Registration component | VERIFIED | 25 lines, exports `RegisterServiceWorker`, wired in `src/app/layout.tsx` |
 | `public/icons/icon-192x192.png` | PWA icon (small) | VERIFIED | 662 bytes |
 | `public/icons/icon-512x512.png` | PWA icon (large) | VERIFIED | 2004 bytes |

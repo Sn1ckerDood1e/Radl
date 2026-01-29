@@ -78,7 +78,7 @@ User Request
 **Implementation:** Already in place
 
 ```typescript
-// Source: /home/hb/rowops/src/app/api/practices/route.ts
+// Source: /home/hb/radl/src/app/api/practices/route.ts
 
 // Layer 1: CASL permission check
 if (!context.ability.can('create', 'Practice')) {
@@ -105,7 +105,7 @@ const practices = await prisma.practice.findMany({
 **Why:** FACILITY_ADMIN managing shared equipment but not creating lineups
 
 ```typescript
-// Source: /home/hb/rowops/src/lib/permissions/ability.ts
+// Source: /home/hb/radl/src/lib/permissions/ability.ts
 
 // FACILITY_ADMIN cannot create lineups without COACH role
 if (user.roles.includes('FACILITY_ADMIN')) {
@@ -151,7 +151,7 @@ $$;
 
 3. **PARENT Role Incomplete:** `linkedAthleteIds` is always empty array:
    ```typescript
-   // Source: /home/hb/rowops/src/lib/auth/get-auth-context.ts
+   // Source: /home/hb/radl/src/lib/auth/get-auth-context.ts
    if (roles.includes('PARENT')) {
      // TODO: Query ParentAthleteLink table when it exists
      linkedAthleteIds = [];  // <-- Always empty!
@@ -210,7 +210,7 @@ WHERE schemaname = 'public'
 **Current handling:** Routes wrap in try/catch, return empty array
 
 ```typescript
-// Source: /home/hb/rowops/src/app/api/practices/route.ts
+// Source: /home/hb/radl/src/app/api/practices/route.ts
 try {
   const practices = await prisma.practice.findMany({
     where: {
@@ -234,7 +234,7 @@ try {
 
 **Current mitigation:** Database lookup in getAuthContext (good):
 ```typescript
-// Source: /home/hb/rowops/src/lib/auth/claims.ts
+// Source: /home/hb/radl/src/lib/auth/claims.ts
 // Get effective roles including any temporary grants
 const effectiveRoles = await getUserEffectiveRoles(
   user.id,
@@ -550,12 +550,12 @@ describe('RBAC-03: COACH can create practices', () => {
 ## Sources
 
 ### Primary (HIGH confidence)
-- Codebase analysis: /home/hb/rowops/src/lib/permissions/ability.ts
-- Codebase analysis: /home/hb/rowops/src/lib/auth/claims.ts
-- Codebase analysis: /home/hb/rowops/src/lib/auth/get-auth-context.ts
-- Codebase analysis: /home/hb/rowops/supabase/migrations/00002_rls_policies.sql
-- Codebase analysis: /home/hb/rowops/supabase/migrations/00005_facility_rls_helpers.sql
-- Codebase analysis: /home/hb/rowops/supabase/migrations/00008_facility_rls_policies.sql
+- Codebase analysis: /home/hb/radl/src/lib/permissions/ability.ts
+- Codebase analysis: /home/hb/radl/src/lib/auth/claims.ts
+- Codebase analysis: /home/hb/radl/src/lib/auth/get-auth-context.ts
+- Codebase analysis: /home/hb/radl/supabase/migrations/00002_rls_policies.sql
+- Codebase analysis: /home/hb/radl/supabase/migrations/00005_facility_rls_helpers.sql
+- Codebase analysis: /home/hb/radl/supabase/migrations/00008_facility_rls_policies.sql
 - [CASL Prisma Documentation](https://casl.js.org/v6/en/package/casl-prisma/)
 - [Supabase RLS Testing with pgTAP](https://supabase.com/docs/guides/local-development/testing/pgtap-extended)
 

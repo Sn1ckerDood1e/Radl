@@ -1,6 +1,6 @@
 # Security Audit Stack
 
-**Project:** RowOps Security Audit Milestone
+**Project:** Radl Security Audit Milestone
 **Domain:** Multi-tenant SaaS Security Testing
 **Existing Stack:** Next.js 16 + React 19, Prisma 6 + PostgreSQL (Supabase), CASL + Supabase Auth
 **Researched:** 2026-01-28
@@ -32,7 +32,7 @@ This research identifies tools for auditing an existing Next.js + Supabase + Pri
 3. Add Socket for supply chain threat detection
 4. Consider Snyk for enhanced reporting (optional upgrade from npm audit)
 
-**Why this matters for RowOps:**
+**Why this matters for Radl:**
 - npm audit by default scans both production and dev dependencies
 - Socket detects malicious packages that pass traditional scanners
 - Dependabot keeps dependencies current automatically
@@ -530,7 +530,7 @@ jwt_tool [Supabase access token] -M at
 ### Phase 4: Dynamic Testing (Day 5)
 **OWASP ZAP scan:**
 ```bash
-zap-cli quick-scan http://staging.rowops.app
+zap-cli quick-scan http://staging.radl.sol
 ```
 
 **Manual penetration testing:**

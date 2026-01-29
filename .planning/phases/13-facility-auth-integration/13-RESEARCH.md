@@ -76,7 +76,7 @@ User action → API endpoint → Cookie update → Response → Client refresh
 
 **Existing Implementation (Club Switch):**
 ```typescript
-// Source: /home/hb/rowops/src/app/api/clubs/switch/route.ts
+// Source: /home/hb/radl/src/app/api/clubs/switch/route.ts
 export async function POST(request: NextRequest) {
   const { user } = await getClaimsForApiRoute();
   const { clubId } = await request.json();
@@ -120,7 +120,7 @@ async function handleSwitch(clubId: string) {
 
 **Current Implementation:**
 ```typescript
-// Source: /home/hb/rowops/src/lib/permissions/ability.ts
+// Source: /home/hb/radl/src/lib/permissions/ability.ts
 export interface UserContext {
   userId: string;
   clubId: string;
@@ -382,7 +382,7 @@ const userContext = useMemo(
 
 **Current implementation:** GOOD
 ```sql
--- Source: /home/hb/rowops/supabase/migrations/00006_facility_access_token_hook.sql
+-- Source: /home/hb/radl/supabase/migrations/00006_facility_access_token_hook.sql
 SELECT t."facilityId", cm."clubId", cm.roles
 FROM public."ClubMembership" cm
 JOIN public."Team" t ON t.id = cm."clubId"
@@ -426,7 +426,7 @@ Verified patterns from official sources and current implementation:
 
 ### Facility Context Switch API
 ```typescript
-// Source: Adapted from /home/hb/rowops/src/app/api/clubs/switch/route.ts
+// Source: Adapted from /home/hb/radl/src/app/api/clubs/switch/route.ts
 
 // POST /api/facility/switch
 export async function POST(request: NextRequest) {
@@ -473,7 +473,7 @@ export async function POST(request: NextRequest) {
 
 ### CASL Ability with Facility Context
 ```typescript
-// Source: Extended from /home/hb/rowops/src/lib/permissions/ability.ts
+// Source: Extended from /home/hb/radl/src/lib/permissions/ability.ts
 
 export interface UserContext {
   userId: string;
@@ -518,7 +518,7 @@ export function defineAbilityFor(user: UserContext): AppAbility {
 
 ### Client-Side Context Switch with Session Refresh
 ```typescript
-// Source: Adapted from /home/hb/rowops/src/components/layout/club-switcher.tsx
+// Source: Adapted from /home/hb/radl/src/components/layout/club-switcher.tsx
 
 async function handleFacilitySwitch(facilityId: string, clubId?: string) {
   setIsSwitching(true);
@@ -556,7 +556,7 @@ async function handleFacilitySwitch(facilityId: string, clubId?: string) {
 
 ### AbilityProvider Server-Side Usage
 ```typescript
-// Source: /home/hb/rowops/src/components/permissions/ability-provider.tsx
+// Source: /home/hb/radl/src/components/permissions/ability-provider.tsx
 // Pattern: Server component passes user context as prop
 
 // app/(dashboard)/layout.tsx (Server Component)

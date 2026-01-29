@@ -1,12 +1,12 @@
 # Security Audit Architecture
 
-**Project:** RowOps Multi-Tenant SaaS
+**Project:** Radl Multi-Tenant SaaS
 **Architecture:** Next.js 16 App Router + Supabase Auth + Prisma 6 + PostgreSQL
 **Researched:** 2026-01-28
 
 ## Executive Summary
 
-This document defines the security audit structure for RowOps, a multi-tenant rowing team management SaaS. The architecture employs defense-in-depth with three isolation layers: database-level RLS, middleware authentication, and application-level CASL permissions. The audit must verify tenant isolation at each layer, test authorization bypass vectors, and validate JWT claim integrity.
+This document defines the security audit structure for Radl, a multi-tenant rowing team management SaaS. The architecture employs defense-in-depth with three isolation layers: database-level RLS, middleware authentication, and application-level CASL permissions. The audit must verify tenant isolation at each layer, test authorization bypass vectors, and validate JWT claim integrity.
 
 **Critical vulnerability context:** CVE-2025-29927 (CVSS 9.1) affects Next.js 11.1.4-15.2.2 self-hosted deployments, allowing middleware bypass via `x-middleware-subrequest` header manipulation. While this codebase uses Next.js 16, the audit must verify no similar bypass vectors exist.
 

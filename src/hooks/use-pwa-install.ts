@@ -30,7 +30,7 @@ export interface UsePwaInstallReturn {
 // Constants
 // ============================================================================
 
-const DISMISS_STORAGE_KEY = 'rowops-install-dismissed';
+const DISMISS_STORAGE_KEY = 'radl-install-dismissed';
 const DISMISS_DURATION_DAYS = 30;
 
 // ============================================================================

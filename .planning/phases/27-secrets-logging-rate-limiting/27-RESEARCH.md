@@ -633,10 +633,10 @@ export const AUDITABLE_ACTIONS = {
 ## Sources
 
 ### Primary (HIGH confidence)
-- Codebase analysis: `/home/hb/rowops/src/lib/rate-limit/index.ts`
-- Codebase analysis: `/home/hb/rowops/src/lib/audit/logger.ts`
-- Codebase analysis: `/home/hb/rowops/src/lib/auth/api-key.ts`
-- Codebase analysis: `/home/hb/rowops/.env.example`
+- Codebase analysis: `/home/hb/radl/src/lib/rate-limit/index.ts`
+- Codebase analysis: `/home/hb/radl/src/lib/audit/logger.ts`
+- Codebase analysis: `/home/hb/radl/src/lib/auth/api-key.ts`
+- Codebase analysis: `/home/hb/radl/.env.example`
 - [Supabase Auth Rate Limits](https://supabase.com/docs/guides/auth/rate-limits)
 - [Next.js Data Security Guide](https://nextjs.org/docs/app/guides/data-security)
 - [TruffleHog GitHub Action](https://github.com/marketplace/actions/trufflehog-oss)

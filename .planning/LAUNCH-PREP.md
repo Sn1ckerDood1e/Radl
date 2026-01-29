@@ -1,4 +1,4 @@
-# RowOps Two-Week Launch Prep
+# Radl Two-Week Launch Prep
 
 **Goal:** Have a working app ready for a test team within two weeks.
 
@@ -13,8 +13,8 @@
 | Task | Priority | Est. Time | Notes |
 |------|----------|-----------|-------|
 | **Form LLC** | HIGH | 2-3 days | File in your state. Consider Wyoming or Delaware for simplicity. Use a registered agent service. |
-| **Set up business email** | HIGH | 1 hour | Google Workspace ($6/mo) or Zoho Mail (free tier). Use your domain (e.g., hello@rowops.com) |
-| **Get custom domain** | HIGH | 30 min | If not done: rowops.com or similar. Point to Vercel. |
+| **Set up business email** | HIGH | 1 hour | Google Workspace ($6/mo) or Zoho Mail (free tier). Use your domain (e.g., hello@radl.com) |
+| **Get custom domain** | HIGH | 30 min | If not done: radl.com or similar. Point to Vercel. |
 | **Set up Stripe account** | MEDIUM | 1 hour | Even if free for testing, you'll need this eventually. Requires LLC/EIN. |
 | **Identify test club** | HIGH | Ongoing | Reach out to 2-3 rowing clubs. Offer free access for feedback. |
 | **Create demo data script** | LOW | - | I can help with this (see Claude prompts below) |
@@ -27,12 +27,12 @@ Copy these prompts when you encounter issues:
 
 **Authentication Issues:**
 ```
-I'm having an authentication issue on RowOps. [Describe what's happening - login failing, session expiring, redirect loops, etc.]. Check the auth flow and help me debug.
+I'm having an authentication issue on Radl. [Describe what's happening - login failing, session expiring, redirect loops, etc.]. Check the auth flow and help me debug.
 ```
 
 **Database/Prisma Errors:**
 ```
-I'm getting this database error on RowOps: [paste error]. Help me understand what's wrong and fix it.
+I'm getting this database error on Radl: [paste error]. Help me understand what's wrong and fix it.
 ```
 
 **Vercel Deployment Issues:**
@@ -87,7 +87,7 @@ These are structured development tasks. Run `/gsd:new-milestone` when ready to s
 | **Monitor first sessions** | HIGH | Ongoing | Watch for errors in Vercel logs, respond quickly |
 | **Collect initial feedback** | HIGH | Ongoing | Note pain points, confusion, feature requests |
 | **Back up production data** | MEDIUM | 15 min | Enable Supabase backups if not already |
-| **Create support email** | LOW | 15 min | support@rowops.com forwarding to you |
+| **Create support email** | LOW | 15 min | support@radl.com forwarding to you |
 
 ### Claude Prompts (Testing Phase)
 

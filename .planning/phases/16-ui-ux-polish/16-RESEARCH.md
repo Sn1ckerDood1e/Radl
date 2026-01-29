@@ -6,7 +6,7 @@
 
 ## Summary
 
-This phase enhances the existing RowOps application with polished UI/UX patterns: empty states, skeleton loading, actionable error toasts, inline form validation, micro-animations, onboarding flow, and command palette with keyboard shortcuts.
+This phase enhances the existing Radl application with polished UI/UX patterns: empty states, skeleton loading, actionable error toasts, inline form validation, micro-animations, onboarding flow, and command palette with keyboard shortcuts.
 
 The codebase already has strong foundations: shadcn/ui components, Sonner toasts (configured at bottom-right with richColors and closeButton), react-hook-form with Zod, tw-animate-css for animations, and Lucide icons. The primary work involves leveraging these existing tools consistently while adding new patterns (skeletons, command palette, onboarding).
 
@@ -306,7 +306,7 @@ export function CommandPalette({ teamSlug }: { teamSlug: string }) {
 ```tsx
 // Source: Synthesized from https://radzion.com/blog/onboarding/
 // hooks/use-onboarding-state.ts
-const STORAGE_KEY = 'rowops-onboarding-completed';
+const STORAGE_KEY = 'radl-onboarding-completed';
 
 export function useOnboardingState() {
   const [hasCompletedOnboarding, setHasCompletedOnboarding] = useState(() => {
@@ -336,7 +336,7 @@ interface OnboardingStep {
 }
 
 const ONBOARDING_STEPS: OnboardingStep[] = [
-  { id: 'welcome', title: 'Welcome to RowOps', ... },
+  { id: 'welcome', title: 'Welcome to Radl', ... },
   { id: 'roster', title: 'Meet Your Team', ... },
   { id: 'practice', title: 'Create Your First Practice', ... },
   { id: 'equipment', title: 'Review Equipment', ... },

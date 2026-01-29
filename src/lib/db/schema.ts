@@ -111,7 +111,7 @@ export class AppDB extends Dexie {
   entries!: Table<OfflineEntry>;
 
   constructor() {
-    super('rowops-offline');
+    super('radl-offline');
 
     // Version 1: Initial schema (keep for migration)
     this.version(1).stores({

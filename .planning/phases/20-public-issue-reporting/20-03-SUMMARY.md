@@ -125,7 +125,7 @@ None - plan executed smoothly with auto-fixes integrated.
    - Sign up at https://resend.com
    - Create API key in dashboard
    - Add to `.env.local`: `RESEND_API_KEY=re_xxxxx`
-   - Optionally set `RESEND_FROM_ADDRESS` (defaults to `RowOps <onboarding@resend.dev>`)
+   - Optionally set `RESEND_FROM_ADDRESS` (defaults to `Radl <onboarding@resend.dev>`)
 
 2. **Supabase Service Role Key (for user email lookup):**
    - Get from Supabase Dashboard -> Settings -> API -> service_role key

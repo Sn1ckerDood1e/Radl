@@ -51,13 +51,13 @@ Multi-tenancy patterns, PWA best practices, and RBAC models are well-established
 | Feature | Why Expected | Complexity | Dependencies | Notes |
 |---------|--------------|------------|--------------|-------|
 | **Touch-friendly targets (≥44px)** | WCAG 2.5.5 standard for mobile accessibility. Required for operational apps used in field. | Low | UI component updates | 44x44px CSS pixels minimum |
-| **Offline-first data sync** | Coaches/athletes use app at regattas with unreliable cellular. Industry standard for field apps. | Medium (already built in v1.0) | Service workers + IndexedDB | RowOps already has this via Serwist + Dexie |
+| **Offline-first data sync** | Coaches/athletes use app at regattas with unreliable cellular. Industry standard for field apps. | Medium (already built in v1.0) | Service workers + IndexedDB | Radl already has this via Serwist + Dexie |
 | **Responsive breakpoints** | Mobile-first design with tablet/desktop layouts. No separate mobile site. | Medium | CSS refactor for existing pages | Standard practice in 2026 |
 | **Conflict resolution strategy** | When offline changes clash with server state, app must handle gracefully. | Medium | Background sync implementation | Last-write-wins or user prompt for critical data |
-| **Background sync queue** | Mutations queued in IndexedDB, synced when online. Essential for regatta mode offline reliability. | Medium (already built in v1.0) | Service worker Background Sync API | RowOps has this for lineup changes |
+| **Background sync queue** | Mutations queued in IndexedDB, synced when online. Essential for regatta mode offline reliability. | Medium (already built in v1.0) | Service worker Background Sync API | Radl has this for lineup changes |
 | **App-like UX (add to homescreen)** | PWA manifest, splash screen, standalone mode. Expected for "app-like" claim. | Low | Web manifest configuration | Standard PWA setup |
 | **Network-aware UI** | Show connection status, indicate when changes are pending sync. | Low | Online/offline event listeners | Reduces user confusion |
-| **Cache-first for static, network-first for dynamic** | Service worker strategies per resource type. | Low (already built in v1.0) | Serwist configuration | RowOps uses Serwist caching strategies |
+| **Cache-first for static, network-first for dynamic** | Service worker strategies per resource type. | Low (already built in v1.0) | Serwist configuration | Radl uses Serwist caching strategies |
 
 ### Differentiators
 
@@ -93,7 +93,7 @@ Multi-tenancy patterns, PWA best practices, and RBAC models are well-established
 | **Progressive disclosure** | Don't overwhelm new users with all features. Reveal advanced options as needed. | Medium | UI refactor for multi-step flows | Reduces onboarding friction |
 | **Dark mode support** | Expected by 2026, especially for operational apps used early morning/late evening. | Medium | Theme system (CSS variables) | Sonner already supports dark mode |
 | **Loading states (skeletons)** | Replace spinners with content-shaped placeholders. Feels faster. | Low | Component library patterns | Standard in modern design systems |
-| **Toast notifications for feedback** | Instant feedback for actions. "Practice created." "Lineup saved." | Low (already built in v1.0) | Sonner library | RowOps already uses Sonner |
+| **Toast notifications for feedback** | Instant feedback for actions. "Practice created." "Lineup saved." | Low (already built in v1.0) | Sonner library | Radl already uses Sonner |
 | **Accessible form validation** | Inline errors, ARIA labels, keyboard navigation. WCAG compliance. | Medium | Form component standards | Required for commercial sale (accessibility laws) |
 | **Consistent typography system** | Type scale, weights, spacing defined. Not ad-hoc font sizes. | Low | Design tokens | Foundation of design system |
 | **AI integration touchpoints** | Not full AI features, but UI prepared for AI assistance (e.g., "Suggest lineup"). 2026 baseline. | Low | Button placeholders, future-ready architecture | AI is table stakes expectation (not differentiator) in 2026 |
@@ -102,7 +102,7 @@ Multi-tenancy patterns, PWA best practices, and RBAC models are well-established
 
 | Feature | Value Proposition | Complexity | Notes |
 |---------|-------------------|------------|-------|
-| **Drag-and-drop everywhere** | Lineups, equipment assignment, practice planning all use drag-drop. Consistent interaction model. | Medium (dnd-kit already in use) | RowOps has dnd-kit for lineups — extend pattern |
+| **Drag-and-drop everywhere** | Lineups, equipment assignment, practice planning all use drag-drop. Consistent interaction model. | Medium (dnd-kit already in use) | Radl has dnd-kit for lineups — extend pattern |
 | **Contextual help (tooltips, hints)** | Inline guidance without leaving page. "What's a coxswain?" tooltip. | Low | Native tooltips or library |
 | **Milestone-based onboarding** | "3/5 setup tasks complete." Gamified progress. | Medium | Track user state, show progress UI |
 | **Smart defaults** | Auto-fill common values (e.g., practice duration defaults to team's usual). Learn from usage. | Medium | Requires usage analytics |
@@ -133,7 +133,7 @@ Multi-tenancy patterns, PWA best practices, and RBAC models are well-established
 | **Least privilege by default** | New users start with minimal permissions. Explicit grants required. | Low | Default role assignment | Prevents accidental over-permissioning |
 | **Audit logging for sensitive actions** | Who changed what, when. Required for compliance (SOC 2, GDPR). | Medium | Audit log table + background writes | 365-day retention standard |
 | **MFA support** | Expected for admin accounts in commercial SaaS. | Medium | Auth provider (Supabase supports MFA) | Required for enterprise sales |
-| **Rate limiting** | Protect against brute force, DDoS. Already in v1.0, must be comprehensive. | Low (already built in v1.0) | Middleware rate limit check | RowOps has SEC-02 complete |
+| **Rate limiting** | Protect against brute force, DDoS. Already in v1.0, must be comprehensive. | Low (already built in v1.0) | Middleware rate limit check | Radl has SEC-02 complete |
 | **Session management** | Configurable session timeout, revocation. Admin can force logout. | Medium | Auth provider features | Standard for security-conscious orgs |
 | **Permission delegation** | Facility admin can delegate club management without granting facility-level access. | Medium | Hierarchical RBAC | Scope grants to organizational level |
 

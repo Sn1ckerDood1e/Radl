@@ -304,7 +304,7 @@ const publicPrefixes = [
 
 **AUTH-01 Compliance Status: PASS**
 
-The RowOps API authentication implementation meets all AUTH-01 requirements:
+The Radl API authentication implementation meets all AUTH-01 requirements:
 - Every API route has authentication or explicit public justification
 - CVE-2025-29927 is not applicable (patched Next.js version)
 - Role-based access control is consistently implemented

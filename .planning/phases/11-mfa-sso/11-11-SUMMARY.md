@@ -43,7 +43,7 @@ Client component (`SsoConfigForm`) with:
 - Enable/disable SSO toggle
 - IDP configuration (provider ID, domain, group claim)
 - Role mappings editor:
-  - Add new mappings (IDP group -> RowOps roles)
+  - Add new mappings (IDP group -> Radl roles)
   - Remove existing mappings
   - Multi-role selection via toggle buttons
 - Default role selector for unmatched users

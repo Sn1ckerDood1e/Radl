@@ -39,7 +39,7 @@ key-files:
 key-decisions:
   - "Fire-and-forget audit logging (performance over guaranteed logging)"
   - "Rate limit by IP address (getClientIp from X-Forwarded-For)"
-  - "Auth rate limiters use separate Redis keys (rowops:auth:{action}:)"
+  - "Auth rate limiters use separate Redis keys (radl:auth:{action}:)"
   - "Always return success for password reset to prevent email enumeration"
   - "Server-side auth routes mandatory for rate limiting and logging"
 
@@ -102,7 +102,7 @@ Each task was committed atomically:
 
 **2. Per-action rate limiters**
 - Rationale: Different auth actions need different limits (login more frequent than signup/reset)
-- Implementation: Map<AuthAction, Ratelimit> with per-action Redis keys (rowops:auth:login:, rowops:auth:signup:)
+- Implementation: Map<AuthAction, Ratelimit> with per-action Redis keys (radl:auth:login:, radl:auth:signup:)
 
 **3. Server-side auth mandatory**
 - Rationale: Client-side Supabase auth bypasses all server-side controls (rate limiting, logging)

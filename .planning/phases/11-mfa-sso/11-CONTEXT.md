@@ -21,7 +21,7 @@ Enterprise authentication features for admin protection and single sign-on. Faci
 
 ### SSO Configuration
 - Support **SAML 2.0 only** — covers Okta, Azure AD, Google Workspace
-- **Hybrid setup approach**: self-service UI for facility admin with option to request assisted setup from RowOps support
+- **Hybrid setup approach**: self-service UI for facility admin with option to request assisted setup from Radl support
 - SSO configured at **facility level only** — all clubs under facility use same IDP
 - Password login **remains available** even when SSO is enabled — both authentication methods coexist
 
@@ -31,9 +31,9 @@ Enterprise authentication features for admin protection and single sign-on. Faci
 - User notified via **both email and in-app** when access is about to expire and when it does
 
 ### Role Mapping from SSO
-- **Configurable mapping** — facility admin defines which IDP groups/claims map to which RowOps roles
+- **Configurable mapping** — facility admin defines which IDP groups/claims map to which Radl roles
 - Users with no matching role **default to ATHLETE** — can still access system with basic permissions
-- Role updates on **next login** — when IDP role changes, RowOps picks up new claims at next authentication
+- Role updates on **next login** — when IDP role changes, Radl picks up new claims at next authentication
 - Facility admin **can override SSO-derived roles** — local override takes precedence over IDP claim
 
 ### Claude's Discretion

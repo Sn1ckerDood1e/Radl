@@ -93,7 +93,7 @@ None - plan executed exactly as written.
 
 ## User Setup Required
 
-**External services require manual configuration.** See [supabase/CRON_SETUP.md](/home/hb/rowops/supabase/CRON_SETUP.md) for:
+**External services require manual configuration.** See [supabase/CRON_SETUP.md](/home/hb/radl/supabase/CRON_SETUP.md) for:
 - Enable pg_cron and pg_net extensions in Supabase dashboard
 - Deploy process-race-notifications Edge Function
 - Create cron job with project-specific URL

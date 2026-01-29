@@ -1,6 +1,6 @@
 # Stack Research: v2.0 Commercial Readiness
 
-**Project:** RowOps v2.0 — Facility Model + Mobile PWA + UI/UX Polish + Security Hardening
+**Project:** Radl v2.0 — Facility Model + Mobile PWA + UI/UX Polish + Security Hardening
 **Researched:** 2026-01-22
 **Overall Confidence:** HIGH
 
@@ -87,7 +87,7 @@ npx shadcn@canary add sheet  # Mobile drawer/bottom sheet
 - Handles complex gesture combos (swipe to dismiss, drag to reorder, pinch to zoom schedules)
 - Maintained by Poimandres (same team as Three.js, React Three Fiber — trusted ecosystem)
 
-**Use cases in RowOps:**
+**Use cases in Radl:**
 - **Lineup editor**: Swipe to remove athlete from seat, drag to reorder
 - **Regatta timeline**: Horizontal scroll/swipe between races, pull-to-refresh
 - **Equipment list**: Swipe to mark unavailable

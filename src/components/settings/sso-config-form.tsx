@@ -90,7 +90,7 @@ export function SsoConfigForm({ initialConfig }: SsoConfigFormProps) {
       ...prev,
       roleMappings: [
         ...prev.roleMappings,
-        { idpValue: newMappingIdp.trim(), rowopsRoles: [...newMappingRoles] },
+        { idpValue: newMappingIdp.trim(), radlRoles: [...newMappingRoles] },
       ],
     }));
     setNewMappingIdp('');
@@ -254,7 +254,7 @@ export function SsoConfigForm({ initialConfig }: SsoConfigFormProps) {
                   </div>
                   <div className="text-sm text-[var(--text-muted)]">
                     Maps to:{' '}
-                    {mapping.rowopsRoles.map((role) => (
+                    {mapping.radlRoles.map((role) => (
                       <span
                         key={role}
                         className="inline-block px-2 py-0.5 bg-[var(--accent)]/20 text-[var(--accent)] rounded text-xs mr-1"

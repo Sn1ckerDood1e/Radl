@@ -505,11 +505,11 @@ Things that couldn't be fully resolved:
 ## Sources
 
 ### Primary (HIGH confidence)
-- Prisma schema: `/home/hb/rowops/prisma/schema.prisma` - Equipment, DamageReport, TeamSettings models
-- Existing readiness logic: `/home/hb/rowops/src/lib/equipment/readiness.ts` - Compute-on-read pattern
-- TeamSettings API: `/home/hb/rowops/src/app/api/team-settings/route.ts` - Extension pattern
-- Badge component: `/home/hb/rowops/src/components/announcements/announcement-priority-badge.tsx` - CVA usage
-- Dashboard structure: `/home/hb/rowops/src/app/(dashboard)/[teamSlug]/page.tsx` - Widget patterns
+- Prisma schema: `/home/hb/radl/prisma/schema.prisma` - Equipment, DamageReport, TeamSettings models
+- Existing readiness logic: `/home/hb/radl/src/lib/equipment/readiness.ts` - Compute-on-read pattern
+- TeamSettings API: `/home/hb/radl/src/app/api/team-settings/route.ts` - Extension pattern
+- Badge component: `/home/hb/radl/src/components/announcements/announcement-priority-badge.tsx` - CVA usage
+- Dashboard structure: `/home/hb/radl/src/app/(dashboard)/[teamSlug]/page.tsx` - Widget patterns
 
 ### Secondary (MEDIUM confidence)
 - Phase context: `.planning/phases/21-equipment-readiness/21-CONTEXT.md` - User decisions from /gsd:discuss-phase

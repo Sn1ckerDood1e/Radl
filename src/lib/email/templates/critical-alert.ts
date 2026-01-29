@@ -25,7 +25,7 @@ export async function sendCriticalDamageAlert(
     return { success: true, sent: 0 };
   }
 
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://rowops.app';
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://radl.sol';
   const equipmentUrl = `${appUrl}/equipment/${data.equipmentId}`;
 
   const html = `

@@ -631,14 +631,14 @@ Things that couldn't be fully resolved:
 ## Sources
 
 ### Primary (HIGH confidence)
-- Existing dashboard: `/home/hb/rowops/src/app/(dashboard)/[teamSlug]/page.tsx` - Current structure, parallel queries
-- Fleet health widget: `/home/hb/rowops/src/components/equipment/fleet-health-widget.tsx` - Widget card pattern
-- Usage logger: `/home/hb/rowops/src/lib/equipment/usage-logger.ts` - getUsageLogsForTeam()
-- Readiness utilities: `/home/hb/rowops/src/lib/equipment/readiness.ts` - aggregateFleetHealth()
-- Practice schema: `/home/hb/rowops/prisma/schema.prisma` - Practice, Block, Lineup, SeatAssignment models
+- Existing dashboard: `/home/hb/radl/src/app/(dashboard)/[teamSlug]/page.tsx` - Current structure, parallel queries
+- Fleet health widget: `/home/hb/radl/src/components/equipment/fleet-health-widget.tsx` - Widget card pattern
+- Usage logger: `/home/hb/radl/src/lib/equipment/usage-logger.ts` - getUsageLogsForTeam()
+- Readiness utilities: `/home/hb/radl/src/lib/equipment/readiness.ts` - aggregateFleetHealth()
+- Practice schema: `/home/hb/radl/prisma/schema.prisma` - Practice, Block, Lineup, SeatAssignment models
 
 ### Secondary (MEDIUM confidence)
-- Phase 23 Context: `/home/hb/rowops/.planning/phases/23-dashboard-enhancements/23-CONTEXT.md` - User decisions
+- Phase 23 Context: `/home/hb/radl/.planning/phases/23-dashboard-enhancements/23-CONTEXT.md` - User decisions
 - Custom sparkline tutorial: https://dev.to/gnykka/how-to-create-a-sparkline-component-in-react-4e1
 
 ### Tertiary (LOW confidence - WebSearch only)

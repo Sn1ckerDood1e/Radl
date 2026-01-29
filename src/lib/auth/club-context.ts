@@ -1,6 +1,6 @@
 import { cookies } from 'next/headers';
 
-export const CLUB_COOKIE_NAME = 'rowops_current_club';
+export const CLUB_COOKIE_NAME = 'radl_current_club';
 const CLUB_COOKIE_MAX_AGE = 60 * 60 * 24 * 365; // 1 year
 
 /**

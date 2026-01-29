@@ -1,4 +1,4 @@
-# Requirements: RowOps v2.2 Security Audit
+# Requirements: Radl v2.2 Security Audit
 
 **Defined:** 2026-01-28
 **Core Value:** Coaches can plan practices with lineups and equipment, and athletes know where to be and what boat they're in.

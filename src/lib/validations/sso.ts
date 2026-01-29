@@ -10,7 +10,7 @@ const mappableRoles = ['FACILITY_ADMIN', 'CLUB_ADMIN', 'COACH', 'ATHLETE', 'PARE
  */
 export const roleMappingSchema = z.object({
   idpValue: z.string().min(1).max(255),  // Value from IDP claim
-  rowopsRoles: z.array(z.enum(mappableRoles)).min(1),
+  radlRoles: z.array(z.enum(mappableRoles)).min(1),
 });
 
 /**

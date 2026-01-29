@@ -514,7 +514,7 @@ Things that couldn't be fully resolved:
 ## Sources
 
 ### Primary (HIGH confidence)
-- Existing codebase: `/home/hb/rowops/prisma/schema.prisma`, API routes, components
+- Existing codebase: `/home/hb/radl/prisma/schema.prisma`, API routes, components
 - [Prisma Docs - Filtering and Sorting](https://www.prisma.io/docs/orm/prisma-client/queries/filtering-and-sorting)
 - [shadcn/ui Calendar Blocks](https://ui.shadcn.com/blocks/calendar)
 

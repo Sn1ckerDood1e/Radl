@@ -52,7 +52,7 @@ const TOTAL_STEPS = 4;
  * Get storage key for team-specific onboarding state
  */
 function getStorageKey(teamId: string): string {
-  return `rowops-onboarding-${teamId}`;
+  return `radl-onboarding-${teamId}`;
 }
 
 /**

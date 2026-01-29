@@ -212,7 +212,7 @@ export class AppDB extends Dexie {
   syncQueue!: Table<SyncQueueItem>;
 
   constructor() {
-    super('rowops-offline');
+    super('radl-offline');
 
     // Version 1: Initial schema
     this.version(1).stores({
@@ -333,7 +333,7 @@ if (typeof window !== 'undefined') {
 // Store in .env.local:
 // VAPID_PUBLIC_KEY=...
 // VAPID_PRIVATE_KEY=...
-// VAPID_SUBJECT=mailto:admin@rowops.com
+// VAPID_SUBJECT=mailto:admin@radl.com
 
 // supabase/functions/send-notification/index.ts
 // Source: https://supabase.com/docs/guides/functions/examples/push-notifications
@@ -446,7 +446,7 @@ export function InstallBanner() {
     <div className="fixed bottom-0 inset-x-0 p-4 bg-blue-600 text-white">
       <div className="flex items-center justify-between">
         <div>
-          <p className="font-semibold">Install RowOps</p>
+          <p className="font-semibold">Install Radl</p>
           <p className="text-sm">Quick access to your team's schedule</p>
         </div>
         <div className="flex gap-2">
@@ -611,7 +611,7 @@ export function RegisterPWA() {
 // Source: IndexedDB migration patterns research
 export class AppDB extends Dexie {
   constructor() {
-    super('rowops-offline');
+    super('radl-offline');
 
     // Version 1: Initial schema
     this.version(1).stores({
@@ -642,8 +642,8 @@ export class AppDB extends Dexie {
 // public/manifest.json
 // Source: https://web.dev/articles/add-manifest
 {
-  "name": "RowOps - Crew Team Management",
-  "short_name": "RowOps",
+  "name": "Radl - Crew Team Management",
+  "short_name": "Radl",
   "description": "Manage your rowing team's schedule, lineups, and equipment",
   "start_url": "/",
   "display": "standalone",
@@ -684,7 +684,7 @@ self.addEventListener('push', (event: PushEvent) => {
   const data = event.data?.json() || {};
 
   event.waitUntil(
-    self.registration.showNotification(data.title || 'RowOps', {
+    self.registration.showNotification(data.title || 'Radl', {
       body: data.body,
       icon: data.icon || '/icons/icon-192x192.png',
       badge: '/icons/badge-72x72.png',

@@ -133,7 +133,7 @@ Each task was committed atomically:
 ## Issues Encountered
 
 **Nested directory artifact**
-- Issue: Write tool created `/home/hb/rowops/rowops/src/...` nested structure
+- Issue: Write tool created `/home/hb/radl/radl/src/...` nested structure
 - Resolution: Moved boat-selector.tsx to correct location, removed nested directory
 - Impact: One cleanup commit (`cd27558`) to remove artifact
 

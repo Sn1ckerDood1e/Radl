@@ -9,7 +9,7 @@ requires:
   - phase: 04-01
     provides: Serwist service worker configuration
 provides:
-  - IndexedDB schema with rowops-offline database
+  - IndexedDB schema with radl-offline database
   - Offline schedule and lineup caching interfaces
   - Reactive React hooks for offline data queries
   - Sync queue infrastructure for background mutations
@@ -57,7 +57,7 @@ completed: 2026-01-21
 - **Files modified:** 5 (3 created + 2 package files)
 
 ## Accomplishments
-- Dexie database schema with versioned IndexedDB (rowops-offline)
+- Dexie database schema with versioned IndexedDB (radl-offline)
 - Offline data types for schedules, lineups, sync queue, and cache metadata
 - Reactive React hooks using useLiveQuery for automatic re-renders
 - Sync queue with retry logic and automatic online sync trigger

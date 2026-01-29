@@ -35,7 +35,7 @@ key-decisions:
 patterns-established:
   - "MFA backup codes: 10 codes per user, SHA-256 hash, one-time use"
   - "Permission grants: explicit expiration, soft revocation via revokedAt"
-  - "SSO role mapping: JSON array of { idpValue, rowopsRoles } objects"
+  - "SSO role mapping: JSON array of { idpValue, radlRoles } objects"
 
 # Metrics
 duration: 4min

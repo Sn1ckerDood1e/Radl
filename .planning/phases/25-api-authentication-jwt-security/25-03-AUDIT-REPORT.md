@@ -325,7 +325,7 @@ Steps:
 5. Try to access protected route (e.g., /demo-club/practices)
 6. Expected: Redirect to /login or 401 response
 7. Check cookies in DevTools
-8. Expected: rowops_current_club and rowops_current_facility cookies cleared
+8. Expected: radl_current_club and radl_current_facility cookies cleared
 ```
 
 ### AUTH-07: Token Refresh Test

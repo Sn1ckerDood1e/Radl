@@ -296,7 +296,7 @@ async function getPractices(userContext: UserContext) {
 // src/lib/auth/club-context.ts
 import { cookies } from 'next/headers';
 
-const CLUB_COOKIE_NAME = 'rowops_current_club';
+const CLUB_COOKIE_NAME = 'radl_current_club';
 const CLUB_COOKIE_MAX_AGE = 60 * 60 * 24 * 365; // 1 year
 
 export async function getCurrentClubId(): Promise<string | null> {

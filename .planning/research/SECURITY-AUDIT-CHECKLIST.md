@@ -1,6 +1,6 @@
 # Security Audit Checklist: Multi-Tenant SaaS
 
-**Project:** RowOps
+**Project:** Radl
 **Domain:** Multi-tenant SaaS with RBAC and RLS
 **Researched:** 2026-01-28
 **Overall confidence:** HIGH

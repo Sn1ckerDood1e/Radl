@@ -1,6 +1,6 @@
 import { cookies } from 'next/headers';
 
-export const FACILITY_COOKIE_NAME = 'rowops_current_facility';
+export const FACILITY_COOKIE_NAME = 'radl_current_facility';
 const FACILITY_COOKIE_MAX_AGE = 60 * 60 * 24 * 365; // 1 year
 
 /**

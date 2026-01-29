@@ -515,7 +515,7 @@ interface SsoRoleMapping {
   idpGroupClaim: string;     // e.g., 'groups', 'memberOf'
   mappings: {
     idpValue: string;        // Value from IdP claim
-    rowopsRoles: Role[];     // Mapped RowOps roles
+    radlRoles: Role[];     // Mapped Radl roles
   }[];
   defaultRole: Role;         // Default if no mapping matches (ATHLETE per CONTEXT.md)
 }
@@ -528,7 +528,7 @@ model SsoConfig {
   ssoProviderId  String?  // From Supabase SSO setup
   idpDomain      String?  // e.g., 'company.com'
   idpGroupClaim  String   @default("groups")
-  roleMappings   Json     @default("[]")  // Array of { idpValue, rowopsRoles }
+  roleMappings   Json     @default("[]")  // Array of { idpValue, radlRoles }
   defaultRole    Role     @default(ATHLETE)
   allowOverride  Boolean  @default(true)  // Facility admin can override
   createdAt      DateTime @default(now())
@@ -554,13 +554,13 @@ export async function mapSsoRoles(
   const groups = idpClaims[config.idpGroupClaim] as string[] ?? [];
   const mappings = config.roleMappings as Array<{
     idpValue: string;
-    rowopsRoles: Role[];
+    radlRoles: Role[];
   }>;
 
   const mappedRoles: Role[] = [];
   for (const mapping of mappings) {
     if (groups.includes(mapping.idpValue)) {
-      mappedRoles.push(...mapping.rowopsRoles);
+      mappedRoles.push(...mapping.radlRoles);
     }
   }
 
@@ -706,11 +706,11 @@ Things that couldn't be fully resolved:
 - [qrcode.react GitHub](https://github.com/zpao/qrcode.react) - QR code component
 
 ### Codebase (HIGH confidence)
-- `/home/hb/rowops/src/lib/auth/claims.ts` - Existing JWT claims handling
-- `/home/hb/rowops/src/lib/audit/logger.ts` - Audit logging pattern
-- `/home/hb/rowops/src/app/api/cron/audit-cleanup/route.ts` - Cron job pattern
-- `/home/hb/rowops/src/lib/push/triggers.ts` - Notification pattern
-- `/home/hb/rowops/package.json` - qrcode.react already installed
+- `/home/hb/radl/src/lib/auth/claims.ts` - Existing JWT claims handling
+- `/home/hb/radl/src/lib/audit/logger.ts` - Audit logging pattern
+- `/home/hb/radl/src/app/api/cron/audit-cleanup/route.ts` - Cron job pattern
+- `/home/hb/radl/src/lib/push/triggers.ts` - Notification pattern
+- `/home/hb/radl/package.json` - qrcode.react already installed
 
 ## Metadata
 

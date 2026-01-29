@@ -53,7 +53,7 @@ export async function GET(request: NextRequest) {
       format: 'letter', // 8.5 x 11 inches
     });
 
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://rowops.app';
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://radl.sol';
 
     // Layout: 3 columns x 4 rows = 12 QR codes per page
     const cols = 3;

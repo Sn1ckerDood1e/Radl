@@ -531,7 +531,7 @@ export class AppDB extends Dexie {
   entries!: Table<OfflineEntry>;
 
   constructor() {
-    super('rowops-offline');
+    super('radl-offline');
 
     // Version 2: Add regatta tables
     this.version(2).stores({

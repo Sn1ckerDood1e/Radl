@@ -66,7 +66,7 @@ Before: Users had no way to log out. Sessions only ended by manual cookie cleari
 After: Users can click "Sign Out" in settings to:
 1. Invalidate Supabase session (server-side)
 2. Clear auth cookies (automatic via signOut)
-3. Clear context cookies (rowops_current_club, rowops_current_facility)
+3. Clear context cookies (radl_current_club, radl_current_facility)
 4. Redirect to /login
 
 ## Commits

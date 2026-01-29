@@ -208,7 +208,7 @@ Verified patterns from existing codebase:
 
 ### Public Form Page Structure
 ```typescript
-// Source: /home/hb/rowops/src/app/report/[equipmentId]/page.tsx
+// Source: /home/hb/radl/src/app/report/[equipmentId]/page.tsx
 export default async function ReportDamagePage({ params }: Props) {
   const { equipmentId } = await params;
 
@@ -235,7 +235,7 @@ export default async function ReportDamagePage({ params }: Props) {
 
 ### Rate Limiting Pattern
 ```typescript
-// Source: /home/hb/rowops/src/lib/rate-limit/index.ts
+// Source: /home/hb/radl/src/lib/rate-limit/index.ts
 import { checkRateLimit, getClientIp } from '@/lib/rate-limit';
 
 // In API route - FIRST thing before any DB operations
@@ -259,7 +259,7 @@ if (!rateLimit.success) {
 
 ### QR Code Display Component
 ```typescript
-// Source: /home/hb/rowops/src/components/equipment/qr-code-display.tsx
+// Source: /home/hb/radl/src/components/equipment/qr-code-display.tsx
 import { QRCodeSVG } from 'qrcode.react';
 
 export function QRCodeDisplay({ equipmentId, size = 128 }: QRCodeDisplayProps) {
@@ -279,7 +279,7 @@ export function QRCodeDisplay({ equipmentId, size = 128 }: QRCodeDisplayProps) {
 
 ### Photo Upload with Camera Capture
 ```typescript
-// Source: /home/hb/rowops/src/components/equipment/damage-report-form.tsx
+// Source: /home/hb/radl/src/components/equipment/damage-report-form.tsx
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
 
@@ -308,7 +308,7 @@ const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 
 ### Notification Creation Pattern
 ```typescript
-// Source: /home/hb/rowops/src/app/api/equipment/[id]/damage-reports/route.ts
+// Source: /home/hb/radl/src/app/api/equipment/[id]/damage-reports/route.ts
 // Get recipients from settings or default to coaches
 let notifyUserIds: string[] = [];
 const settings = await prisma.teamSettings.findUnique({
@@ -375,7 +375,7 @@ Things that couldn't be fully resolved:
 ## Sources
 
 ### Primary (HIGH confidence)
-- **Existing codebase** - `/home/hb/rowops/src/app/report/[equipmentId]/page.tsx`, damage-report-form.tsx, qr-code-display.tsx, rate-limit/index.ts
+- **Existing codebase** - `/home/hb/radl/src/app/report/[equipmentId]/page.tsx`, damage-report-form.tsx, qr-code-display.tsx, rate-limit/index.ts
 - **package.json** - qrcode.react ^4.2.0 already installed
 - **Prisma schema** - DamageReport, Notification, TeamSettings models exist
 

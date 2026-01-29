@@ -11,7 +11,7 @@ requires:
 provides:
   - SSO validation schemas (roleMappingSchema, ssoConfigSchema, ssoLoginSchema)
   - SSO configuration functions (getSsoConfig, updateSsoConfig)
-  - Role mapping function (mapSsoRoles) for IDP claims to RowOps roles
+  - Role mapping function (mapSsoRoles) for IDP claims to Radl roles
   - Helper functions (isSsoEnabled, getSsoDomain, canOverrideSsoRoles)
 affects: [11-08, 11-09, 11-10, 11-11]
 
@@ -20,7 +20,7 @@ tech-stack:
   added: []
   patterns:
     - "Typed JSON fields: Cast Prisma Json to typed interfaces"
-    - "Role mapping: IDP groups to RowOps roles with configurable claim field"
+    - "Role mapping: IDP groups to Radl roles with configurable claim field"
     - "Default role fallback: ATHLETE when no mapping matches"
 
 key-files:
@@ -60,7 +60,7 @@ completed: 2026-01-23
 
 - Created Zod validation schemas for SSO configuration and role mappings
 - Implemented type-safe SSO configuration retrieval and update functions
-- Built role mapping function that maps IDP claims to RowOps roles
+- Built role mapping function that maps IDP claims to Radl roles
 - Added helper functions for SSO status, domain, and override permission checks
 
 ## Task Commits
@@ -79,7 +79,7 @@ Each task was committed atomically:
 
 1. **Typed JSON casting for roleMappings** - Cast Prisma Json to RoleMapping[] for type safety while maintaining flexibility
 2. **Configurable IDP group claim** - Default to 'groups' but allow configuration for different identity providers
-3. **Role deduplication** - Use Set to deduplicate when multiple IDP groups map to same RowOps role
+3. **Role deduplication** - Use Set to deduplicate when multiple IDP groups map to same Radl role
 4. **Default role on disabled SSO** - Return defaultRole (or ATHLETE) even when SSO is disabled for consistency
 
 ## Deviations from Plan

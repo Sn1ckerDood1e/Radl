@@ -1,13 +1,13 @@
 # Security Audit Research Summary
 
-**Project:** RowOps v2.2 Security Audit Milestone
+**Project:** Radl v2.2 Security Audit Milestone
 **Domain:** Multi-tenant SaaS Security Testing
 **Researched:** 2026-01-28
 **Confidence:** HIGH
 
 ## Executive Summary
 
-RowOps is a multi-tenant rowing team management SaaS built on Next.js 16, Supabase Auth, PostgreSQL RLS, Prisma 6, and CASL. The security audit must verify defense-in-depth across six layers: Edge middleware, JWT claims, database RLS policies, API route authorization, Prisma queries, and client-side security. The architecture implements tenant isolation at facility → club → team hierarchy with shared equipment management requiring complex permission boundaries.
+Radl is a multi-tenant rowing team management SaaS built on Next.js 16, Supabase Auth, PostgreSQL RLS, Prisma 6, and CASL. The security audit must verify defense-in-depth across six layers: Edge middleware, JWT claims, database RLS policies, API route authorization, Prisma queries, and client-side security. The architecture implements tenant isolation at facility → club → team hierarchy with shared equipment management requiring complex permission boundaries.
 
 The audit combines automated tools (Semgrep, TruffleHog, SupaShield, pgTAP, OWASP ZAP) with manual testing across six critical areas: API authentication, RBAC permissions, tenant isolation, secrets management, audit logging, and rate limiting. Research reveals **19 critical vulnerabilities** including React2Shell RCE (CVE-2025-55182), Next.js middleware bypass (CVE-2025-29927), and Prisma RLS bypass by default. The most dangerous attack vector is tenant isolation failure — a single misconfigured RLS policy or missing tenant context check can expose all facility/club data across the system.
 
@@ -187,7 +187,7 @@ Based on research, the security audit should be structured as a single focused m
 ---
 
 **Phase 2: Authorization & Tenant Isolation (Days 4-6)**
-**Rationale:** Multi-tenant isolation is the highest-risk area unique to RowOps architecture. Facility → club → team hierarchy with shared equipment creates complex permission boundaries requiring both automated and manual testing.
+**Rationale:** Multi-tenant isolation is the highest-risk area unique to Radl architecture. Facility → club → team hierarchy with shared equipment creates complex permission boundaries requiring both automated and manual testing.
 
 **Delivers:**
 - Cross-tenant isolation verified with 2+ test facilities/clubs
@@ -259,7 +259,7 @@ Based on research, the security audit should be structured as a single focused m
 
 **Why this order:**
 1. **Infrastructure first (Phases 1):** Next.js CVEs are pre-auth exploits — no point testing application security if base platform is compromised
-2. **Tenant isolation second (Phase 2):** Multi-tenant data leakage is catastrophic and unique to RowOps architecture — must verify before hardening
+2. **Tenant isolation second (Phase 2):** Multi-tenant data leakage is catastrophic and unique to Radl architecture — must verify before hardening
 3. **Defense-in-depth third (Phase 3):** Rate limiting, audit logging, CSRF don't prevent initial breach but limit damage
 4. **Documentation last (Phase 4):** Document after all testing complete to capture final state
 
@@ -278,7 +278,7 @@ Based on research, the security audit should be structured as a single focused m
 **Phases likely needing deeper research during planning:**
 
 **Phase 2 (Authorization & Tenant Isolation):**
-- **Reason:** Facility → club → team hierarchy is complex. Research covers general multi-tenant patterns, but RowOps-specific equipment sharing model (facility-owned equipment visible to all clubs, club-owned equipment private) needs custom pgTAP test design.
+- **Reason:** Facility → club → team hierarchy is complex. Research covers general multi-tenant patterns, but Radl-specific equipment sharing model (facility-owned equipment visible to all clubs, club-owned equipment private) needs custom pgTAP test design.
 - **Action:** During Phase 2 planning, research Supabase RLS policy patterns for hierarchical tenancy with shared/private resources.
 
 **Phase 3 (Application Security Hardening):**
@@ -301,7 +301,7 @@ Based on research, the security audit should be structured as a single focused m
 |------|------------|-------|
 | **Security Tools** | HIGH | All tools verified with official docs, GitHub repos, and 2026 security research. Semgrep, TruffleHog, OWASP ZAP are industry-standard. SupaShield is newer (2025-2026) but purpose-built for Supabase RLS testing. |
 | **Audit Checklist** | HIGH | 58-item checklist compiled from authoritative sources: OWASP, Supabase official docs, WorkOS multi-tenant patterns, Microsoft Azure tenancy models. Verified against 2026 CVE disclosures. |
-| **Architecture Analysis** | HIGH | Audit layers mapped directly to RowOps codebase structure. Middleware, JWT hooks, RLS policies, CASL patterns all verified in actual repository. CVE-2025-29927 and React2Shell vulnerabilities confirmed with official advisories. |
+| **Architecture Analysis** | HIGH | Audit layers mapped directly to Radl codebase structure. Middleware, JWT hooks, RLS policies, CASL patterns all verified in actual repository. CVE-2025-29927 and React2Shell vulnerabilities confirmed with official advisories. |
 | **Critical Vulnerabilities** | HIGH | All 19 vulnerabilities sourced from official CVE disclosures (Next.js security advisories, PostgreSQL CVEs), Supabase GitHub discussions, and reputable security research (Datadog Security Labs, JFrog, Aikido). |
 
 **Overall confidence:** HIGH
@@ -310,14 +310,14 @@ Based on research, the security audit should be structured as a single focused m
 
 **CASL server-side testing patterns:**
 - **Gap:** Official CASL.js documentation exists, but 2026-specific testing patterns for 5-role hierarchy (FACILITY_ADMIN, CLUB_ADMIN, COACH, ATHLETE, PARENT) with tenant context need project-specific implementation.
-- **How to handle:** During Phase 2 planning, write custom integration tests for CASL abilities. Reference CASL official docs for ability definition patterns, but test suite will be RowOps-specific.
+- **How to handle:** During Phase 2 planning, write custom integration tests for CASL abilities. Reference CASL official docs for ability definition patterns, but test suite will be Radl-specific.
 
 **Facility-shared equipment RLS policies:**
 - **Gap:** Research covers general multi-tenant RLS patterns (HIGH confidence), but facility-level equipment visible to all clubs while club-level equipment is private requires custom policy design.
 - **How to handle:** During Phase 2 execution, use Supabase Database Advisors to check policy coverage. Write pgTAP tests for both facility-owned and club-owned equipment access patterns.
 
 **Supabase Realtime channel security:**
-- **Gap:** Official Supabase docs confirm Realtime channels inherit table RLS policies, but RowOps uses Realtime for lineup updates — needs verification that cross-tenant subscriptions are blocked.
+- **Gap:** Official Supabase docs confirm Realtime channels inherit table RLS policies, but Radl uses Realtime for lineup updates — needs verification that cross-tenant subscriptions are blocked.
 - **How to handle:** During Phase 2, test Realtime subscription from Club A user attempting to subscribe to Club B's practice channel. Expect connection rejection or empty messages.
 
 **Background job tenant isolation:**
@@ -325,7 +325,7 @@ Based on research, the security audit should be structured as a single focused m
 - **How to handle:** During Phase 1, audit any database functions marked `SECURITY DEFINER` to ensure they explicitly filter by tenant context, not relying on session variables that may not be set in background context.
 
 **API key permission inheritance:**
-- **Gap:** Research notes API keys inherit creator's roles, but RowOps implementation needs verification that revoked keys are immediately invalidated and that role changes propagate to active keys.
+- **Gap:** Research notes API keys inherit creator's roles, but Radl implementation needs verification that revoked keys are immediately invalidated and that role changes propagate to active keys.
 - **How to handle:** During Phase 3, test API key lifecycle: create key as COACH, revoke, verify 401 response. Change creator role to ATHLETE, verify key permissions update or fail.
 
 ## Sources
@@ -369,7 +369,7 @@ Based on research, the security audit should be structured as a single focused m
 - [JWT Security Best Practices (Curity)](https://curity.io/resources/learn/jwt-best-practices/)
 - [API Security Checklist 2026 (Wiz)](https://www.wiz.io/academy/api-security/api-security-checklist)
 
-### Tertiary (Context for RowOps domain)
+### Tertiary (Context for Radl domain)
 
 **Supabase + Prisma Integration:**
 - [Prisma with Supabase RLS Policies (Medium)](https://medium.com/@kavitanambissan/prisma-with-supabase-rls-policies-c72b68a62330)

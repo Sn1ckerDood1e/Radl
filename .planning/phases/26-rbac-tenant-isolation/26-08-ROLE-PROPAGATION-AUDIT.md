@@ -190,7 +190,7 @@ After:  Next API request finds no membership
 
 ## JWT vs Database Authorization
 
-| Aspect | JWT-Only (Insecure) | RowOps Implementation (Secure) |
+| Aspect | JWT-Only (Insecure) | Radl Implementation (Secure) |
 |--------|---------------------|-------------------------------|
 | Role source | JWT claims | Database query |
 | Propagation delay | Until JWT refresh (~1 hour) | Immediate |
@@ -244,7 +244,7 @@ Tests added in `src/__tests__/auth/role-propagation.test.ts`:
 
 **RBAC-07: IMPLEMENTED AND VERIFIED**
 
-The RowOps system implements immediate role propagation through database lookups on every request. This design ensures:
+The Radl system implements immediate role propagation through database lookups on every request. This design ensures:
 
 1. Role changes to ClubMembership take effect immediately
 2. Temporary permission grants are merged with base roles

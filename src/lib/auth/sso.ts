@@ -99,7 +99,7 @@ export async function mapSsoRoles(
 
   for (const mapping of config.roleMappings) {
     if (groups.includes(mapping.idpValue)) {
-      mappedRoles.push(...(mapping.rowopsRoles as Role[]));
+      mappedRoles.push(...(mapping.radlRoles as Role[]));
     }
   }
 

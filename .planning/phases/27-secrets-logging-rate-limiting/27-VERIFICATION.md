@@ -446,7 +446,7 @@ All `NEXT_PUBLIC_` variables verified safe for client exposure:
 
 3. **Rate limiting technology:**
    - Upstash Redis with sliding window algorithm
-   - Separate Redis keys per action: `rowops:auth:login:`, `rowops:auth:signup:`
+   - Separate Redis keys per action: `radl:auth:login:`, `radl:auth:signup:`
    - Per-IP tracking via `getClientIp` (X-Forwarded-For header)
 
 4. **Graceful fallback:**
@@ -519,9 +519,9 @@ All `NEXT_PUBLIC_` variables verified safe for client exposure:
    - Per-IP tracking prevents single attacker from brute forcing
 
 3. **Redis key structure:**
-   - Login: `rowops:auth:login:{IP}`
-   - Signup: `rowops:auth:signup:{IP}`
-   - Forgot password: `rowops:auth:forgot-password:{IP}`
+   - Login: `radl:auth:login:{IP}`
+   - Signup: `radl:auth:signup:{IP}`
+   - Forgot password: `radl:auth:forgot-password:{IP}`
 
 4. **Reverse proxy handling:**
    - X-Forwarded-For header parsed correctly

@@ -4,7 +4,7 @@
 // Required secrets (set via Supabase dashboard or CLI):
 // - VAPID_PUBLIC_KEY
 // - VAPID_PRIVATE_KEY
-// - VAPID_SUBJECT (optional, defaults to mailto:admin@rowops.app)
+// - VAPID_SUBJECT (optional, defaults to mailto:admin@radl.sol)
 //
 // Request body:
 // {
@@ -48,7 +48,7 @@ serve(async (req: Request) => {
     const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
     const vapidPublicKey = Deno.env.get('VAPID_PUBLIC_KEY');
     const vapidPrivateKey = Deno.env.get('VAPID_PRIVATE_KEY');
-    const vapidSubject = Deno.env.get('VAPID_SUBJECT') || 'mailto:admin@rowops.app';
+    const vapidSubject = Deno.env.get('VAPID_SUBJECT') || 'mailto:admin@radl.sol';
 
     if (!supabaseUrl || !supabaseKey) {
       return new Response(
@@ -115,7 +115,7 @@ serve(async (req: Request) => {
       url: url || '/',
       icon: '/icons/icon-192x192.png',
       badge: '/icons/icon-192x192.png',
-      tag: tag || 'rowops-notification',
+      tag: tag || 'radl-notification',
     };
 
     // Send notifications to all subscriptions

@@ -23,7 +23,7 @@ decisions:
     outcome: "isCoach prop controls onboarding visibility"
   - decision: "Team-specific localStorage key"
     rationale: "Users may be part of multiple teams, each needs separate onboarding state"
-    outcome: "Storage key includes teamId: rowops-onboarding-{teamId}"
+    outcome: "Storage key includes teamId: radl-onboarding-{teamId}"
   - decision: "Fullscreen modal instead of inline wizard"
     rationale: "Captures attention and guides focus for first-time users"
     outcome: "Fixed overlay with centered modal and backdrop blur"
@@ -46,7 +46,7 @@ Multi-step onboarding wizard guiding new coaches through first steps with team-s
 Team-specific localStorage persistence for onboarding progress:
 
 **Features:**
-- Team-scoped storage key (`rowops-onboarding-{teamId}`)
+- Team-scoped storage key (`radl-onboarding-{teamId}`)
 - SSR-safe with window checks and loading state
 - State tracking: completed, currentStep, skipped, completedAt
 - Actions: nextStep, prevStep, goToStep, complete, skip, reset
@@ -123,7 +123,7 @@ None - plan executed exactly as written.
 
 ### LocalStorage Key Structure
 
-**Decision:** Use `rowops-onboarding-{teamId}` format
+**Decision:** Use `radl-onboarding-{teamId}` format
 
 **Context:** Users can be part of multiple teams, each team's onboarding should be tracked independently.
 
@@ -232,7 +232,7 @@ Hook uses standard pattern:
 **Check stored state:**
 ```javascript
 // After completing onboarding for team-id-123
-localStorage.getItem('rowops-onboarding-team-id-123')
+localStorage.getItem('radl-onboarding-team-id-123')
 // Expected: {"completed":true,"currentStep":4,"skipped":false,"completedAt":"2026-01-24T13:44:12.000Z"}
 ```
 

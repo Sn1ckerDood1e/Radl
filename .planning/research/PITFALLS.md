@@ -42,13 +42,13 @@ Attackers bypass authentication middleware by adding `x-middleware-subrequest` h
 **How it manifests:**
 Next.js uses `x-middleware-subrequest` internally to track middleware recursion depth. Attacker sets this header to max recursion value, causing middleware to skip entirely.
 
-**Detection in RowOps:**
+**Detection in Radl:**
 ```bash
 # Check if middleware.ts properly validates headers
 grep -n "x-middleware-subrequest" src/middleware.ts
 
 # Audit if middleware is bypassable
-curl -H "x-middleware-subrequest: 10" https://rowops.example.com/api/teams
+curl -H "x-middleware-subrequest: 10" https://radl.example.com/api/teams
 ```
 
 **Vulnerable code pattern:**
@@ -73,7 +73,7 @@ export async function middleware(request: NextRequest) {
   }
   ```
 
-**RowOps-specific risk:**
+**Radl-specific risk:**
 API key authentication bypass allows unauthorized access to `/api/*` routes, exposing club data and equipment information.
 
 **Sources:**
@@ -91,7 +91,7 @@ Row Level Security disabled by default on Supabase tables. 83% of exposed Supaba
 **How it manifests:**
 Supabase auto-generates REST APIs from PostgreSQL schema, but RLS is opt-in. Attackers use simple SQL queries to dump entire database.
 
-**Detection in RowOps:**
+**Detection in Radl:**
 ```sql
 -- Check if RLS is enabled on all tables
 SELECT
@@ -116,7 +116,7 @@ WHERE schemaname = 'public'
   );
 ```
 
-**Vulnerable tables in RowOps:**
+**Vulnerable tables in Radl:**
 - `Facility` — shared boathouse data across clubs
 - `Equipment` — boats and equipment (may have dual ownership)
 - `EquipmentBooking` — cross-club bookings
@@ -136,7 +136,7 @@ CREATE POLICY "Users see own facility data"
   USING (id = current_setting('app.facility_id', true)::uuid);
 ```
 
-**RowOps-specific considerations:**
+**Radl-specific considerations:**
 - Facility → club → team hierarchy requires cascading policies
 - Shared equipment needs both facility-level and club-level policies
 - API keys bypass RLS — must validate programmatically
@@ -156,7 +156,7 @@ Prisma connects to PostgreSQL as `postgres` superuser, which bypasses all RLS po
 **How it manifests:**
 All Prisma queries ignore tenant isolation, returning data across all facilities/clubs. No error thrown — data just leaks silently.
 
-**Detection in RowOps:**
+**Detection in Radl:**
 ```typescript
 // Check DATABASE_URL in .env
 // If connecting as "postgres", RLS is bypassed
@@ -211,7 +211,7 @@ const tenantPrisma = prisma.$extends({
 });
 ```
 
-**RowOps-specific risk:**
+**Radl-specific risk:**
 Multi-tenant hierarchy (facility → club → team) means a single query without filtering can expose:
 - All facilities' equipment
 - All clubs' practices
@@ -290,7 +290,7 @@ const data = await prisma.$transaction(async (tx) => {
 });
 ```
 
-**RowOps-specific risk:**
+**Radl-specific risk:**
 Facility-scoped equipment can leak across clubs. Practice lineups exposed to wrong teams. Regatta schedules visible to non-participating clubs.
 
 **Sources:**
@@ -320,7 +320,7 @@ export async function updatePractice(formData: FormData) {
 }
 ```
 
-**Detection in RowOps:**
+**Detection in Radl:**
 ```bash
 # Find all Server Actions
 grep -r "use server" src/
@@ -370,7 +370,7 @@ export async function updatePractice(formData: FormData) {
 }
 ```
 
-**RowOps-specific patterns to audit:**
+**Radl-specific patterns to audit:**
 - Practice creation/update actions
 - Equipment damage report submission
 - Lineup editing with drag-drop
@@ -403,7 +403,7 @@ export async function deletePractice(practiceId: string) {
 }
 ```
 
-**Detection in RowOps:**
+**Detection in Radl:**
 ```typescript
 // Check src/lib/auth/authorize.ts
 // Line 17-22: getUserClaims() decodes JWT without validation
@@ -457,7 +457,7 @@ const { data: { user } } = await supabase.auth.getUser(); // Verifies JWT signat
 const { data: { session } } = await supabase.auth.getSession(); // No verification
 ```
 
-**RowOps-specific risk:**
+**Radl-specific risk:**
 - User removed from team but JWT not expired → still has access
 - User role downgraded (COACH → ATHLETE) but JWT claims role=COACH
 - Facility admin adds user to club, JWT doesn't have facility_id yet
@@ -519,7 +519,7 @@ export async function deletePractice(id: string) {
 }
 ```
 
-**RowOps-specific patterns:**
+**Radl-specific patterns:**
 - Equipment editing (COACH vs ATHLETE permissions)
 - Roster management (CLUB_ADMIN vs COACH roles)
 - Facility settings (FACILITY_ADMIN only)
@@ -554,7 +554,7 @@ git log -p | grep "SERVICE_ROLE"
 git ls-files .env*
 
 # Scan with external tool
-npx supabase-exposure-check https://rowops.example.com
+npx supabase-exposure-check https://radl.example.com
 ```
 
 **How to fix:**
@@ -564,7 +564,7 @@ npx supabase-exposure-check https://rowops.example.com
 - Rotate key if exposed (requires downtime)
 - Use `anon` key for client-side operations
 
-**RowOps context:**
+**Radl context:**
 - API key validation uses Prisma, which may use service role
 - Equipment damage reports allow anonymous submission
 - RC API integration may need elevated permissions
@@ -594,7 +594,7 @@ npm list next  # Vulnerable: >=15.1.0 <15.1.8
 grep -r "revalidate:" src/app/
 ```
 
-**Vulnerable pattern in RowOps:**
+**Vulnerable pattern in Radl:**
 ```typescript
 // app/[teamSlug]/practices/page.tsx
 export const revalidate = 60; // ✅ Uses ISR
@@ -663,7 +663,7 @@ export async function middleware(request: NextRequest) {
 }
 ```
 
-**Detection in RowOps:**
+**Detection in Radl:**
 ```bash
 # Check for module-level state
 grep -r "^let " src/ | grep -v "const"
@@ -697,7 +697,7 @@ export function getTenantContext() {
 }
 ```
 
-**RowOps-specific considerations:**
+**Radl-specific considerations:**
 - Facility → club → team hierarchy requires nested context
 - Equipment bookings span multiple clubs
 - API key validation runs parallel to session auth
@@ -748,8 +748,8 @@ export async function POST(request: Request) {
 
   // Or check against allowlist
   const allowedOrigins = [
-    'https://rowops.com',
-    'https://app.rowops.com',
+    'https://radl.com',
+    'https://app.radl.com',
   ];
   if (origin && !allowedOrigins.includes(origin)) {
     return NextResponse.json({ error: 'CSRF' }, { status: 403 });
@@ -760,7 +760,7 @@ export async function POST(request: Request) {
 }
 ```
 
-**RowOps-specific routes to check:**
+**Radl-specific routes to check:**
 - `/api/equipment/*` — Damage reports
 - `/api/auth/callback` — OAuth callback
 - `/api/webhooks/*` — External integrations
@@ -881,7 +881,7 @@ WHERE pol.schemaname = 'public'
 
 **Add indexes for RLS policy columns:**
 ```sql
--- RowOps schema.prisma Line 95-96 already has these
+-- Radl schema.prisma Line 95-96 already has these
 @@index([userId])  // ✅ Good
 @@index([teamId])  // ✅ Good
 
@@ -890,7 +890,7 @@ CREATE INDEX idx_equipment_facility ON "Equipment"(facilityId);
 CREATE INDEX idx_booking_club ON "EquipmentBooking"(clubId);
 ```
 
-**RowOps-specific columns to index:**
+**Radl-specific columns to index:**
 - `facilityId` (facility-scoped policies)
 - `clubId` (club-scoped policies)
 - `teamId` (team-scoped policies)
@@ -907,7 +907,7 @@ CREATE INDEX idx_booking_club ON "EquipmentBooking"(clubId);
 **What it is:**
 API key validation queries Prisma with service role connection, bypassing RLS.
 
-**Detection in RowOps:**
+**Detection in Radl:**
 ```typescript
 // src/lib/auth/api-key.ts (needs audit)
 export async function validateApiKey(key: string) {
@@ -952,7 +952,7 @@ export async function validateApiKey(key: string, requestedClubId?: string) {
 }
 ```
 
-**RowOps-specific concern:**
+**Radl-specific concern:**
 API keys grant programmatic access to club data. If validation is flawed, attacker can access any club's data by changing headers.
 
 ---
@@ -1034,7 +1034,7 @@ export async function requireCoach() {
 }
 ```
 
-**RowOps-specific scenarios:**
+**Radl-specific scenarios:**
 - Coach demoted to athlete — shouldn't edit lineups
 - Facility admin removed — shouldn't manage equipment
 - Club admin role revoked — shouldn't invite users
@@ -1079,7 +1079,7 @@ export const prisma = new PrismaClient();
 npm install server-only
 ```
 
-**RowOps modules requiring `'server-only'`:**
+**Radl modules requiring `'server-only'`:**
 - `src/lib/prisma.ts` — Database client
 - `src/lib/supabase/server.ts` — Server-side Supabase
 - `src/lib/auth/authorize.ts` — Authorization helpers
@@ -1154,7 +1154,7 @@ export default async function PracticePage({ params }: {
 }
 ```
 
-**RowOps routes to audit:**
+**Radl routes to audit:**
 - `/[teamSlug]/practices/[practiceId]`
 - `/[teamSlug]/equipment/[equipmentId]`
 - `/[teamSlug]/roster/[memberId]`

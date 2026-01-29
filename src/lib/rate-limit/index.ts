@@ -39,7 +39,7 @@ function getRateLimiter(): Ratelimit | null {
     redis: new Redis({ url, token }),
     limiter: Ratelimit.slidingWindow(10, '1 h'), // 10 requests per hour
     analytics: true,
-    prefix: 'rowops:ratelimit',
+    prefix: 'radl:ratelimit',
   });
 
   return rateLimiter;
@@ -63,7 +63,7 @@ function getAuthRateLimiter(action: AuthAction): Ratelimit | null {
       redis: new Redis({ url, token }),
       limiter: Ratelimit.slidingWindow(config.requests, config.window),
       analytics: true,
-      prefix: `rowops:auth:${action}`,
+      prefix: `radl:auth:${action}`,
     }));
   }
 

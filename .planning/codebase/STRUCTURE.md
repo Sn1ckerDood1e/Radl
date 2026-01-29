@@ -5,7 +5,7 @@
 ## Directory Layout
 
 ```
-rowops/
+radl/
 ├── prisma/
 │   ├── migrations/           # Database migration files
 │   └── schema.prisma         # Prisma ORM schema (multi-tenant models)
