@@ -8,6 +8,18 @@ export type RateLimitResult = {
   reset: number; // Unix timestamp
 };
 
+/**
+ * Rate limit configurations by action type.
+ * Auth endpoints use stricter limits to prevent brute force.
+ */
+export const authLimits = {
+  login: { requests: 5, window: '15 m' },      // 5 attempts per 15 minutes
+  signup: { requests: 3, window: '1 h' },      // 3 signups per hour per IP
+  'forgot-password': { requests: 3, window: '1 h' }, // 3 reset requests per hour
+} as const;
+
+type AuthAction = keyof typeof authLimits;
+
 // Singleton rate limiter - created lazily when env vars available
 let rateLimiter: Ratelimit | null = null;
 
@@ -31,6 +43,31 @@ function getRateLimiter(): Ratelimit | null {
   });
 
   return rateLimiter;
+}
+
+// Auth-specific rate limiters with different windows
+const authRateLimiters: Map<AuthAction, Ratelimit> = new Map();
+
+function getAuthRateLimiter(action: AuthAction): Ratelimit | null {
+  const url = process.env.UPSTASH_REDIS_REST_URL;
+  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+
+  if (!url || !token) {
+    console.warn('Auth rate limiting disabled: Upstash not configured');
+    return null;
+  }
+
+  if (!authRateLimiters.has(action)) {
+    const config = authLimits[action];
+    authRateLimiters.set(action, new Ratelimit({
+      redis: new Redis({ url, token }),
+      limiter: Ratelimit.slidingWindow(config.requests, config.window),
+      analytics: true,
+      prefix: `rowops:auth:${action}`,
+    }));
+  }
+
+  return authRateLimiters.get(action)!;
 }
 
 /**
@@ -60,6 +97,36 @@ export async function checkRateLimit(
   const { success, limit, remaining, reset } = await limiter.limit(key);
 
   return { success, limit, remaining, reset };
+}
+
+/**
+ * Check auth-specific rate limit with stricter windows.
+ * Returns rate limit result with headers for 429 responses.
+ */
+export async function checkAuthRateLimit(
+  identifier: string,
+  action: AuthAction
+): Promise<RateLimitResult> {
+  const limiter = getAuthRateLimiter(action);
+
+  if (!limiter) {
+    return { success: true, limit: Infinity, remaining: Infinity, reset: 0 };
+  }
+
+  const { success, limit, remaining, reset } = await limiter.limit(identifier);
+  return { success, limit, remaining, reset };
+}
+
+/**
+ * Build rate limit headers for 429 responses.
+ */
+export function rateLimitHeaders(result: RateLimitResult): HeadersInit {
+  return {
+    'Retry-After': String(Math.ceil((result.reset - Date.now()) / 1000)),
+    'X-RateLimit-Limit': String(result.limit),
+    'X-RateLimit-Remaining': String(result.remaining),
+    'X-RateLimit-Reset': String(result.reset),
+  };
 }
 
 /**
