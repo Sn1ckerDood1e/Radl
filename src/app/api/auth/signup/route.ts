@@ -7,7 +7,15 @@ import { z } from 'zod';
 const signupSchema = z.object({
   email: z.string().email(),
   password: z.string().min(8),
+  redirectTo: z.string().optional(),
 });
+
+// Validate redirect is a safe relative path to prevent open redirect attacks
+function isValidRedirect(redirect: string | undefined): redirect is string {
+  if (!redirect) return false;
+  // Must start with / and not be a protocol-relative URL (//)
+  return redirect.startsWith('/') && !redirect.startsWith('//');
+}
 
 export async function POST(request: NextRequest) {
   const clientIp = getClientIp(request);
@@ -27,13 +35,26 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Invalid request' }, { status: 400 });
   }
 
-  const { email, password } = parsed.data;
+  const { email, password, redirectTo } = parsed.data;
   const supabase = await createClient();
 
-  const { data, error } = await supabase.auth.signUp({
+  // Build email redirect URL with next parameter if redirect is valid
+  const origin = request.headers.get('origin') || request.headers.get('host') || '';
+  const protocol = origin.startsWith('localhost') ? 'http' : 'https';
+  const baseUrl = origin.includes('://') ? origin : `${protocol}://${origin}`;
+
+  const signUpOptions: { email: string; password: string; options?: { emailRedirectTo?: string } } = {
     email,
     password,
-  });
+  };
+
+  if (isValidRedirect(redirectTo)) {
+    signUpOptions.options = {
+      emailRedirectTo: `${baseUrl}/api/auth/callback?next=${encodeURIComponent(redirectTo)}`,
+    };
+  }
+
+  const { data, error } = await supabase.auth.signUp(signUpOptions);
 
   // Log event
   if (data.user) {
