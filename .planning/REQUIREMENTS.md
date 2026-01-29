@@ -24,12 +24,12 @@ Verify all major user journeys work end-to-end, fix bugs, and polish UX before b
 - [x] **PRAC-04**: Coach can publish practice and athletes see assignments
 - [x] **PRAC-05**: Calendar view is easy to read and understand
 
-### Equipment Flow
+### Equipment Flow ✅
 
-- [ ] **EQUP-01**: Admin/coach can add equipment with full details
-- [ ] **EQUP-02**: Equipment usage is tracked when assigned to lineups
-- [ ] **EQUP-03**: Anyone can report damage via QR code without login
-- [ ] **EQUP-04**: Coach can view damage reports and mark resolved
+- [x] **EQUP-01**: Admin/coach can add equipment with full details
+- [x] **EQUP-02**: Equipment usage is tracked when assigned to lineups
+- [x] **EQUP-03**: Anyone can report damage via QR code without login
+- [x] **EQUP-04**: Coach can view damage reports and mark resolved
 
 ### UX Quality
 
@@ -80,10 +80,10 @@ Deferred to future milestones:
 | PRAC-03 | Phase 29 | Complete |
 | PRAC-04 | Phase 29 | Complete |
 | PRAC-05 | Phase 29 | Complete |
-| EQUP-01 | Phase 30 | Pending |
-| EQUP-02 | Phase 30 | Pending |
-| EQUP-03 | Phase 30 | Pending |
-| EQUP-04 | Phase 30 | Pending |
+| EQUP-01 | Phase 30 | Complete |
+| EQUP-02 | Phase 30 | Complete |
+| EQUP-03 | Phase 30 | Complete |
+| EQUP-04 | Phase 30 | Complete |
 | UXQL-01 | Phase 31 | Pending |
 | UXQL-02 | Phase 31 | Pending |
 | UXQL-03 | Phase 31 | Pending |
@@ -97,4 +97,4 @@ Deferred to future milestones:
 
 ---
 *Requirements defined: 2026-01-29*
-*Last updated: 2026-01-29 (Phase 29 complete)*
+*Last updated: 2026-01-29 (Phase 30 complete)*

@@ -4,17 +4,17 @@
 
 **Core Value:** Coaches can plan practices with lineups and equipment, and athletes know where to be and what boat they're in.
 
-**Current Focus:** v2.3 Core Flow Testing - Phase 29 Practice Flow Testing
+**Current Focus:** v2.3 Core Flow Testing - Phase 31 UX Quality Polish
 
 ## Current Position
 
 | Field | Value |
 |-------|-------|
 | Milestone | v2.3 Core Flow Testing |
-| Phase | 29 - Practice Flow Testing |
+| Phase | 30 - Equipment Flow Testing |
 | Plan | 01 complete (E2E Verification) |
-| Status | Phase 29 plan 01 complete |
-| Last activity | 2026-01-29 - Completed 29-01-PLAN.md |
+| Status | Phase 30 complete |
+| Last activity | 2026-01-29 - Completed 30-01-PLAN.md |
 
 **Progress:**
 ```
@@ -23,7 +23,7 @@ v1.1: [##########] 100% SHIPPED (2026-01-22) — 9/11 reqs, 2 deferred
 v2.0: [##########] 100% SHIPPED (2026-01-26) — 34/34 requirements
 v2.1: [##########] 100% SHIPPED (2026-01-27) — 30/30 requirements
 v2.2: [##########] 100% SHIPPED (2026-01-29) — 33/35 requirements
-v2.3: [###░░░░░░░] 37.5% — Phases 28-29 complete, Phase 30 next
+v2.3: [#######░░░] 75% — Phases 28-30 complete, Phase 31 next
 ```
 
 ## Shipped Milestones
@@ -88,7 +88,7 @@ v2.3: [###░░░░░░░] 37.5% — Phases 28-29 complete, Phase 30 next
 |-------|------|--------------|--------|
 | 28 | Onboarding Flow Testing | ONBD-01 to ONBD-06 (6) | Complete |
 | 29 | Practice Flow Testing | PRAC-01 to PRAC-05 (5) | Complete |
-| 30 | Equipment Flow Testing | EQUP-01 to EQUP-04 (4) | Pending |
+| 30 | Equipment Flow Testing | EQUP-01 to EQUP-04 (4) | Complete |
 | 31 | UX Quality Polish | UXQL-01 to UXQL-05 (5) | Pending |
 
 **Total:** 20 requirements across 4 phases
@@ -119,6 +119,18 @@ v2.3: [###░░░░░░░] 37.5% — Phases 28-29 complete, Phase 30 next
 - PRAC-05: Calendar shows practices with green dots and draft/published styling ✓
 
 **Status:** Complete - All 5 requirements verified
+
+## Phase 30: Equipment Flow Testing
+
+**Goal:** Equipment can be managed through its full lifecycle from creation to damage resolution
+
+**Requirements:**
+- EQUP-01: Admin/coach can add equipment with full details ✓
+- EQUP-02: Equipment usage is tracked when assigned to lineups ✓
+- EQUP-03: Anyone can report damage via QR code without login ✓
+- EQUP-04: Coach can view damage reports and mark resolved ✓
+
+**Status:** Complete - All 4 requirements verified
 
 ## Accumulated Context
 
@@ -172,9 +184,9 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 | Field | Value |
 |-------|-------|
 | Last session | 2026-01-29 |
-| Stopped at | Completed 29-01-PLAN.md |
-| Resume with | `/gsd:plan-phase 30` |
+| Stopped at | Completed 30-01-PLAN.md |
+| Resume with | `/gsd:plan-phase 31` |
 
 ---
 
-*Last updated: 2026-01-29 (Phase 29 complete, ready for Phase 30)*
+*Last updated: 2026-01-29 (Phase 30 complete, ready for Phase 31)*
