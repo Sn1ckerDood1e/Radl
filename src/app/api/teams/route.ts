@@ -57,12 +57,22 @@ export async function POST(request: NextRequest) {
         },
       });
 
-      // Create TeamMember record with COACH role
+      // Create TeamMember record with COACH role (legacy)
       await tx.teamMember.create({
         data: {
           teamId: newTeam.id,
           userId: user.id,
           role: 'COACH',
+        },
+      });
+
+      // Create ClubMembership for RBAC (Team.id = ClubMembership.clubId)
+      await tx.clubMembership.create({
+        data: {
+          clubId: newTeam.id,
+          userId: user.id,
+          roles: ['COACH'],
+          isActive: true,
         },
       });
 
