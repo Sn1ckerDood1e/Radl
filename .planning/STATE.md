@@ -4,7 +4,7 @@
 
 **Core Value:** Coaches can plan practices with lineups and equipment, and athletes know where to be and what boat they're in.
 
-**Current Focus:** v2.2 Security Audit - Phase 26 complete, Phase 27 next (Secrets, Logging & Rate Limiting)
+**Current Focus:** v2.2 Security Audit - Phase 27 complete (Secrets, Logging & Rate Limiting)
 
 ## Current Position
 
@@ -12,9 +12,9 @@
 |-------|-------|
 | Milestone | v2.2 Security Audit |
 | Phase | Phase 27 - Secrets, Logging & Rate Limiting |
-| Plan | 01 complete (Secrets Management Verification) |
-| Status | In progress |
-| Last activity | 2026-01-29 - Completed 27-01-PLAN.md (Secrets Management Verification) |
+| Plan | 03 complete (Auth Rate Limiting & Logging) |
+| Status | Phase 27 complete |
+| Last activity | 2026-01-29 - Completed 27-03-PLAN.md (Auth Rate Limiting & Logging) |
 
 **Progress:**
 ```
@@ -22,7 +22,7 @@ v1.0: [##########] 100% SHIPPED (2026-01-22)
 v1.1: [##########] 100% SHIPPED (2026-01-22) — 9/11 reqs, 2 deferred
 v2.0: [##########] 100% SHIPPED (2026-01-26) — 34/34 requirements
 v2.1: [##########] 100% SHIPPED (2026-01-27) — 30/30 requirements
-v2.2: [#######   ]  67% IN PROGRESS (Phases 25-27) — 20/35 requirements assessed
+v2.2: [##########] 100% COMPLETE (Phases 25-27) — 35/35 requirements assessed
 ```
 
 ## Shipped Milestones
@@ -115,6 +115,9 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 | Backward-compatible forbiddenResponse | 2026-01-29 | Optional audit context preserves existing callers |
 | Bundle scanner 11 patterns | 2026-01-29 | Covers all environment secrets in use (service_role, API keys, JWTs) |
 | CI/CD defense in depth | 2026-01-29 | TruffleHog + bundle check provides two-job security workflow |
+| Server-side auth mandatory | 2026-01-29 | All auth flows through API routes for rate limiting and logging |
+| Per-action rate limiters | 2026-01-29 | Different auth actions need different limits (login vs signup) |
+| Email enumeration prevention | 2026-01-29 | Password reset always returns success to prevent email discovery |
 
 ### Architecture Notes
 
@@ -203,7 +206,7 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 
 **Status:** Phase 26 COMPLETE. Proceed to Phase 27.
 
-## Phase 27 Audit Findings (IN PROGRESS)
+## Phase 27 Audit Findings (COMPLETE)
 
 | Requirement | Status | Notes |
 |-------------|--------|-------|
@@ -212,31 +215,38 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 | SECR-03: Service role not client-accessible | PASS | Only referenced in server-side admin.ts |
 | SECR-04: API keys hashed in database | PASS | SHA-256 hashing via crypto.createHash() |
 | SECR-05: No hardcoded credentials | PASS | All secrets use process.env |
-| AUDIT-01: Immutable logging | TBD | Plan 27-02 |
-| AUDIT-02: Security event logging | TBD | Plan 27-02 |
-| AUDIT-03: Sufficient context | TBD | Plan 27-02 |
-| AUDIT-04: Log retention | TBD | Plan 27-03 |
-| AUDIT-05: No sensitive data in logs | TBD | Plan 27-03 |
-| RATE-01: Auth endpoint limits | TBD | Plan 27-03 |
-| RATE-02: API endpoint limits | TBD | Plan 27-03 |
-| RATE-03: Per-user tracking | TBD | Plan 27-03 |
-| RATE-04: Rate limit headers | TBD | Plan 27-03 |
-| RATE-05: Bypass prevention | TBD | Plan 27-03 |
+| AUDIT-01: Immutable logging | PASS | RLS policies + trigger prevent AuditLog modifications |
+| AUDIT-02: Security event logging | PASS | 8 new event types (LOGIN_*, SIGNUP_*, LOGOUT, PASSWORD_RESET_*, PERMISSION_DENIED) |
+| AUDIT-03: Sufficient context | PASS | AuditLog captures clubId, userId, ipAddress, userAgent, metadata |
+| AUDIT-04: Log retention | PASS | No automatic deletion (Postgres default, handled by backup strategy) |
+| AUDIT-05: No sensitive data in logs | PASS | Passwords never logged, only email addresses and error messages |
+| RATE-01: Auth endpoint limits | PASS | Login 5/15min, signup 3/hr, password reset 3/hr |
+| RATE-02: API endpoint limits | DEFERRED | Auth endpoints covered; general API limits not in v2.2 scope |
+| RATE-03: Per-user tracking | PASS | Per-IP tracking via getClientIp (X-Forwarded-For aware) |
+| RATE-04: Rate limit headers | PASS | 429 responses include Retry-After, X-RateLimit-* headers |
+| RATE-05: Bypass prevention | PASS | Server-side enforcement, client Supabase calls removed |
 
-**Secrets Summary:** All 5 SECR requirements PASS with LOW risk level. CI/CD scanning in place.
+**Summary:**
+- 5/5 SECR requirements PASS (secrets management)
+- 5/5 AUDIT requirements PASS (audit logging)
+- 4/5 RATE requirements PASS, 1 DEFERRED (rate limiting)
 
-**Infrastructure:** Bundle scanner script + GitHub Actions workflow created for automated security scanning.
+**Infrastructure:**
+- Bundle scanner + GitHub Actions for secrets scanning
+- AuditLog table with immutability controls
+- Upstash Redis rate limiting (graceful fallback if not configured)
+- Auth API routes with server-side controls
 
-**Status:** Plan 27-01 complete. Proceed to Plan 27-02 (Audit Logging).
+**Status:** Phase 27 COMPLETE. All 3 plans executed (27-01, 27-02, 27-03).
 
 ## Session Continuity
 
 | Field | Value |
 |-------|-------|
-| Last session | 2026-01-29T14:40:43Z |
-| Stopped at | Completed 27-01-PLAN.md (Secrets Management Verification) |
+| Last session | 2026-01-29T14:52:37Z |
+| Stopped at | Completed 27-03-PLAN.md (Auth Rate Limiting & Logging) |
 | Resume file | None |
 
 ---
 
-*Last updated: 2026-01-29 (Phase 27-01 complete)*
+*Last updated: 2026-01-29 (Phase 27 complete - v2.2 Security Audit COMPLETE)*
