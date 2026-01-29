@@ -668,3 +668,312 @@ describe('No role / empty ability', () => {
     expect(ability.can('manage', 'Team')).toBe(false);
   });
 });
+
+// =============================================================================
+// Cross-Role Boundary Tests
+// =============================================================================
+
+describe('Club isolation', () => {
+  it('COACH cannot manage other clubs practices', () => {
+    const ability = defineAbilityFor({
+      userId: 'user-1',
+      clubId: 'club-a',
+      roles: ['COACH'],
+      viewMode: 'club',
+    });
+    // Can manage own club
+    expect(ability.can('manage', Practice({ teamId: 'club-a' }))).toBe(true);
+    // Cannot manage other club
+    expect(ability.can('manage', Practice({ teamId: 'club-b' }))).toBe(false);
+  });
+
+  it('COACH cannot manage other clubs equipment', () => {
+    const ability = defineAbilityFor({
+      userId: 'user-1',
+      clubId: 'club-a',
+      roles: ['COACH'],
+      viewMode: 'club',
+    });
+    expect(ability.can('manage', Equipment({ teamId: 'club-a' }))).toBe(true);
+    expect(ability.can('manage', Equipment({ teamId: 'club-b' }))).toBe(false);
+  });
+
+  it('CLUB_ADMIN cannot manage other clubs', () => {
+    const ability = defineAbilityFor({
+      userId: 'user-1',
+      clubId: 'club-a',
+      roles: ['CLUB_ADMIN'],
+      viewMode: 'club',
+    });
+    expect(ability.can('manage', Team({ id: 'club-a' }))).toBe(true);
+    expect(ability.can('manage', Team({ id: 'club-b' }))).toBe(false);
+  });
+
+  it('ATHLETE cannot read other clubs data', () => {
+    const ability = defineAbilityFor({
+      userId: 'athlete-1',
+      clubId: 'club-a',
+      roles: ['ATHLETE'],
+      viewMode: 'club',
+    });
+    expect(ability.can('read', Practice({ teamId: 'club-a' }))).toBe(true);
+    expect(ability.can('read', Practice({ teamId: 'club-b' }))).toBe(false);
+    expect(ability.can('read', Equipment({ teamId: 'club-a' }))).toBe(true);
+    expect(ability.can('read', Equipment({ teamId: 'club-b' }))).toBe(false);
+  });
+
+  it('PARENT cannot read other clubs schedule', () => {
+    const ability = defineAbilityFor({
+      userId: 'parent-1',
+      clubId: 'club-a',
+      roles: ['PARENT'],
+      linkedAthleteIds: ['athlete-1'],
+      viewMode: 'club',
+    });
+    expect(ability.can('read', Practice({ teamId: 'club-a' }))).toBe(true);
+    expect(ability.can('read', Practice({ teamId: 'club-b' }))).toBe(false);
+  });
+});
+
+describe('Privilege escalation prevention', () => {
+  describe('ATHLETE privilege escalation', () => {
+    it('cannot assign roles', () => {
+      const ability = defineAbilityFor({
+        userId: 'athlete-1',
+        clubId: 'club-a',
+        roles: ['ATHLETE'],
+        viewMode: 'club',
+      });
+      expect(ability.can('assign-role', 'Team')).toBe(false);
+      expect(ability.can('assign-role', 'ClubMembership')).toBe(false);
+    });
+
+    it('cannot manage team settings', () => {
+      const ability = defineAbilityFor({
+        userId: 'athlete-1',
+        clubId: 'club-a',
+        roles: ['ATHLETE'],
+        viewMode: 'club',
+      });
+      expect(ability.can('manage', 'Team')).toBe(false);
+      expect(ability.can('manage', Team({ id: 'club-a' }))).toBe(false);
+    });
+
+    it('cannot invite or remove members', () => {
+      const ability = defineAbilityFor({
+        userId: 'athlete-1',
+        clubId: 'club-a',
+        roles: ['ATHLETE'],
+        viewMode: 'club',
+      });
+      expect(ability.can('invite-member', 'ClubMembership')).toBe(false);
+      expect(ability.can('remove-member', 'ClubMembership')).toBe(false);
+    });
+
+    it('cannot manage API keys', () => {
+      const ability = defineAbilityFor({
+        userId: 'athlete-1',
+        clubId: 'club-a',
+        roles: ['ATHLETE'],
+        viewMode: 'club',
+      });
+      expect(ability.can('manage-api-keys', 'ApiKey')).toBe(false);
+    });
+
+    it('cannot export data', () => {
+      const ability = defineAbilityFor({
+        userId: 'athlete-1',
+        clubId: 'club-a',
+        roles: ['ATHLETE'],
+        viewMode: 'club',
+      });
+      expect(ability.can('export-data', 'Team')).toBe(false);
+    });
+  });
+
+  describe('COACH privilege escalation', () => {
+    it('cannot change team settings', () => {
+      const ability = defineAbilityFor({
+        userId: 'coach-1',
+        clubId: 'club-a',
+        roles: ['COACH'],
+        viewMode: 'club',
+      });
+      expect(ability.can('manage', Team({ id: 'club-a' }))).toBe(false);
+      expect(ability.can('update', 'Team')).toBe(false);
+    });
+
+    it('cannot assign roles to users', () => {
+      const ability = defineAbilityFor({
+        userId: 'coach-1',
+        clubId: 'club-a',
+        roles: ['COACH'],
+        viewMode: 'club',
+      });
+      expect(ability.can('assign-role', 'Team')).toBe(false);
+      expect(ability.can('assign-role', ClubMembership({ clubId: 'club-a' }))).toBe(false);
+    });
+
+    it('cannot invite or remove members', () => {
+      const ability = defineAbilityFor({
+        userId: 'coach-1',
+        clubId: 'club-a',
+        roles: ['COACH'],
+        viewMode: 'club',
+      });
+      expect(ability.can('invite-member', 'ClubMembership')).toBe(false);
+      expect(ability.can('remove-member', 'ClubMembership')).toBe(false);
+    });
+
+    it('cannot manage API keys', () => {
+      const ability = defineAbilityFor({
+        userId: 'coach-1',
+        clubId: 'club-a',
+        roles: ['COACH'],
+        viewMode: 'club',
+      });
+      expect(ability.can('manage-api-keys', 'ApiKey')).toBe(false);
+    });
+
+    it('cannot export club data', () => {
+      const ability = defineAbilityFor({
+        userId: 'coach-1',
+        clubId: 'club-a',
+        roles: ['COACH'],
+        viewMode: 'club',
+      });
+      expect(ability.can('export-data', 'Team')).toBe(false);
+    });
+  });
+
+  describe('CLUB_ADMIN cross-club escalation', () => {
+    it('cannot access other clubs even as CLUB_ADMIN', () => {
+      const ability = defineAbilityFor({
+        userId: 'admin-1',
+        clubId: 'club-a',
+        roles: ['CLUB_ADMIN'],
+        viewMode: 'club',
+      });
+      // Own club - allowed
+      expect(ability.can('manage', Team({ id: 'club-a' }))).toBe(true);
+      expect(ability.can('assign-role', ClubMembership({ clubId: 'club-a' }))).toBe(true);
+      // Other club - denied
+      expect(ability.can('manage', Team({ id: 'club-b' }))).toBe(false);
+      expect(ability.can('assign-role', ClubMembership({ clubId: 'club-b' }))).toBe(false);
+      expect(ability.can('read', Practice({ teamId: 'club-b' }))).toBe(false);
+    });
+
+    it('cannot manage facilities without FACILITY_ADMIN role', () => {
+      const ability = defineAbilityFor({
+        userId: 'admin-1',
+        clubId: 'club-a',
+        roles: ['CLUB_ADMIN'],
+        viewMode: 'club',
+      });
+      expect(ability.can('manage', 'Facility')).toBe(false);
+      expect(ability.can('manage', Facility({ id: 'facility-1' }))).toBe(false);
+    });
+  });
+
+  describe('PARENT privilege restrictions', () => {
+    it('cannot assign roles', () => {
+      const ability = defineAbilityFor({
+        userId: 'parent-1',
+        clubId: 'club-a',
+        roles: ['PARENT'],
+        linkedAthleteIds: ['athlete-1'],
+        viewMode: 'club',
+      });
+      expect(ability.can('assign-role', 'Team')).toBe(false);
+      expect(ability.can('assign-role', 'ClubMembership')).toBe(false);
+    });
+
+    it('cannot modify practices or lineups', () => {
+      const ability = defineAbilityFor({
+        userId: 'parent-1',
+        clubId: 'club-a',
+        roles: ['PARENT'],
+        linkedAthleteIds: ['athlete-1'],
+        viewMode: 'club',
+      });
+      expect(ability.can('create', 'Practice')).toBe(false);
+      expect(ability.can('update', 'Practice')).toBe(false);
+      expect(ability.can('delete', 'Practice')).toBe(false);
+      expect(ability.can('create', 'Lineup')).toBe(false);
+      expect(ability.can('update', 'Lineup')).toBe(false);
+    });
+
+    it('cannot manage equipment', () => {
+      const ability = defineAbilityFor({
+        userId: 'parent-1',
+        clubId: 'club-a',
+        roles: ['PARENT'],
+        linkedAthleteIds: ['athlete-1'],
+        viewMode: 'club',
+      });
+      expect(ability.can('create', 'Equipment')).toBe(false);
+      expect(ability.can('update', 'Equipment')).toBe(false);
+      expect(ability.can('manage', 'Equipment')).toBe(false);
+    });
+  });
+});
+
+describe('Role combination scenarios', () => {
+  it('CLUB_ADMIN + COACH has combined permissions', () => {
+    const ability = defineAbilityFor({
+      userId: 'user-1',
+      clubId: 'club-a',
+      roles: ['CLUB_ADMIN', 'COACH'],
+      viewMode: 'club',
+    });
+    // CLUB_ADMIN permissions
+    expect(ability.can('manage', Team({ id: 'club-a' }))).toBe(true);
+    expect(ability.can('assign-role', ClubMembership({ clubId: 'club-a' }))).toBe(true);
+    // COACH permissions
+    expect(ability.can('manage', Practice({ teamId: 'club-a' }))).toBe(true);
+    expect(ability.can('manage', 'Lineup')).toBe(true);
+    expect(ability.can('manage', Equipment({ teamId: 'club-a' }))).toBe(true);
+  });
+
+  it('FACILITY_ADMIN + COACH in facility mode has broad read but no edit', () => {
+    const ability = defineAbilityFor({
+      userId: 'user-1',
+      clubId: 'club-a',
+      facilityId: 'facility-1',
+      roles: ['FACILITY_ADMIN', 'COACH'],
+      viewMode: 'facility',
+    });
+    // FACILITY_ADMIN read access
+    expect(ability.can('read', 'Team')).toBe(true);
+    expect(ability.can('read', 'Practice')).toBe(true);
+    // COACH permissions still apply (but unconditionally for facility mode)
+    expect(ability.can('manage', 'Lineup')).toBe(true);
+  });
+
+  it('FACILITY_ADMIN + COACH in club mode can create', () => {
+    const ability = defineAbilityFor({
+      userId: 'user-1',
+      clubId: 'club-a',
+      facilityId: 'facility-1',
+      roles: ['FACILITY_ADMIN', 'COACH'],
+      viewMode: 'club',
+    });
+    // COACH grants creation rights
+    expect(ability.can('manage', Practice({ teamId: 'club-a' }))).toBe(true);
+    expect(ability.can('manage', 'Lineup')).toBe(true);
+    expect(ability.can('manage', Equipment({ teamId: 'club-a' }))).toBe(true);
+  });
+
+  it('Multiple roles does not grant cross-club access', () => {
+    const ability = defineAbilityFor({
+      userId: 'user-1',
+      clubId: 'club-a',
+      roles: ['CLUB_ADMIN', 'COACH', 'ATHLETE'],
+      viewMode: 'club',
+    });
+    // Still cannot access other clubs
+    expect(ability.can('manage', Team({ id: 'club-b' }))).toBe(false);
+    expect(ability.can('manage', Practice({ teamId: 'club-b' }))).toBe(false);
+    expect(ability.can('read', Practice({ teamId: 'club-b' }))).toBe(false);
+  });
+});
