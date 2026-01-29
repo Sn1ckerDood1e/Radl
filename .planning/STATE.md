@@ -4,17 +4,17 @@
 
 **Core Value:** Coaches can plan practices with lineups and equipment, and athletes know where to be and what boat they're in.
 
-**Current Focus:** v2.3 Core Flow Testing - Phase 28 Onboarding Flow Testing
+**Current Focus:** v2.3 Core Flow Testing - Phase 29 Practice Flow Testing
 
 ## Current Position
 
 | Field | Value |
 |-------|-------|
 | Milestone | v2.3 Core Flow Testing |
-| Phase | 28 - Onboarding Flow Testing |
-| Plan | 05 complete (E2E Verification) |
-| Status | Phase 28 complete |
-| Last activity | 2026-01-29 - Phase 28 verified |
+| Phase | 29 - Practice Flow Testing |
+| Plan | 01 complete (E2E Verification) |
+| Status | Phase 29 plan 01 complete |
+| Last activity | 2026-01-29 - Completed 29-01-PLAN.md |
 
 **Progress:**
 ```
@@ -23,7 +23,7 @@ v1.1: [##########] 100% SHIPPED (2026-01-22) — 9/11 reqs, 2 deferred
 v2.0: [##########] 100% SHIPPED (2026-01-26) — 34/34 requirements
 v2.1: [##########] 100% SHIPPED (2026-01-27) — 30/30 requirements
 v2.2: [##########] 100% SHIPPED (2026-01-29) — 33/35 requirements
-v2.3: [##░░░░░░░░] 25% — Phase 28 complete, Phase 29 next
+v2.3: [###░░░░░░░] 37.5% — Phases 28-29 complete, Phase 30 next
 ```
 
 ## Shipped Milestones
@@ -86,8 +86,8 @@ v2.3: [##░░░░░░░░] 25% — Phase 28 complete, Phase 29 next
 **Phases:**
 | Phase | Name | Requirements | Status |
 |-------|------|--------------|--------|
-| 28 | Onboarding Flow Testing | ONBD-01 to ONBD-06 (6) | Ready |
-| 29 | Practice Flow Testing | PRAC-01 to PRAC-05 (5) | Pending |
+| 28 | Onboarding Flow Testing | ONBD-01 to ONBD-06 (6) | Complete |
+| 29 | Practice Flow Testing | PRAC-01 to PRAC-05 (5) | Complete |
 | 30 | Equipment Flow Testing | EQUP-01 to EQUP-04 (4) | Pending |
 | 31 | UX Quality Polish | UXQL-01 to UXQL-05 (5) | Pending |
 
@@ -98,20 +98,27 @@ v2.3: [##░░░░░░░░] 25% — Phase 28 complete, Phase 29 next
 **Goal:** New users can successfully sign up, create a team, invite members, and those members can join
 
 **Requirements:**
-- ONBD-01: User can sign up with email and password
-- ONBD-02: User receives and can complete email verification
-- ONBD-03: User can create a new team/club after signup
-- ONBD-04: Coach/admin can invite members via email
-- ONBD-05: Invited user can accept invitation and join team
-- ONBD-06: New users see helpful empty states guiding next actions
+- ONBD-01: User can sign up with email and password ✓
+- ONBD-02: User receives and can complete email verification ✓
+- ONBD-03: User can create a new team/club after signup ✓
+- ONBD-04: Coach/admin can invite members via email ✓
+- ONBD-05: Invited user can accept invitation and join team ✓
+- ONBD-06: New users see helpful empty states guiding next actions ✓
 
-**Success Criteria:**
-1. User can complete full signup flow from landing page to verified account
-2. Verified user can create a new team and land on team dashboard
-3. Coach can send email invitation and invitee receives actionable email
-4. Invitee can click link, complete signup (if new), and appear on team roster
+**Status:** Complete - All 6 requirements verified
 
-**Plans:** Not yet created
+## Phase 29: Practice Flow Testing
+
+**Goal:** Coaches can plan practices with lineups and athletes know where to be and what boat they're in
+
+**Requirements:**
+- PRAC-01: Coach can create practice with date, time, name and see it on calendar ✓
+- PRAC-02: Coach can add water, erg, land, and meeting blocks to practice ✓
+- PRAC-03: Coach can drag athletes into lineup seats and assignments persist after save ✓
+- PRAC-04: Athletes see their boat assignment when practice is published ✓
+- PRAC-05: Calendar shows practices with green dots and draft/published styling ✓
+
+**Status:** Complete - All 5 requirements verified
 
 ## Accumulated Context
 
@@ -130,6 +137,8 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 | Server-side auth mandatory | 2026-01-29 | All auth flows through API routes for rate limiting and logging |
 | Per-action rate limiters | 2026-01-29 | Different auth actions need different limits (login vs signup) |
 | Email enumeration prevention | 2026-01-29 | Password reset always returns success to prevent email discovery |
+| Location field workaround | 2026-01-29 | Use notes field for practice location (acceptable for MVP) |
+| Meeting blocks minimal content | 2026-01-29 | Notes-only sufficient for meeting blocks (by design) |
 
 ### Architecture Notes
 
@@ -163,9 +172,9 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 | Field | Value |
 |-------|-------|
 | Last session | 2026-01-29 |
-| Stopped at | Roadmap created for v2.3 |
-| Resume with | `/gsd:plan-phase 28` |
+| Stopped at | Completed 29-01-PLAN.md |
+| Resume with | `/gsd:plan-phase 30` |
 
 ---
 
-*Last updated: 2026-01-29 (v2.3 roadmap created, Phase 28 ready)*
+*Last updated: 2026-01-29 (Phase 29 complete, ready for Phase 30)*
