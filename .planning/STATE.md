@@ -11,10 +11,10 @@
 | Field | Value |
 |-------|-------|
 | Milestone | v2.2 Security Audit |
-| Phase | Phase 26 - RBAC & Tenant Isolation |
-| Plan | 09 complete (Final Verification) |
-| Status | Phase complete |
-| Last activity | 2026-01-29 - Completed 26-09-PLAN.md (Final Verification) |
+| Phase | Phase 27 - Secrets, Logging & Rate Limiting |
+| Plan | 02 complete (Audit Infrastructure Extension) |
+| Status | In progress |
+| Last activity | 2026-01-29 - Completed 27-02-PLAN.md (Audit Infrastructure Extension) |
 
 **Progress:**
 ```
@@ -110,6 +110,9 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 | 404 for cross-tenant access | 2026-01-29 | Prevents resource enumeration attacks |
 | Booking clubName acceptable | 2026-01-29 | Public coordination data at shared facilities |
 | Database lookup per request | 2026-01-29 | Security over performance; 2 DB queries for immediate role propagation |
+| Fire-and-forget audit logging | 2026-01-29 | Performance over guaranteed logging in error responses |
+| Defense-in-depth immutability | 2026-01-29 | RLS + trigger to protect AuditLog from service role modifications |
+| Backward-compatible forbiddenResponse | 2026-01-29 | Optional audit context preserves existing callers |
 
 ### Architecture Notes
 
@@ -202,8 +205,8 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 
 | Field | Value |
 |-------|-------|
-| Last session | 2026-01-29T03:20:49Z |
-| Stopped at | Completed 26-09-PLAN.md (Final Verification) |
+| Last session | 2026-01-29T14:37:58Z |
+| Stopped at | Completed 27-02-PLAN.md (Audit Infrastructure Extension) |
 | Resume file | None |
 
 ---
