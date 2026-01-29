@@ -4,7 +4,20 @@
 
 A multi-tenant SaaS for rowing team operations — practice planning, equipment management, roster coordination, and race-day execution at regattas.
 
-**Current State:** v2.2 shipped. Ready for beta testing.
+**Current State:** v2.3 in progress. Core flow testing before beta.
+
+## Current Milestone: v2.3 Core Flow Testing
+
+**Goal:** Verify all major user journeys work end-to-end and fix issues discovered before beta release.
+
+**Target features:**
+- Onboarding flow testing (signup → create team → invite members → accept invitation)
+- Practice flow testing (create practice → add blocks → assign lineup → publish)
+- Equipment flow testing (add equipment → track usage → report damage → resolve)
+- Bug fixes for issues discovered during testing
+- UX polish for friction points
+- Mobile experience improvements
+- Error handling and empty states refinement
 
 ## Core Value
 
@@ -212,4 +225,4 @@ v3.0 candidates:
 - Social features
 
 ---
-*Last updated: 2026-01-29 after v2.2 milestone shipped*
+*Last updated: 2026-01-29 after v2.3 milestone started*
