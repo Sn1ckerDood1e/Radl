@@ -4,17 +4,17 @@
 
 **Core Value:** Coaches can plan practices with lineups and equipment, and athletes know where to be and what boat they're in.
 
-**Current Focus:** v2.2 Security Audit - Phase 25 complete, Phase 26 next
+**Current Focus:** v2.2 Security Audit - Phase 26 in progress (RBAC & Tenant Isolation)
 
 ## Current Position
 
 | Field | Value |
 |-------|-------|
 | Milestone | v2.2 Security Audit |
-| Phase | Phase 25 - API Authentication & JWT Security |
-| Plan | 04 complete (gap closure) |
-| Status | Phase 25 complete |
-| Last activity | 2026-01-28 - Completed 25-04-PLAN.md (Logout Implementation) |
+| Phase | Phase 26 - RBAC & Tenant Isolation |
+| Plan | 03 complete (CASL Enforcement Audit) |
+| Status | In progress |
+| Last activity | 2026-01-29 - Completed 26-03-PLAN.md (CASL Enforcement Audit) |
 
 **Progress:**
 ```
@@ -22,7 +22,7 @@ v1.0: [##########] 100% SHIPPED (2026-01-22)
 v1.1: [##########] 100% SHIPPED (2026-01-22) — 9/11 reqs, 2 deferred
 v2.0: [##########] 100% SHIPPED (2026-01-26) — 34/34 requirements
 v2.1: [##########] 100% SHIPPED (2026-01-27) — 30/30 requirements
-v2.2: [###       ]  33% IN PROGRESS (Phases 25-27) — 7/35 requirements complete
+v2.2: [####      ]  40% IN PROGRESS (Phases 25-27) — 8/35 requirements assessed
 ```
 
 ## Shipped Milestones
@@ -82,17 +82,14 @@ v2.2: [###       ]  33% IN PROGRESS (Phases 25-27) — 7/35 requirements complet
 - Audit Logging: 5 requirements (AUDIT-01 through AUDIT-05)
 - Rate Limiting: 5 requirements (RATE-01 through RATE-05)
 
-**Current Phase:** Phase 25 - API Authentication & JWT Security
-- Verifies JWT signature, expiration, claims validation
-- Tests session persistence and logout behavior
-- Validates token refresh without re-authentication
-- Ensures no unprotected API endpoints
+**Completed Phase:** Phase 25 - API Authentication & JWT Security
+- All 7 AUTH requirements PASS
+- 88 routes audited, all protected or justified
 
-**Next Phase:** Phase 26 - RBAC & Tenant Isolation
-- Tests role boundary enforcement (5-role hierarchy)
-- Validates RLS policies at database level
-- Verifies cross-tenant data access is blocked
-- Tests JWT claims match data access patterns
+**Current Phase:** Phase 26 - RBAC & Tenant Isolation
+- Plan 03 complete: CASL Enforcement Audit
+- RBAC-06 status: CONDITIONAL PASS (16/88 routes use full CASL)
+- Next: Plan 04 (RLS policy testing)
 
 **Final Phase:** Phase 27 - Secrets, Logging & Rate Limiting
 - Audits secrets in client bundle and environment variables
@@ -104,6 +101,10 @@ v2.2: [###       ]  33% IN PROGRESS (Phases 25-27) — 7/35 requirements complet
 ### Key Decisions
 
 See `.planning/PROJECT.md` for full decision table with outcomes.
+
+| Decision | Date | Outcome |
+|----------|------|---------|
+| Dual auth patterns coexist | 2026-01-29 | Both secure; migration is code quality, not security |
 
 ### Architecture Notes
 
@@ -127,6 +128,7 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 | QR external scanning | DEFERRED | Needs production deployment |
 | Push notifications | DEFERRED | NOTIF-01, NOTIF-02 for v3.0 |
 | Dynamic team colors | DEFERRED | Color settings stored in DB, UI uses fixed emerald colors |
+| CASL migration | IDENTIFIED | 59 routes use legacy getClaimsForApiRoute pattern |
 
 ### Security Audit Context (v2.2)
 
@@ -160,16 +162,24 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 | AUTH-06: Logout Implementation | PASS | POST /api/auth/logout + settings button (25-04) |
 | AUTH-07: Token Refresh | PASS | Automatic via getUser() |
 
-**Status:** All 7 AUTH requirements now PASS. Phase 25 complete.
+**Status:** All 7 AUTH requirements PASS. Phase 25 complete.
+
+## Phase 26 Audit Findings
+
+| Requirement | Status | Notes |
+|-------------|--------|-------|
+| RBAC-06: Server-side CASL | CONDITIONAL PASS | 16/88 routes use full CASL, all secure for tenant isolation |
+
+**Status:** RBAC-06 assessed. Plan 03 complete.
 
 ## Session Continuity
 
 | Field | Value |
 |-------|-------|
-| Last session | 2026-01-28T23:15:00Z |
-| Stopped at | Completed 25-04-PLAN.md (Logout Implementation - gap closure) |
+| Last session | 2026-01-29T03:00:00Z |
+| Stopped at | Completed 26-03-PLAN.md (CASL Enforcement Audit) |
 | Resume file | None |
 
 ---
 
-*Last updated: 2026-01-28 (Phase 25 complete)*
+*Last updated: 2026-01-29 (Phase 26 Plan 03 complete)*
