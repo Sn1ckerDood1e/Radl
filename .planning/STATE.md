@@ -12,9 +12,9 @@
 |-------|-------|
 | Milestone | v2.2 Security Audit |
 | Phase | Phase 26 - RBAC & Tenant Isolation |
-| Plan | 02 complete (CASL Ability Unit Tests) |
+| Plan | 06 complete (JWT Claims Audit) |
 | Status | In progress |
-| Last activity | 2026-01-29 - Completed 26-02-PLAN.md (CASL Ability Unit Tests) |
+| Last activity | 2026-01-29 - Completed 26-06-PLAN.md (JWT Claims Audit) |
 
 **Progress:**
 ```
@@ -87,9 +87,9 @@ v2.2: [####      ]  40% IN PROGRESS (Phases 25-27) — 8/35 requirements assesse
 - 88 routes audited, all protected or justified
 
 **Current Phase:** Phase 26 - RBAC & Tenant Isolation
-- Plan 03 complete: CASL Enforcement Audit
-- RBAC-06 status: CONDITIONAL PASS (16/88 routes use full CASL)
-- Next: Plan 04 (RLS policy testing)
+- Plan 06 complete: JWT Claims Audit
+- ISOL-04 status: PASS (JWT claims correctly map to data access patterns)
+- Next: Continue Phase 26 plans
 
 **Final Phase:** Phase 27 - Secrets, Logging & Rate Limiting
 - Audits secrets in client bundle and environment variables
@@ -176,21 +176,22 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 | RBAC-02: CLUB_ADMIN | VERIFIED | Unit tests verify cross-club access blocked |
 | RBAC-03: COACH | VERIFIED | Unit tests verify practice/equipment/lineup management |
 | RBAC-04: ATHLETE | VERIFIED | Unit tests verify read-only access |
+| ISOL-04: JWT Claims | PASS | JWT claims correctly map to data access patterns |
 
 **Critical Finding (26-01):** Equipment table has 4 well-designed RLS policies but RLS is disabled - policies have NO effect.
 
 **Test Infrastructure (26-02):** Vitest framework added with 109 CASL ability unit tests covering all 5 roles.
 
-**Status:** Plan 01 (RLS Audit), Plan 02 (Ability Tests), and Plan 03 (CASL Audit) complete.
+**Status:** Plan 01 (RLS Audit), Plan 02 (Ability Tests), Plan 03 (CASL Audit), and Plan 06 (JWT Claims Audit) complete.
 
 ## Session Continuity
 
 | Field | Value |
 |-------|-------|
-| Last session | 2026-01-29T03:05:00Z |
-| Stopped at | Completed 26-02-PLAN.md (CASL Ability Unit Tests) |
+| Last session | 2026-01-29T03:09:12Z |
+| Stopped at | Completed 26-06-PLAN.md (JWT Claims Audit) |
 | Resume file | None |
 
 ---
 
-*Last updated: 2026-01-29 (Phase 26 Plan 02 complete)*
+*Last updated: 2026-01-29 (Phase 26 Plan 06 complete)*
