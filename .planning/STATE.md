@@ -12,9 +12,9 @@
 |-------|-------|
 | Milestone | v2.3 Core Flow Testing |
 | Phase | 31 - UX Quality Polish |
-| Plan | 03 complete (Settings Cleanup) |
+| Plan | 02, 03 complete |
 | Status | In progress |
-| Last activity | 2026-01-29 - Completed 31-03-PLAN.md |
+| Last activity | 2026-01-29 - Completed 31-02-PLAN.md |
 
 **Progress:**
 ```
@@ -89,7 +89,7 @@ v2.3: [########░░] 80% — Phases 28-30 complete, Phase 31 in progress
 | 28 | Onboarding Flow Testing | ONBD-01 to ONBD-06 (6) | Complete |
 | 29 | Practice Flow Testing | PRAC-01 to PRAC-05 (5) | Complete |
 | 30 | Equipment Flow Testing | EQUP-01 to EQUP-04 (4) | Complete |
-| 31 | UX Quality Polish | UXQL-01 to UXQL-05 (5) | In progress (2/3 plans) |
+| 31 | UX Quality Polish | UXQL-01 to UXQL-05 (5) | In progress (3/? plans) |
 
 **Total:** 20 requirements across 4 phases
 
@@ -184,9 +184,9 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 | Field | Value |
 |-------|-------|
 | Last session | 2026-01-29 |
-| Stopped at | Completed 31-03-PLAN.md |
-| Resume with | `/gsd:execute-phase 31-02-PLAN.md` |
+| Stopped at | Completed 31-02-PLAN.md |
+| Resume with | Continue Phase 31 plans |
 
 ---
 
-*Last updated: 2026-01-29 (Phase 31 plan 03 complete)*
+*Last updated: 2026-01-29 (Phase 31 plans 01, 02, 03 complete)*
