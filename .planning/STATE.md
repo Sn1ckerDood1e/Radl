@@ -12,9 +12,9 @@
 |-------|-------|
 | Milestone | v2.2 Security Audit |
 | Phase | Phase 26 - RBAC & Tenant Isolation |
-| Plan | 06 complete (JWT Claims Audit) |
+| Plan | 05 complete (API Route Integration Tests) |
 | Status | In progress |
-| Last activity | 2026-01-29 - Completed 26-06-PLAN.md (JWT Claims Audit) |
+| Last activity | 2026-01-29 - Completed 26-05-PLAN.md (API Route Integration Tests) |
 
 **Progress:**
 ```
@@ -87,8 +87,8 @@ v2.2: [####      ]  40% IN PROGRESS (Phases 25-27) — 8/35 requirements assesse
 - 88 routes audited, all protected or justified
 
 **Current Phase:** Phase 26 - RBAC & Tenant Isolation
-- Plan 06 complete: JWT Claims Audit
-- ISOL-04 status: PASS (JWT claims correctly map to data access patterns)
+- Plan 05 complete: API Route Integration Tests
+- 17 API RBAC integration tests verifying 403 enforcement
 - Next: Continue Phase 26 plans
 
 **Final Phase:** Phase 27 - Secrets, Logging & Rate Limiting
@@ -177,21 +177,23 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 | RBAC-03: COACH | VERIFIED | Unit tests verify practice/equipment/lineup management |
 | RBAC-04: ATHLETE | VERIFIED | Unit tests verify read-only access |
 | ISOL-04: JWT Claims | PASS | JWT claims correctly map to data access patterns |
+| RBAC-03: API Tests | VERIFIED | 17 integration tests verify COACH can create at API layer |
+| RBAC-04: API Tests | VERIFIED | 17 integration tests verify ATHLETE gets 403 at API layer |
 
 **Critical Finding (26-01):** Equipment table has 4 well-designed RLS policies but RLS is disabled - policies have NO effect.
 
 **Test Infrastructure (26-02):** Vitest framework added with 109 CASL ability unit tests covering all 5 roles.
 
-**Status:** Plan 01 (RLS Audit), Plan 02 (Ability Tests), Plan 03 (CASL Audit), and Plan 06 (JWT Claims Audit) complete.
+**Status:** Plan 01 (RLS Audit), Plan 02 (Ability Tests), Plan 03 (CASL Audit), Plan 05 (API Integration Tests), and Plan 06 (JWT Claims Audit) complete.
 
 ## Session Continuity
 
 | Field | Value |
 |-------|-------|
-| Last session | 2026-01-29T03:09:12Z |
-| Stopped at | Completed 26-06-PLAN.md (JWT Claims Audit) |
+| Last session | 2026-01-29T03:11:49Z |
+| Stopped at | Completed 26-05-PLAN.md (API Route Integration Tests) |
 | Resume file | None |
 
 ---
 
-*Last updated: 2026-01-29 (Phase 26 Plan 06 complete)*
+*Last updated: 2026-01-29 (Phase 26 Plan 05 complete)*
