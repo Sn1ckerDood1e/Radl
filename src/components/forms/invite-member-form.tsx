@@ -87,12 +87,12 @@ export function InviteMemberForm({ teamSlug, onSuccess }: InviteMemberFormProps)
         throw new Error(result.error || 'Failed to create invitation');
       }
 
-      showSuccessToast('Invitation sent', `Sent to ${data.email}`);
+      showSuccessToast('Invitation created', 'Share the join link with this member to let them join');
       reset();
       onSuccess?.();
     } catch (error) {
       showErrorToast({
-        message: 'Failed to send invitation',
+        message: 'Failed to create invitation',
         description: error instanceof Error ? error.message : undefined,
         retry: () => onSubmit(data),
       });
@@ -181,7 +181,7 @@ export function InviteMemberForm({ teamSlug, onSuccess }: InviteMemberFormProps)
           disabled={isSubmitting || (selectedRole === 'PARENT' && athletes.length === 0)}
           className="w-full flex justify-center py-2 px-4 border border-transparent rounded-lg text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-zinc-900 focus:ring-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
         >
-          {isSubmitting ? 'Sending Invitation...' : 'Send Invitation'}
+          {isSubmitting ? 'Creating Invitation...' : 'Create Invitation'}
         </button>
       </div>
     </form>

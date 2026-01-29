@@ -3,6 +3,7 @@ import { requireTeamBySlug } from '@/lib/auth/authorize';
 import { prisma } from '@/lib/prisma';
 import { RosterClient } from './roster-client';
 import { EmptyState } from '@/components/ui/empty-state';
+import { ShareJoinLink } from '@/components/teams/share-join-link';
 import { Users } from 'lucide-react';
 
 interface RosterPageProps {
@@ -90,20 +91,10 @@ export default async function RosterPage({ params }: RosterPageProps) {
         </div>
       </div>
 
-      {/* Team Code Section (Coach Only) */}
+      {/* Share Join Link Section (Coach Only) */}
       {isCoach && (
-        <div className="bg-zinc-900 rounded-xl p-6 mb-6 border border-zinc-800">
-          <div className="flex items-center justify-between">
-            <div>
-              <h3 className="font-semibold text-white mb-1">Invite Link</h3>
-              <p className="text-sm text-zinc-400">
-                Share this code with athletes and parents to let them request to join
-              </p>
-            </div>
-            <div className="text-2xl font-mono font-bold text-emerald-400 bg-zinc-800 px-4 py-2 rounded-lg border border-zinc-700 select-all cursor-pointer" title="Click to select">
-              {team.joinCode}
-            </div>
-          </div>
+        <div className="mb-6">
+          <ShareJoinLink joinCode={team.joinCode} />
         </div>
       )}
 

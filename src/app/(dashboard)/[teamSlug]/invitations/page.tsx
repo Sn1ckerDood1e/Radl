@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { requireTeamBySlug } from '@/lib/auth/authorize';
 import { prisma } from '@/lib/prisma';
 import { InvitationsClient } from './invitations-client';
+import { ShareJoinLink } from '@/components/teams/share-join-link';
 
 interface InvitationsPageProps {
   params: Promise<{ teamSlug: string }>;
@@ -62,22 +63,9 @@ export default async function InvitationsPage({ params }: InvitationsPageProps) 
         </div>
       </div>
 
-      {/* Team Code Section */}
-      <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6 mb-8">
-        <div className="flex items-center justify-between">
-          <div>
-            <h3 className="font-semibold text-white">Team Code</h3>
-            <p className="text-sm text-zinc-400 mt-1">
-              Share this code with athletes and parents to let them request to join.
-            </p>
-          </div>
-          <div className="text-2xl font-mono font-bold text-emerald-400 bg-zinc-800 px-4 py-2 rounded-lg border border-zinc-700 select-all cursor-pointer">
-            {team.joinCode}
-          </div>
-        </div>
-        <div className="mt-3 text-sm text-zinc-500">
-          Join link: <code className="bg-zinc-800 px-2 py-1 rounded text-zinc-300">{process.env.NEXT_PUBLIC_APP_URL || 'https://your-app.com'}/join/{team.joinCode}</code>
-        </div>
+      {/* Share Join Link Section */}
+      <div className="mb-8">
+        <ShareJoinLink joinCode={team.joinCode} />
       </div>
 
       <InvitationsClient
