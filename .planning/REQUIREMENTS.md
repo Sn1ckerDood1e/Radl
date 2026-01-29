@@ -96,41 +96,41 @@ Deferred to v3.1 or later:
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| BRND-01 | TBD | Pending |
-| BRND-02 | TBD | Pending |
-| BRND-03 | TBD | Pending |
-| BRND-04 | TBD | Pending |
-| BRND-05 | TBD | Pending |
-| LOAD-01 | TBD | Pending |
-| LOAD-02 | TBD | Pending |
-| LOAD-03 | TBD | Pending |
-| LOAD-04 | TBD | Pending |
-| ERRR-01 | TBD | Pending |
-| ERRR-02 | TBD | Pending |
-| ERRR-03 | TBD | Pending |
-| ERRR-04 | TBD | Pending |
-| EMPT-01 | TBD | Pending |
-| EMPT-02 | TBD | Pending |
-| EMPT-03 | TBD | Pending |
-| CALM-01 | TBD | Pending |
-| CALM-02 | TBD | Pending |
-| CALM-03 | TBD | Pending |
-| DRAG-01 | TBD | Pending |
-| DRAG-02 | TBD | Pending |
-| DRAG-03 | TBD | Pending |
-| SAFE-01 | TBD | Pending |
-| SAFE-02 | TBD | Pending |
-| SAFE-03 | TBD | Pending |
-| LEGL-01 | TBD | Pending |
-| LEGL-02 | TBD | Pending |
-| LEGL-03 | TBD | Pending |
-| LEGL-04 | TBD | Pending |
+| BRND-01 | Phase 32 | Pending |
+| BRND-02 | Phase 32 | Pending |
+| BRND-03 | Phase 32 | Pending |
+| BRND-04 | Phase 32 | Pending |
+| BRND-05 | Phase 32 | Pending |
+| SAFE-01 | Phase 32 | Pending |
+| SAFE-02 | Phase 32 | Pending |
+| SAFE-03 | Phase 32 | Pending |
+| LEGL-01 | Phase 33 | Pending |
+| LEGL-02 | Phase 33 | Pending |
+| LEGL-03 | Phase 33 | Pending |
+| LEGL-04 | Phase 33 | Pending |
+| LOAD-01 | Phase 34 | Pending |
+| LOAD-02 | Phase 34 | Pending |
+| LOAD-03 | Phase 34 | Pending |
+| LOAD-04 | Phase 34 | Pending |
+| ERRR-01 | Phase 34 | Pending |
+| ERRR-02 | Phase 34 | Pending |
+| ERRR-03 | Phase 34 | Pending |
+| ERRR-04 | Phase 34 | Pending |
+| EMPT-01 | Phase 34 | Pending |
+| EMPT-02 | Phase 34 | Pending |
+| EMPT-03 | Phase 34 | Pending |
+| CALM-01 | Phase 35 | Pending |
+| CALM-02 | Phase 35 | Pending |
+| CALM-03 | Phase 35 | Pending |
+| DRAG-01 | Phase 35 | Pending |
+| DRAG-02 | Phase 35 | Pending |
+| DRAG-03 | Phase 35 | Pending |
 
 **Coverage:**
 - v3.0 requirements: 29 total
-- Mapped to phases: 0 (pending roadmap)
-- Unmapped: 29
+- Mapped to phases: 29
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-01-29*
-*Last updated: 2026-01-29 after initial definition*
+*Last updated: 2026-01-29 — Phase mappings added*

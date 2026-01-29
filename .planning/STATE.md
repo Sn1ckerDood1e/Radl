@@ -4,17 +4,17 @@
 
 **Core Value:** Coaches can plan practices with lineups and equipment, and athletes know where to be and what boat they're in.
 
-**Current Focus:** v3.0 Production Polish — Defining requirements
+**Current Focus:** v3.0 Production Polish — Phase 32: Safe Areas & Branding Foundation
 
 ## Current Position
 
 | Field | Value |
 |-------|-------|
 | Milestone | v3.0 Production Polish |
-| Phase | Not started (defining requirements) |
-| Plan | — |
-| Status | Defining requirements |
-| Last activity | 2026-01-29 — Milestone v3.0 started |
+| Phase | 32 - Safe Areas & Branding Foundation |
+| Plan | Not started |
+| Status | Ready for planning |
+| Last activity | 2026-01-29 — Roadmap created |
 
 **Progress:**
 ```
@@ -24,23 +24,24 @@ v2.0: [##########] 100% SHIPPED (2026-01-26) — 34/34 requirements
 v2.1: [##########] 100% SHIPPED (2026-01-27) — 30/30 requirements
 v2.2: [##########] 100% SHIPPED (2026-01-29) — 33/35 requirements
 v2.3: [##########] 100% SHIPPED (2026-01-29) — 20/20 requirements
-v3.0: [          ] 0% — Defining requirements
+v3.0: [          ] 0% — 0/29 requirements (Phases 32-35)
 ```
 
 **Total shipped:** 6 milestones, 31 phases, 157 requirements
 
-## v3.0 Milestone Goals
+## v3.0 Milestone Overview
 
 **Goal:** Production-ready polish before user launch
 
-**Target features:**
-1. Branding implementation (Strokeline → Radl, color palette, typography)
-2. UX polish (loading states, error messages, empty states, smooth workflows)
-3. Device-specific fixes (calendar on mobile, lineup editor cross-device)
-4. Legal requirements (Terms of Service, Privacy Policy)
-5. Native mobile apps (if scope allows)
+**Phases:**
+| Phase | Name | Requirements | Status |
+|-------|------|--------------|--------|
+| 32 | Safe Areas & Branding | 8 | Pending |
+| 33 | Legal Pages | 4 | Pending |
+| 34 | UX Polish | 11 | Pending |
+| 35 | Device-Specific | 6 | Pending |
 
-**Reference:** `.planning/BRANDING.md` for color palette, typography, naming
+**Parallelization:** Phase 33 (Legal) can run in parallel with Phase 32
 
 ## Shipped Milestones
 
@@ -101,8 +102,8 @@ v3.0: [          ] 0% — Defining requirements
 
 | Item | Status | Notes |
 |------|--------|-------|
-| Strokeline → Radl rename | PENDING | v3.0 branding implementation |
-| Color palette update | PENDING | v3.0 - emerald → teal per BRANDING.md |
+| Strokeline -> Radl rename | PENDING | Phase 32 - BRND-01 |
+| Color palette update | PENDING | Phase 32 - BRND-02 (emerald -> teal) |
 | RC connection testing | DEFERRED | Needs RC_CLIENT_ID and RC_CLIENT_SECRET |
 | QR external scanning | DEFERRED | Needs production deployment |
 | Push notifications | DEFERRED | NOTIF-01, NOTIF-02 for v4.0 |
@@ -117,9 +118,9 @@ v3.0: [          ] 0% — Defining requirements
 | Field | Value |
 |-------|-------|
 | Last session | 2026-01-29 |
-| Stopped at | Started v3.0, gathering requirements |
-| Resume with | Continue requirements definition |
+| Stopped at | Roadmap created for v3.0 |
+| Resume with | `/gsd:plan-phase 32` to start Safe Areas & Branding |
 
 ---
 
-*Last updated: 2026-01-29 (v3.0 milestone started)*
+*Last updated: 2026-01-29 (v3.0 roadmap created)*
