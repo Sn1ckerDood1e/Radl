@@ -130,6 +130,8 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 | Dynamic team colors | DEFERRED | Color settings stored in DB, UI uses fixed emerald colors |
 | CASL migration | IDENTIFIED | 59 routes use legacy getClaimsForApiRoute pattern |
 | Vitest framework | ADDED | 26-02 - Unit test infrastructure for security audit |
+| pgTAP RLS tests | CREATED | 26-04 - 20 tests awaiting multi-tenant data |
+| Equipment RLS disabled | CRITICAL | 26-04 - 4 policies exist but RLS not enabled |
 
 ### Security Audit Context (v2.2)
 
@@ -171,6 +173,7 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 |-------------|--------|-------|
 | ISOL-01: RLS Enabled | NOT MET | 5/43 tables have RLS enabled (12%) |
 | ISOL-02: Tenant Filtering | PARTIAL | 5 tables have proper filtering; Equipment policies inactive |
+| ISOL-03: Cross-Tenant Tests | CONDITIONAL PASS | pgTAP tests created; no multi-tenant data to verify |
 | RBAC-06: Server-side CASL | CONDITIONAL PASS | 16/88 routes use full CASL, all secure for tenant isolation |
 | RBAC-01: FACILITY_ADMIN | VERIFIED | 109 unit tests verify FACILITY_ADMIN cannot create without COACH |
 | RBAC-02: CLUB_ADMIN | VERIFIED | Unit tests verify cross-club access blocked |
@@ -184,16 +187,16 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 
 **Test Infrastructure (26-02):** Vitest framework added with 109 CASL ability unit tests covering all 5 roles.
 
-**Status:** Plan 01 (RLS Audit), Plan 02 (Ability Tests), Plan 03 (CASL Audit), Plan 05 (API Integration Tests), and Plan 06 (JWT Claims Audit) complete.
+**Status:** Plan 01 (RLS Audit), Plan 02 (Ability Tests), Plan 03 (CASL Audit), Plan 04 (RLS Tests), Plan 05 (API Integration Tests), and Plan 06 (JWT Claims Audit) complete.
 
 ## Session Continuity
 
 | Field | Value |
 |-------|-------|
-| Last session | 2026-01-29T03:11:49Z |
-| Stopped at | Completed 26-05-PLAN.md (API Route Integration Tests) |
+| Last session | 2026-01-29T03:13:10Z |
+| Stopped at | Completed 26-04-PLAN.md (RLS Cross-Tenant Tests) |
 | Resume file | None |
 
 ---
 
-*Last updated: 2026-01-29 (Phase 26 Plan 05 complete)*
+*Last updated: 2026-01-29 (Phase 26 Plan 04 complete)*
