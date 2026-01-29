@@ -168,18 +168,22 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 
 | Requirement | Status | Notes |
 |-------------|--------|-------|
+| ISOL-01: RLS Enabled | NOT MET | 5/43 tables have RLS enabled (12%) |
+| ISOL-02: Tenant Filtering | PARTIAL | 5 tables have proper filtering; Equipment policies inactive |
 | RBAC-06: Server-side CASL | CONDITIONAL PASS | 16/88 routes use full CASL, all secure for tenant isolation |
 
-**Status:** RBAC-06 assessed. Plan 03 complete.
+**Critical Finding (26-01):** Equipment table has 4 well-designed RLS policies but RLS is disabled - policies have NO effect.
+
+**Status:** Plan 01 (RLS Audit) and Plan 03 (CASL Audit) complete.
 
 ## Session Continuity
 
 | Field | Value |
 |-------|-------|
-| Last session | 2026-01-29T03:00:00Z |
-| Stopped at | Completed 26-03-PLAN.md (CASL Enforcement Audit) |
+| Last session | 2026-01-29T03:03:00Z |
+| Stopped at | Completed 26-01-PLAN.md (RLS Audit) |
 | Resume file | None |
 
 ---
 
-*Last updated: 2026-01-29 (Phase 26 Plan 03 complete)*
+*Last updated: 2026-01-29 (Phase 26 Plan 01 complete)*
