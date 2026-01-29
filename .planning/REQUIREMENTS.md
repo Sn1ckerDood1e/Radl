@@ -16,13 +16,13 @@ Verify all major user journeys work end-to-end, fix bugs, and polish UX before b
 - [x] **ONBD-05**: Invited user can accept invitation and join team
 - [x] **ONBD-06**: New users see helpful empty states guiding next actions
 
-### Practice Flow
+### Practice Flow ✅
 
-- [ ] **PRAC-01**: Coach can create a practice with date, time, and location
-- [ ] **PRAC-02**: Coach can add blocks to practice (water, erg, land, meeting)
-- [ ] **PRAC-03**: Coach can assign athletes to lineup seats via drag-drop
-- [ ] **PRAC-04**: Coach can publish practice and athletes see assignments
-- [ ] **PRAC-05**: Calendar view is easy to read and understand
+- [x] **PRAC-01**: Coach can create a practice with date, time, and location
+- [x] **PRAC-02**: Coach can add blocks to practice (water, erg, land, meeting)
+- [x] **PRAC-03**: Coach can assign athletes to lineup seats via drag-drop
+- [x] **PRAC-04**: Coach can publish practice and athletes see assignments
+- [x] **PRAC-05**: Calendar view is easy to read and understand
 
 ### Equipment Flow
 
@@ -75,11 +75,11 @@ Deferred to future milestones:
 | ONBD-04 | Phase 28 | Complete |
 | ONBD-05 | Phase 28 | Complete |
 | ONBD-06 | Phase 28 | Complete |
-| PRAC-01 | Phase 29 | Pending |
-| PRAC-02 | Phase 29 | Pending |
-| PRAC-03 | Phase 29 | Pending |
-| PRAC-04 | Phase 29 | Pending |
-| PRAC-05 | Phase 29 | Pending |
+| PRAC-01 | Phase 29 | Complete |
+| PRAC-02 | Phase 29 | Complete |
+| PRAC-03 | Phase 29 | Complete |
+| PRAC-04 | Phase 29 | Complete |
+| PRAC-05 | Phase 29 | Complete |
 | EQUP-01 | Phase 30 | Pending |
 | EQUP-02 | Phase 30 | Pending |
 | EQUP-03 | Phase 30 | Pending |
@@ -97,4 +97,4 @@ Deferred to future milestones:
 
 ---
 *Requirements defined: 2026-01-29*
-*Last updated: 2026-01-29 after roadmap creation*
+*Last updated: 2026-01-29 (Phase 29 complete)*

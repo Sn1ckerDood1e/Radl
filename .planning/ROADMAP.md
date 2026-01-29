@@ -132,7 +132,7 @@ Plans:
 **Plans:** 1 plan in 1 wave
 
 Plans:
-- [ ] 29-01-PLAN.md - E2E verification of practice flow
+- [x] 29-01-PLAN.md - E2E verification of practice flow
 
 ---
 
@@ -180,7 +180,7 @@ Phases execute in numeric order: 28 -> 29 -> 30 -> 31
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
 | 28. Onboarding Flow Testing | v2.3 | 5/5 | ✅ Complete | 2026-01-29 |
-| 29. Practice Flow Testing | v2.3 | 0/1 | Ready | - |
+| 29. Practice Flow Testing | v2.3 | 1/1 | ✅ Complete | 2026-01-29 |
 | 30. Equipment Flow Testing | v2.3 | 0/? | Pending | - |
 | 31. UX Quality Polish | v2.3 | 0/? | Pending | - |
 
@@ -202,4 +202,4 @@ Phases execute in numeric order: 28 -> 29 -> 30 -> 31
 
 ---
 
-*Last updated: 2026-01-29 (Phase 29 plan created)*
+*Last updated: 2026-01-29 (Phase 29 complete)*
