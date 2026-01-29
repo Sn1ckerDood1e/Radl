@@ -12,9 +12,9 @@
 |-------|-------|
 | Milestone | v2.2 Security Audit |
 | Phase | Phase 26 - RBAC & Tenant Isolation |
-| Plan | 03 complete (CASL Enforcement Audit) |
+| Plan | 02 complete (CASL Ability Unit Tests) |
 | Status | In progress |
-| Last activity | 2026-01-29 - Completed 26-03-PLAN.md (CASL Enforcement Audit) |
+| Last activity | 2026-01-29 - Completed 26-02-PLAN.md (CASL Ability Unit Tests) |
 
 **Progress:**
 ```
@@ -129,6 +129,7 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 | Push notifications | DEFERRED | NOTIF-01, NOTIF-02 for v3.0 |
 | Dynamic team colors | DEFERRED | Color settings stored in DB, UI uses fixed emerald colors |
 | CASL migration | IDENTIFIED | 59 routes use legacy getClaimsForApiRoute pattern |
+| Vitest framework | ADDED | 26-02 - Unit test infrastructure for security audit |
 
 ### Security Audit Context (v2.2)
 
@@ -171,19 +172,25 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 | ISOL-01: RLS Enabled | NOT MET | 5/43 tables have RLS enabled (12%) |
 | ISOL-02: Tenant Filtering | PARTIAL | 5 tables have proper filtering; Equipment policies inactive |
 | RBAC-06: Server-side CASL | CONDITIONAL PASS | 16/88 routes use full CASL, all secure for tenant isolation |
+| RBAC-01: FACILITY_ADMIN | VERIFIED | 109 unit tests verify FACILITY_ADMIN cannot create without COACH |
+| RBAC-02: CLUB_ADMIN | VERIFIED | Unit tests verify cross-club access blocked |
+| RBAC-03: COACH | VERIFIED | Unit tests verify practice/equipment/lineup management |
+| RBAC-04: ATHLETE | VERIFIED | Unit tests verify read-only access |
 
 **Critical Finding (26-01):** Equipment table has 4 well-designed RLS policies but RLS is disabled - policies have NO effect.
 
-**Status:** Plan 01 (RLS Audit) and Plan 03 (CASL Audit) complete.
+**Test Infrastructure (26-02):** Vitest framework added with 109 CASL ability unit tests covering all 5 roles.
+
+**Status:** Plan 01 (RLS Audit), Plan 02 (Ability Tests), and Plan 03 (CASL Audit) complete.
 
 ## Session Continuity
 
 | Field | Value |
 |-------|-------|
-| Last session | 2026-01-29T03:03:00Z |
-| Stopped at | Completed 26-01-PLAN.md (RLS Audit) |
+| Last session | 2026-01-29T03:05:00Z |
+| Stopped at | Completed 26-02-PLAN.md (CASL Ability Unit Tests) |
 | Resume file | None |
 
 ---
 
-*Last updated: 2026-01-29 (Phase 26 Plan 01 complete)*
+*Last updated: 2026-01-29 (Phase 26 Plan 02 complete)*
