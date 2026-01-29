@@ -145,11 +145,13 @@ Plans:
 4. Audit logs are immutable and cannot be modified after creation
 5. Login, signup, and password reset endpoints reject excessive requests with rate limit headers
 
-**Plans:** TBD
+**Plans:** 4 plans in 3 waves
 
 Plans:
-- [ ] 27-01: TBD
-- [ ] 27-02: TBD
+- [ ] 27-01-PLAN.md — Secrets verification and CI/CD scanning (SECR-01 to SECR-05)
+- [ ] 27-02-PLAN.md — Audit logging infrastructure and immutability (AUDIT-01 to AUDIT-05)
+- [ ] 27-03-PLAN.md — Rate-limited auth API routes (RATE-01 to RATE-05)
+- [ ] 27-04-PLAN.md — Final verification (all 15 requirements)
 
 ---
 
@@ -162,8 +164,8 @@ Phases execute in numeric order: 25 → 26 → 27
 |-------|-----------|----------------|--------|-----------|
 | 25. API Authentication & JWT Security | v2.2 | 4/4 | ✅ Complete | 2026-01-28 |
 | 26. RBAC & Tenant Isolation | v2.2 | 9/9 | ✅ Complete | 2026-01-29 |
-| 27. Secrets, Logging & Rate Limiting | v2.2 | 0/TBD | Not started | - |
+| 27. Secrets, Logging & Rate Limiting | v2.2 | 0/4 | Not started | - |
 
 ---
 
-*Last updated: 2026-01-29 (Phase 26 complete)*
+*Last updated: 2026-01-29 (Phase 27 planned)*
