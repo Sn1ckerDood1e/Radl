@@ -34,6 +34,8 @@ export function AthleteForm({ memberId, initialProfile, onSuccess }: AthleteForm
     handleSubmit,
     formState: { errors },
   } = useForm<UpdateAthleteProfileInput>({
+    mode: 'onTouched',
+    reValidateMode: 'onChange',
     resolver: zodResolver(updateAthleteProfileSchema),
     defaultValues: {
       displayName: initialProfile?.displayName || '',
