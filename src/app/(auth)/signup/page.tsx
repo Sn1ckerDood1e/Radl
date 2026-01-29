@@ -5,12 +5,10 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
 import { signupSchema, type SignupInput } from '@/lib/validations/auth';
-import { createClient } from '@/lib/supabase/client';
 
 export default function SignupPage() {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
-  const supabase = createClient();
 
   const {
     register,
@@ -24,17 +22,29 @@ export default function SignupPage() {
     setError(null);
     setSuccess(false);
 
-    const { error: signUpError } = await supabase.auth.signUp({
-      email: data.email,
-      password: data.password,
-    });
+    try {
+      const response = await fetch('/api/auth/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: data.email, password: data.password }),
+      });
 
-    if (signUpError) {
-      setError(signUpError.message);
-      return;
+      const result = await response.json();
+
+      if (!response.ok) {
+        if (response.status === 429) {
+          const retryAfter = response.headers.get('Retry-After');
+          setError(`Too many attempts. Please try again in ${retryAfter || '60'} seconds.`);
+          return;
+        }
+        setError(result.error || 'Signup failed');
+        return;
+      }
+
+      setSuccess(true);
+    } catch {
+      setError('An unexpected error occurred');
     }
-
-    setSuccess(true);
   };
 
   if (success) {

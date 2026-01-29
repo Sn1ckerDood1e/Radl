@@ -6,12 +6,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { loginSchema, type LoginInput } from '@/lib/validations/auth';
-import { createClient } from '@/lib/supabase/client';
 
 export default function LoginPage() {
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
-  const supabase = createClient();
 
   const {
     register,
@@ -24,18 +22,31 @@ export default function LoginPage() {
   const onSubmit = async (data: LoginInput) => {
     setError(null);
 
-    const { error: signInError } = await supabase.auth.signInWithPassword({
-      email: data.email,
-      password: data.password,
-    });
+    try {
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: data.email, password: data.password }),
+      });
 
-    if (signInError) {
-      setError(signInError.message);
-      return;
+      const result = await response.json();
+
+      if (!response.ok) {
+        // Handle rate limit
+        if (response.status === 429) {
+          const retryAfter = response.headers.get('Retry-After');
+          setError(`Too many attempts. Please try again in ${retryAfter || '15'} seconds.`);
+          return;
+        }
+        setError(result.error || 'Login failed');
+        return;
+      }
+
+      router.push('/');
+      router.refresh();
+    } catch {
+      setError('An unexpected error occurred');
     }
-
-    router.push('/');
-    router.refresh();
   };
 
   return (
