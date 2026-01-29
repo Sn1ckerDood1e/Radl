@@ -171,7 +171,12 @@ Plans:
 3. All interactive elements on mobile are tappable without accidental mis-taps
 4. Form validation errors appear inline before submission attempt
 
-**Plans:** TBD
+**Plans:** 3 plans in 1 wave
+
+Plans:
+- [ ] 31-01-PLAN.md - Form validation standardization (UXQL-04)
+- [ ] 31-02-PLAN.md - Actionable error messages + empty states (UXQL-01, UXQL-02)
+- [ ] 31-03-PLAN.md - Settings cleanup + touch target verification (UXQL-05, UXQL-03)
 
 ---
 
@@ -182,10 +187,10 @@ Phases execute in numeric order: 28 -> 29 -> 30 -> 31
 
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
-| 28. Onboarding Flow Testing | v2.3 | 5/5 | ✅ Complete | 2026-01-29 |
-| 29. Practice Flow Testing | v2.3 | 1/1 | ✅ Complete | 2026-01-29 |
-| 30. Equipment Flow Testing | v2.3 | 1/1 | ✅ Complete | 2026-01-29 |
-| 31. UX Quality Polish | v2.3 | 0/? | Pending | - |
+| 28. Onboarding Flow Testing | v2.3 | 5/5 | Complete | 2026-01-29 |
+| 29. Practice Flow Testing | v2.3 | 1/1 | Complete | 2026-01-29 |
+| 30. Equipment Flow Testing | v2.3 | 1/1 | Complete | 2026-01-29 |
+| 31. UX Quality Polish | v2.3 | 0/3 | Planned | - |
 
 ---
 
@@ -205,4 +210,4 @@ Phases execute in numeric order: 28 -> 29 -> 30 -> 31
 
 ---
 
-*Last updated: 2026-01-29 (Phase 30 complete)*
+*Last updated: 2026-01-29 (Phase 31 planned)*
