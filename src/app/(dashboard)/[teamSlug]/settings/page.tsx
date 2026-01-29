@@ -35,12 +35,10 @@ export default function TeamSettingsPage() {
 
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [savingColors, setSavingColors] = useState(false);
   const [savingThresholds, setSavingThresholds] = useState(false);
   const [savingRegions, setSavingRegions] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
-  const [colorSuccess, setColorSuccess] = useState(false);
   const [thresholdSuccess, setThresholdSuccess] = useState(false);
   const [regionSuccess, setRegionSuccess] = useState(false);
 
@@ -60,9 +58,7 @@ export default function TeamSettingsPage() {
   const [regattaRegions, setRegattaRegions] = useState<string[]>([]);
   const [loggingOut, setLoggingOut] = useState(false);
 
-  const [teamInfo, setTeamInfo] = useState<TeamInfo>({ name: '', primaryColor: '#1a365d', secondaryColor: '#e2e8f0' });
-  const [primaryColor, setPrimaryColor] = useState('#1a365d');
-  const [secondaryColor, setSecondaryColor] = useState('#e2e8f0');
+  const [teamInfo, setTeamInfo] = useState<TeamInfo>({ name: '', primaryColor: '', secondaryColor: '' });
 
   useEffect(() => {
     async function fetchSettings() {
@@ -92,8 +88,6 @@ export default function TeamSettingsPage() {
 
         if (data.team) {
           setTeamInfo(data.team);
-          setPrimaryColor(data.team.primaryColor);
-          setSecondaryColor(data.team.secondaryColor);
         }
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to load settings');
@@ -146,36 +140,6 @@ export default function TeamSettingsPage() {
     }
   };
 
-  const handleSaveColors = async () => {
-    setSavingColors(true);
-    setError(null);
-    setColorSuccess(false);
-
-    try {
-      const response = await fetch('/api/team-settings', {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          primaryColor,
-          secondaryColor,
-        }),
-      });
-
-      if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.error || 'Failed to save colors');
-      }
-
-      setTeamInfo(prev => ({ ...prev, primaryColor, secondaryColor }));
-      setColorSuccess(true);
-      setTimeout(() => setColorSuccess(false), 3000);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to save colors');
-    } finally {
-      setSavingColors(false);
-    }
-  };
-
   const hasNotificationChanges = () => {
     const currentIds = new Set(settings.damageNotifyUserIds || []);
     if (currentIds.size !== selectedCoaches.size) return true;
@@ -183,10 +147,6 @@ export default function TeamSettingsPage() {
       if (!currentIds.has(id)) return true;
     }
     return false;
-  };
-
-  const hasColorChanges = () => {
-    return primaryColor !== teamInfo.primaryColor || secondaryColor !== teamInfo.secondaryColor;
   };
 
   const handleSaveThresholds = async () => {
@@ -314,100 +274,6 @@ export default function TeamSettingsPage() {
           </div>
         </div>
       )}
-
-      {/* Team Colors Section */}
-      <div className="bg-zinc-900 rounded-xl border border-zinc-800 p-6 mb-6">
-        <h2 className="text-lg font-semibold text-white mb-2">Team Colors</h2>
-        <p className="text-sm text-zinc-400 mb-6">
-          Customize your team's branding colors. These appear throughout the app.
-        </p>
-
-        {/* Color Success Alert */}
-        {colorSuccess && (
-          <div className="mb-4 bg-emerald-500/10 border border-emerald-500/30 rounded-lg p-3">
-            <div className="flex items-center gap-2 text-emerald-400 text-sm">
-              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-              </svg>
-              <p>Colors saved successfully</p>
-            </div>
-          </div>
-        )}
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-          {/* Primary Color */}
-          <div>
-            <label className="block text-sm font-medium text-zinc-300 mb-2">
-              Primary Color
-            </label>
-            <div className="flex items-center gap-3">
-              <input
-                type="color"
-                value={primaryColor}
-                onChange={(e) => setPrimaryColor(e.target.value)}
-                className="h-12 w-20 rounded-lg border border-zinc-700 cursor-pointer bg-zinc-800"
-              />
-              <div className="flex-1">
-                <input
-                  type="text"
-                  value={primaryColor}
-                  onChange={(e) => setPrimaryColor(e.target.value)}
-                  className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-zinc-300 text-sm font-mono"
-                />
-                <p className="text-xs text-zinc-500 mt-1">Main team color</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Secondary Color */}
-          <div>
-            <label className="block text-sm font-medium text-zinc-300 mb-2">
-              Secondary Color
-            </label>
-            <div className="flex items-center gap-3">
-              <input
-                type="color"
-                value={secondaryColor}
-                onChange={(e) => setSecondaryColor(e.target.value)}
-                className="h-12 w-20 rounded-lg border border-zinc-700 cursor-pointer bg-zinc-800"
-              />
-              <div className="flex-1">
-                <input
-                  type="text"
-                  value={secondaryColor}
-                  onChange={(e) => setSecondaryColor(e.target.value)}
-                  className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-zinc-300 text-sm font-mono"
-                />
-                <p className="text-xs text-zinc-500 mt-1">Accent color</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Preview */}
-        <div className="mb-6">
-          <p className="text-sm text-zinc-400 mb-2">Preview</p>
-          <div
-            className="h-16 rounded-lg flex items-center justify-center text-white font-semibold"
-            style={{ backgroundColor: primaryColor }}
-          >
-            {teamInfo.name}
-          </div>
-        </div>
-
-        {/* Save Colors Button */}
-        <button
-          onClick={handleSaveColors}
-          disabled={savingColors || !hasColorChanges()}
-          className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-            savingColors || !hasColorChanges()
-              ? 'bg-zinc-700 text-zinc-500 cursor-not-allowed'
-              : 'bg-emerald-600 hover:bg-emerald-500 text-white'
-          }`}
-        >
-          {savingColors ? 'Saving...' : 'Save Colors'}
-        </button>
-      </div>
 
       {/* Equipment Readiness Thresholds */}
       <div className="bg-zinc-800/50 rounded-xl p-6 border border-zinc-700/50 mb-6">
