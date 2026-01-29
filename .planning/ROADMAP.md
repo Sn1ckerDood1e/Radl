@@ -104,7 +104,14 @@ Navigation redesign, RIM feature parity, practice flow improvements, RC public A
 3. Coach can send email invitation and invitee receives actionable email
 4. Invitee can click link, complete signup (if new), and appear on team roster
 
-**Plans:** TBD
+**Plans:** 5 plans in 2 waves
+
+Plans:
+- [ ] 28-01-PLAN.md - Fix signup redirect parameter handling
+- [ ] 28-02-PLAN.md - Fix team creation ClubMembership
+- [ ] 28-03-PLAN.md - Update invitation toast + copy-to-clipboard
+- [ ] 28-04-PLAN.md - Add equipment empty state
+- [ ] 28-05-PLAN.md - E2E verification of onboarding flow
 
 ---
 
@@ -169,7 +176,7 @@ Phases execute in numeric order: 28 -> 29 -> 30 -> 31
 
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
-| 28. Onboarding Flow Testing | v2.3 | 0/? | Pending | - |
+| 28. Onboarding Flow Testing | v2.3 | 0/5 | Ready | - |
 | 29. Practice Flow Testing | v2.3 | 0/? | Pending | - |
 | 30. Equipment Flow Testing | v2.3 | 0/? | Pending | - |
 | 31. UX Quality Polish | v2.3 | 0/? | Pending | - |
@@ -192,4 +199,4 @@ Phases execute in numeric order: 28 -> 29 -> 30 -> 31
 
 ---
 
-*Last updated: 2026-01-29 (v2.3 roadmap created)*
+*Last updated: 2026-01-29 (Phase 28 plans created)*
