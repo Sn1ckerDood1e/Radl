@@ -1,5 +1,55 @@
 # Project Milestones: Radl
 
+## v2.2 Security Audit (Shipped: 2026-01-29)
+
+**Delivered:** Security audit validation for beta testing readiness with comprehensive authentication, RBAC, tenant isolation, and audit logging verification.
+
+**Phases completed:** 25-27 (3 phases, 17 plans)
+
+**Key accomplishments:**
+- API authentication verification: all 88+ routes require authentication
+- JWT validation with signature, expiration, and claims verification
+- RBAC permission boundaries tested across 5-role hierarchy
+- Tenant isolation with RLS policies on core tables
+- Secrets management audit (no client-side exposure)
+- Audit logging for auth events and data modifications
+- Rate limiting on authentication endpoints (Upstash Redis)
+
+**Stats:**
+- 135,800 lines of TypeScript
+- 3 phases, 17 plans, 71 commits
+- 33/35 requirements shipped
+- 3 conditional passes (RBAC-06, ISOL-01, ISOL-03)
+- 1 deferred (RBAC-05 — PARENT role, ParentAthleteLink table missing)
+
+**Git range:** Phase 25 → Phase 27
+
+---
+
+## v2.1 UX Refinement (Shipped: 2026-01-27)
+
+**Delivered:** Desktop/mobile navigation patterns, RIM feature parity, practice flow enhancements, and RC public API integration.
+
+**Phases completed:** 18-24 (7 phases)
+
+**Key accomplishments:**
+- Desktop sidebar with master-detail pattern, mobile bottom navigation
+- Announcements with priority levels (info, warning, urgent)
+- Public QR-based damage reporting without login
+- Equipment readiness with traffic-light badges
+- Maintenance workflow with resolution notes
+- Inline practice editing with block-based structure
+- Drag-drop lineups with @dnd-kit
+- RC public API integration with 6-hour caching
+
+**Stats:**
+- 30 requirements delivered
+- 7 phases
+
+**Git range:** Phase 18 → Phase 24
+
+---
+
 ## v2.0 Commercial Readiness (Shipped: 2026-01-26)
 
 **Delivered:** Commercial-ready platform with facility model, mobile PWA, design system, and hardened security.

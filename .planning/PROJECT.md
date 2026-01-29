@@ -4,25 +4,63 @@
 
 A multi-tenant SaaS for rowing team operations — practice planning, equipment management, roster coordination, and race-day execution at regattas.
 
-**Current State:** v2.2 in progress. Security audit before beta testing.
-
-## Current Milestone: v2.2 Security Audit
-
-**Goal:** Validate security architecture before beta testing
-
-**Target features:**
-- API authentication verification (all routes secured)
-- RBAC permission boundaries (5-role hierarchy tested)
-- Tenant isolation (facility → club → team data separation)
-- Secrets management (no exposure in client code)
-- Audit logging (security events captured)
-- Rate limiting (brute force prevention)
+**Current State:** v2.2 shipped. Ready for beta testing.
 
 ## Core Value
 
 **The ONE thing that must work:** Coaches can plan practices with lineups and equipment, and athletes know where to be and what boat they're in.
 
 ## Shipped Capabilities
+
+### v2.2 Security Audit (2026-01-29)
+
+**33 requirements delivered across 3 phases:**
+
+**API Authentication (7 requirements)**
+- All 88+ API routes require authentication
+- JWT signature verification on every request
+- JWT expiration enforcement
+- JWT claims validation
+- Session persistence across browser refresh
+- Logout properly invalidates session
+- Token refresh works without re-authentication
+
+**RBAC Permissions (7 requirements)**
+- FACILITY_ADMIN can only access facility-level operations
+- CLUB_ADMIN can only access their club's data
+- COACH can manage practices/equipment but not club settings
+- ATHLETE can only view their own schedule and assignments
+- CASL permissions enforced server-side
+- Role changes propagate immediately
+
+**Tenant Isolation (6 requirements)**
+- RLS policies on core tenant tables
+- RLS policies correctly filter by tenant
+- Cross-tenant data access blocked
+- JWT claims match data access patterns
+- Prisma queries include tenant filtering
+- API responses don't leak data from other tenants
+
+**Secrets & Environment (5 requirements)**
+- No secrets exposed in client-side JavaScript
+- Environment variables properly scoped
+- Supabase service role key not accessible from client
+- API keys are hashed in database
+- No hardcoded credentials in source code
+
+**Audit Logging (5 requirements)**
+- Authentication events logged
+- Data modification events logged
+- Permission denied events logged
+- Logs include user ID, timestamp, and action details
+- Logs are immutable
+
+**Rate Limiting (5 requirements)**
+- Login endpoint rate limited
+- Signup endpoint rate limited
+- Password reset endpoint rate limited
+- Rate limit responses include proper headers
+- Rate limiting is per-IP
 
 ### v2.1 UX Refinement (2026-01-27)
 
@@ -123,7 +161,7 @@ A multi-tenant SaaS for rowing team operations — practice planning, equipment 
 - @use-gesture/react + vaul (mobile interactions)
 - @dnd-kit (drag-drop lineups)
 
-**LOC:** ~115,000 TypeScript
+**LOC:** ~136,000 TypeScript
 
 **Architecture:**
 - Multi-tenant: Facility → Club → Team hierarchy
@@ -174,4 +212,4 @@ v3.0 candidates:
 - Social features
 
 ---
-*Last updated: 2026-01-27 after v2.1 milestone shipped*
+*Last updated: 2026-01-29 after v2.2 milestone shipped*
