@@ -12,9 +12,9 @@
 |-------|-------|
 | Milestone | v2.2 Security Audit |
 | Phase | Phase 27 - Secrets, Logging & Rate Limiting |
-| Plan | 02 complete (Audit Infrastructure Extension) |
+| Plan | 01 complete (Secrets Management Verification) |
 | Status | In progress |
-| Last activity | 2026-01-29 - Completed 27-02-PLAN.md (Audit Infrastructure Extension) |
+| Last activity | 2026-01-29 - Completed 27-01-PLAN.md (Secrets Management Verification) |
 
 **Progress:**
 ```
@@ -113,6 +113,8 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 | Fire-and-forget audit logging | 2026-01-29 | Performance over guaranteed logging in error responses |
 | Defense-in-depth immutability | 2026-01-29 | RLS + trigger to protect AuditLog from service role modifications |
 | Backward-compatible forbiddenResponse | 2026-01-29 | Optional audit context preserves existing callers |
+| Bundle scanner 11 patterns | 2026-01-29 | Covers all environment secrets in use (service_role, API keys, JWTs) |
+| CI/CD defense in depth | 2026-01-29 | TruffleHog + bundle check provides two-job security workflow |
 
 ### Architecture Notes
 
@@ -201,14 +203,40 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 
 **Status:** Phase 26 COMPLETE. Proceed to Phase 27.
 
+## Phase 27 Audit Findings (IN PROGRESS)
+
+| Requirement | Status | Notes |
+|-------------|--------|-------|
+| SECR-01: No secrets in client bundle | PASS | Bundle scanner confirms 0 secrets in .next/static/ |
+| SECR-02: NEXT_PUBLIC_ properly scoped | PASS | All 4 variables safe for client exposure |
+| SECR-03: Service role not client-accessible | PASS | Only referenced in server-side admin.ts |
+| SECR-04: API keys hashed in database | PASS | SHA-256 hashing via crypto.createHash() |
+| SECR-05: No hardcoded credentials | PASS | All secrets use process.env |
+| AUDIT-01: Immutable logging | TBD | Plan 27-02 |
+| AUDIT-02: Security event logging | TBD | Plan 27-02 |
+| AUDIT-03: Sufficient context | TBD | Plan 27-02 |
+| AUDIT-04: Log retention | TBD | Plan 27-03 |
+| AUDIT-05: No sensitive data in logs | TBD | Plan 27-03 |
+| RATE-01: Auth endpoint limits | TBD | Plan 27-03 |
+| RATE-02: API endpoint limits | TBD | Plan 27-03 |
+| RATE-03: Per-user tracking | TBD | Plan 27-03 |
+| RATE-04: Rate limit headers | TBD | Plan 27-03 |
+| RATE-05: Bypass prevention | TBD | Plan 27-03 |
+
+**Secrets Summary:** All 5 SECR requirements PASS with LOW risk level. CI/CD scanning in place.
+
+**Infrastructure:** Bundle scanner script + GitHub Actions workflow created for automated security scanning.
+
+**Status:** Plan 27-01 complete. Proceed to Plan 27-02 (Audit Logging).
+
 ## Session Continuity
 
 | Field | Value |
 |-------|-------|
-| Last session | 2026-01-29T14:37:58Z |
-| Stopped at | Completed 27-02-PLAN.md (Audit Infrastructure Extension) |
+| Last session | 2026-01-29T14:40:43Z |
+| Stopped at | Completed 27-01-PLAN.md (Secrets Management Verification) |
 | Resume file | None |
 
 ---
 
-*Last updated: 2026-01-29 (Phase 26 complete)*
+*Last updated: 2026-01-29 (Phase 27-01 complete)*
