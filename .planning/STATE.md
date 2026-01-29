@@ -11,10 +11,10 @@
 | Field | Value |
 |-------|-------|
 | Milestone | v2.3 Core Flow Testing |
-| Phase | 30 - Equipment Flow Testing |
-| Plan | 01 complete (E2E Verification) |
-| Status | Phase 30 complete |
-| Last activity | 2026-01-29 - Completed 30-01-PLAN.md |
+| Phase | 31 - UX Quality Polish |
+| Plan | 01 complete (Inline Form Validation) |
+| Status | In progress |
+| Last activity | 2026-01-29 - Completed 31-01-PLAN.md |
 
 **Progress:**
 ```
@@ -23,7 +23,7 @@ v1.1: [##########] 100% SHIPPED (2026-01-22) — 9/11 reqs, 2 deferred
 v2.0: [##########] 100% SHIPPED (2026-01-26) — 34/34 requirements
 v2.1: [##########] 100% SHIPPED (2026-01-27) — 30/30 requirements
 v2.2: [##########] 100% SHIPPED (2026-01-29) — 33/35 requirements
-v2.3: [#######░░░] 75% — Phases 28-30 complete, Phase 31 next
+v2.3: [########░░] 80% — Phases 28-30 complete, Phase 31 in progress
 ```
 
 ## Shipped Milestones
@@ -89,7 +89,7 @@ v2.3: [#######░░░] 75% — Phases 28-30 complete, Phase 31 next
 | 28 | Onboarding Flow Testing | ONBD-01 to ONBD-06 (6) | Complete |
 | 29 | Practice Flow Testing | PRAC-01 to PRAC-05 (5) | Complete |
 | 30 | Equipment Flow Testing | EQUP-01 to EQUP-04 (4) | Complete |
-| 31 | UX Quality Polish | UXQL-01 to UXQL-05 (5) | Pending |
+| 31 | UX Quality Polish | UXQL-01 to UXQL-05 (5) | In progress (1/3 plans) |
 
 **Total:** 20 requirements across 4 phases
 
@@ -184,9 +184,9 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 | Field | Value |
 |-------|-------|
 | Last session | 2026-01-29 |
-| Stopped at | Completed 30-01-PLAN.md |
-| Resume with | `/gsd:plan-phase 31` |
+| Stopped at | Completed 31-01-PLAN.md |
+| Resume with | `/gsd:execute-phase 31-02-PLAN.md` |
 
 ---
 
-*Last updated: 2026-01-29 (Phase 30 complete, ready for Phase 31)*
+*Last updated: 2026-01-29 (Phase 31 plan 01 complete)*
