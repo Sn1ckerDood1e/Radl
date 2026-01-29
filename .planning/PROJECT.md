@@ -4,7 +4,18 @@
 
 A multi-tenant SaaS for rowing team operations — practice planning, equipment management, roster coordination, and race-day execution at regattas.
 
-**Current State:** v2.3 shipped. Ready for beta release.
+**Current State:** v3.0 in progress. Production polish before user launch.
+
+## Current Milestone: v3.0 Production Polish
+
+**Goal:** Make the app production-ready with consistent branding, polished UX, device-optimized layouts, and legal compliance.
+
+**Target features:**
+- Branding implementation (Strokeline → Radl, color palette, typography)
+- UX polish (loading states, error messages, empty states, smooth workflows)
+- Device-specific fixes (calendar on mobile, lineup editor on desktop/mobile)
+- Legal requirements (Terms of Service, Privacy Policy)
+- Native mobile apps (if scope allows)
 
 ## Core Value
 
@@ -144,9 +155,8 @@ A multi-tenant SaaS for rowing team operations — practice planning, equipment 
 
 ## Future Milestone Goals
 
-v3.0 candidates:
+v4.0 candidates:
 - Push notifications (NOTIF-01, NOTIF-02)
-- Native mobile apps (iOS, Android)
 - Season templates
 - RC team-specific OAuth integration
 - Email digest notifications
@@ -154,14 +164,13 @@ v3.0 candidates:
 
 ## Deferred Items
 
-- **NOTIF-01**: Push notification for equipment damage (v3.0)
-- **NOTIF-02**: Push notification for lineup published (v3.0)
-- Season templates — reusable structures (v3.0)
+- **NOTIF-01**: Push notification for equipment damage (v4.0)
+- **NOTIF-02**: Push notification for lineup published (v4.0)
+- Season templates — reusable structures (v4.0)
 - Email notifications — alternative to push
 - Erg results tracking — Concept2 integration
 - Attendance analytics — reporting and trends
-- RC team-specific OAuth — requires credentials (v3.0)
-- Dynamic team colors — color settings stored in DB, UI uses fixed emerald
+- RC team-specific OAuth — requires credentials (v4.0)
 
 ## Out of Scope
 
@@ -174,4 +183,4 @@ v3.0 candidates:
 - Social features
 
 ---
-*Last updated: 2026-01-29 after v2.3 milestone shipped*
+*Last updated: 2026-01-29 after v3.0 milestone started*
