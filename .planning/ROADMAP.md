@@ -150,7 +150,10 @@ Plans:
 3. Anonymous user can scan QR code and submit damage report without login
 4. Coach can view damage report details and mark issue as resolved
 
-**Plans:** TBD
+**Plans:** 1 plan in 1 wave
+
+Plans:
+- [ ] 30-01-PLAN.md - E2E verification of equipment flow
 
 ---
 
@@ -181,7 +184,7 @@ Phases execute in numeric order: 28 -> 29 -> 30 -> 31
 |-------|-----------|----------------|--------|-----------|
 | 28. Onboarding Flow Testing | v2.3 | 5/5 | ✅ Complete | 2026-01-29 |
 | 29. Practice Flow Testing | v2.3 | 1/1 | ✅ Complete | 2026-01-29 |
-| 30. Equipment Flow Testing | v2.3 | 0/? | Pending | - |
+| 30. Equipment Flow Testing | v2.3 | 0/1 | Planned | - |
 | 31. UX Quality Polish | v2.3 | 0/? | Pending | - |
 
 ---
@@ -202,4 +205,4 @@ Phases execute in numeric order: 28 -> 29 -> 30 -> 31
 
 ---
 
-*Last updated: 2026-01-29 (Phase 29 complete)*
+*Last updated: 2026-01-29 (Phase 30 planned)*
