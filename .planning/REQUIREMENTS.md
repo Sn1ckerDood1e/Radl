@@ -36,29 +36,29 @@ Security audit requirements to validate the app before beta testing.
 - [x] **ISOL-05**: Prisma queries include tenant filtering
 - [x] **ISOL-06**: API responses don't leak data from other tenants
 
-### Secrets & Environment
+### Secrets & Environment ✅
 
-- [ ] **SECR-01**: No secrets exposed in client-side JavaScript bundle
-- [ ] **SECR-02**: Environment variables properly scoped (NEXT_PUBLIC_ only for public)
-- [ ] **SECR-03**: Supabase service role key not accessible from client
-- [ ] **SECR-04**: API keys are hashed in database (not plaintext)
-- [ ] **SECR-05**: No hardcoded credentials in source code
+- [x] **SECR-01**: No secrets exposed in client-side JavaScript bundle
+- [x] **SECR-02**: Environment variables properly scoped (NEXT_PUBLIC_ only for public)
+- [x] **SECR-03**: Supabase service role key not accessible from client
+- [x] **SECR-04**: API keys are hashed in database (not plaintext)
+- [x] **SECR-05**: No hardcoded credentials in source code
 
-### Audit Logging
+### Audit Logging ✅
 
-- [ ] **AUDIT-01**: Authentication events are logged (login, logout, failed attempts)
-- [ ] **AUDIT-02**: Data modification events are logged (create, update, delete)
-- [ ] **AUDIT-03**: Permission denied events are logged
-- [ ] **AUDIT-04**: Logs include user ID, timestamp, and action details
-- [ ] **AUDIT-05**: Logs are immutable (can't be modified after creation)
+- [x] **AUDIT-01**: Authentication events are logged (login, logout, failed attempts)
+- [x] **AUDIT-02**: Data modification events are logged (create, update, delete)
+- [x] **AUDIT-03**: Permission denied events are logged
+- [x] **AUDIT-04**: Logs include user ID, timestamp, and action details
+- [x] **AUDIT-05**: Logs are immutable (can't be modified after creation)
 
-### Rate Limiting
+### Rate Limiting ✅
 
-- [ ] **RATE-01**: Login endpoint has rate limiting
-- [ ] **RATE-02**: Signup endpoint has rate limiting
-- [ ] **RATE-03**: Password reset endpoint has rate limiting
-- [ ] **RATE-04**: Rate limit responses include proper headers
-- [ ] **RATE-05**: Rate limiting is per-IP or per-user (not global)
+- [x] **RATE-01**: Login endpoint has rate limiting
+- [x] **RATE-02**: Signup endpoint has rate limiting
+- [x] **RATE-03**: Password reset endpoint has rate limiting
+- [x] **RATE-04**: Rate limit responses include proper headers
+- [x] **RATE-05**: Rate limiting is per-IP or per-user (not global)
 
 ## Future Requirements
 
@@ -107,27 +107,28 @@ Deferred to future milestones:
 | ISOL-04 | Phase 26 | Complete |
 | ISOL-05 | Phase 26 | Complete |
 | ISOL-06 | Phase 26 | Complete |
-| SECR-01 | Phase 27 | Pending |
-| SECR-02 | Phase 27 | Pending |
-| SECR-03 | Phase 27 | Pending |
-| SECR-04 | Phase 27 | Pending |
-| SECR-05 | Phase 27 | Pending |
-| AUDIT-01 | Phase 27 | Pending |
-| AUDIT-02 | Phase 27 | Pending |
-| AUDIT-03 | Phase 27 | Pending |
-| AUDIT-04 | Phase 27 | Pending |
-| AUDIT-05 | Phase 27 | Pending |
-| RATE-01 | Phase 27 | Pending |
-| RATE-02 | Phase 27 | Pending |
-| RATE-03 | Phase 27 | Pending |
-| RATE-04 | Phase 27 | Pending |
-| RATE-05 | Phase 27 | Pending |
+| SECR-01 | Phase 27 | Complete |
+| SECR-02 | Phase 27 | Complete |
+| SECR-03 | Phase 27 | Complete |
+| SECR-04 | Phase 27 | Complete |
+| SECR-05 | Phase 27 | Complete |
+| AUDIT-01 | Phase 27 | Complete |
+| AUDIT-02 | Phase 27 | Complete |
+| AUDIT-03 | Phase 27 | Complete |
+| AUDIT-04 | Phase 27 | Complete |
+| AUDIT-05 | Phase 27 | Complete |
+| RATE-01 | Phase 27 | Complete |
+| RATE-02 | Phase 27 | Complete |
+| RATE-03 | Phase 27 | Complete |
+| RATE-04 | Phase 27 | Complete |
+| RATE-05 | Phase 27 | Complete |
 
 **Coverage:**
-- v2.2 requirements: 32 total
-- Mapped to phases: 32
-- Unmapped: 0 ✓
+- v2.2 requirements: 35 total
+- Complete: 33
+- Conditional: 2 (RBAC-06, ISOL-01)
+- Deferred: 1 (RBAC-05)
 
 ---
 *Requirements defined: 2026-01-28*
-*Last updated: 2026-01-29 (Phase 26 complete — 19/35 requirements, 1 deferred)*
+*Last updated: 2026-01-29 (Phase 27 complete — v2.2 Security Audit milestone COMPLETE)*
