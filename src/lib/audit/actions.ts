@@ -40,10 +40,22 @@ export const AUDITABLE_ACTIONS = {
   MFA_BACKUP_CODE_USED: 'MFA_BACKUP_CODE_USED',           // User used backup code for recovery
   MFA_RESET_BY_ADMIN: 'MFA_RESET_BY_ADMIN',               // Admin reset user MFA settings
 
+  // Authentication events (Phase 27 - AUDIT-01)
+  LOGIN_SUCCESS: 'LOGIN_SUCCESS',                         // User logged in successfully
+  LOGIN_FAILED: 'LOGIN_FAILED',                           // Failed login attempt
+  LOGOUT: 'LOGOUT',                                       // User logged out
+  PASSWORD_RESET_REQUESTED: 'PASSWORD_RESET_REQUESTED',   // Password reset email sent
+  PASSWORD_RESET_COMPLETED: 'PASSWORD_RESET_COMPLETED',   // Password successfully reset
+  SIGNUP_SUCCESS: 'SIGNUP_SUCCESS',                       // New user registered
+  SIGNUP_FAILED: 'SIGNUP_FAILED',                         // Registration failed (after rate limit)
+
   // Permission grants
   PERMISSION_GRANT_CREATED: 'PERMISSION_GRANT_CREATED',   // Admin granted temporary elevated permissions
   PERMISSION_GRANT_REVOKED: 'PERMISSION_GRANT_REVOKED',   // Admin revoked temporary permissions
   PERMISSION_GRANT_EXPIRED: 'PERMISSION_GRANT_EXPIRED',   // Temporary permissions expired automatically
+
+  // Permission events (Phase 27 - AUDIT-03)
+  PERMISSION_DENIED: 'PERMISSION_DENIED',                 // 403 response logged
 
   // SSO configuration
   SSO_CONFIG_UPDATED: 'SSO_CONFIG_UPDATED',               // Facility admin updated SSO configuration
@@ -78,9 +90,17 @@ export const AUDIT_ACTION_DESCRIPTIONS: Record<AuditAction, string> = {
   MFA_BACKUP_CODES_REGENERATED: 'User regenerated MFA backup codes',
   MFA_BACKUP_CODE_USED: 'User used MFA backup code for recovery',
   MFA_RESET_BY_ADMIN: 'Admin reset user MFA settings',
+  LOGIN_SUCCESS: 'User logged in successfully',
+  LOGIN_FAILED: 'Failed login attempt',
+  LOGOUT: 'User logged out',
+  PASSWORD_RESET_REQUESTED: 'Password reset requested',
+  PASSWORD_RESET_COMPLETED: 'Password reset completed',
+  SIGNUP_SUCCESS: 'New user registered',
+  SIGNUP_FAILED: 'User registration failed',
   PERMISSION_GRANT_CREATED: 'Admin granted temporary elevated permissions to user',
   PERMISSION_GRANT_REVOKED: 'Admin revoked temporary permissions from user',
   PERMISSION_GRANT_EXPIRED: 'Temporary permissions expired automatically',
+  PERMISSION_DENIED: 'Access denied to resource',
   SSO_CONFIG_UPDATED: 'Facility admin updated SSO configuration',
   SSO_ENABLED: 'SSO was enabled for facility',
   SSO_DISABLED: 'SSO was disabled for facility',
