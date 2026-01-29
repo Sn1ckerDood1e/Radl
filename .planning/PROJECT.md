@@ -4,20 +4,7 @@
 
 A multi-tenant SaaS for rowing team operations — practice planning, equipment management, roster coordination, and race-day execution at regattas.
 
-**Current State:** v2.3 in progress. Core flow testing before beta.
-
-## Current Milestone: v2.3 Core Flow Testing
-
-**Goal:** Verify all major user journeys work end-to-end and fix issues discovered before beta release.
-
-**Target features:**
-- Onboarding flow testing (signup → create team → invite members → accept invitation)
-- Practice flow testing (create practice → add blocks → assign lineup → publish)
-- Equipment flow testing (add equipment → track usage → report damage → resolve)
-- Bug fixes for issues discovered during testing
-- UX polish for friction points
-- Mobile experience improvements
-- Error handling and empty states refinement
+**Current State:** v2.3 shipped. Ready for beta release.
 
 ## Core Value
 
@@ -25,86 +12,48 @@ A multi-tenant SaaS for rowing team operations — practice planning, equipment 
 
 ## Shipped Capabilities
 
+### v2.3 Core Flow Testing (2026-01-29)
+
+**20 requirements delivered across 4 phases:**
+
+**Verified End-to-End Flows:**
+- Onboarding: signup → email verify → create team → invite → join
+- Practice: create → add blocks → drag-drop lineup → publish
+- Equipment: add → assign to lineup → QR damage report → resolve
+
+**Bug Fixes:**
+- Signup redirect parameter handling
+- Team creation ClubMembership record
+- Invitation toast text accuracy
+- Equipment empty state for new teams
+
+**UX Polish:**
+- Form validation standardized (onTouched mode)
+- Actionable error messages with examples
+- 44px mobile touch targets verified
+- Settings page cleanup (removed non-functional Team Colors)
+
 ### v2.2 Security Audit (2026-01-29)
 
 **33 requirements delivered across 3 phases:**
 
-**API Authentication (7 requirements)**
-- All 88+ API routes require authentication
-- JWT signature verification on every request
-- JWT expiration enforcement
-- JWT claims validation
-- Session persistence across browser refresh
-- Logout properly invalidates session
-- Token refresh works without re-authentication
-
-**RBAC Permissions (7 requirements)**
-- FACILITY_ADMIN can only access facility-level operations
-- CLUB_ADMIN can only access their club's data
-- COACH can manage practices/equipment but not club settings
-- ATHLETE can only view their own schedule and assignments
-- CASL permissions enforced server-side
-- Role changes propagate immediately
-
-**Tenant Isolation (6 requirements)**
-- RLS policies on core tenant tables
-- RLS policies correctly filter by tenant
-- Cross-tenant data access blocked
-- JWT claims match data access patterns
-- Prisma queries include tenant filtering
-- API responses don't leak data from other tenants
-
-**Secrets & Environment (5 requirements)**
-- No secrets exposed in client-side JavaScript
-- Environment variables properly scoped
-- Supabase service role key not accessible from client
-- API keys are hashed in database
-- No hardcoded credentials in source code
-
-**Audit Logging (5 requirements)**
-- Authentication events logged
-- Data modification events logged
-- Permission denied events logged
-- Logs include user ID, timestamp, and action details
-- Logs are immutable
-
-**Rate Limiting (5 requirements)**
-- Login endpoint rate limited
-- Signup endpoint rate limited
-- Password reset endpoint rate limited
-- Rate limit responses include proper headers
-- Rate limiting is per-IP
+- API authentication — 88 routes audited, JWT verification, session management
+- RBAC & tenant isolation — 163 tests (109 CASL, 17 API, 17 role propagation, 20 pgTAP)
+- Secrets management — bundle scanner, CI/CD integration, SHA-256 API key hashing
+- Audit logging — immutable logs, 8 auth event types, PERMISSION_DENIED tracking
+- Rate limiting — auth endpoints (5/15min login, 3/hr signup), Upstash Redis integration
 
 ### v2.1 UX Refinement (2026-01-27)
 
 **30 requirements delivered across 7 phases:**
 
-**Navigation/Layout (6 requirements)**
-- Desktop sidebar with master-detail pattern
-- Mobile bottom navigation bar
-- Responsive breakpoint at 768px
-- Active state indicators
-
-**RIM Feature Parity (12 requirements)**
-- Announcements — Coach broadcasts with priority levels (info, warning, urgent)
-- Public issue reporting — QR code damage reports without login
-- Equipment readiness — Calculated status with traffic-light badges
-- Maintenance workflow — Resolution notes, inspection tracking
-- Fleet health dashboard widget
-
-**Practice Flow (8 requirements)**
-- Inline editing — Edit practice details on-page
-- Block-based structure — Water, erg, land, meeting blocks
-- Type-specific forms — Lineups for water, workouts for erg
-- Drag-drop lineups — Athletes into boat seats with @dnd-kit
-- Workout builder — PM5-style intervals with templates
-- Bulk operations — Create/delete multiple practices
-
-**RC Public API (4 requirements)**
-- Regatta schedules fetched from RC API
-- Calendar integration with blue indicators
-- Multi-day spanning bars
-- 6-hour caching with stale-while-revalidate
+- Navigation/Layout redesign — desktop sidebar + mobile bottom nav
+- Announcements — coach broadcasts with priority levels
+- Public issue reporting — QR-based damage reports (no login required)
+- Equipment readiness — calculated status with maintenance workflow
+- Practice flow — inline editing, block structure, drag-drop lineups
+- Dashboard enhancements — role-specific widgets, usage trends
+- Regatta Central integration — calendar display with caching
 
 ### v2.0 Commercial Readiness (2026-01-26)
 
@@ -118,7 +67,6 @@ A multi-tenant SaaS for rowing team operations — practice planning, equipment 
 - Equipment booking system with conflict detection
 - Cross-club event scheduling
 - Facility dashboard with aggregate statistics
-- Club subscription oversight
 
 **Mobile PWA (8 requirements)**
 - Mobile-first responsive design (320px-414px tested)
@@ -130,13 +78,11 @@ A multi-tenant SaaS for rowing team operations — practice planning, equipment 
 - shadcn/ui design system with dark mode
 - Empty states, loading skeletons, error handling
 - Command palette (Cmd+K) and keyboard shortcuts
-- Onboarding flow for new users
 
 **Security & RBAC (8 requirements)**
 - 5-role hierarchy (FACILITY_ADMIN → CLUB_ADMIN → COACH → ATHLETE → PARENT)
 - Tenant-scoped permissions with audit logging
 - MFA for admin roles, SSO/SAML for enterprise
-- API key management for integrations
 
 </details>
 
@@ -194,6 +140,7 @@ A multi-tenant SaaS for rowing team operations — practice planning, equipment 
 | Wave-based execution | Plans grouped by dependency for parallel execution | Good — fast delivery |
 | Block-based practices | Flexible structure for varied training sessions | Good — cleaner than monolithic form |
 | @dnd-kit for lineups | React 19 compatible, accessible, performant | Good — smooth drag-drop experience |
+| onTouched validation | Immediate feedback on field blur | Good — better UX than onSubmit |
 
 ## Future Milestone Goals
 
@@ -203,6 +150,7 @@ v3.0 candidates:
 - Season templates
 - RC team-specific OAuth integration
 - Email digest notifications
+- Parent role with ParentAthleteLink
 
 ## Deferred Items
 
@@ -213,6 +161,7 @@ v3.0 candidates:
 - Erg results tracking — Concept2 integration
 - Attendance analytics — reporting and trends
 - RC team-specific OAuth — requires credentials (v3.0)
+- Dynamic team colors — color settings stored in DB, UI uses fixed emerald
 
 ## Out of Scope
 
@@ -225,4 +174,4 @@ v3.0 candidates:
 - Social features
 
 ---
-*Last updated: 2026-01-29 after v2.3 milestone started*
+*Last updated: 2026-01-29 after v2.3 milestone shipped*

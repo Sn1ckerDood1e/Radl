@@ -1,5 +1,32 @@
 # Project Milestones: Radl
 
+## v2.3 Core Flow Testing (Shipped: 2026-01-29)
+
+**Delivered:** End-to-end verification of all major user journeys with bug fixes and UX polish before beta release.
+
+**Phases completed:** 28-31 (4 phases, 10 plans)
+
+**Key accomplishments:**
+- E2E verification of onboarding flow (signup → email verify → create team → invite → join)
+- E2E verification of practice flow (create → add blocks → drag-drop lineup → publish)
+- E2E verification of equipment flow (add → assign to lineup → QR damage report → resolve)
+- Bug fixes: signup redirect, team creation ClubMembership, invitation toast, equipment empty state
+- Form validation standardized with onTouched mode
+- Actionable error messages with examples
+- Settings page cleanup (removed non-functional Team Colors)
+- 44px mobile touch targets verified
+
+**Stats:**
+- ~136,000 lines of TypeScript
+- 4 phases, 10 plans
+- 20/20 requirements shipped
+- 28 cross-phase connections verified
+- 6 complete E2E flows verified
+
+**Git range:** Phase 28 → Phase 31
+
+---
+
 ## v2.2 Security Audit (Shipped: 2026-01-29)
 
 **Delivered:** Security audit validation for beta testing readiness with comprehensive authentication, RBAC, tenant isolation, and audit logging verification.
