@@ -12,9 +12,9 @@
 |-------|-------|
 | Milestone | v2.2 Security Audit |
 | Phase | Phase 26 - RBAC & Tenant Isolation |
-| Plan | 07 complete (API Response Audit) |
+| Plan | 08 complete (Role Propagation Audit) |
 | Status | In progress |
-| Last activity | 2026-01-29 - Completed 26-07-PLAN.md (API Response Audit) |
+| Last activity | 2026-01-29 - Completed 26-08-PLAN.md (Role Propagation Audit) |
 
 **Progress:**
 ```
@@ -87,10 +87,10 @@ v2.2: [#####     ]  50% IN PROGRESS (Phases 25-27) — 14/35 requirements assess
 - 88 routes audited, all protected or justified
 
 **Current Phase:** Phase 26 - RBAC & Tenant Isolation
-- Plan 07 complete: API Response Audit
-- ISOL-06 verified: No cross-tenant data leakage in API responses
-- 25+ endpoints audited, 303 error messages reviewed
-- Next: Plans 08-09 (RBAC Remediation, Security Hardening)
+- Plan 08 complete: Role Propagation Audit
+- RBAC-07 verified: Role changes propagate immediately via database lookup
+- 17 unit tests verify database lookup mechanism (not JWT-only)
+- Next: Plan 09 (Permission Grant Tests)
 
 **Final Phase:** Phase 27 - Secrets, Logging & Rate Limiting
 - Audits secrets in client bundle and environment variables
@@ -108,6 +108,7 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 | Dual auth patterns coexist | 2026-01-29 | Both secure; migration is code quality, not security |
 | 404 for cross-tenant access | 2026-01-29 | Prevents resource enumeration attacks |
 | Booking clubName acceptable | 2026-01-29 | Public coordination data at shared facilities |
+| Database lookup per request | 2026-01-29 | Security over performance; 2 DB queries for immediate role propagation |
 
 ### Architecture Notes
 
@@ -186,21 +187,22 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 | RBAC-03: API Tests | VERIFIED | 17 integration tests verify COACH can create at API layer |
 | RBAC-04: API Tests | VERIFIED | 17 integration tests verify ATHLETE gets 403 at API layer |
 | ISOL-06: API Response Leaks | PASS | 25+ endpoints audited, 404 pattern prevents enumeration |
+| RBAC-07: Role Propagation | PASS | Database lookup per request, not JWT-only |
 
 **Critical Finding (26-01):** Equipment table has 4 well-designed RLS policies but RLS is disabled - policies have NO effect.
 
 **Test Infrastructure (26-02):** Vitest framework added with 109 CASL ability unit tests covering all 5 roles.
 
-**Status:** Plans 01-07 complete. Remaining: 08 (RBAC Remediation), 09 (Security Hardening).
+**Status:** Plans 01-08 complete. Remaining: 09 (Permission Grant Tests).
 
 ## Session Continuity
 
 | Field | Value |
 |-------|-------|
-| Last session | 2026-01-29T03:17:52Z |
-| Stopped at | Completed 26-07-PLAN.md (API Response Audit) |
+| Last session | 2026-01-29T03:19:25Z |
+| Stopped at | Completed 26-08-PLAN.md (Role Propagation Audit) |
 | Resume file | None |
 
 ---
 
-*Last updated: 2026-01-29 (Phase 26 Plan 07 complete)*
+*Last updated: 2026-01-29 (Phase 26 Plan 08 complete)*
