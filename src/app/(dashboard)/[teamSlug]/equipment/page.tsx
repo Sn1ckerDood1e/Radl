@@ -1,10 +1,12 @@
 import Link from 'next/link';
+import { Anchor } from 'lucide-react';
 import { requireTeamBySlug } from '@/lib/auth/authorize';
 import { prisma } from '@/lib/prisma';
 import { EquipmentListClient } from './equipment-list-client';
 import { EquipmentUsageSummary } from '@/components/equipment/equipment-usage-summary';
 import { QRBulkExportButton } from '@/components/equipment/qr-bulk-export';
 import { calculateMultipleReadinessStatus } from '@/lib/equipment/readiness';
+import { EmptyState } from '@/components/ui/empty-state';
 
 interface EquipmentPageProps {
   params: Promise<{ teamSlug: string }>;
@@ -132,29 +134,46 @@ export default async function EquipmentPage({ params }: EquipmentPageProps) {
         )}
       </div>
 
-      <EquipmentUsageSummary
-        mostUsed={mostUsed}
-        recentUsage={recentUsage}
-        teamSlug={teamSlug}
-      />
+      {equipment.length === 0 ? (
+        <EmptyState
+          icon={Anchor}
+          title="No equipment yet"
+          description={isCoach
+            ? "Add your team's shells, oars, and launches to start tracking equipment usage and maintenance."
+            : "Your team hasn't added any equipment yet."
+          }
+          action={isCoach ? {
+            label: "Add Equipment",
+            href: `/${teamSlug}/equipment/new`,
+          } : undefined}
+        />
+      ) : (
+        <>
+          <EquipmentUsageSummary
+            mostUsed={mostUsed}
+            recentUsage={recentUsage}
+            teamSlug={teamSlug}
+          />
 
-      <EquipmentListClient
-        equipment={equipmentWithReadiness.map(e => ({
-          id: e.id,
-          type: e.type,
-          name: e.name,
-          manufacturer: e.manufacturer,
-          status: e.status,
-          boatClass: e.boatClass,
-          weightCategory: e.weightCategory,
-          serialNumber: e.serialNumber,
-          yearAcquired: e.yearAcquired,
-          notes: e.notes,
-          readiness: e.readiness,
-        }))}
-        teamSlug={teamSlug}
-        isCoach={isCoach}
-      />
+          <EquipmentListClient
+            equipment={equipmentWithReadiness.map(e => ({
+              id: e.id,
+              type: e.type,
+              name: e.name,
+              manufacturer: e.manufacturer,
+              status: e.status,
+              boatClass: e.boatClass,
+              weightCategory: e.weightCategory,
+              serialNumber: e.serialNumber,
+              yearAcquired: e.yearAcquired,
+              notes: e.notes,
+              readiness: e.readiness,
+            }))}
+            teamSlug={teamSlug}
+            isCoach={isCoach}
+          />
+        </>
+      )}
     </div>
   );
 }
