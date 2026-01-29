@@ -12,9 +12,9 @@
 |-------|-------|
 | Milestone | v2.3 Core Flow Testing |
 | Phase | 28 - Onboarding Flow Testing |
-| Plan | Not started |
-| Status | Ready for planning |
-| Last activity | 2026-01-29 - Roadmap created |
+| Plan | 05 complete (E2E Verification) |
+| Status | Phase 28 complete |
+| Last activity | 2026-01-29 - Phase 28 verified |
 
 **Progress:**
 ```
@@ -23,7 +23,7 @@ v1.1: [##########] 100% SHIPPED (2026-01-22) — 9/11 reqs, 2 deferred
 v2.0: [##########] 100% SHIPPED (2026-01-26) — 34/34 requirements
 v2.1: [##########] 100% SHIPPED (2026-01-27) — 30/30 requirements
 v2.2: [##########] 100% SHIPPED (2026-01-29) — 33/35 requirements
-v2.3: [░░░░░░░░░░] 0% — Phase 28 ready
+v2.3: [##░░░░░░░░] 25% — Phase 28 complete, Phase 29 next
 ```
 
 ## Shipped Milestones

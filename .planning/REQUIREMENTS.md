@@ -7,14 +7,14 @@
 
 Verify all major user journeys work end-to-end, fix bugs, and polish UX before beta release.
 
-### Onboarding Flow
+### Onboarding Flow ✅
 
-- [ ] **ONBD-01**: User can sign up with email and password
-- [ ] **ONBD-02**: User receives and can complete email verification
-- [ ] **ONBD-03**: User can create a new team/club after signup
-- [ ] **ONBD-04**: Coach/admin can invite members via email
-- [ ] **ONBD-05**: Invited user can accept invitation and join team
-- [ ] **ONBD-06**: New users see helpful empty states guiding next actions
+- [x] **ONBD-01**: User can sign up with email and password
+- [x] **ONBD-02**: User receives and can complete email verification
+- [x] **ONBD-03**: User can create a new team/club after signup
+- [x] **ONBD-04**: Coach/admin can invite members via email
+- [x] **ONBD-05**: Invited user can accept invitation and join team
+- [x] **ONBD-06**: New users see helpful empty states guiding next actions
 
 ### Practice Flow
 
@@ -69,12 +69,12 @@ Deferred to future milestones:
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| ONBD-01 | Phase 28 | Pending |
-| ONBD-02 | Phase 28 | Pending |
-| ONBD-03 | Phase 28 | Pending |
-| ONBD-04 | Phase 28 | Pending |
-| ONBD-05 | Phase 28 | Pending |
-| ONBD-06 | Phase 28 | Pending |
+| ONBD-01 | Phase 28 | Complete |
+| ONBD-02 | Phase 28 | Complete |
+| ONBD-03 | Phase 28 | Complete |
+| ONBD-04 | Phase 28 | Complete |
+| ONBD-05 | Phase 28 | Complete |
+| ONBD-06 | Phase 28 | Complete |
 | PRAC-01 | Phase 29 | Pending |
 | PRAC-02 | Phase 29 | Pending |
 | PRAC-03 | Phase 29 | Pending |
