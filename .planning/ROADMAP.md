@@ -110,12 +110,20 @@ Plans:
 5. RLS policies prevent cross-tenant data access at database level
 6. Role changes propagate immediately to all active sessions
 
-**Plans:** TBD
+**Plans:** 9 plans in 4 waves
 
 Plans:
-- [ ] 26-01: TBD
-- [ ] 26-02: TBD
-- [ ] 26-03: TBD
+- [ ] 26-01-PLAN.md — RLS audit: document all tables, policies, and gaps (ISOL-01, ISOL-02)
+- [ ] 26-02-PLAN.md — CASL ability unit tests for all 5 roles (RBAC-01, RBAC-02, RBAC-03, RBAC-04)
+- [ ] 26-03-PLAN.md — CASL server-side enforcement audit (RBAC-06)
+- [ ] 26-04-PLAN.md — pgTAP tests for RLS cross-tenant isolation (ISOL-03)
+- [ ] 26-05-PLAN.md — API integration tests for role boundaries (RBAC-03, RBAC-04)
+- [ ] 26-06-PLAN.md — JWT claims to RLS function verification (ISOL-04)
+- [ ] 26-07-PLAN.md — API response data leak audit (ISOL-06)
+- [ ] 26-08-PLAN.md — Role propagation verification (RBAC-07)
+- [ ] 26-09-PLAN.md — Final verification and requirement status (all 13 requirements)
+
+**Note:** RBAC-05 (PARENT role) may be DEFERRED - ParentAthleteLink table does not exist. ISOL-05 (Prisma tenant filtering) covered by RBAC-06 audit.
 
 ---
 
@@ -150,9 +158,9 @@ Phases execute in numeric order: 25 → 26 → 27
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
 | 25. API Authentication & JWT Security | v2.2 | 4/4 | ✅ Complete | 2026-01-28 |
-| 26. RBAC & Tenant Isolation | v2.2 | 0/TBD | Not started | - |
+| 26. RBAC & Tenant Isolation | v2.2 | 0/9 | Not started | - |
 | 27. Secrets, Logging & Rate Limiting | v2.2 | 0/TBD | Not started | - |
 
 ---
 
-*Last updated: 2026-01-28 (Phase 25 complete)*
+*Last updated: 2026-01-28 (Phase 26 planned)*
