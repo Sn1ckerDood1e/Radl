@@ -157,7 +157,7 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 | CASL migration | IDENTIFIED | 59 routes use legacy getClaimsForApiRoute pattern |
 | Vitest framework | ADDED | 26-02 - Unit test infrastructure for security audit |
 | pgTAP RLS tests | CREATED | 26-04 - 20 tests awaiting multi-tenant data |
-| Equipment RLS disabled | CRITICAL | 26-04 - 4 policies exist but RLS not enabled |
+| Equipment RLS | RESOLVED | 00004_equipment_rls.sql enables RLS with 4 policies |
 
 ### Security Audit Context (v2.2)
 
@@ -213,7 +213,7 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 
 **Summary:** 9 PASS, 2 CONDITIONAL PASS (RBAC-06, ISOL-01), 2 DEFERRED (RBAC-05, ISOL-03 needs data)
 
-**Critical Gap:** Equipment table has 4 RLS policies but RLS is NOT ENABLED. Fix required before beta.
+**Note:** Equipment RLS is enabled in migration 00004_equipment_rls.sql with 4 policies (select, insert, update, delete).
 
 **Test Infrastructure:** 163 new tests (109 CASL unit, 17 API RBAC, 17 role propagation, 20 pgTAP RLS)
 

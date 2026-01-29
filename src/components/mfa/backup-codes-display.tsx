@@ -26,7 +26,7 @@ export function BackupCodesDisplay({ codes, onDone }: BackupCodesDisplayProps) {
 
   const handleDownload = () => {
     const text = [
-      'RowOps MFA Backup Codes',
+      'Radl MFA Backup Codes',
       '========================',
       '',
       'Keep these codes safe. Each code can only be used once.',
@@ -41,7 +41,7 @@ export function BackupCodesDisplay({ codes, onDone }: BackupCodesDisplayProps) {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'rowops-backup-codes.txt';
+    a.download = 'radl-backup-codes.txt';
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);

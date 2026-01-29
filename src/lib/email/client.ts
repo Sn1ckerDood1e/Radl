@@ -38,7 +38,7 @@ export async function sendEmail(options: EmailOptions): Promise<{ success: boole
 
   try {
     // Use onboarding domain for now, switch to custom domain in production
-    const fromAddress = process.env.RESEND_FROM_ADDRESS || 'RowOps <onboarding@resend.dev>';
+    const fromAddress = process.env.RESEND_FROM_ADDRESS || 'Radl <onboarding@resend.dev>';
 
     const { error } = await client.emails.send({
       from: fromAddress,

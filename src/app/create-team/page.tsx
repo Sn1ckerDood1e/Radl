@@ -3,7 +3,7 @@ import { CreateTeamForm } from '@/components/forms/create-team-form';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: 'Create Your Team | RowOps',
+  title: 'Create Your Team | Radl',
   description: 'Set up your rowing team with branding and invite your members.',
 };
 

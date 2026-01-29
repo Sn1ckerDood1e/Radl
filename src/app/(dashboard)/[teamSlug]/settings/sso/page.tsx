@@ -82,13 +82,13 @@ export default async function SsoSettingsPage({ params }: SsoSettingsPageProps) 
           </li>
           <li>Enter the provider ID and your IDP domain below</li>
           <li>
-            Configure role mappings to automatically assign RowOps roles based on IDP
+            Configure role mappings to automatically assign Radl roles based on IDP
             groups
           </li>
           <li>Enable SSO when ready</li>
         </ol>
         <p className="text-sm text-[var(--text-muted)] mt-3">
-          Need help? Contact RowOps support for assisted setup.
+          Need help? Contact Radl support for assisted setup.
         </p>
       </div>
 

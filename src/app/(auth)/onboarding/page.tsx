@@ -14,7 +14,7 @@ export default function OnboardingPage() {
     <div className="min-h-screen flex items-center justify-center bg-[var(--background)]">
       <div className="max-w-md w-full p-8 bg-[var(--surface-1)] rounded-lg border border-[var(--border)]">
         <h1 className="text-2xl font-bold text-[var(--text-primary)] mb-4">
-          Welcome to RowOps
+          Welcome to Radl
         </h1>
         <p className="text-[var(--text-secondary)] mb-6">
           You're not currently a member of any clubs. Please contact your club administrator to receive an invitation, or create a new club.

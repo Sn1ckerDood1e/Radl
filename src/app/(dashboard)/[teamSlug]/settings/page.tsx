@@ -552,7 +552,7 @@ export default function TeamSettingsPage() {
       <div className="bg-zinc-900 dark:bg-zinc-900 light:bg-white rounded-xl border border-zinc-800 dark:border-zinc-800 light:border-zinc-200 p-6 mb-6">
         <h2 className="text-lg font-semibold text-white dark:text-white light:text-zinc-900 mb-2">Appearance</h2>
         <p className="text-sm text-zinc-400 dark:text-zinc-400 light:text-zinc-600 mb-6">
-          Choose how RowOps looks to you. Select a theme or sync with your system.
+          Choose how Radl looks to you. Select a theme or sync with your system.
         </p>
 
         <div className="grid grid-cols-3 gap-3">
@@ -648,7 +648,7 @@ export default function TeamSettingsPage() {
       <div className="bg-zinc-900 rounded-xl border border-zinc-800 p-6 mb-6">
         <h2 className="text-lg font-semibold text-white mb-2">Account</h2>
         <p className="text-sm text-zinc-400 mb-4">
-          Sign out of your RowOps account on this device.
+          Sign out of your Radl account on this device.
         </p>
         <button
           onClick={handleLogout}

@@ -7,7 +7,7 @@ import { RegattaForm } from '@/components/regatta/regatta-form';
 import { ArrowLeft } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'New Regatta | RowOps',
+  title: 'New Regatta | Radl',
 };
 
 interface PageProps {

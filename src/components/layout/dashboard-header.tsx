@@ -65,7 +65,7 @@ export function DashboardHeader({ team, contexts }: DashboardHeaderProps) {
               href={currentSlug ? `/${currentSlug}` : '/'}
               className="flex items-center"
             >
-              <span className="text-xl font-bold text-[var(--text-primary)]">RowOps</span>
+              <span className="text-xl font-bold text-[var(--text-primary)]">Radl</span>
             </Link>
 
             {/* Separator */}

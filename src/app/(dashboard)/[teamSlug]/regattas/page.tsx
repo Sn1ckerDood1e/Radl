@@ -7,7 +7,7 @@ import { Calendar, MapPin, Plus, ChevronRight, Trophy } from 'lucide-react';
 import { EmptyState } from '@/components/ui/empty-state';
 
 export const metadata: Metadata = {
-  title: 'Regattas | RowOps',
+  title: 'Regattas | Radl',
 };
 
 interface PageProps {

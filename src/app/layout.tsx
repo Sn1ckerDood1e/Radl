@@ -15,18 +15,18 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "RowOps - Rowing Team Management",
-  description: "Manage your rowing team's equipment, athletes, and lineups",
+  title: "Radl - Rowing Team Management",
+  description: "Diligence wins. Manage your rowing team's schedule, lineups, and equipment.",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "RowOps",
+    title: "Radl",
   },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0066cc",
+  themeColor: "#0d9488",
 };
 
 export default function RootLayout({

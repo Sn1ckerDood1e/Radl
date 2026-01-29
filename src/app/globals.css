@@ -6,9 +6,14 @@
   --background: #0a0a0a;
   --foreground: #ededed;
 
-  /* Team colors (set dynamically) */
-  --team-primary: #10b981;
-  --team-secondary: #6ee7b7;
+  /* Brand colors (Radl Teal + Charcoal palette) */
+  --brand-primary: #0d9488;
+  --brand-secondary: #1f2937;
+  --brand-accent: #f59e0b;
+
+  /* Team colors (set dynamically per team, defaults to brand) */
+  --team-primary: #0d9488;
+  --team-secondary: #14b8a6;
 
   /* Zinc palette for dark */
   --surface-1: #18181b;

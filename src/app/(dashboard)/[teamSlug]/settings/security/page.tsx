@@ -6,7 +6,7 @@ import { MfaSection } from '@/components/settings/mfa-section';
 import { PermissionGrantsSection } from '@/components/settings/permission-grants-section';
 
 export const metadata = {
-  title: 'Security Settings - RowOps',
+  title: 'Security Settings - Radl',
 };
 
 function LoadingSkeleton() {

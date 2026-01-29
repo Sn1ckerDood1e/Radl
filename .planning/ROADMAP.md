@@ -129,7 +129,7 @@ Plans:
 - [x] 26-08-PLAN.md — Role propagation verification (RBAC-07)
 - [x] 26-09-PLAN.md — Final verification and requirement status (all 13 requirements)
 
-**Critical Gap:** Equipment table has policies but RLS not enabled. Fix in Phase 27.
+**Note:** Equipment RLS enabled in migration 00004_equipment_rls.sql.
 **Deferred:** RBAC-05 (PARENT role) - ParentAthleteLink table does not exist.
 
 ---

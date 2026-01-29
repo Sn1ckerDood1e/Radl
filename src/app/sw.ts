@@ -41,12 +41,12 @@ self.addEventListener('push', (event: PushEvent) => {
   const data: PushPayload = event.data?.json() || {};
 
   event.waitUntil(
-    self.registration.showNotification(data.title || 'RowOps', {
+    self.registration.showNotification(data.title || 'Radl', {
       body: data.body,
       icon: data.icon || '/icons/icon-192x192.png',
       badge: data.badge || '/icons/icon-192x192.png',
       data: { url: data.url || '/' },
-      tag: data.tag || 'rowops-notification',
+      tag: data.tag || 'radl-notification',
     })
   );
 });

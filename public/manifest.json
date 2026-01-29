@@ -1,11 +1,11 @@
 {
-  "name": "RowOps - Crew Team Management",
-  "short_name": "RowOps",
-  "description": "Manage your rowing team's schedule, lineups, and equipment",
+  "name": "Radl - Crew Team Management",
+  "short_name": "Radl",
+  "description": "Diligence wins. Manage your rowing team's schedule, lineups, and equipment.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#0066cc",
+  "background_color": "#0a0a0a",
+  "theme_color": "#0d9488",
   "orientation": "portrait-primary",
   "scope": "/",
   "icons": [

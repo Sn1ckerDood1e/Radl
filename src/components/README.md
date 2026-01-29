@@ -2,7 +2,7 @@
 
 ## Overview
 
-RowOps uses [shadcn/ui](https://ui.shadcn.com/) as its design system foundation, built on:
+Radl uses [shadcn/ui](https://ui.shadcn.com/) as its design system foundation, built on:
 
 - **Tailwind CSS v4** - Utility-first CSS framework with CSS-first configuration
 - **Radix UI** - Unstyled, accessible component primitives

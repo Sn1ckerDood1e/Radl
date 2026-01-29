@@ -65,16 +65,16 @@ export async function updateSsoConfig(
 }
 
 /**
- * Map SSO/IDP claims to RowOps roles.
+ * Map SSO/IDP claims to Radl roles.
  *
  * Per CONTEXT.md:
- * - Configurable mapping from IDP groups/claims to RowOps roles
+ * - Configurable mapping from IDP groups/claims to Radl roles
  * - Default to ATHLETE if no mapping matches
  * - Role updates on next login
  *
  * @param facilityId - Facility the user is logging into
  * @param idpClaims - Claims from identity provider
- * @returns Array of mapped RowOps roles
+ * @returns Array of mapped Radl roles
  */
 export async function mapSsoRoles(
   facilityId: string,

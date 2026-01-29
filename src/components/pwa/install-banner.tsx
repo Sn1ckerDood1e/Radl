@@ -74,7 +74,7 @@ export function InstallBanner({ className = '' }: InstallBannerProps) {
           <div className="flex items-start gap-4">
             {/* App icon */}
             <div className="flex-shrink-0">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-teal-500 to-teal-600 flex items-center justify-center">
                 <AppIcon className="w-7 h-7 text-white" />
               </div>
             </div>
@@ -82,7 +82,7 @@ export function InstallBanner({ className = '' }: InstallBannerProps) {
             {/* Content */}
             <div className="flex-1 min-w-0">
               <h3 className="text-base font-semibold text-gray-900 dark:text-white">
-                Install RowOps
+                Install Radl
               </h3>
 
               {isIOS ? (
@@ -101,7 +101,7 @@ export function InstallBanner({ className = '' }: InstallBannerProps) {
                   // iOS: "Got it" button that dismisses
                   <button
                     onClick={handleDismiss}
-                    className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors"
+                    className="px-4 py-2 bg-teal-600 text-white text-sm font-medium rounded-lg hover:bg-teal-700 transition-colors"
                   >
                     Got it
                   </button>
@@ -110,7 +110,7 @@ export function InstallBanner({ className = '' }: InstallBannerProps) {
                   <button
                     onClick={handleInstall}
                     disabled={isInstalling}
-                    className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    className="px-4 py-2 bg-teal-600 text-white text-sm font-medium rounded-lg hover:bg-teal-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                   >
                     {isInstalling ? 'Installing...' : 'Install'}
                   </button>
@@ -153,7 +153,7 @@ function IOSInstructions() {
           </span>
           <span className="flex items-center gap-1.5">
             Tap the
-            <ShareIcon className="w-4 h-4 text-blue-500" />
+            <ShareIcon className="w-4 h-4 text-teal-500" />
             <span className="font-medium">Share</span> button
           </span>
         </li>

@@ -92,7 +92,7 @@ export async function sendCriticalDamageAlert(
   </div>
 
   <p style="margin: 16px 0 0; font-size: 12px; color: #9ca3af; text-align: center;">
-    Sent by RowOps - Equipment Management for Rowing Teams
+    Sent by Radl - Diligence wins.
   </p>
 </body>
 </html>

@@ -13,7 +13,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     where: { id },
     select: { name: true },
   });
-  return { title: regatta ? `${regatta.name} | RowOps` : 'Regatta | RowOps' };
+  return { title: regatta ? `${regatta.name} | Radl` : 'Regatta | Radl' };
 }
 
 interface PageProps {

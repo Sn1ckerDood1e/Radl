@@ -236,7 +236,7 @@ export function SsoConfigForm({ initialConfig }: SsoConfigFormProps) {
       <div className="bg-[var(--surface-2)] rounded-lg p-4">
         <h3 className="font-medium text-[var(--text-primary)] mb-2">Role Mappings</h3>
         <p className="text-sm text-[var(--text-muted)] mb-4">
-          Map IDP groups to RowOps roles. Users with matching groups will be assigned the
+          Map IDP groups to Radl roles. Users with matching groups will be assigned the
           corresponding roles.
         </p>
 
@@ -288,13 +288,13 @@ export function SsoConfigForm({ initialConfig }: SsoConfigFormProps) {
                 id="newMappingIdp"
                 value={newMappingIdp}
                 onChange={(e) => setNewMappingIdp(e.target.value)}
-                placeholder="e.g., RowOps-Coaches"
+                placeholder="e.g., Radl-Coaches"
                 className={inputClassName}
               />
             </div>
 
             <div>
-              <label className={labelClassName}>Assign RowOps Roles</label>
+              <label className={labelClassName}>Assign Radl Roles</label>
               <div className="flex flex-wrap gap-2">
                 {MAPPABLE_ROLES.map((role) => (
                   <button
