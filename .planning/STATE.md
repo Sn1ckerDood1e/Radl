@@ -4,17 +4,17 @@
 
 **Core Value:** Coaches can plan practices with lineups and equipment, and athletes know where to be and what boat they're in.
 
-**Current Focus:** v2.3 Core Flow Testing - Defining requirements
+**Current Focus:** v2.3 Core Flow Testing - Phase 28 Onboarding Flow Testing
 
 ## Current Position
 
 | Field | Value |
 |-------|-------|
 | Milestone | v2.3 Core Flow Testing |
-| Phase | Not started |
-| Plan | — |
-| Status | Defining requirements |
-| Last activity | 2026-01-29 - Milestone v2.3 started |
+| Phase | 28 - Onboarding Flow Testing |
+| Plan | Not started |
+| Status | Ready for planning |
+| Last activity | 2026-01-29 - Roadmap created |
 
 **Progress:**
 ```
@@ -23,7 +23,7 @@ v1.1: [##########] 100% SHIPPED (2026-01-22) — 9/11 reqs, 2 deferred
 v2.0: [##########] 100% SHIPPED (2026-01-26) — 34/34 requirements
 v2.1: [##########] 100% SHIPPED (2026-01-27) — 30/30 requirements
 v2.2: [##########] 100% SHIPPED (2026-01-29) — 33/35 requirements
-v2.3: [░░░░░░░░░░] 0% — Defining requirements
+v2.3: [░░░░░░░░░░] 0% — Phase 28 ready
 ```
 
 ## Shipped Milestones
@@ -39,12 +39,7 @@ v2.3: [░░░░░░░░░░] 0% — Defining requirements
 - Audit logging — immutable logs, 8 auth event types, PERMISSION_DENIED tracking
 - Rate limiting — auth endpoints (5/15min login, 3/hr signup/reset), Upstash Redis integration
 
-**Audit:** Passed (15/15 Phase 27 requirements, all PASS)
-
-**Verification Documents:**
-- 25-VERIFICATION.md — 7/7 AUTH requirements PASS
-- 26-VERIFICATION.md — 9 PASS, 2 CONDITIONAL PASS, 2 DEFERRED
-- 27-VERIFICATION.md — 15/15 requirements PASS (5 SECR, 5 AUDIT, 5 RATE)
+**Audit:** Passed (31 PASS, 2 CONDITIONAL PASS, 2 DEFERRED, 0 FAIL)
 
 ### v2.1 UX Refinement (2026-01-27)
 
@@ -58,8 +53,6 @@ v2.3: [░░░░░░░░░░] 0% — Defining requirements
 - Practice flow — inline editing, block structure, drag-drop lineups
 - Dashboard enhancements — role-specific widgets, usage trends
 - Regatta Central integration — calendar display with caching
-
-**Audit:** Passed (30/30 requirements, 7/7 phases, 6/6 integrations, 5/5 flows)
 
 ### v2.0 Commercial Readiness (2026-01-26)
 
@@ -78,39 +71,47 @@ v2.3: [░░░░░░░░░░] 0% — Defining requirements
 - Equipment usage display (history on detail page, summary on list page)
 - Data export (equipment, roster, schedule to CSV)
 
-**Deferred:**
-- NOTIF-01: Push notification for equipment damage
-- NOTIF-02: Push notification for lineup published
-
 ### v1.0 MVP (2026-01-22)
 
 **Delivered:** Operational rowing team platform with practice scheduling, lineup management, PWA offline support, and regatta mode.
 
 **Stats:** 5 phases, 37 plans, 31 requirements, 79,737 LOC, 3 days
 
-## v2.2 Security Audit (COMPLETE)
+## v2.3 Core Flow Testing
 
-**Goal:** Validate security architecture before beta testing through comprehensive audit of authentication, authorization, tenant isolation, secrets management, logging, and rate limiting.
+**Goal:** Verify all major user journeys work end-to-end and fix issues discovered before beta release.
 
-**Status:** ✅ COMPLETE (2026-01-29)
+**Status:** Roadmap created, ready for Phase 28 planning
 
-**Phases Completed:** 25, 26, 27
+**Phases:**
+| Phase | Name | Requirements | Status |
+|-------|------|--------------|--------|
+| 28 | Onboarding Flow Testing | ONBD-01 to ONBD-06 (6) | Ready |
+| 29 | Practice Flow Testing | PRAC-01 to PRAC-05 (5) | Pending |
+| 30 | Equipment Flow Testing | EQUP-01 to EQUP-04 (4) | Pending |
+| 31 | UX Quality Polish | UXQL-01 to UXQL-05 (5) | Pending |
 
-**Overall Results:**
-- Phase 25 (API Authentication): 7/7 requirements PASS
-- Phase 26 (RBAC & Tenant Isolation): 9 PASS, 2 CONDITIONAL PASS, 2 DEFERRED
-- Phase 27 (Secrets, Logging & Rate Limiting): 15/15 requirements PASS
+**Total:** 20 requirements across 4 phases
 
-**Total:** 31 PASS, 2 CONDITIONAL PASS, 2 DEFERRED, 0 FAIL
+## Phase 28: Onboarding Flow Testing
 
-**Infrastructure Delivered:**
-- 163 security tests (109 CASL, 17 API, 17 role propagation, 20 pgTAP)
-- Bundle secrets scanner + GitHub Actions CI/CD
-- Immutable audit logging (RLS + trigger defense-in-depth)
-- Auth rate limiting (Upstash Redis, 5/15min login, 3/hr signup)
-- 3 comprehensive verification documents (25-VERIFICATION.md, 26-VERIFICATION.md, 27-VERIFICATION.md)
+**Goal:** New users can successfully sign up, create a team, invite members, and those members can join
 
-**Ready for Beta Testing:** All security controls validated and in place.
+**Requirements:**
+- ONBD-01: User can sign up with email and password
+- ONBD-02: User receives and can complete email verification
+- ONBD-03: User can create a new team/club after signup
+- ONBD-04: Coach/admin can invite members via email
+- ONBD-05: Invited user can accept invitation and join team
+- ONBD-06: New users see helpful empty states guiding next actions
+
+**Success Criteria:**
+1. User can complete full signup flow from landing page to verified account
+2. Verified user can create a new team and land on team dashboard
+3. Coach can send email invitation and invitee receives actionable email
+4. Invitee can click link, complete signup (if new), and appear on team roster
+
+**Plans:** Not yet created
 
 ## Accumulated Context
 
@@ -126,16 +127,13 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 | Database lookup per request | 2026-01-29 | Security over performance; 2 DB queries for immediate role propagation |
 | Fire-and-forget audit logging | 2026-01-29 | Performance over guaranteed logging in error responses |
 | Defense-in-depth immutability | 2026-01-29 | RLS + trigger to protect AuditLog from service role modifications |
-| Backward-compatible forbiddenResponse | 2026-01-29 | Optional audit context preserves existing callers |
-| Bundle scanner 11 patterns | 2026-01-29 | Covers all environment secrets in use (service_role, API keys, JWTs) |
-| CI/CD defense in depth | 2026-01-29 | TruffleHog + bundle check provides two-job security workflow |
 | Server-side auth mandatory | 2026-01-29 | All auth flows through API routes for rate limiting and logging |
 | Per-action rate limiters | 2026-01-29 | Different auth actions need different limits (login vs signup) |
 | Email enumeration prevention | 2026-01-29 | Password reset always returns success to prevent email discovery |
 
 ### Architecture Notes
 
-- **Multi-tenant:** Facility → club → team hierarchy with JWT claims, RLS policies for database-level isolation
+- **Multi-tenant:** Facility -> club -> team hierarchy with JWT claims, RLS policies for database-level isolation
 - **Auth:** Supabase SSR client + JWT claims for team context
 - **Stack:** Next.js 16 + Prisma 6 + Supabase + React 19
 - **PWA:** Serwist (service worker), Dexie.js (IndexedDB), web-push (notifications)
@@ -160,107 +158,14 @@ See `.planning/PROJECT.md` for full decision table with outcomes.
 | pgTAP RLS tests | CREATED | 26-04 - 20 tests awaiting multi-tenant data |
 | Equipment RLS | RESOLVED | 00004_equipment_rls.sql enables RLS with 4 policies |
 
-### Security Audit Context (v2.2)
-
-**Critical vulnerabilities to check:**
-- React2Shell RCE (CVE-2025-55182) - Next.js upgrade to 16.0.12+
-- Middleware bypass (CVE-2025-29927) - x-middleware-subrequest header
-- RLS misconfiguration (83% of Supabase breaches)
-- Prisma RLS bypass (superuser role by default)
-- Server Action validation missing (Zod schemas required)
-
-**Tools for audit:**
-- Semgrep (SAST)
-- TruffleHog (secrets scanning)
-- SupaShield + pgTAP (RLS testing)
-- OWASP ZAP (DAST)
-- jwt_tool (JWT security testing)
-
-**Research flags:**
-- Phase 26 likely needs deeper research for facility-shared equipment RLS policies
-- Standard patterns for Phase 25 and Phase 27 (no additional research needed)
-
-## Phase 25 Audit Findings
-
-| Requirement | Status | Notes |
-|-------------|--------|-------|
-| AUTH-01: API Authentication | PASS | 88 routes audited, all protected or justified |
-| AUTH-02: JWT Signature Verification | PASS | getUser() called before getSession() in all auth paths |
-| AUTH-03: Expired Token Rejection | PASS | Supabase getUser() handles server-side validation |
-| AUTH-04: Claims Validation | PASS | CustomJwtPayload interface defines expected structure |
-| AUTH-05: Session Persistence | PASS | httpOnly cookies + middleware refresh |
-| AUTH-06: Logout Implementation | PASS | POST /api/auth/logout + settings button (25-04) |
-| AUTH-07: Token Refresh | PASS | Automatic via getUser() |
-
-**Status:** All 7 AUTH requirements PASS. Phase 25 complete.
-
-## Phase 26 Audit Findings (COMPLETE)
-
-| Requirement | Status | Notes |
-|-------------|--------|-------|
-| RBAC-01: FACILITY_ADMIN | PASS | 109 unit tests verify role boundaries |
-| RBAC-02: CLUB_ADMIN | PASS | Unit tests verify cross-club blocked |
-| RBAC-03: COACH | PASS | 17 API tests + 109 unit tests |
-| RBAC-04: ATHLETE | PASS | Unit tests verify read-only, API tests verify 403 |
-| RBAC-05: PARENT | DEFERRED | ParentAthleteLink table does not exist |
-| RBAC-06: Server-side CASL | CONDITIONAL PASS | 16/88 routes full CASL; all routes secure |
-| RBAC-07: Role Propagation | PASS | Database lookup per request, not JWT-only |
-| ISOL-01: RLS Enabled | CONDITIONAL PASS | 5/43 tables (12%); uses service role + app filtering |
-| ISOL-02: Tenant Filtering | PASS | All 5 enabled tables have correct filtering |
-| ISOL-03: Cross-Tenant Tests | CONDITIONAL PASS | 20 pgTAP tests; no multi-tenant data to verify |
-| ISOL-04: JWT Claims | PASS | 8 helper functions, 13 policies verified |
-| ISOL-05: Prisma Filtering | PASS | Covered by RBAC-06; accessibleBy pattern used |
-| ISOL-06: API Response Leaks | PASS | 25+ endpoints audited, 404 pattern prevents enumeration |
-
-**Summary:** 9 PASS, 2 CONDITIONAL PASS (RBAC-06, ISOL-01), 2 DEFERRED (RBAC-05, ISOL-03 needs data)
-
-**Note:** Equipment RLS is enabled in migration 00004_equipment_rls.sql with 4 policies (select, insert, update, delete).
-
-**Test Infrastructure:** 163 new tests (109 CASL unit, 17 API RBAC, 17 role propagation, 20 pgTAP RLS)
-
-**Status:** Phase 26 COMPLETE. Proceed to Phase 27.
-
-## Phase 27 Audit Findings (COMPLETE)
-
-| Requirement | Status | Notes |
-|-------------|--------|-------|
-| SECR-01: No secrets in client bundle | PASS | Bundle scanner confirms 0 secrets in .next/static/ |
-| SECR-02: NEXT_PUBLIC_ properly scoped | PASS | All 4 variables safe for client exposure |
-| SECR-03: Service role not client-accessible | PASS | Only referenced in server-side admin.ts |
-| SECR-04: API keys hashed in database | PASS | SHA-256 hashing via crypto.createHash() |
-| SECR-05: No hardcoded credentials | PASS | All secrets use process.env |
-| AUDIT-01: Immutable logging | PASS | RLS policies + trigger prevent AuditLog modifications |
-| AUDIT-02: Security event logging | PASS | 8 new event types (LOGIN_*, SIGNUP_*, LOGOUT, PASSWORD_RESET_*, PERMISSION_DENIED) |
-| AUDIT-03: Sufficient context | PASS | AuditLog captures clubId, userId, ipAddress, userAgent, metadata |
-| AUDIT-04: Log retention | PASS | No automatic deletion (Postgres default, handled by backup strategy) |
-| AUDIT-05: No sensitive data in logs | PASS | Passwords never logged, only email addresses and error messages |
-| RATE-01: Auth endpoint limits | PASS | Login 5/15min, signup 3/hr, password reset 3/hr |
-| RATE-02: API endpoint limits | DEFERRED | Auth endpoints covered; general API limits not in v2.2 scope |
-| RATE-03: Per-user tracking | PASS | Per-IP tracking via getClientIp (X-Forwarded-For aware) |
-| RATE-04: Rate limit headers | PASS | 429 responses include Retry-After, X-RateLimit-* headers |
-| RATE-05: Bypass prevention | PASS | Server-side enforcement, client Supabase calls removed |
-
-**Summary:**
-- 5/5 SECR requirements PASS (secrets management)
-- 5/5 AUDIT requirements PASS (audit logging)
-- 4/5 RATE requirements PASS, 1 DEFERRED (rate limiting)
-
-**Infrastructure:**
-- Bundle scanner + GitHub Actions for secrets scanning
-- AuditLog table with immutability controls
-- Upstash Redis rate limiting (graceful fallback if not configured)
-- Auth API routes with server-side controls
-
-**Status:** Phase 27 COMPLETE. All 3 plans executed (27-01, 27-02, 27-03).
-
 ## Session Continuity
 
 | Field | Value |
 |-------|-------|
 | Last session | 2026-01-29 |
-| Stopped at | Milestone v2.3 started — defining requirements |
-| Resume file | None |
+| Stopped at | Roadmap created for v2.3 |
+| Resume with | `/gsd:plan-phase 28` |
 
 ---
 
-*Last updated: 2026-01-29 (Milestone v2.3 Core Flow Testing started)*
+*Last updated: 2026-01-29 (v2.3 roadmap created, Phase 28 ready)*

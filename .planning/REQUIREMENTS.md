@@ -69,32 +69,32 @@ Deferred to future milestones:
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| ONBD-01 | TBD | Pending |
-| ONBD-02 | TBD | Pending |
-| ONBD-03 | TBD | Pending |
-| ONBD-04 | TBD | Pending |
-| ONBD-05 | TBD | Pending |
-| ONBD-06 | TBD | Pending |
-| PRAC-01 | TBD | Pending |
-| PRAC-02 | TBD | Pending |
-| PRAC-03 | TBD | Pending |
-| PRAC-04 | TBD | Pending |
-| PRAC-05 | TBD | Pending |
-| EQUP-01 | TBD | Pending |
-| EQUP-02 | TBD | Pending |
-| EQUP-03 | TBD | Pending |
-| EQUP-04 | TBD | Pending |
-| UXQL-01 | TBD | Pending |
-| UXQL-02 | TBD | Pending |
-| UXQL-03 | TBD | Pending |
-| UXQL-04 | TBD | Pending |
-| UXQL-05 | TBD | Pending |
+| ONBD-01 | Phase 28 | Pending |
+| ONBD-02 | Phase 28 | Pending |
+| ONBD-03 | Phase 28 | Pending |
+| ONBD-04 | Phase 28 | Pending |
+| ONBD-05 | Phase 28 | Pending |
+| ONBD-06 | Phase 28 | Pending |
+| PRAC-01 | Phase 29 | Pending |
+| PRAC-02 | Phase 29 | Pending |
+| PRAC-03 | Phase 29 | Pending |
+| PRAC-04 | Phase 29 | Pending |
+| PRAC-05 | Phase 29 | Pending |
+| EQUP-01 | Phase 30 | Pending |
+| EQUP-02 | Phase 30 | Pending |
+| EQUP-03 | Phase 30 | Pending |
+| EQUP-04 | Phase 30 | Pending |
+| UXQL-01 | Phase 31 | Pending |
+| UXQL-02 | Phase 31 | Pending |
+| UXQL-03 | Phase 31 | Pending |
+| UXQL-04 | Phase 31 | Pending |
+| UXQL-05 | Phase 31 | Pending |
 
 **Coverage:**
 - v2.3 requirements: 20 total
-- Mapped to phases: 0 (pending roadmap)
-- Unmapped: 20
+- Mapped to phases: 20
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-01-29*
-*Last updated: 2026-01-29 after initial definition*
+*Last updated: 2026-01-29 after roadmap creation*
