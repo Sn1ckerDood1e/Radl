@@ -52,6 +52,8 @@ function SignupForm() {
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<SignupInput>({
+    mode: 'onTouched',
+    reValidateMode: 'onChange',
     resolver: zodResolver(signupSchema),
   });
 

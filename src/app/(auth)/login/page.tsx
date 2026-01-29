@@ -16,6 +16,8 @@ export default function LoginPage() {
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<LoginInput>({
+    mode: 'onTouched',
+    reValidateMode: 'onChange',
     resolver: zodResolver(loginSchema),
   });
 
