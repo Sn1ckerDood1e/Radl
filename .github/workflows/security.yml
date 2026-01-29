@@ -23,7 +23,7 @@ jobs:
       - name: Run TruffleHog
         uses: trufflesecurity/trufflehog@main
         with:
-          extra_args: --results=verified,unknown --no-update
+          extra_args: --results=verified,unknown
 
   bundle-secrets-check:
     name: Bundle Secrets Check
