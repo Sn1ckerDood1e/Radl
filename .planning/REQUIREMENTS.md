@@ -31,13 +31,13 @@ Verify all major user journeys work end-to-end, fix bugs, and polish UX before b
 - [x] **EQUP-03**: Anyone can report damage via QR code without login
 - [x] **EQUP-04**: Coach can view damage reports and mark resolved
 
-### UX Quality
+### UX Quality ✅
 
-- [ ] **UXQL-01**: Error messages are clear and actionable
-- [ ] **UXQL-02**: Empty states guide users to their next action
-- [ ] **UXQL-03**: Mobile touch targets meet 44px accessibility minimum
-- [ ] **UXQL-04**: Forms validate before submission with inline errors
-- [ ] **UXQL-05**: Settings page cleaned up (hide unused options like team colors)
+- [x] **UXQL-01**: Error messages are clear and actionable
+- [x] **UXQL-02**: Empty states guide users to their next action
+- [x] **UXQL-03**: Mobile touch targets meet 44px accessibility minimum
+- [x] **UXQL-04**: Forms validate before submission with inline errors
+- [x] **UXQL-05**: Settings page cleaned up (hide unused options like team colors)
 
 ## Future Requirements
 
@@ -84,11 +84,11 @@ Deferred to future milestones:
 | EQUP-02 | Phase 30 | Complete |
 | EQUP-03 | Phase 30 | Complete |
 | EQUP-04 | Phase 30 | Complete |
-| UXQL-01 | Phase 31 | Pending |
-| UXQL-02 | Phase 31 | Pending |
-| UXQL-03 | Phase 31 | Pending |
-| UXQL-04 | Phase 31 | Pending |
-| UXQL-05 | Phase 31 | Pending |
+| UXQL-01 | Phase 31 | Complete |
+| UXQL-02 | Phase 31 | Complete |
+| UXQL-03 | Phase 31 | Complete |
+| UXQL-04 | Phase 31 | Complete |
+| UXQL-05 | Phase 31 | Complete |
 
 **Coverage:**
 - v2.3 requirements: 20 total
@@ -97,4 +97,4 @@ Deferred to future milestones:
 
 ---
 *Requirements defined: 2026-01-29*
-*Last updated: 2026-01-29 (Phase 30 complete)*
+*Last updated: 2026-01-29 (v2.3 Core Flow Testing complete - 20/20 requirements)*
