@@ -4,9 +4,11 @@ import { useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { DayPicker } from 'react-day-picker';
 import { eachDayOfInterval, getDay, format, addWeeks } from 'date-fns';
-import { Calendar, Clock, FileText, Loader2 } from 'lucide-react';
+import { Calendar, Clock, FileText } from 'lucide-react';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
+import { ProgressIndicator } from '@/components/ui/progress-indicator';
 
 interface PracticeTemplate {
   id: string;
@@ -410,21 +412,23 @@ export function BulkPracticeCreator({
           )}
         </div>
 
-        <button
+        <Button
           type="button"
           onClick={handleCreate}
-          disabled={isCreating || practiceDates.length === 0}
-          className="w-full py-3 bg-teal-600 hover:bg-teal-500 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg text-sm font-medium text-white transition-colors flex items-center justify-center gap-2"
+          loading={isCreating}
+          disabled={practiceDates.length === 0}
+          className="w-full py-3"
+          size="lg"
         >
-          {isCreating ? (
-            <>
-              <Loader2 className="h-4 w-4 animate-spin" />
-              Creating...
-            </>
-          ) : (
-            <>Create {practiceDates.length} Practice{practiceDates.length !== 1 ? 's' : ''}</>
-          )}
-        </button>
+          Create {practiceDates.length} Practice{practiceDates.length !== 1 ? 's' : ''}
+        </Button>
+
+        {/* Progress indicator for long operations (10+ seconds) */}
+        <ProgressIndicator
+          isActive={isCreating}
+          message={`Creating ${practiceDates.length} practices... This may take a moment.`}
+          className="mt-4"
+        />
       </div>
 
       {/* Custom styles for DayPicker dark theme */}

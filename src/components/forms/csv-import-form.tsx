@@ -3,6 +3,8 @@
 import { useState, useRef } from 'react';
 import { useCSVParser } from '@/hooks/use-csv-parser';
 import { CSVPreviewTable } from './csv-preview-table';
+import { Button } from '@/components/ui/button';
+import { ProgressIndicator } from '@/components/ui/progress-indicator';
 
 interface ImportResult {
   created: number;
@@ -157,23 +159,31 @@ export function CSVImportForm({ onSuccess }: CSVImportFormProps) {
 
       {/* Action Buttons */}
       {parsedData.length > 0 && (
-        <div className="flex gap-3">
-          <button
-            type="button"
-            onClick={handleImport}
-            disabled={isSubmitting}
-            className="flex-1 py-2 px-4 border border-transparent rounded-lg text-sm font-medium text-white bg-teal-600 hover:bg-teal-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-zinc-900 focus:ring-teal-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-          >
-            {isSubmitting ? 'Importing...' : `Import ${parsedData.length} Invitations`}
-          </button>
-          <button
-            type="button"
-            onClick={handleClear}
-            disabled={isSubmitting}
-            className="py-2 px-4 border border-zinc-700 rounded-lg text-sm font-medium text-zinc-300 bg-zinc-800 hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-zinc-900 focus:ring-zinc-500 disabled:opacity-50 transition-colors"
-          >
-            Clear
-          </button>
+        <div className="space-y-4">
+          <div className="flex gap-3">
+            <Button
+              type="button"
+              onClick={handleImport}
+              loading={isSubmitting}
+              className="flex-1"
+            >
+              Import {parsedData.length} Invitations
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={handleClear}
+              disabled={isSubmitting}
+            >
+              Clear
+            </Button>
+          </div>
+
+          {/* Progress indicator for long imports (10+ seconds) */}
+          <ProgressIndicator
+            isActive={isSubmitting}
+            message={`Importing ${parsedData.length} invitations... This may take a moment.`}
+          />
         </div>
       )}
     </div>
