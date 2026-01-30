@@ -78,7 +78,7 @@ export function UsageTrendsWidget({
         </h2>
         <Link
           href={`/${teamSlug}/equipment`}
-          className="text-sm text-emerald-500 hover:text-emerald-400 font-medium"
+          className="text-sm text-teal-500 hover:text-teal-400 font-medium"
         >
           View all
         </Link>
@@ -90,8 +90,8 @@ export function UsageTrendsWidget({
         <div className="flex items-center justify-between mb-4">
           {/* Total hours */}
           <div className="flex items-center gap-3">
-            <div className="flex items-center justify-center w-10 h-10 rounded-full bg-emerald-500/15">
-              <Clock className="h-5 w-5 text-emerald-400" />
+            <div className="flex items-center justify-center w-10 h-10 rounded-full bg-teal-500/15">
+              <Clock className="h-5 w-5 text-teal-400" />
             </div>
             <div>
               <div className="text-2xl font-bold text-[var(--text-primary)]">
@@ -111,7 +111,7 @@ export function UsageTrendsWidget({
                 width={100}
                 height={40}
                 strokeColor="currentColor"
-                className="text-emerald-400"
+                className="text-teal-400"
                 strokeWidth={2}
               />
             ) : (

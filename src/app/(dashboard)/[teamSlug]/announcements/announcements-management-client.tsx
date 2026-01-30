@@ -181,7 +181,7 @@ function AnnouncementsManagementClient({
                   <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-zinc-500">
                     <span>Created {formatDate(announcement.createdAt)}</span>
                     {announcement.practice && (
-                      <span className="text-emerald-400">
+                      <span className="text-teal-400">
                         Linked to: {announcement.practice.name} ({formatPracticeDate(announcement.practice.date)})
                       </span>
                     )}

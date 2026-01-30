@@ -47,7 +47,7 @@ const typeLabels: Record<string, string> = {
 };
 
 const statusConfig: Record<string, { label: string; className: string }> = {
-  ACTIVE: { label: 'Active', className: 'bg-emerald-500/20 text-emerald-400' },
+  ACTIVE: { label: 'Active', className: 'bg-teal-500/20 text-teal-400' },
   INACTIVE: { label: 'Inactive', className: 'bg-yellow-500/20 text-yellow-400' },
   RETIRED: { label: 'Retired', className: 'bg-zinc-700 text-zinc-400' },
 };
@@ -134,7 +134,7 @@ export function EquipmentDetail({ equipment, teamSlug, isCoach }: EquipmentDetai
               </button>
               <Link
                 href={`/${teamSlug}/equipment/${equipment.id}/edit`}
-                className="inline-flex items-center px-3 py-1.5 border border-transparent rounded-lg text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-500 transition-colors"
+                className="inline-flex items-center px-3 py-1.5 border border-transparent rounded-lg text-sm font-medium text-white bg-teal-600 hover:bg-teal-500 transition-colors"
               >
                 Edit
               </Link>

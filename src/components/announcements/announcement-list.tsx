@@ -89,7 +89,7 @@ function AnnouncementList({
           {announcements.length > 5 && (
             <Link
               href={`/${teamSlug}/announcements`}
-              className="text-sm text-emerald-400 hover:text-emerald-300 transition-colors"
+              className="text-sm text-teal-400 hover:text-teal-300 transition-colors"
             >
               View All
             </Link>

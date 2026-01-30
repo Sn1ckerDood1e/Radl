@@ -53,7 +53,7 @@ export function EquipmentCard({
             <div className="flex items-center gap-2 mb-1">
               <Link
                 href={`/${teamSlug}/equipment/${id}`}
-                className="font-medium text-white hover:text-emerald-400 truncate"
+                className="font-medium text-white hover:text-teal-400 truncate"
               >
                 {name}
               </Link>
@@ -63,7 +63,7 @@ export function EquipmentCard({
               <p className="text-sm text-zinc-400 truncate">{manufacturer}</p>
             )}
             {boatClass && (
-              <span className="inline-flex items-center mt-2 px-2 py-0.5 rounded text-xs font-medium bg-emerald-500/20 text-emerald-400">
+              <span className="inline-flex items-center mt-2 px-2 py-0.5 rounded text-xs font-medium bg-teal-500/20 text-teal-400">
                 {boatClassLabels[boatClass] || boatClass}
               </span>
             )}
@@ -72,7 +72,7 @@ export function EquipmentCard({
             <span
               className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
                 status === 'ACTIVE'
-                  ? 'bg-emerald-500/20 text-emerald-400'
+                  ? 'bg-teal-500/20 text-teal-400'
                   : status === 'INACTIVE'
                   ? 'bg-yellow-500/20 text-yellow-400'
                   : 'bg-zinc-700 text-zinc-400'
@@ -83,7 +83,7 @@ export function EquipmentCard({
             {isCoach && (
               <Link
                 href={`/${teamSlug}/equipment/${id}/edit`}
-                className="text-sm text-zinc-400 hover:text-emerald-400"
+                className="text-sm text-zinc-400 hover:text-teal-400"
               >
                 Edit
               </Link>

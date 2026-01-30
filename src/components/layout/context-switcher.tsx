@@ -190,7 +190,7 @@ export function ContextSwitcher({ initialContexts }: ContextSwitcherProps) {
             className="h-6 w-6 rounded object-cover"
           />
         ) : (
-          <div className="h-6 w-6 rounded flex items-center justify-center text-xs font-bold text-white bg-emerald-600">
+          <div className="h-6 w-6 rounded flex items-center justify-center text-xs font-bold text-white bg-teal-600">
             {currentClub?.name.charAt(0)}
           </div>
         )}
@@ -226,7 +226,7 @@ export function ContextSwitcher({ initialContexts }: ContextSwitcherProps) {
             className="h-6 w-6 rounded object-cover"
           />
         ) : (
-          <div className="h-6 w-6 rounded flex items-center justify-center text-xs font-bold text-white bg-emerald-600">
+          <div className="h-6 w-6 rounded flex items-center justify-center text-xs font-bold text-white bg-teal-600">
             {currentClub?.name.charAt(0)}
           </div>
         )}
@@ -315,7 +315,7 @@ export function ContextSwitcher({ initialContexts }: ContextSwitcherProps) {
                     className="h-8 w-8 rounded object-cover flex-shrink-0"
                   />
                 ) : (
-                  <div className="h-8 w-8 rounded flex items-center justify-center text-sm font-bold text-white flex-shrink-0 bg-emerald-600">
+                  <div className="h-8 w-8 rounded flex items-center justify-center text-sm font-bold text-white flex-shrink-0 bg-teal-600">
                     {club.name.charAt(0)}
                   </div>
                 )}

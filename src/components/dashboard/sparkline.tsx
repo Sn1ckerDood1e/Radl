@@ -43,7 +43,7 @@ interface SparklineProps {
  *   width={120}
  *   height={32}
  *   strokeColor="var(--text-muted)"
- *   className="text-emerald-400"
+ *   className="text-teal-400"
  * />
  */
 export function Sparkline({

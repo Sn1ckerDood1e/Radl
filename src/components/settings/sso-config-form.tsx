@@ -126,7 +126,7 @@ export function SsoConfigForm({ initialConfig }: SsoConfigFormProps) {
 
       {/* Success Alert */}
       {success && (
-        <div className="p-3 text-sm text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 rounded-lg">
+        <div className="p-3 text-sm text-teal-400 bg-teal-500/10 border border-teal-500/30 rounded-lg">
           SSO configuration saved successfully
         </div>
       )}

@@ -214,7 +214,7 @@ export function WaterLineupBuilder({
             type="button"
             onClick={handleSave}
             disabled={isSaving}
-            className="w-full py-2 bg-emerald-600 hover:bg-emerald-500 disabled:bg-zinc-700 disabled:cursor-not-allowed rounded-lg text-white font-medium transition-colors"
+            className="w-full py-2 bg-teal-600 hover:bg-teal-500 disabled:bg-zinc-700 disabled:cursor-not-allowed rounded-lg text-white font-medium transition-colors"
           >
             {isSaving ? 'Saving...' : 'Save Lineup'}
           </button>

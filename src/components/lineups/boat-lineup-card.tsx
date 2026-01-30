@@ -87,7 +87,7 @@ export function BoatLineupCard({
       ref={setNodeRef}
       className={cn(
         'bg-zinc-800/50 border rounded-lg transition-colors',
-        isOver ? 'border-emerald-500 bg-emerald-500/10' : 'border-zinc-700'
+        isOver ? 'border-teal-500 bg-teal-500/10' : 'border-zinc-700'
       )}
     >
       {/* Header */}
@@ -113,7 +113,7 @@ export function BoatLineupCard({
           {/* Seat count */}
           <span className={cn(
             'text-xs',
-            filledSeats < seats.length ? 'text-amber-400' : 'text-emerald-400'
+            filledSeats < seats.length ? 'text-amber-400' : 'text-teal-400'
           )}>
             {filledSeats}/{seats.length}
           </span>

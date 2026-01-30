@@ -101,9 +101,9 @@ export function NotificationSettings() {
           onClick={handleToggle}
           className={`
             relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent
-            transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus:ring-offset-zinc-900
+            transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 focus:ring-offset-zinc-900
             ${!canToggle || isToggling ? 'cursor-not-allowed opacity-50' : ''}
-            ${isEnabled ? 'bg-emerald-600' : 'bg-zinc-700'}
+            ${isEnabled ? 'bg-teal-600' : 'bg-zinc-700'}
           `}
         >
           <span className="sr-only">Enable push notifications</span>
@@ -157,15 +157,15 @@ export function NotificationSettings() {
           <p className="text-xs text-zinc-500 mb-2">You'll receive notifications for:</p>
           <ul className="text-xs text-zinc-500 space-y-1">
             <li className="flex items-center gap-2">
-              <CheckIcon className="h-3 w-3 text-emerald-500" />
+              <CheckIcon className="h-3 w-3 text-teal-500" />
               <span>Lineup assignments</span>
             </li>
             <li className="flex items-center gap-2">
-              <CheckIcon className="h-3 w-3 text-emerald-500" />
+              <CheckIcon className="h-3 w-3 text-teal-500" />
               <span>Practice schedule changes</span>
             </li>
             <li className="flex items-center gap-2">
-              <CheckIcon className="h-3 w-3 text-emerald-500" />
+              <CheckIcon className="h-3 w-3 text-teal-500" />
               <span>Practice cancellations</span>
             </li>
           </ul>

@@ -73,7 +73,7 @@ export function BottomNavigation({ teamSlug }: BottomNavigationProps) {
               className={`
                 flex flex-col items-center justify-center gap-1 flex-1 h-full min-w-0 transition-colors rounded-lg
                 ${active
-                  ? 'text-emerald-500'
+                  ? 'text-teal-500'
                   : 'text-[var(--text-muted)] active:text-[var(--text-primary)]'
                 }
               `}

@@ -62,10 +62,10 @@ export function QuickActionsWidget({
           <h2 className="text-lg font-semibold text-[var(--text-primary)]">Needs Attention</h2>
         </div>
         <div className="p-8 text-center">
-          <div className="h-12 w-12 rounded-full bg-emerald-500/15 flex items-center justify-center mx-auto mb-3">
-            <CheckCircle2 className="h-6 w-6 text-emerald-400" />
+          <div className="h-12 w-12 rounded-full bg-teal-500/15 flex items-center justify-center mx-auto mb-3">
+            <CheckCircle2 className="h-6 w-6 text-teal-400" />
           </div>
-          <p className="font-medium text-emerald-400 mb-1">All caught up!</p>
+          <p className="font-medium text-teal-400 mb-1">All caught up!</p>
           <p className="text-sm text-[var(--text-muted)]">No items need attention</p>
         </div>
       </div>

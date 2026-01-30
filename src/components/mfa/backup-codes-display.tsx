@@ -84,7 +84,7 @@ export function BackupCodesDisplay({ codes, onDone }: BackupCodesDisplayProps) {
         >
           {copied ? (
             <>
-              <Check className="h-4 w-4 text-emerald-500" />
+              <Check className="h-4 w-4 text-teal-500" />
               Copied
             </>
           ) : (
@@ -112,7 +112,7 @@ export function BackupCodesDisplay({ codes, onDone }: BackupCodesDisplayProps) {
               type="checkbox"
               checked={acknowledged}
               onChange={(e) => setAcknowledged(e.target.checked)}
-              className="mt-1 h-4 w-4 rounded border-zinc-700 bg-zinc-800 text-emerald-500 focus:ring-emerald-500 focus:ring-offset-zinc-900"
+              className="mt-1 h-4 w-4 rounded border-zinc-700 bg-zinc-800 text-teal-500 focus:ring-teal-500 focus:ring-offset-zinc-900"
             />
             <span className="text-sm text-zinc-400">
               I have saved my backup codes in a secure location
@@ -123,7 +123,7 @@ export function BackupCodesDisplay({ codes, onDone }: BackupCodesDisplayProps) {
             type="button"
             onClick={onDone}
             disabled={!acknowledged}
-            className="mt-4 w-full py-2.5 px-4 rounded-lg text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-zinc-900 focus:ring-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="mt-4 w-full py-2.5 px-4 rounded-lg text-sm font-medium text-white bg-teal-600 hover:bg-teal-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-zinc-900 focus:ring-teal-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             Continue
           </button>

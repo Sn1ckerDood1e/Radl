@@ -111,7 +111,7 @@ export function FacilityEquipmentForm({ facilitySlug, facilityId }: FacilityEqui
     }
   };
 
-  const inputClassName = "mt-1 block w-full rounded-lg border border-[var(--border)] bg-[var(--surface-2)] px-3 py-2 text-[var(--text-primary)] placeholder-[var(--text-muted)] shadow-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500";
+  const inputClassName = "mt-1 block w-full rounded-lg border border-[var(--border)] bg-[var(--surface-2)] px-3 py-2 text-[var(--text-primary)] placeholder-[var(--text-muted)] shadow-sm focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500";
   const labelClassName = "block text-sm font-medium text-[var(--text-secondary)]";
 
   return (
@@ -263,14 +263,14 @@ export function FacilityEquipmentForm({ facilitySlug, facilityId }: FacilityEqui
         <button
           type="button"
           onClick={() => router.back()}
-          className="flex-1 py-2 px-4 border border-[var(--border)] rounded-lg text-sm font-medium text-[var(--text-secondary)] bg-[var(--surface-2)] hover:bg-[var(--surface-3)] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[var(--surface-1)] focus:ring-emerald-500 transition-colors"
+          className="flex-1 py-2 px-4 border border-[var(--border)] rounded-lg text-sm font-medium text-[var(--text-secondary)] bg-[var(--surface-2)] hover:bg-[var(--surface-3)] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[var(--surface-1)] focus:ring-teal-500 transition-colors"
         >
           Cancel
         </button>
         <button
           type="submit"
           disabled={isSubmitting}
-          className="flex-1 py-2 px-4 border border-transparent rounded-lg text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[var(--surface-1)] focus:ring-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          className="flex-1 py-2 px-4 border border-transparent rounded-lg text-sm font-medium text-white bg-teal-600 hover:bg-teal-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[var(--surface-1)] focus:ring-teal-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
         >
           {isSubmitting ? 'Adding...' : 'Add Equipment'}
         </button>

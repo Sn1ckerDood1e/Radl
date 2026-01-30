@@ -97,7 +97,7 @@ export function CSVImportForm({ onSuccess }: CSVImportFormProps) {
       )}
 
       {importResult && (
-        <div className={`p-3 text-sm rounded-lg border ${importResult.created > 0 ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30' : 'bg-yellow-500/10 text-yellow-400 border-yellow-500/30'}`}>
+        <div className={`p-3 text-sm rounded-lg border ${importResult.created > 0 ? 'bg-teal-500/10 text-teal-400 border-teal-500/30' : 'bg-yellow-500/10 text-yellow-400 border-yellow-500/30'}`}>
           <p className="font-medium">
             {importResult.created > 0 ? `Successfully created ${importResult.created} invitation(s)` : 'No invitations created'}
           </p>
@@ -122,7 +122,7 @@ export function CSVImportForm({ onSuccess }: CSVImportFormProps) {
         <button
           type="button"
           onClick={downloadTemplate}
-          className="text-sm text-emerald-400 hover:text-emerald-300 underline transition-colors"
+          className="text-sm text-teal-400 hover:text-teal-300 underline transition-colors"
         >
           Download CSV Template
         </button>
@@ -162,7 +162,7 @@ export function CSVImportForm({ onSuccess }: CSVImportFormProps) {
             type="button"
             onClick={handleImport}
             disabled={isSubmitting}
-            className="flex-1 py-2 px-4 border border-transparent rounded-lg text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-zinc-900 focus:ring-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="flex-1 py-2 px-4 border border-transparent rounded-lg text-sm font-medium text-white bg-teal-600 hover:bg-teal-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-zinc-900 focus:ring-teal-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             {isSubmitting ? 'Importing...' : `Import ${parsedData.length} Invitations`}
           </button>

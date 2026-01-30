@@ -42,7 +42,7 @@ export function EquipmentUsageSummary({ mostUsed, recentUsage, teamSlug }: Equip
                   <span className="text-xs text-zinc-500 w-4">{index + 1}.</span>
                   <Link
                     href={`/${teamSlug}/equipment/${item.equipmentId}`}
-                    className="text-sm text-zinc-200 hover:text-emerald-400 transition-colors"
+                    className="text-sm text-zinc-200 hover:text-teal-400 transition-colors"
                   >
                     {item.equipmentName}
                   </Link>
@@ -71,10 +71,10 @@ export function EquipmentUsageSummary({ mostUsed, recentUsage, teamSlug }: Equip
               return (
                 <div key={usage.id} className="flex items-center justify-between text-sm">
                   <div className="flex items-center gap-2 min-w-0">
-                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 flex-shrink-0" />
+                    <div className="w-1.5 h-1.5 rounded-full bg-teal-500 flex-shrink-0" />
                     <Link
                       href={`/${teamSlug}/equipment/${usage.equipmentId}`}
-                      className="text-zinc-200 hover:text-emerald-400 transition-colors truncate"
+                      className="text-zinc-200 hover:text-teal-400 transition-colors truncate"
                     >
                       {usage.equipmentName}
                     </Link>

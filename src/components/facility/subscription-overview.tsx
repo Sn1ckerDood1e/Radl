@@ -57,7 +57,7 @@ export function SubscriptionOverview({
           <span className="text-sm text-[var(--text-secondary)]">Status</span>
           <span className={`px-2 py-0.5 text-xs rounded-full ${
             subscriptionData.status === 'active'
-              ? 'bg-emerald-500/20 text-emerald-400'
+              ? 'bg-teal-500/20 text-teal-400'
               : 'bg-red-500/20 text-red-400'
           }`}>
             {subscriptionData.status === 'active' ? 'Active' : 'Inactive'}
@@ -99,7 +99,7 @@ export function SubscriptionOverview({
             <div className="h-2 bg-[var(--surface-2)] rounded-full overflow-hidden">
               <div
                 className={`h-full rounded-full transition-all ${
-                  memberUsage > 90 ? 'bg-amber-500' : 'bg-emerald-500'
+                  memberUsage > 90 ? 'bg-amber-500' : 'bg-teal-500'
                 }`}
                 style={{ width: `${memberUsage}%` }}
               />
@@ -120,7 +120,7 @@ export function SubscriptionOverview({
             <div className="h-2 bg-[var(--surface-2)] rounded-full overflow-hidden">
               <div
                 className={`h-full rounded-full transition-all ${
-                  equipmentUsage > 90 ? 'bg-amber-500' : 'bg-emerald-500'
+                  equipmentUsage > 90 ? 'bg-amber-500' : 'bg-teal-500'
                 }`}
                 style={{ width: `${equipmentUsage}%` }}
               />
@@ -139,7 +139,7 @@ export function SubscriptionOverview({
               </span>
             </div>
             <div className="h-2 bg-[var(--surface-2)] rounded-full">
-              <div className="h-full w-0 rounded-full bg-emerald-500" />
+              <div className="h-full w-0 rounded-full bg-teal-500" />
             </div>
           </div>
         </div>

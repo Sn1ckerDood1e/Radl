@@ -62,7 +62,7 @@ export function WorkoutIntervalRow({
           <span className="text-sm text-zinc-400 hidden sm:inline">Duration:</span>
           <select
             {...register(`intervals.${index}.durationType`)}
-            className="px-2 py-1.5 text-sm bg-zinc-800 border border-zinc-700 rounded text-zinc-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none"
+            className="px-2 py-1.5 text-sm bg-zinc-800 border border-zinc-700 rounded text-zinc-200 focus:border-teal-500 focus:ring-1 focus:ring-teal-500 outline-none"
           >
             <option value="time">Time</option>
             <option value="distance">Distance</option>
@@ -74,7 +74,7 @@ export function WorkoutIntervalRow({
               placeholder={durationType === 'time' ? '300' : '2000'}
               className={cn(
                 'w-24 px-2 py-1.5 text-sm bg-zinc-800 border rounded text-zinc-200',
-                'focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none',
+                'focus:border-teal-500 focus:ring-1 focus:ring-teal-500 outline-none',
                 intervalErrors?.duration ? 'border-red-500' : 'border-zinc-700'
               )}
             />
@@ -93,7 +93,7 @@ export function WorkoutIntervalRow({
                 type="text"
                 {...register(`intervals.${index}.targetSplit`)}
                 placeholder={formatTargetPlaceholder}
-                className="w-20 px-2 py-1.5 text-sm bg-zinc-800 border border-zinc-700 rounded text-zinc-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none"
+                className="w-20 px-2 py-1.5 text-sm bg-zinc-800 border border-zinc-700 rounded text-zinc-200 focus:border-teal-500 focus:ring-1 focus:ring-teal-500 outline-none"
               />
               <span className="text-sm text-zinc-400">/500m</span>
             </div>
@@ -105,7 +105,7 @@ export function WorkoutIntervalRow({
                 placeholder={formatTargetPlaceholder}
                 min={16}
                 max={40}
-                className="w-20 px-2 py-1.5 text-sm bg-zinc-800 border border-zinc-700 rounded text-zinc-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none"
+                className="w-20 px-2 py-1.5 text-sm bg-zinc-800 border border-zinc-700 rounded text-zinc-200 focus:border-teal-500 focus:ring-1 focus:ring-teal-500 outline-none"
               />
               <span className="text-sm text-zinc-400">spm</span>
             </div>
@@ -120,12 +120,12 @@ export function WorkoutIntervalRow({
             {...register(`intervals.${index}.restDuration`, { valueAsNumber: true })}
             placeholder="0"
             min={0}
-            className="w-20 px-2 py-1.5 text-sm bg-zinc-800 border border-zinc-700 rounded text-zinc-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none"
+            className="w-20 px-2 py-1.5 text-sm bg-zinc-800 border border-zinc-700 rounded text-zinc-200 focus:border-teal-500 focus:ring-1 focus:ring-teal-500 outline-none"
           />
           <span className="text-sm text-zinc-400">s</span>
           <select
             {...register(`intervals.${index}.restType`)}
-            className="px-2 py-1.5 text-sm bg-zinc-800 border border-zinc-700 rounded text-zinc-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none"
+            className="px-2 py-1.5 text-sm bg-zinc-800 border border-zinc-700 rounded text-zinc-200 focus:border-teal-500 focus:ring-1 focus:ring-teal-500 outline-none"
           >
             <option value="time">Timed</option>
             <option value="undefined">Free</option>

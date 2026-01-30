@@ -193,7 +193,7 @@ export function SeasonManager({ teamSlug, seasons }: SeasonManagerProps) {
                     onChange={(e) => setName(e.target.value)}
                     placeholder="e.g., Spring 2026"
                     required
-                    className="w-full px-3 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-sm"
+                    className="w-full px-3 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent text-sm"
                   />
                 </div>
 
@@ -207,7 +207,7 @@ export function SeasonManager({ teamSlug, seasons }: SeasonManagerProps) {
                       id="start-date"
                       value={startDate}
                       onChange={(e) => setStartDate(e.target.value)}
-                      className="w-full px-3 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-sm [color-scheme:dark]"
+                      className="w-full px-3 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent text-sm [color-scheme:dark]"
                     />
                   </div>
                   <div>
@@ -219,7 +219,7 @@ export function SeasonManager({ teamSlug, seasons }: SeasonManagerProps) {
                       id="end-date"
                       value={endDate}
                       onChange={(e) => setEndDate(e.target.value)}
-                      className="w-full px-3 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-sm [color-scheme:dark]"
+                      className="w-full px-3 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent text-sm [color-scheme:dark]"
                     />
                   </div>
                 </div>
@@ -263,13 +263,13 @@ export function SeasonManager({ teamSlug, seasons }: SeasonManagerProps) {
                       className="flex items-center justify-between p-3 bg-zinc-800/50 rounded-lg border border-zinc-700"
                     >
                       <div className="flex items-center gap-3">
-                        <div className="p-1.5 rounded-md bg-emerald-500/10">
-                          <Calendar className="h-4 w-4 text-emerald-400" />
+                        <div className="p-1.5 rounded-md bg-teal-500/10">
+                          <Calendar className="h-4 w-4 text-teal-400" />
                         </div>
                         <div>
                           <div className="flex items-center gap-2">
                             <span className="text-sm font-medium text-white">{season.name}</span>
-                            <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-emerald-500/20 text-emerald-400">
+                            <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-teal-500/20 text-teal-400">
                               Active
                             </span>
                           </div>

@@ -325,7 +325,7 @@ export function UnifiedCalendar({
                 id="season-select"
                 value={seasonId}
                 onChange={(e) => handleSeasonChange(e.target.value)}
-                className="w-full sm:w-auto px-3 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                className="w-full sm:w-auto px-3 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
               >
                 <option value="">All seasons</option>
                 {seasons.map((season) => (
@@ -555,7 +555,7 @@ export function UnifiedCalendar({
             {isCoach && selectedDate && (
               <Link
                 href={`/${teamSlug}/practices/new?date=${format(selectedDate, 'yyyy-MM-dd')}`}
-                className="p-2 text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/10 rounded-lg transition-colors"
+                className="p-2 text-teal-400 hover:text-teal-300 hover:bg-teal-500/10 rounded-lg transition-colors"
                 title="Add practice"
               >
                 <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -567,7 +567,7 @@ export function UnifiedCalendar({
 
           {loading && displayEvents.length === 0 ? (
             <div className="text-center py-8">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-500 mx-auto"></div>
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-teal-500 mx-auto"></div>
               <p className="text-zinc-500 text-sm mt-2">Loading events...</p>
             </div>
           ) : selectedEvents.length > 0 || selectedRcRegattas.length > 0 ? (
@@ -658,7 +658,7 @@ export function UnifiedCalendar({
               {isCoach && selectedDate && (
                 <Link
                   href={`/${teamSlug}/practices/new?date=${format(selectedDate, 'yyyy-MM-dd')}`}
-                  className="inline-flex items-center mt-4 px-3 py-1.5 text-sm text-emerald-400 hover:text-emerald-300 border border-emerald-500/30 hover:border-emerald-500/50 rounded-lg transition-colors"
+                  className="inline-flex items-center mt-4 px-3 py-1.5 text-sm text-teal-400 hover:text-teal-300 border border-teal-500/30 hover:border-teal-500/50 rounded-lg transition-colors"
                 >
                   <svg className="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />

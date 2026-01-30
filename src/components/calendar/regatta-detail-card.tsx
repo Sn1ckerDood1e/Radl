@@ -35,7 +35,7 @@ export function RegattaDetailCard({ regatta, onClose }: RegattaDetailCardProps) 
   // Status indicator color
   const statusColors: Record<string, string> = {
     UPCOMING: 'bg-blue-500',
-    IN_PROGRESS: 'bg-emerald-500',
+    IN_PROGRESS: 'bg-teal-500',
     COMPLETED: 'bg-zinc-500',
     CANCELLED: 'bg-red-500',
   };

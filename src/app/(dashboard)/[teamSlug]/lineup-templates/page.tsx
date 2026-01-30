@@ -30,7 +30,7 @@ export default async function LineupTemplatesPage({ params }: PageProps) {
       <nav className="mb-6 text-sm">
         <ol className="flex items-center gap-2 text-zinc-400">
           <li>
-            <Link href={`/${teamSlug}`} className="hover:text-emerald-400 transition-colors">
+            <Link href={`/${teamSlug}`} className="hover:text-teal-400 transition-colors">
               Dashboard
             </Link>
           </li>
@@ -49,7 +49,7 @@ export default async function LineupTemplatesPage({ params }: PageProps) {
         {isCoach && (
           <Link
             href={`/${teamSlug}/practices`}
-            className="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-500 transition-colors"
+            className="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium text-white bg-teal-600 hover:bg-teal-500 transition-colors"
           >
             <Plus className="h-5 w-5 mr-2" />
             Create from Practice

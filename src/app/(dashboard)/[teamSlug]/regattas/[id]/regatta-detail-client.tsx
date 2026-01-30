@@ -70,7 +70,7 @@ export function RegattaDetailClient({
   if (isLoading && !regatta) {
     return (
       <div className="flex justify-center py-8">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-500" />
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-teal-500" />
       </div>
     );
   }
@@ -81,7 +81,7 @@ export function RegattaDetailClient({
       <div className="text-center py-8 text-red-400">
         <p>{error}</p>
         {!isOffline && (
-          <button onClick={refresh} className="mt-4 text-emerald-400 hover:underline">
+          <button onClick={refresh} className="mt-4 text-teal-400 hover:underline">
             Try again
           </button>
         )}
@@ -130,7 +130,7 @@ export function RegattaDetailClient({
           {isCoach && !isOffline && (
             <button
               onClick={() => router.push(`/${teamSlug}/regattas/${regattaId}/entries/new`)}
-              className="flex items-center gap-2 px-3 py-1.5 bg-emerald-600 text-white rounded-lg hover:bg-emerald-500 text-sm"
+              className="flex items-center gap-2 px-3 py-1.5 bg-teal-600 text-white rounded-lg hover:bg-teal-500 text-sm"
             >
               <Plus className="h-4 w-4" />
               Add Entry
@@ -164,7 +164,7 @@ export function RegattaDetailClient({
         <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-6 text-center text-zinc-400">
           <p>No race schedule data available.</p>
           {!isOffline && (
-            <button onClick={refresh} className="mt-4 text-emerald-400 hover:underline">
+            <button onClick={refresh} className="mt-4 text-teal-400 hover:underline">
               Load schedule
             </button>
           )}

@@ -162,8 +162,8 @@ export function MfaSetupDialog({ open, onClose, onComplete }: MfaSetupDialogProp
           {step === 'intro' && (
             <div className="space-y-6">
               <div className="flex justify-center">
-                <div className="p-4 bg-emerald-500/10 rounded-full">
-                  <Shield className="h-12 w-12 text-emerald-500" />
+                <div className="p-4 bg-teal-500/10 rounded-full">
+                  <Shield className="h-12 w-12 text-teal-500" />
                 </div>
               </div>
 
@@ -206,7 +206,7 @@ export function MfaSetupDialog({ open, onClose, onComplete }: MfaSetupDialogProp
                 type="button"
                 onClick={handleStartEnrollment}
                 disabled={loading}
-                className="w-full py-2.5 px-4 rounded-lg text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-zinc-900 focus:ring-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="w-full py-2.5 px-4 rounded-lg text-sm font-medium text-white bg-teal-600 hover:bg-teal-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-zinc-900 focus:ring-teal-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
                 {loading ? (
                   <span className="inline-flex items-center gap-2">
@@ -255,7 +255,7 @@ export function MfaSetupDialog({ open, onClose, onComplete }: MfaSetupDialogProp
               <button
                 type="button"
                 onClick={handleQrScanned}
-                className="w-full py-2.5 px-4 rounded-lg text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-zinc-900 focus:ring-emerald-500 transition-colors"
+                className="w-full py-2.5 px-4 rounded-lg text-sm font-medium text-white bg-teal-600 hover:bg-teal-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-zinc-900 focus:ring-teal-500 transition-colors"
               >
                 I've scanned the code
               </button>
@@ -289,7 +289,7 @@ export function MfaSetupDialog({ open, onClose, onComplete }: MfaSetupDialogProp
                   }}
                   placeholder="000000"
                   autoFocus
-                  className="block w-full text-center text-2xl tracking-widest font-mono rounded-lg border border-zinc-700 bg-zinc-800 px-4 py-3 text-zinc-100 placeholder-zinc-600 shadow-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                  className="block w-full text-center text-2xl tracking-widest font-mono rounded-lg border border-zinc-700 bg-zinc-800 px-4 py-3 text-zinc-100 placeholder-zinc-600 shadow-sm focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500"
                 />
               </div>
 
@@ -304,7 +304,7 @@ export function MfaSetupDialog({ open, onClose, onComplete }: MfaSetupDialogProp
                 type="button"
                 onClick={handleVerifyCode}
                 disabled={loading || code.length !== 6}
-                className="w-full py-2.5 px-4 rounded-lg text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-zinc-900 focus:ring-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="w-full py-2.5 px-4 rounded-lg text-sm font-medium text-white bg-teal-600 hover:bg-teal-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-zinc-900 focus:ring-teal-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
                 {loading ? (
                   <span className="inline-flex items-center gap-2">
@@ -338,8 +338,8 @@ export function MfaSetupDialog({ open, onClose, onComplete }: MfaSetupDialogProp
           {step === 'complete' && (
             <div className="space-y-6">
               <div className="flex justify-center">
-                <div className="p-4 bg-emerald-500/10 rounded-full">
-                  <CheckCircle className="h-12 w-12 text-emerald-500" />
+                <div className="p-4 bg-teal-500/10 rounded-full">
+                  <CheckCircle className="h-12 w-12 text-teal-500" />
                 </div>
               </div>
 
@@ -356,7 +356,7 @@ export function MfaSetupDialog({ open, onClose, onComplete }: MfaSetupDialogProp
               <button
                 type="button"
                 onClick={handleDone}
-                className="w-full py-2.5 px-4 rounded-lg text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-zinc-900 focus:ring-emerald-500 transition-colors"
+                className="w-full py-2.5 px-4 rounded-lg text-sm font-medium text-white bg-teal-600 hover:bg-teal-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-zinc-900 focus:ring-teal-500 transition-colors"
               >
                 Done
               </button>
@@ -373,7 +373,7 @@ export function MfaSetupDialog({ open, onClose, onComplete }: MfaSetupDialogProp
                   key={s}
                   className={`h-1 flex-1 rounded-full transition-colors ${
                     ['qr', 'verify', 'backup'].indexOf(step) >= i
-                      ? 'bg-emerald-500'
+                      ? 'bg-teal-500'
                       : 'bg-zinc-700'
                   }`}
                 />

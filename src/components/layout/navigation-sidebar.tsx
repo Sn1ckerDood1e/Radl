@@ -77,7 +77,7 @@ export function NavigationSidebar({ teamSlug }: NavigationSidebarProps) {
             className={`
               flex items-center gap-3 px-4 py-3 rounded-lg transition-colors font-medium
               ${active
-                ? 'bg-emerald-500/20 text-emerald-500'
+                ? 'bg-teal-500/20 text-teal-500'
                 : 'text-[var(--text-secondary)] hover:bg-[var(--surface-2)] hover:text-[var(--text-primary)]'
               }
             `}

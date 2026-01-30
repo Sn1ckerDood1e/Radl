@@ -8,7 +8,7 @@ const registrationBadgeVariants = cva(
   {
     variants: {
       status: {
-        OPEN: 'bg-emerald-500/20 text-emerald-400',
+        OPEN: 'bg-teal-500/20 text-teal-400',
         CLOSED: 'bg-zinc-500/20 text-zinc-400',
         WAITLIST: 'bg-amber-500/20 text-amber-400',
         NOT_AVAILABLE: 'bg-zinc-500/20 text-zinc-500',

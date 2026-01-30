@@ -237,14 +237,14 @@ export default function NewFacilityEventPage() {
                   key={club.id}
                   className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-colors ${
                     selectedClubIds.includes(club.id)
-                      ? 'bg-emerald-500/10 border border-emerald-500/30'
+                      ? 'bg-teal-500/10 border border-teal-500/30'
                       : 'bg-[var(--surface-2)] border border-transparent hover:border-[var(--border)]'
                   }`}
                 >
                   <div
                     className={`h-5 w-5 rounded border flex items-center justify-center ${
                       selectedClubIds.includes(club.id)
-                        ? 'bg-emerald-600 border-emerald-600'
+                        ? 'bg-teal-600 border-teal-600'
                         : 'border-[var(--border)]'
                     }`}
                   >

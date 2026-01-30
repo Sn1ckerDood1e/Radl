@@ -104,7 +104,7 @@ export function InvitationsClient({
             onClick={() => setActiveTab('invite')}
             className={`py-3 px-1 border-b-2 font-medium text-sm transition-colors ${
               activeTab === 'invite'
-                ? 'border-emerald-500 text-emerald-400'
+                ? 'border-teal-500 text-teal-400'
                 : 'border-transparent text-zinc-500 hover:text-zinc-300 hover:border-zinc-600'
             }`}
           >
@@ -114,7 +114,7 @@ export function InvitationsClient({
             onClick={() => setActiveTab('bulk')}
             className={`py-3 px-1 border-b-2 font-medium text-sm transition-colors ${
               activeTab === 'bulk'
-                ? 'border-emerald-500 text-emerald-400'
+                ? 'border-teal-500 text-teal-400'
                 : 'border-transparent text-zinc-500 hover:text-zinc-300 hover:border-zinc-600'
             }`}
           >
@@ -124,7 +124,7 @@ export function InvitationsClient({
             onClick={() => setActiveTab('pending')}
             className={`py-3 px-1 border-b-2 font-medium text-sm flex items-center gap-2 transition-colors ${
               activeTab === 'pending'
-                ? 'border-emerald-500 text-emerald-400'
+                ? 'border-teal-500 text-teal-400'
                 : 'border-transparent text-zinc-500 hover:text-zinc-300 hover:border-zinc-600'
             }`}
           >
@@ -198,7 +198,7 @@ export function InvitationsClient({
                           <button
                             onClick={() => handleApprove(invitation.id, invitation.userId!)}
                             disabled={isActionInProgress}
-                            className="text-sm text-emerald-400 hover:text-emerald-300 disabled:opacity-50 transition-colors"
+                            className="text-sm text-teal-400 hover:text-teal-300 disabled:opacity-50 transition-colors"
                           >
                             {isApproving === invitation.id ? 'Approving...' : 'Approve'}
                           </button>
@@ -238,7 +238,7 @@ export function InvitationsClient({
                           : 'N/A'}
                       </p>
                     </div>
-                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-500/20 text-emerald-400">
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-teal-500/20 text-teal-400">
                       Accepted
                     </span>
                   </div>

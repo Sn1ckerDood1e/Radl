@@ -59,7 +59,7 @@ export function QRBulkExportButton({ teamId, equipmentCount }: QRBulkExportButto
       type="button"
       onClick={handleExport}
       disabled={isExporting || equipmentCount === 0}
-      className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-emerald-600 rounded-lg hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed"
+      className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-teal-600 rounded-lg hover:bg-teal-700 disabled:opacity-50 disabled:cursor-not-allowed"
     >
       {isExporting ? (
         <>

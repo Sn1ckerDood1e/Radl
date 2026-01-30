@@ -75,7 +75,7 @@ export function TodaysScheduleWidget({
           <h2 className="text-lg font-semibold text-[var(--text-primary)]">Today's Schedule</h2>
           <Link
             href={`/${teamSlug}/practices`}
-            className="text-sm text-emerald-500 hover:text-emerald-400 font-medium"
+            className="text-sm text-teal-500 hover:text-teal-400 font-medium"
           >
             View all
           </Link>
@@ -85,7 +85,7 @@ export function TodaysScheduleWidget({
           <p className="text-[var(--text-muted)] mb-4">No upcoming practices</p>
           <Link
             href={`/${teamSlug}/practices/new`}
-            className="inline-flex items-center gap-2 text-sm text-emerald-500 hover:text-emerald-400 font-medium"
+            className="inline-flex items-center gap-2 text-sm text-teal-500 hover:text-teal-400 font-medium"
           >
             <Plus className="h-4 w-4" />
             Create a practice
@@ -110,7 +110,7 @@ export function TodaysScheduleWidget({
           <h2 className="text-lg font-semibold text-[var(--text-primary)]">Today's Schedule</h2>
           <Link
             href={`/${teamSlug}/practices`}
-            className="text-sm text-emerald-500 hover:text-emerald-400 font-medium"
+            className="text-sm text-teal-500 hover:text-teal-400 font-medium"
           >
             View all
           </Link>
@@ -148,7 +148,7 @@ export function TodaysScheduleWidget({
         <h2 className="text-lg font-semibold text-[var(--text-primary)]">Today's Schedule</h2>
         <Link
           href={`/${teamSlug}/practices`}
-          className="text-sm text-emerald-500 hover:text-emerald-400 font-medium"
+          className="text-sm text-teal-500 hover:text-teal-400 font-medium"
         >
           View all
         </Link>
@@ -160,8 +160,8 @@ export function TodaysScheduleWidget({
             href={`/${teamSlug}/practices/${practice.id}`}
             className="flex items-center gap-4 p-4 hover:bg-[var(--surface-2)] transition-colors"
           >
-            <div className="h-10 w-10 rounded-lg bg-emerald-500/15 flex items-center justify-center flex-shrink-0">
-              <Clock className="h-5 w-5 text-emerald-400" />
+            <div className="h-10 w-10 rounded-lg bg-teal-500/15 flex items-center justify-center flex-shrink-0">
+              <Clock className="h-5 w-5 text-teal-400" />
             </div>
             <div className="flex-1 min-w-0">
               <h3 className="font-medium text-[var(--text-primary)] truncate">

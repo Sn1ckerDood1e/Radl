@@ -223,8 +223,8 @@ export function MfaSection() {
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3">
             {isEnabled ? (
-              <div className="p-2 bg-emerald-500/10 rounded-lg">
-                <ShieldCheck className="h-5 w-5 text-emerald-500" />
+              <div className="p-2 bg-teal-500/10 rounded-lg">
+                <ShieldCheck className="h-5 w-5 text-teal-500" />
               </div>
             ) : (
               <div className="p-2 bg-zinc-500/10 rounded-lg">
@@ -244,7 +244,7 @@ export function MfaSection() {
           </div>
 
           {isEnabled && (
-            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400">
+            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-teal-500/10 text-teal-400">
               Enabled
             </span>
           )}
@@ -297,7 +297,7 @@ export function MfaSection() {
                   className="p-2 text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"
                 >
                   {secretCopied ? (
-                    <Check className="h-4 w-4 text-emerald-500" />
+                    <Check className="h-4 w-4 text-teal-500" />
                   ) : (
                     <Copy className="h-4 w-4" />
                   )}
@@ -358,8 +358,8 @@ export function MfaSection() {
         {/* Setup Step: Complete */}
         {setupStep === 'complete' && (
           <div className="text-center py-8">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-emerald-500/10 rounded-full mb-4">
-              <ShieldCheck className="h-8 w-8 text-emerald-500" />
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-teal-500/10 rounded-full mb-4">
+              <ShieldCheck className="h-8 w-8 text-teal-500" />
             </div>
             <h3 className="text-lg font-medium text-[var(--text-primary)]">
               Two-factor authentication enabled

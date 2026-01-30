@@ -293,7 +293,7 @@ export default function TeamSettingsPage() {
               max="365"
               value={inspectSoonDays}
               onChange={(e) => setInspectSoonDays(parseInt(e.target.value) || 14)}
-              className="w-full px-3 py-2 bg-zinc-900 border border-zinc-700 rounded-lg text-white focus:outline-none focus:border-emerald-500"
+              className="w-full px-3 py-2 bg-zinc-900 border border-zinc-700 rounded-lg text-white focus:outline-none focus:border-teal-500"
             />
           </div>
 
@@ -307,7 +307,7 @@ export default function TeamSettingsPage() {
               max="365"
               value={needsAttentionDays}
               onChange={(e) => setNeedsAttentionDays(parseInt(e.target.value) || 21)}
-              className="w-full px-3 py-2 bg-zinc-900 border border-zinc-700 rounded-lg text-white focus:outline-none focus:border-emerald-500"
+              className="w-full px-3 py-2 bg-zinc-900 border border-zinc-700 rounded-lg text-white focus:outline-none focus:border-teal-500"
             />
           </div>
 
@@ -321,20 +321,20 @@ export default function TeamSettingsPage() {
               max="365"
               value={outOfServiceDays}
               onChange={(e) => setOutOfServiceDays(parseInt(e.target.value) || 30)}
-              className="w-full px-3 py-2 bg-zinc-900 border border-zinc-700 rounded-lg text-white focus:outline-none focus:border-emerald-500"
+              className="w-full px-3 py-2 bg-zinc-900 border border-zinc-700 rounded-lg text-white focus:outline-none focus:border-teal-500"
             />
           </div>
 
           <button
             onClick={handleSaveThresholds}
             disabled={savingThresholds}
-            className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 disabled:bg-emerald-600/50 text-white rounded-lg text-sm font-medium transition-colors"
+            className="px-4 py-2 bg-teal-600 hover:bg-teal-500 disabled:bg-teal-600/50 text-white rounded-lg text-sm font-medium transition-colors"
           >
             {savingThresholds ? 'Saving...' : 'Save Thresholds'}
           </button>
 
           {thresholdSuccess && (
-            <p className="text-sm text-emerald-400">Thresholds saved successfully!</p>
+            <p className="text-sm text-teal-400">Thresholds saved successfully!</p>
           )}
         </div>
       </div>
@@ -427,7 +427,7 @@ export default function TeamSettingsPage() {
             onClick={() => setTheme('light')}
             className={`p-4 rounded-lg border-2 transition-all ${
               theme === 'light'
-                ? 'border-emerald-500 bg-emerald-500/10'
+                ? 'border-teal-500 bg-teal-500/10'
                 : 'border-zinc-700 hover:border-zinc-600 bg-zinc-800'
             }`}
           >
@@ -437,7 +437,7 @@ export default function TeamSettingsPage() {
                   <path d="M12 2.25a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0V3a.75.75 0 01.75-.75zM7.5 12a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM18.894 6.166a.75.75 0 00-1.06-1.06l-1.591 1.59a.75.75 0 101.06 1.061l1.591-1.59zM21.75 12a.75.75 0 01-.75.75h-2.25a.75.75 0 010-1.5H21a.75.75 0 01.75.75zM17.834 18.894a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 10-1.061 1.06l1.59 1.591zM12 18a.75.75 0 01.75.75V21a.75.75 0 01-1.5 0v-2.25A.75.75 0 0112 18zM7.758 17.303a.75.75 0 00-1.061-1.06l-1.591 1.59a.75.75 0 001.06 1.061l1.591-1.59zM6 12a.75.75 0 01-.75.75H3a.75.75 0 010-1.5h2.25A.75.75 0 016 12zM6.697 7.757a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 00-1.061 1.06l1.59 1.591z" />
                 </svg>
               </div>
-              <span className={`text-sm font-medium ${theme === 'light' ? 'text-emerald-400' : 'text-zinc-300'}`}>
+              <span className={`text-sm font-medium ${theme === 'light' ? 'text-teal-400' : 'text-zinc-300'}`}>
                 Light
               </span>
             </div>
@@ -448,7 +448,7 @@ export default function TeamSettingsPage() {
             onClick={() => setTheme('dark')}
             className={`p-4 rounded-lg border-2 transition-all ${
               theme === 'dark'
-                ? 'border-emerald-500 bg-emerald-500/10'
+                ? 'border-teal-500 bg-teal-500/10'
                 : 'border-zinc-700 hover:border-zinc-600 bg-zinc-800'
             }`}
           >
@@ -458,7 +458,7 @@ export default function TeamSettingsPage() {
                   <path fillRule="evenodd" d="M9.528 1.718a.75.75 0 01.162.819A8.97 8.97 0 009 6a9 9 0 009 9 8.97 8.97 0 003.463-.69.75.75 0 01.981.98 10.503 10.503 0 01-9.694 6.46c-5.799 0-10.5-4.701-10.5-10.5 0-4.368 2.667-8.112 6.46-9.694a.75.75 0 01.818.162z" clipRule="evenodd" />
                 </svg>
               </div>
-              <span className={`text-sm font-medium ${theme === 'dark' ? 'text-emerald-400' : 'text-zinc-300'}`}>
+              <span className={`text-sm font-medium ${theme === 'dark' ? 'text-teal-400' : 'text-zinc-300'}`}>
                 Dark
               </span>
             </div>
@@ -469,7 +469,7 @@ export default function TeamSettingsPage() {
             onClick={() => setTheme('system')}
             className={`p-4 rounded-lg border-2 transition-all ${
               theme === 'system'
-                ? 'border-emerald-500 bg-emerald-500/10'
+                ? 'border-teal-500 bg-teal-500/10'
                 : 'border-zinc-700 hover:border-zinc-600 bg-zinc-800'
             }`}
           >
@@ -479,7 +479,7 @@ export default function TeamSettingsPage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                 </svg>
               </div>
-              <span className={`text-sm font-medium ${theme === 'system' ? 'text-emerald-400' : 'text-zinc-300'}`}>
+              <span className={`text-sm font-medium ${theme === 'system' ? 'text-teal-400' : 'text-zinc-300'}`}>
                 System
               </span>
             </div>
@@ -541,8 +541,8 @@ export default function TeamSettingsPage() {
 
         {/* Success Alert */}
         {success && (
-          <div className="mb-4 bg-emerald-500/10 border border-emerald-500/30 rounded-lg p-3">
-            <div className="flex items-center gap-2 text-emerald-400 text-sm">
+          <div className="mb-4 bg-teal-500/10 border border-teal-500/30 rounded-lg p-3">
+            <div className="flex items-center gap-2 text-teal-400 text-sm">
               <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>
@@ -572,7 +572,7 @@ export default function TeamSettingsPage() {
                     type="checkbox"
                     checked={selectedCoaches.has(coach.userId)}
                     onChange={() => handleCoachToggle(coach.userId)}
-                    className="h-4 w-4 rounded border-zinc-600 bg-zinc-700 text-emerald-500 focus:ring-emerald-500 focus:ring-offset-zinc-900"
+                    className="h-4 w-4 rounded border-zinc-600 bg-zinc-700 text-teal-500 focus:ring-teal-500 focus:ring-offset-zinc-900"
                   />
                   <div className="flex-1">
                     <span className="text-sm font-medium text-white">
@@ -580,7 +580,7 @@ export default function TeamSettingsPage() {
                     </span>
                   </div>
                   {selectedCoaches.has(coach.userId) && (
-                    <span className="text-xs bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded-full">
+                    <span className="text-xs bg-teal-500/20 text-teal-400 px-2 py-0.5 rounded-full">
                       Will receive notifications
                     </span>
                   )}
@@ -597,7 +597,7 @@ export default function TeamSettingsPage() {
               className={`px-4 py-2 rounded-lg font-medium transition-colors ${
                 saving || !hasNotificationChanges()
                   ? 'bg-zinc-700 text-zinc-500 cursor-not-allowed'
-                  : 'bg-emerald-600 hover:bg-emerald-500 text-white'
+                  : 'bg-teal-600 hover:bg-teal-500 text-white'
               }`}
             >
               {saving ? 'Saving...' : 'Save Changes'}

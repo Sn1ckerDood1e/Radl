@@ -108,7 +108,7 @@ export function LandLineupBuilder({
           placeholder="Search athletes..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="flex-1 px-3 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-sm text-white placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+          className="flex-1 px-3 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-sm text-white placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
         />
         <button
           type="button"
@@ -165,7 +165,7 @@ export function LandLineupBuilder({
                   className={`
                     flex items-center gap-3 p-3 cursor-pointer transition-colors border-l-4
                     ${sideIndicator?.color || 'border-l-zinc-800'}
-                    ${isSelected ? 'bg-emerald-500/10' : 'hover:bg-zinc-800/50'}
+                    ${isSelected ? 'bg-teal-500/10' : 'hover:bg-zinc-800/50'}
                   `}
                 >
                   {/* Checkbox */}
@@ -173,7 +173,7 @@ export function LandLineupBuilder({
                     type="checkbox"
                     checked={isSelected}
                     onChange={() => toggleAthlete(athlete.id)}
-                    className="h-4 w-4 rounded border-zinc-600 bg-zinc-800 text-emerald-500 focus:ring-2 focus:ring-emerald-500 focus:ring-offset-0 focus:ring-offset-zinc-900"
+                    className="h-4 w-4 rounded border-zinc-600 bg-zinc-800 text-teal-500 focus:ring-2 focus:ring-teal-500 focus:ring-offset-0 focus:ring-offset-zinc-900"
                   />
 
                   {/* Avatar */}
@@ -201,7 +201,7 @@ export function LandLineupBuilder({
           type="button"
           onClick={handleSave}
           disabled={isSaving}
-          className="px-6 py-2 bg-emerald-600 hover:bg-emerald-700 disabled:bg-emerald-600/50 disabled:cursor-not-allowed text-white font-medium rounded-lg transition-colors"
+          className="px-6 py-2 bg-teal-600 hover:bg-teal-700 disabled:bg-teal-600/50 disabled:cursor-not-allowed text-white font-medium rounded-lg transition-colors"
         >
           {isSaving ? 'Saving...' : 'Save Assignment'}
         </button>

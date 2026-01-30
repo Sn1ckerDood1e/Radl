@@ -324,7 +324,7 @@ export function MultiBoatLineupBuilder({
             type="button"
             onClick={handleSave}
             disabled={isSaving}
-            className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg text-sm font-medium text-white transition-colors flex items-center gap-2"
+            className="px-4 py-2 bg-teal-600 hover:bg-teal-500 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg text-sm font-medium text-white transition-colors flex items-center gap-2"
           >
             <Save className="h-4 w-4" />
             {isSaving ? 'Saving...' : 'Save Lineups'}

@@ -120,7 +120,7 @@ export default async function FacilityEventsPage({ params }: EventsPageProps) {
         </div>
         <Link
           href={`/facility/${facilitySlug}/events/new`}
-          className="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-500 transition-colors"
+          className="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium text-white bg-teal-600 hover:bg-teal-500 transition-colors"
         >
           <Plus className="h-5 w-5 mr-2" />
           Create Event
@@ -136,7 +136,7 @@ export default async function FacilityEventsPage({ params }: EventsPageProps) {
           </p>
           <Link
             href={`/facility/${facilitySlug}/events/new`}
-            className="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-500 transition-colors"
+            className="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium text-white bg-teal-600 hover:bg-teal-500 transition-colors"
           >
             <Plus className="h-5 w-5 mr-2" />
             Create First Event
@@ -170,7 +170,7 @@ export default async function FacilityEventsPage({ params }: EventsPageProps) {
                           </span>
                         </div>
                       </div>
-                      <span className="px-2 py-1 text-xs rounded-full bg-emerald-500/20 text-emerald-400">
+                      <span className="px-2 py-1 text-xs rounded-full bg-teal-500/20 text-teal-400">
                         {event.clubs.length} club{event.clubs.length !== 1 ? 's' : ''}
                       </span>
                     </div>

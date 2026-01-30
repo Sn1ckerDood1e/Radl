@@ -113,7 +113,7 @@ export function DamageHistory({ damageReports, equipmentId, isCoach }: DamageHis
                     className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${
                       report.status === 'OPEN'
                         ? 'bg-red-500/20 text-red-400'
-                        : 'bg-emerald-500/20 text-emerald-400'
+                        : 'bg-teal-500/20 text-teal-400'
                     }`}
                   >
                     {report.status === 'OPEN' ? 'Open' : 'Resolved'}
@@ -152,7 +152,7 @@ export function DamageHistory({ damageReports, equipmentId, isCoach }: DamageHis
                 {report.description.length > 150 && (
                   <button
                     onClick={() => setExpandedId(expandedId === report.id ? null : report.id)}
-                    className="text-sm text-emerald-400 hover:text-emerald-300 mt-1"
+                    className="text-sm text-teal-400 hover:text-teal-300 mt-1"
                   >
                     {expandedId === report.id ? 'Show less' : 'Show more'}
                   </button>
@@ -206,7 +206,7 @@ export function DamageHistory({ damageReports, equipmentId, isCoach }: DamageHis
                   <button
                     onClick={() => handleResolve(report.id)}
                     disabled={resolvingId === report.id}
-                    className="inline-flex items-center px-3 py-1.5 border border-transparent rounded-lg text-xs font-medium text-white bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 transition-colors"
+                    className="inline-flex items-center px-3 py-1.5 border border-transparent rounded-lg text-xs font-medium text-white bg-teal-600 hover:bg-teal-500 disabled:opacity-50 transition-colors"
                   >
                     {resolvingId === report.id ? 'Resolving...' : 'Mark Resolved'}
                   </button>

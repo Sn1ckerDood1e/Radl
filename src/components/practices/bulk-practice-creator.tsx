@@ -230,7 +230,7 @@ export function BulkPracticeCreator({
         <select
           value={seasonId}
           onChange={(e) => setSeasonId(e.target.value)}
-          className="w-full px-3 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-zinc-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none"
+          className="w-full px-3 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-zinc-200 focus:border-teal-500 focus:ring-1 focus:ring-teal-500 outline-none"
         >
           {seasons.map(season => (
             <option key={season.id} value={season.id}>
@@ -320,7 +320,7 @@ export function BulkPracticeCreator({
               className={cn(
                 'px-3 py-2 rounded-lg text-sm font-medium transition-colors',
                 selectedDays.includes(index as DayOfWeek)
-                  ? 'bg-emerald-600 text-white'
+                  ? 'bg-teal-600 text-white'
                   : 'bg-zinc-800 text-zinc-400 border border-zinc-700 hover:bg-zinc-700'
               )}
             >
@@ -341,7 +341,7 @@ export function BulkPracticeCreator({
             type="time"
             value={startTime}
             onChange={(e) => setStartTime(e.target.value)}
-            className="w-full px-3 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-zinc-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none [color-scheme:dark]"
+            className="w-full px-3 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-zinc-200 focus:border-teal-500 focus:ring-1 focus:ring-teal-500 outline-none [color-scheme:dark]"
           />
         </div>
         <div>
@@ -352,7 +352,7 @@ export function BulkPracticeCreator({
             type="time"
             value={endTime}
             onChange={(e) => setEndTime(e.target.value)}
-            className="w-full px-3 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-zinc-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none [color-scheme:dark]"
+            className="w-full px-3 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-zinc-200 focus:border-teal-500 focus:ring-1 focus:ring-teal-500 outline-none [color-scheme:dark]"
           />
         </div>
       </div>
@@ -367,7 +367,7 @@ export function BulkPracticeCreator({
           <select
             value={templateId}
             onChange={(e) => handleTemplateChange(e.target.value)}
-            className="w-full px-3 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-zinc-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none"
+            className="w-full px-3 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-zinc-200 focus:border-teal-500 focus:ring-1 focus:ring-teal-500 outline-none"
           >
             <option value="">No template - create empty practices</option>
             {templates.map(template => (
@@ -389,7 +389,7 @@ export function BulkPracticeCreator({
           value={namePattern}
           onChange={(e) => setNamePattern(e.target.value)}
           placeholder="e.g., Morning Practice"
-          className="w-full px-3 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-zinc-200 placeholder-zinc-500 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none"
+          className="w-full px-3 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-zinc-200 placeholder-zinc-500 focus:border-teal-500 focus:ring-1 focus:ring-teal-500 outline-none"
         />
         <p className="text-xs text-zinc-500 mt-1">
           Leave empty to auto-generate names with dates
@@ -414,7 +414,7 @@ export function BulkPracticeCreator({
           type="button"
           onClick={handleCreate}
           disabled={isCreating || practiceDates.length === 0}
-          className="w-full py-3 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg text-sm font-medium text-white transition-colors flex items-center justify-center gap-2"
+          className="w-full py-3 bg-teal-600 hover:bg-teal-500 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg text-sm font-medium text-white transition-colors flex items-center justify-center gap-2"
         >
           {isCreating ? (
             <>

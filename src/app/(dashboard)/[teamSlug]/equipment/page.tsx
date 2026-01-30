@@ -123,7 +123,7 @@ export default async function EquipmentPage({ params }: EquipmentPageProps) {
             <QRBulkExportButton teamId={team.id} equipmentCount={equipment.length} />
             <Link
               href={`/${teamSlug}/equipment/new`}
-              className="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-500 transition-colors"
+              className="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium text-white bg-teal-600 hover:bg-teal-500 transition-colors"
             >
               <svg className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />

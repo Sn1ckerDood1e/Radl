@@ -20,8 +20,8 @@ const statusConfig: Record<ReadinessStatus, {
   READY: {
     label: 'Ready',
     icon: CheckCircle2,
-    colorClass: 'text-emerald-400',
-    bgClass: 'bg-emerald-500/15',
+    colorClass: 'text-teal-400',
+    bgClass: 'bg-teal-500/15',
   },
   INSPECT_SOON: {
     label: 'Inspect Soon',
@@ -64,7 +64,7 @@ export function FleetHealthWidget({
           <p className="text-[var(--text-muted)]">No equipment registered</p>
           <Link
             href={`/${teamSlug}/equipment/new`}
-            className="inline-flex items-center gap-2 text-sm text-emerald-500 hover:text-emerald-400 font-medium mt-4"
+            className="inline-flex items-center gap-2 text-sm text-teal-500 hover:text-teal-400 font-medium mt-4"
           >
             Add equipment
           </Link>
@@ -85,7 +85,7 @@ export function FleetHealthWidget({
         <h2 className="text-lg font-semibold text-[var(--text-primary)]">Fleet Health</h2>
         <Link
           href={`/${teamSlug}/equipment`}
-          className="text-sm text-emerald-500 hover:text-emerald-400 font-medium"
+          className="text-sm text-teal-500 hover:text-teal-400 font-medium"
         >
           View all
         </Link>

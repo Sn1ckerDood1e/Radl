@@ -153,8 +153,8 @@ export function NextPracticeWidget({
     return (
       <div className="bg-[var(--surface-1)] rounded-xl border border-[var(--border-subtle)]">
         <div className="p-6 md:p-8 text-center">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-emerald-500/10 mb-4">
-            <Calendar className="h-8 w-8 text-emerald-400" />
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-teal-500/10 mb-4">
+            <Calendar className="h-8 w-8 text-teal-400" />
           </div>
           <h2 className="text-xl font-semibold text-[var(--text-primary)] mb-2">
             No Upcoming Practices
@@ -186,7 +186,7 @@ export function NextPracticeWidget({
           </p>
           <Link
             href={`/${teamSlug}/practices`}
-            className="inline-flex items-center gap-2 text-sm text-emerald-500 hover:text-emerald-400 font-medium"
+            className="inline-flex items-center gap-2 text-sm text-teal-500 hover:text-teal-400 font-medium"
           >
             View practices
           </Link>
@@ -202,13 +202,13 @@ export function NextPracticeWidget({
   return (
     <div className="bg-[var(--surface-1)] rounded-xl border border-[var(--border-subtle)] overflow-hidden">
       {/* Header with accent bar */}
-      <div className="bg-emerald-500/10 border-b border-emerald-500/20 px-6 py-4 md:px-8 md:py-5">
+      <div className="bg-teal-500/10 border-b border-teal-500/20 px-6 py-4 md:px-8 md:py-5">
         <div className="flex items-center gap-3">
-          <div className="flex items-center justify-center w-10 h-10 rounded-full bg-emerald-500/20">
-            <Calendar className="h-5 w-5 text-emerald-400" />
+          <div className="flex items-center justify-center w-10 h-10 rounded-full bg-teal-500/20">
+            <Calendar className="h-5 w-5 text-teal-400" />
           </div>
           <div>
-            <div className="text-sm text-emerald-400 font-medium">Next Practice</div>
+            <div className="text-sm text-teal-400 font-medium">Next Practice</div>
             <h2 className="text-xl md:text-2xl font-semibold text-[var(--text-primary)]">
               {formatPracticeTime(practice!.date, practice!.startTime)}
             </h2>
@@ -234,8 +234,8 @@ export function NextPracticeWidget({
         {/* Assignment details */}
         <div className={`rounded-lg p-4 ${hasAssignment ? 'bg-[var(--surface-2)]' : 'bg-amber-500/10 border border-amber-500/20'}`}>
           <div className="flex items-center gap-3">
-            <div className={`flex items-center justify-center w-10 h-10 rounded-full ${hasAssignment ? 'bg-emerald-500/20' : 'bg-amber-500/20'}`}>
-              <Icon className={`h-5 w-5 ${hasAssignment ? 'text-emerald-400' : 'text-amber-400'}`} />
+            <div className={`flex items-center justify-center w-10 h-10 rounded-full ${hasAssignment ? 'bg-teal-500/20' : 'bg-amber-500/20'}`}>
+              <Icon className={`h-5 w-5 ${hasAssignment ? 'text-teal-400' : 'text-amber-400'}`} />
             </div>
             <div>
               <div className="text-xs text-[var(--text-muted)] uppercase tracking-wide mb-0.5">
@@ -252,7 +252,7 @@ export function NextPracticeWidget({
         <div className="mt-6 pt-4 border-t border-[var(--border-subtle)]">
           <Link
             href={`/${teamSlug}/practices/${practice!.id}`}
-            className="inline-flex items-center gap-2 text-sm text-emerald-500 hover:text-emerald-400 font-medium"
+            className="inline-flex items-center gap-2 text-sm text-teal-500 hover:text-teal-400 font-medium"
           >
             View practice details
           </Link>

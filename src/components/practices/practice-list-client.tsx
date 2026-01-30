@@ -163,7 +163,7 @@ export function PracticeListClient({
                 className="mt-4 p-1 shrink-0"
               >
                 {selectedIds.has(practice.id) ? (
-                  <CheckSquare className="h-5 w-5 text-emerald-400" />
+                  <CheckSquare className="h-5 w-5 text-teal-400" />
                 ) : (
                   <Square className="h-5 w-5 text-zinc-500 hover:text-zinc-300" />
                 )}
@@ -182,7 +182,7 @@ export function PracticeListClient({
                 'flex-1 block p-4 bg-zinc-900 border border-zinc-800 rounded-lg transition-colors',
                 selectionMode
                   ? selectedIds.has(practice.id)
-                    ? 'border-emerald-500/50 bg-emerald-500/5'
+                    ? 'border-teal-500/50 bg-teal-500/5'
                     : 'hover:border-zinc-700 cursor-pointer'
                   : 'hover:border-zinc-700'
               )}
@@ -197,7 +197,7 @@ export function PracticeListClient({
                       </span>
                     )}
                     {practice.status === 'PUBLISHED' && (
-                      <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-emerald-500/20 text-emerald-400">
+                      <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-teal-500/20 text-teal-400">
                         Published
                       </span>
                     )}

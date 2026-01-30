@@ -80,7 +80,7 @@ export function AthleteRosterPanel({
           placeholder="Search athletes..."
           value={searchQuery}
           onChange={(e) => handleSearchChange(e.target.value)}
-          className="w-full px-3 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-sm text-white placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+          className="w-full px-3 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-sm text-white placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
         />
       </div>
 
@@ -91,7 +91,7 @@ export function AthleteRosterPanel({
             type="checkbox"
             checked={showAssigned}
             onChange={(e) => handleShowAssignedChange(e.target.checked)}
-            className="rounded border-zinc-600 bg-zinc-800 text-emerald-500 focus:ring-2 focus:ring-emerald-500 focus:ring-offset-0 focus:ring-offset-zinc-900"
+            className="rounded border-zinc-600 bg-zinc-800 text-teal-500 focus:ring-2 focus:ring-teal-500 focus:ring-offset-0 focus:ring-offset-zinc-900"
           />
           Show assigned athletes
         </label>

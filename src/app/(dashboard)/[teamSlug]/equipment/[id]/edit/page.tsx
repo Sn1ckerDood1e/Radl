@@ -49,13 +49,13 @@ export default async function EditEquipmentPage({ params }: EditEquipmentPagePro
       <nav className="mb-6 text-sm">
         <ol className="flex items-center gap-2 text-zinc-400">
           <li>
-            <Link href={`/${teamSlug}/equipment`} className="hover:text-emerald-400 transition-colors">
+            <Link href={`/${teamSlug}/equipment`} className="hover:text-teal-400 transition-colors">
               Equipment
             </Link>
           </li>
           <li>/</li>
           <li>
-            <Link href={`/${teamSlug}/equipment/${id}`} className="hover:text-emerald-400 transition-colors">
+            <Link href={`/${teamSlug}/equipment/${id}`} className="hover:text-teal-400 transition-colors">
               {equipment.name}
             </Link>
           </li>

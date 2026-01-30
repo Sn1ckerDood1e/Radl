@@ -56,7 +56,7 @@ export function CreateSeasonForm({ teamSlug }: CreateSeasonFormProps) {
     return (
       <button
         onClick={() => setIsOpen(true)}
-        className="inline-flex items-center px-4 py-2 text-sm font-medium text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 rounded-lg hover:bg-emerald-500/20 transition-colors"
+        className="inline-flex items-center px-4 py-2 text-sm font-medium text-teal-400 bg-teal-500/10 border border-teal-500/30 rounded-lg hover:bg-teal-500/20 transition-colors"
       >
         <svg className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -88,7 +88,7 @@ export function CreateSeasonForm({ teamSlug }: CreateSeasonFormProps) {
             onChange={(e) => setName(e.target.value)}
             placeholder="e.g., Spring 2026, Fall Racing"
             required
-            className="w-full px-3 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+            className="w-full px-3 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
           />
         </div>
 
@@ -102,7 +102,7 @@ export function CreateSeasonForm({ teamSlug }: CreateSeasonFormProps) {
               id="start-date"
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
-              className="w-full px-3 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+              className="w-full px-3 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
             />
           </div>
           <div>
@@ -114,7 +114,7 @@ export function CreateSeasonForm({ teamSlug }: CreateSeasonFormProps) {
               id="end-date"
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
-              className="w-full px-3 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+              className="w-full px-3 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
             />
           </div>
         </div>
@@ -130,7 +130,7 @@ export function CreateSeasonForm({ teamSlug }: CreateSeasonFormProps) {
           <button
             type="submit"
             disabled={isSubmitting || !name}
-            className="flex-1 py-2 px-4 border border-transparent rounded-lg text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="flex-1 py-2 px-4 border border-transparent rounded-lg text-sm font-medium text-white bg-teal-600 hover:bg-teal-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             {isSubmitting ? 'Creating...' : 'Create Season'}
           </button>

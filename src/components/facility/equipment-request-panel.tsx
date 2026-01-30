@@ -118,7 +118,7 @@ export function EquipmentRequestPanel({ bookings: initialBookings, onUpdate }: E
 
         {pendingBookings.length === 0 ? (
           <div className="bg-[var(--surface-1)] rounded-xl p-8 text-center border border-[var(--border-subtle)]">
-            <Check className="h-12 w-12 text-emerald-500 mx-auto mb-4" />
+            <Check className="h-12 w-12 text-teal-500 mx-auto mb-4" />
             <p className="text-[var(--text-secondary)]">No pending requests</p>
           </div>
         ) : (
@@ -261,7 +261,7 @@ export function EquipmentRequestPanel({ bookings: initialBookings, onUpdate }: E
                 <span
                   className={`px-2 py-1 text-xs rounded-full ${
                     booking.status === 'APPROVED'
-                      ? 'bg-emerald-500/20 text-emerald-400'
+                      ? 'bg-teal-500/20 text-teal-400'
                       : booking.status === 'DENIED'
                       ? 'bg-red-500/20 text-red-400'
                       : 'bg-zinc-500/20 text-zinc-400'

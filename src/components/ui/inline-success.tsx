@@ -55,7 +55,7 @@ export function InlineSuccess({
   return (
     <CheckCircle
       className={cn(
-        'text-emerald-500',
+        'text-teal-500',
         sizeMap[size],
         isExiting
           ? 'animate-out fade-out duration-200'

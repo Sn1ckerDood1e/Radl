@@ -32,12 +32,12 @@ export function RegattaCard({
 
   return (
     <div
-      className="block p-3 rounded-lg border bg-emerald-500/10 border-emerald-500/30"
+      className="block p-3 rounded-lg border bg-teal-500/10 border-teal-500/30"
     >
       <div className="flex items-center gap-2">
         {/* Regatta icon (trophy/flag) */}
         <svg
-          className="h-4 w-4 flex-shrink-0 text-emerald-400"
+          className="h-4 w-4 flex-shrink-0 text-teal-400"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -50,15 +50,15 @@ export function RegattaCard({
           />
         </svg>
         <div className="min-w-0 flex-1">
-          <p className="text-sm font-medium text-emerald-300 truncate">
+          <p className="text-sm font-medium text-teal-300 truncate">
             {name}
           </p>
-          <p className="text-xs text-emerald-400/70">
+          <p className="text-xs text-teal-400/70">
             {dateDisplay}
             {location && ` • ${location}`}
           </p>
         </div>
-        <span className="inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-emerald-500/20 text-emerald-400">
+        <span className="inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-teal-500/20 text-teal-400">
           Regatta
         </span>
       </div>

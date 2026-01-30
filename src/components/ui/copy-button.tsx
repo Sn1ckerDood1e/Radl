@@ -45,7 +45,7 @@ export function CopyButton({
         title={copied ? 'Copied!' : label}
       >
         {copied ? (
-          <Check className="h-4 w-4 text-emerald-400" />
+          <Check className="h-4 w-4 text-teal-400" />
         ) : (
           <Copy className="h-4 w-4" />
         )}
@@ -59,7 +59,7 @@ export function CopyButton({
       onClick={handleCopy}
       className={`inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-lg transition-colors ${
         copied
-          ? 'bg-emerald-500/20 text-emerald-400'
+          ? 'bg-teal-500/20 text-teal-400'
           : 'bg-zinc-700 text-zinc-300 hover:bg-zinc-600 hover:text-white'
       } ${className}`}
     >

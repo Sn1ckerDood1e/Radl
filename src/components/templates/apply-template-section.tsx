@@ -73,7 +73,7 @@ export function ApplyTemplateSection({
     }
   };
 
-  const inputClassName = "block w-full rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-2 text-zinc-100 placeholder-zinc-500 shadow-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 text-sm [color-scheme:dark]";
+  const inputClassName = "block w-full rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-2 text-zinc-100 placeholder-zinc-500 shadow-sm focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500 text-sm [color-scheme:dark]";
 
   return (
     <div className="space-y-4">
@@ -93,7 +93,7 @@ export function ApplyTemplateSection({
             className={`
               p-3 rounded-lg border text-left transition-colors
               ${template.id === selectedId
-                ? 'bg-emerald-500/10 border-emerald-500/50 ring-1 ring-emerald-500/30'
+                ? 'bg-teal-500/10 border-teal-500/50 ring-1 ring-teal-500/30'
                 : 'bg-zinc-800/50 border-zinc-700 hover:border-zinc-600'}
             `}
           >
@@ -146,7 +146,7 @@ export function ApplyTemplateSection({
             type="button"
             onClick={handleApply}
             disabled={isApplying || !date}
-            className="w-full px-4 py-2 rounded-lg text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="w-full px-4 py-2 rounded-lg text-sm font-medium text-white bg-teal-600 hover:bg-teal-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             {isApplying ? 'Creating Practice...' : 'Create Practice from Template'}
           </button>

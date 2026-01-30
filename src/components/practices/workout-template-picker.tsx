@@ -146,7 +146,7 @@ export function WorkoutTemplatePicker({
                       </p>
                     </div>
                     {selectedId === template.id && (
-                      <Check className="h-4 w-4 text-emerald-400 flex-shrink-0" />
+                      <Check className="h-4 w-4 text-teal-400 flex-shrink-0" />
                     )}
                   </button>
                 ))}

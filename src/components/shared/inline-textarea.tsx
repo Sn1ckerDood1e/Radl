@@ -117,7 +117,7 @@ export function InlineTextarea({
           // Hover
           'hover:border-zinc-700',
           // Focus
-          'focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500',
+          'focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500',
           // States
           isPending && 'opacity-50 cursor-wait',
           disabled && 'cursor-not-allowed opacity-40',

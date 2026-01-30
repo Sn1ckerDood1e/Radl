@@ -63,7 +63,7 @@ export default async function RegattasPage({ params, searchParams }: PageProps) 
         {isCoach && (
           <Link
             href={`/${teamSlug}/regattas/new`}
-            className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-500"
+            className="flex items-center gap-2 px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-500"
           >
             <Plus className="h-5 w-5" />
             Add Regatta

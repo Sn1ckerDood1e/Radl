@@ -172,7 +172,7 @@ export function EquipmentListClient({
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value as StatusFilter)}
-            className="rounded-md border border-zinc-700 bg-zinc-800 px-2 py-1 text-sm text-zinc-300 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+            className="rounded-md border border-zinc-700 bg-zinc-800 px-2 py-1 text-sm text-zinc-300 focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500"
           >
             <option value="ALL">All</option>
             <option value="ACTIVE">Active</option>

@@ -144,7 +144,7 @@ export default async function FacilityEquipmentPage({ params }: FacilityEquipmen
           )}
           <Link
             href={`/facility/${facilitySlug}/equipment/new`}
-            className="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-500 transition-colors"
+            className="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium text-white bg-teal-600 hover:bg-teal-500 transition-colors"
           >
             <Plus className="h-5 w-5 mr-2" />
             Add Equipment
@@ -173,7 +173,7 @@ export default async function FacilityEquipmentPage({ params }: FacilityEquipmen
           <p className="text-[var(--text-muted)] mb-4">No facility equipment yet</p>
           <Link
             href={`/facility/${facilitySlug}/equipment/new`}
-            className="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-500 transition-colors"
+            className="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium text-white bg-teal-600 hover:bg-teal-500 transition-colors"
           >
             <Plus className="h-5 w-5 mr-2" />
             Add First Equipment
@@ -227,7 +227,7 @@ export default async function FacilityEquipmentPage({ params }: FacilityEquipmen
                           {/* Status badge */}
                           <div className="flex items-center gap-2 mt-2">
                             {availability.status === 'available' && (
-                              <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-500/20 text-emerald-500">
+                              <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-teal-500/20 text-teal-500">
                                 Available
                               </span>
                             )}

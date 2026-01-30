@@ -27,7 +27,7 @@ export function ShareJoinLink({ joinCode, baseUrl }: ShareJoinLinkProps) {
         <div className="flex items-center justify-between gap-4 p-3 bg-zinc-800 rounded-lg">
           <div className="flex-1 min-w-0">
             <p className="text-xs text-zinc-500 mb-1">Team Code</p>
-            <p className="text-xl font-mono font-bold text-emerald-400 select-all">
+            <p className="text-xl font-mono font-bold text-teal-400 select-all">
               {joinCode}
             </p>
           </div>

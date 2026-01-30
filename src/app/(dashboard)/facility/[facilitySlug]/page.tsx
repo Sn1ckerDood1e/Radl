@@ -162,8 +162,8 @@ export default async function FacilityDashboardPage({ params }: FacilityDashboar
           className="group bg-[var(--surface-1)] hover:bg-[var(--surface-2)] rounded-xl p-6 transition-all duration-200 border border-[var(--border-subtle)] hover:border-[var(--border)]"
         >
           <div className="flex items-start justify-between mb-4">
-            <div className="h-14 w-14 rounded-xl flex items-center justify-center bg-emerald-500/20">
-              <Building2 className="h-7 w-7 text-emerald-500" />
+            <div className="h-14 w-14 rounded-xl flex items-center justify-center bg-teal-500/20">
+              <Building2 className="h-7 w-7 text-teal-500" />
             </div>
             <span className="text-3xl font-bold text-[var(--text-primary)]">{clubs.length}</span>
           </div>
@@ -177,8 +177,8 @@ export default async function FacilityDashboardPage({ params }: FacilityDashboar
           className="group bg-[var(--surface-1)] hover:bg-[var(--surface-2)] rounded-xl p-6 transition-all duration-200 border border-[var(--border-subtle)] hover:border-[var(--border)]"
         >
           <div className="flex items-start justify-between mb-4">
-            <div className="h-14 w-14 rounded-xl flex items-center justify-center bg-emerald-500/20">
-              <Ship className="h-7 w-7 text-emerald-500" />
+            <div className="h-14 w-14 rounded-xl flex items-center justify-center bg-teal-500/20">
+              <Ship className="h-7 w-7 text-teal-500" />
             </div>
             <span className="text-3xl font-bold text-[var(--text-primary)]">{sharedEquipmentCount}</span>
           </div>
@@ -192,8 +192,8 @@ export default async function FacilityDashboardPage({ params }: FacilityDashboar
           className="group bg-[var(--surface-1)] hover:bg-[var(--surface-2)] rounded-xl p-6 transition-all duration-200 border border-[var(--border-subtle)] hover:border-[var(--border)]"
         >
           <div className="flex items-start justify-between mb-4">
-            <div className="h-14 w-14 rounded-xl flex items-center justify-center bg-emerald-500/20">
-              <Calendar className="h-7 w-7 text-emerald-500" />
+            <div className="h-14 w-14 rounded-xl flex items-center justify-center bg-teal-500/20">
+              <Calendar className="h-7 w-7 text-teal-500" />
             </div>
             <span className="text-3xl font-bold text-[var(--text-primary)]">{upcomingEventsCount}</span>
           </div>
@@ -234,7 +234,7 @@ export default async function FacilityDashboardPage({ params }: FacilityDashboar
                     className="h-10 w-10 rounded-lg object-cover"
                   />
                 ) : (
-                  <div className="h-10 w-10 rounded-lg flex items-center justify-center text-white font-bold bg-emerald-600">
+                  <div className="h-10 w-10 rounded-lg flex items-center justify-center text-white font-bold bg-teal-600">
                     {club.name.charAt(0)}
                   </div>
                 )}

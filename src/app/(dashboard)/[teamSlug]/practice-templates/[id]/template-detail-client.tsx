@@ -116,7 +116,7 @@ export function TemplateDetailClient({ template, teamSlug }: TemplateDetailClien
         <div className="flex items-center gap-2">
           <Link
             href={`/${teamSlug}/practices/new?templateId=${template.id}`}
-            className="px-4 py-2 rounded-lg text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-500 transition-colors"
+            className="px-4 py-2 rounded-lg text-sm font-medium text-white bg-teal-600 hover:bg-teal-500 transition-colors"
           >
             Apply Template
           </Link>

@@ -57,7 +57,7 @@ export default async function NewFacilityEquipmentPage({ params }: NewFacilityEq
       <nav className="mb-6 text-sm">
         <ol className="flex items-center gap-2 text-[var(--text-muted)]">
           <li>
-            <Link href={`/facility/${facilitySlug}/equipment`} className="hover:text-emerald-400 transition-colors">
+            <Link href={`/facility/${facilitySlug}/equipment`} className="hover:text-teal-400 transition-colors">
               Shared Equipment
             </Link>
           </li>

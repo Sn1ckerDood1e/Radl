@@ -208,7 +208,7 @@ function CreateAnnouncementForm({
           maxLength={1000}
           className={cn(
             "w-full rounded-md border bg-zinc-800/50 border-zinc-700 px-3 py-2 text-sm text-white placeholder:text-zinc-500",
-            "focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent",
+            "focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent",
             "resize-none",
             errors.body && "border-red-500 focus:ring-red-500"
           )}
@@ -305,7 +305,7 @@ function CreateAnnouncementForm({
               className={cn(
                 "px-3 py-1.5 text-sm rounded-md border transition-colors",
                 expiryOption === option.value
-                  ? "bg-emerald-500/20 border-emerald-500 text-emerald-400"
+                  ? "bg-teal-500/20 border-teal-500 text-teal-400"
                   : "bg-zinc-800/50 border-zinc-700 text-zinc-400 hover:border-zinc-600"
               )}
             >

@@ -78,7 +78,7 @@ export function MfaVerifyDialog({ open, factorId, onClose, onVerified }: MfaVeri
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-zinc-700">
           <div className="flex items-center gap-3">
-            <Shield className="h-5 w-5 text-emerald-500" />
+            <Shield className="h-5 w-5 text-teal-500" />
             <h2 className="text-lg font-semibold text-zinc-100">
               Two-Factor Authentication
             </h2>
@@ -122,7 +122,7 @@ export function MfaVerifyDialog({ open, factorId, onClose, onVerified }: MfaVeri
                   placeholder="000000"
                   autoFocus
                   autoComplete="one-time-code"
-                  className="block w-full text-center text-2xl tracking-widest font-mono rounded-lg border border-zinc-700 bg-zinc-800 px-4 py-3 text-zinc-100 placeholder-zinc-600 shadow-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                  className="block w-full text-center text-2xl tracking-widest font-mono rounded-lg border border-zinc-700 bg-zinc-800 px-4 py-3 text-zinc-100 placeholder-zinc-600 shadow-sm focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500"
                 />
               </div>
             </>
@@ -159,7 +159,7 @@ export function MfaVerifyDialog({ open, factorId, onClose, onVerified }: MfaVeri
                   onKeyDown={handleKeyDown}
                   placeholder="XXXXXXXX"
                   autoFocus
-                  className="block w-full text-center text-2xl tracking-widest font-mono rounded-lg border border-zinc-700 bg-zinc-800 px-4 py-3 text-zinc-100 placeholder-zinc-600 shadow-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                  className="block w-full text-center text-2xl tracking-widest font-mono rounded-lg border border-zinc-700 bg-zinc-800 px-4 py-3 text-zinc-100 placeholder-zinc-600 shadow-sm focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500"
                 />
               </div>
             </>
@@ -176,7 +176,7 @@ export function MfaVerifyDialog({ open, factorId, onClose, onVerified }: MfaVeri
             type="button"
             onClick={handleVerify}
             disabled={loading || (mode === 'totp' ? code.length !== 6 : code.length !== 8)}
-            className="w-full py-2.5 px-4 rounded-lg text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-zinc-900 focus:ring-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="w-full py-2.5 px-4 rounded-lg text-sm font-medium text-white bg-teal-600 hover:bg-teal-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-zinc-900 focus:ring-teal-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             {loading ? (
               <span className="inline-flex items-center gap-2">

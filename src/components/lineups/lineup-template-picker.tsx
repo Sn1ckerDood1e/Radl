@@ -172,7 +172,7 @@ export function LineupTemplatePicker({ blockId, boatClass, onApplied }: LineupTe
                 className={`
                   p-3 rounded-lg border text-left transition-colors
                   ${template.id === selectedId
-                    ? 'bg-emerald-500/10 border-emerald-500/50 ring-1 ring-emerald-500/30'
+                    ? 'bg-teal-500/10 border-teal-500/50 ring-1 ring-teal-500/30'
                     : 'bg-zinc-800/50 border-zinc-700 hover:border-zinc-600'}
                 `}
               >
@@ -196,7 +196,7 @@ export function LineupTemplatePicker({ blockId, boatClass, onApplied }: LineupTe
             type="button"
             onClick={handleApply}
             disabled={isApplying || !selectedId}
-            className="w-full px-4 py-2 rounded-lg text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="w-full px-4 py-2 rounded-lg text-sm font-medium text-white bg-teal-600 hover:bg-teal-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             {isApplying ? 'Applying Template...' : 'Apply Template'}
           </button>

@@ -24,7 +24,7 @@ export default async function NewTemplatePage({ params }: NewTemplatePageProps) 
       <nav className="mb-6 text-sm">
         <ol className="flex items-center gap-2 text-zinc-400">
           <li>
-            <Link href={`/${teamSlug}/practice-templates`} className="hover:text-emerald-400 transition-colors">
+            <Link href={`/${teamSlug}/practice-templates`} className="hover:text-teal-400 transition-colors">
               Practice Templates
             </Link>
           </li>

@@ -169,7 +169,7 @@ export default function FacilitySettingsPage() {
         </div>
       )}
       {successMessage && (
-        <div className="mb-6 p-4 bg-emerald-500/10 border border-emerald-500/30 rounded-lg text-emerald-400">
+        <div className="mb-6 p-4 bg-teal-500/10 border border-teal-500/30 rounded-lg text-teal-400">
           {successMessage}
         </div>
       )}

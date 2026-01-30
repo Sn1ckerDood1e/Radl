@@ -252,7 +252,7 @@ export function RCSettingsSection() {
       <div className="flex items-center gap-2 mb-6">
         {status?.connected ? (
           <>
-            <div className="h-2.5 w-2.5 rounded-full bg-emerald-500"></div>
+            <div className="h-2.5 w-2.5 rounded-full bg-teal-500"></div>
             <span className="text-sm text-zinc-300">
               Connected (Org: {status.rcClubId})
             </span>
@@ -285,9 +285,9 @@ export function RCSettingsSection() {
               onClick={handleToggleAutoSync}
               className={`
                 relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent
-                transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus:ring-offset-zinc-900
+                transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 focus:ring-offset-zinc-900
                 ${togglingSync ? 'cursor-not-allowed opacity-50' : ''}
-                ${status.autoSyncEnabled ? 'bg-emerald-600' : 'bg-zinc-700'}
+                ${status.autoSyncEnabled ? 'bg-teal-600' : 'bg-zinc-700'}
               `}
             >
               <span className="sr-only">Enable auto-sync</span>
@@ -329,7 +329,7 @@ export function RCSettingsSection() {
                   <select
                     value={selectedSeasonId}
                     onChange={(e) => setSelectedSeasonId(e.target.value)}
-                    className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-zinc-300 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                    className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-zinc-300 text-sm focus:ring-2 focus:ring-teal-500 focus:border-transparent"
                     required
                   >
                     <option value="">Select a season</option>
@@ -348,7 +348,7 @@ export function RCSettingsSection() {
                     value={rcRegattaId}
                     onChange={(e) => setRcRegattaId(e.target.value)}
                     placeholder="e.g., 12345"
-                    className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-zinc-300 text-sm placeholder-zinc-600 focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                    className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-zinc-300 text-sm placeholder-zinc-600 focus:ring-2 focus:ring-teal-500 focus:border-transparent"
                     required
                   />
                   <p className="text-xs text-zinc-500 mt-1">
@@ -360,7 +360,7 @@ export function RCSettingsSection() {
                   <button
                     type="submit"
                     disabled={importing}
-                    className="flex items-center gap-2 px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    className="flex items-center gap-2 px-4 py-2 rounded-lg bg-teal-600 hover:bg-teal-500 text-white text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                   >
                     {importing ? (
                       <>
@@ -440,7 +440,7 @@ export function RCSettingsSection() {
       {!status?.connected && !showConnectForm && (
         <button
           onClick={() => setShowConnectForm(true)}
-          className="flex items-center gap-2 px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-medium transition-colors"
+          className="flex items-center gap-2 px-4 py-2 rounded-lg bg-teal-600 hover:bg-teal-500 text-white font-medium transition-colors"
         >
           <LinkIcon className="h-4 w-4" />
           Connect Regatta Central
@@ -462,7 +462,7 @@ export function RCSettingsSection() {
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-zinc-300 placeholder-zinc-600 focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+              className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-zinc-300 placeholder-zinc-600 focus:ring-2 focus:ring-teal-500 focus:border-transparent"
               placeholder="Your RC username"
               required
             />
@@ -476,7 +476,7 @@ export function RCSettingsSection() {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-zinc-300 placeholder-zinc-600 focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+              className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-zinc-300 placeholder-zinc-600 focus:ring-2 focus:ring-teal-500 focus:border-transparent"
               placeholder="Your RC password"
               required
             />
@@ -490,7 +490,7 @@ export function RCSettingsSection() {
               type="text"
               value={rcClubId}
               onChange={(e) => setRcClubId(e.target.value)}
-              className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-zinc-300 placeholder-zinc-600 focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+              className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-zinc-300 placeholder-zinc-600 focus:ring-2 focus:ring-teal-500 focus:border-transparent"
               placeholder="e.g., 12345"
               required
             />
@@ -503,7 +503,7 @@ export function RCSettingsSection() {
             <button
               type="submit"
               disabled={connecting}
-              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-medium disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-teal-600 hover:bg-teal-500 text-white font-medium disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               {connecting ? (
                 <>

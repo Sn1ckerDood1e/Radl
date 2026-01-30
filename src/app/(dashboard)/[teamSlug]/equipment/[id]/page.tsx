@@ -117,7 +117,7 @@ export default async function EquipmentDetailPage({ params }: EquipmentDetailPag
       <nav className="mb-6">
         <ol className="flex items-center space-x-2 text-sm text-zinc-400 mb-4">
           <li>
-            <Link href={`/${teamSlug}/equipment`} className="hover:text-emerald-400 transition-colors">
+            <Link href={`/${teamSlug}/equipment`} className="hover:text-teal-400 transition-colors">
               Equipment
             </Link>
           </li>

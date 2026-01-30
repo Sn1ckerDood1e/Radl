@@ -18,7 +18,7 @@ const readinessBadgeVariants = cva(
   {
     variants: {
       status: {
-        READY: "bg-emerald-500/15 text-emerald-400 border border-emerald-500/20",
+        READY: "bg-teal-500/15 text-teal-400 border border-teal-500/20",
         INSPECT_SOON: "bg-yellow-500/15 text-yellow-400 border border-yellow-500/20",
         NEEDS_ATTENTION: "bg-amber-500/15 text-amber-400 border border-amber-500/20",
         OUT_OF_SERVICE: "bg-red-500/15 text-red-400 border border-red-500/20",

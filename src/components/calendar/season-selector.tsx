@@ -46,7 +46,7 @@ export function SeasonSelector({ seasons, currentSeasonId }: SeasonSelectorProps
         id="season-select"
         value={currentSeasonId || ''}
         onChange={handleChange}
-        className="w-full sm:w-auto px-3 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+        className="w-full sm:w-auto px-3 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
       >
         <option value="">All seasons</option>
         {seasons.map((season) => (

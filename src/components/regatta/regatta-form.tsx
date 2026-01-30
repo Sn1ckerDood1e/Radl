@@ -208,7 +208,7 @@ export function RegattaForm({ teamSlug, seasons, defaultSeasonId, regatta }: Reg
         <button
           type="submit"
           disabled={isSubmitting}
-          className="flex-1 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-500 disabled:opacity-50"
+          className="flex-1 px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-500 disabled:opacity-50"
         >
           {isSubmitting ? 'Saving...' : isEdit ? 'Save Changes' : 'Create Regatta'}
         </button>

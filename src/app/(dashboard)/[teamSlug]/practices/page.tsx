@@ -146,7 +146,7 @@ export default async function PracticesPage({ params, searchParams }: PracticesP
               </Link>
               <Link
                 href={`/${teamSlug}/practices/new?view=${viewMode}`}
-                className="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-500 transition-colors"
+                className="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium text-white bg-teal-600 hover:bg-teal-500 transition-colors"
               >
                 <Plus className="h-5 w-5 mr-2" />
                 New Practice

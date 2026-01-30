@@ -58,9 +58,9 @@ function AnnouncementCard({ announcement, isRead: initialIsRead, onMarkAsRead }:
         <div className="flex-1">
           <button
             onClick={() => setExpanded(!expanded)}
-            className="w-full text-left group flex items-center gap-2 hover:text-emerald-400 transition-colors"
+            className="w-full text-left group flex items-center gap-2 hover:text-teal-400 transition-colors"
           >
-            <h3 className="font-medium text-white group-hover:text-emerald-400">
+            <h3 className="font-medium text-white group-hover:text-teal-400">
               {announcement.title}
             </h3>
             <ChevronDown
@@ -87,7 +87,7 @@ function AnnouncementCard({ announcement, isRead: initialIsRead, onMarkAsRead }:
         <div className="mt-2">
           <Link
             href={`/practice/${announcement.practice.id}`}
-            className="inline-flex items-center gap-1.5 text-xs text-emerald-400 hover:text-emerald-300 transition-colors"
+            className="inline-flex items-center gap-1.5 text-xs text-teal-400 hover:text-teal-300 transition-colors"
           >
             <span>Related to: {announcement.practice.name}</span>
           </Link>

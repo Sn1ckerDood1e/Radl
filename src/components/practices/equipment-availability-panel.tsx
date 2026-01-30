@@ -245,7 +245,7 @@ function EquipmentRow({
     return (
       <div className="flex items-center justify-between py-1.5 px-2 rounded bg-zinc-800/50">
         <div className="flex items-center gap-2">
-          <CheckCircle className="h-3.5 w-3.5 text-emerald-500 flex-shrink-0" />
+          <CheckCircle className="h-3.5 w-3.5 text-teal-500 flex-shrink-0" />
           <span className="text-sm text-zinc-300">{item.name}</span>
           {item.boatClass && (
             <span className="text-xs text-zinc-500">({item.boatClass.replace(/_/g, ' ')})</span>

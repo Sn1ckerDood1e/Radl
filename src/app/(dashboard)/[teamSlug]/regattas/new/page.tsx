@@ -41,7 +41,7 @@ export default async function NewRegattaPage({ params }: PageProps) {
           </p>
           <Link
             href={`/${teamSlug}/settings/seasons`}
-            className="inline-block mt-4 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-500"
+            className="inline-block mt-4 px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-500"
           >
             Manage Seasons
           </Link>

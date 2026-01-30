@@ -39,7 +39,7 @@ export function EntryCard({ entry, timezone, isNext, onClick }: EntryCardProps) 
   const statusColors = {
     SCHEDULED: isNext ? 'border-blue-500 bg-blue-500/10' : 'border-zinc-700 bg-zinc-800',
     SCRATCHED: 'border-zinc-600 bg-zinc-800/50 opacity-60',
-    COMPLETED: 'border-emerald-500 bg-emerald-500/10',
+    COMPLETED: 'border-teal-500 bg-teal-500/10',
   };
 
   const lineupSummary = entry.entryLineup?.seats
@@ -102,7 +102,7 @@ export function EntryCard({ entry, timezone, isNext, onClick }: EntryCardProps) 
 
         <div className="flex flex-col items-end gap-1">
           {entry.status === 'COMPLETED' && entry.placement && (
-            <span className="text-lg font-bold text-emerald-400">
+            <span className="text-lg font-bold text-teal-400">
               #{entry.placement}
             </span>
           )}

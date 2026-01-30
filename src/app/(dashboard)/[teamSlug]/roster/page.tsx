@@ -136,7 +136,7 @@ export default async function RosterPage({ params }: RosterPageProps) {
                 </div>
                 <Link
                   href={`/${teamSlug}/invitations`}
-                  className="px-3 py-1.5 bg-emerald-500/20 text-emerald-400 text-xs font-medium rounded-lg hover:bg-emerald-500/30 transition-colors"
+                  className="px-3 py-1.5 bg-teal-500/20 text-teal-400 text-xs font-medium rounded-lg hover:bg-teal-500/30 transition-colors"
                 >
                   Review
                 </Link>
@@ -158,12 +158,12 @@ export default async function RosterPage({ params }: RosterPageProps) {
       {isCoach && members.length <= 1 && (
         <Link
           href={`/${teamSlug}/invitations`}
-          className="block mb-6 bg-gradient-to-r from-emerald-500/20 to-teal-500/20 border border-emerald-500/30 rounded-xl p-4 hover:border-emerald-500/50 transition-colors group"
+          className="block mb-6 bg-gradient-to-r from-teal-500/20 to-teal-500/20 border border-teal-500/30 rounded-xl p-4 hover:border-teal-500/50 transition-colors group"
         >
           <div className="flex items-center gap-4">
-            <div className="h-12 w-12 rounded-full bg-emerald-500/20 flex items-center justify-center flex-shrink-0">
+            <div className="h-12 w-12 rounded-full bg-teal-500/20 flex items-center justify-center flex-shrink-0">
               <svg
-                className="h-6 w-6 text-emerald-400"
+                className="h-6 w-6 text-teal-400"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -177,15 +177,15 @@ export default async function RosterPage({ params }: RosterPageProps) {
               </svg>
             </div>
             <div className="flex-1">
-              <h3 className="font-semibold text-emerald-200">
+              <h3 className="font-semibold text-teal-200">
                 Invite your team
               </h3>
-              <p className="text-sm text-emerald-300/70">
+              <p className="text-sm text-teal-300/70">
                 Send email invitations or share your team code
               </p>
             </div>
             <svg
-              className="h-5 w-5 text-emerald-400 group-hover:translate-x-1 transition-transform"
+              className="h-5 w-5 text-teal-400 group-hover:translate-x-1 transition-transform"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"

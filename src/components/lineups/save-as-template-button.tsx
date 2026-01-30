@@ -81,7 +81,7 @@ export function SaveAsTemplateButton({
     setError(null);
   };
 
-  const inputClassName = "block w-full rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-2 text-zinc-100 placeholder-zinc-500 shadow-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 text-sm [color-scheme:dark]";
+  const inputClassName = "block w-full rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-2 text-zinc-100 placeholder-zinc-500 shadow-sm focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500 text-sm [color-scheme:dark]";
 
   return (
     <>
@@ -146,7 +146,7 @@ export function SaveAsTemplateButton({
                       id="include-boat"
                       checked={includeBoat}
                       onChange={(e) => setIncludeBoat(e.target.checked)}
-                      className="h-4 w-4 rounded border-zinc-600 bg-zinc-800 text-emerald-600 focus:ring-emerald-500 focus:ring-offset-0"
+                      className="h-4 w-4 rounded border-zinc-600 bg-zinc-800 text-teal-600 focus:ring-teal-500 focus:ring-offset-0"
                     />
                     <label htmlFor="include-boat" className="text-zinc-300">
                       Include default boat assignment
@@ -169,7 +169,7 @@ export function SaveAsTemplateButton({
                 type="button"
                 onClick={handleSave}
                 disabled={isSaving || !name.trim()}
-                className="flex-1 px-4 py-2 rounded-lg text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="flex-1 px-4 py-2 rounded-lg text-sm font-medium text-white bg-teal-600 hover:bg-teal-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
                 {isSaving ? 'Saving...' : 'Save Template'}
               </button>

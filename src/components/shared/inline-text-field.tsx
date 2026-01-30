@@ -120,7 +120,7 @@ export function InlineTextField({
           // Hover shows border
           'hover:border-zinc-700',
           // Focus styles
-          'focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500',
+          'focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500',
           // Pending state
           isPending && 'opacity-50 cursor-wait',
           // Disabled state

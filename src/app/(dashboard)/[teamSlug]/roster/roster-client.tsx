@@ -92,14 +92,14 @@ export function RosterClient({ members, teamSlug }: RosterClientProps) {
               onClick={() => setActiveFilter(tab.id)}
               className={`py-3 px-1 border-b-2 font-medium text-sm whitespace-nowrap transition-colors ${
                 activeFilter === tab.id
-                  ? 'border-emerald-500 text-emerald-400'
+                  ? 'border-teal-500 text-teal-400'
                   : 'border-transparent text-zinc-500 hover:text-zinc-300 hover:border-zinc-600'
               }`}
             >
               {tab.label}
               <span className={`ml-2 ${
                 activeFilter === tab.id
-                  ? 'bg-emerald-500/20 text-emerald-400'
+                  ? 'bg-teal-500/20 text-teal-400'
                   : 'bg-zinc-800 text-zinc-400'
               } px-2 py-0.5 rounded-full text-xs`}>
                 {counts[tab.id]}

@@ -334,7 +334,7 @@ export function InlinePracticePage({
               className={cn(
                 'flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors',
                 practice.status === 'PUBLISHED'
-                  ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
+                  ? 'bg-teal-500/20 text-teal-400 border border-teal-500/30'
                   : 'bg-zinc-800 text-zinc-400 border border-zinc-700 hover:bg-zinc-700'
               )}
             >

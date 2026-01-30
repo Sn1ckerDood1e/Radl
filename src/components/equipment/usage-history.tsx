@@ -54,11 +54,11 @@ export function UsageHistory({ usageLogs, teamSlug }: UsageHistoryProps) {
               className="flex items-center justify-between py-2 border-b border-zinc-800 last:border-0"
             >
               <div className="flex items-center gap-3">
-                <div className="w-2 h-2 rounded-full bg-emerald-500" />
+                <div className="w-2 h-2 rounded-full bg-teal-500" />
                 <div>
                   <Link
                     href={`/${teamSlug}/practices/${log.practice.id}`}
-                    className="text-sm font-medium text-zinc-200 hover:text-emerald-400 transition-colors"
+                    className="text-sm font-medium text-zinc-200 hover:text-teal-400 transition-colors"
                   >
                     {log.practice.name}
                   </Link>

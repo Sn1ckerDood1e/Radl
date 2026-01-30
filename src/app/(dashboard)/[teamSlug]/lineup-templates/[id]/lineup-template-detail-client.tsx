@@ -108,13 +108,13 @@ export function LineupTemplateDetailClient({
       <nav className="text-sm">
         <ol className="flex items-center gap-2 text-zinc-400">
           <li>
-            <Link href={`/${teamSlug}`} className="hover:text-emerald-400 transition-colors">
+            <Link href={`/${teamSlug}`} className="hover:text-teal-400 transition-colors">
               Dashboard
             </Link>
           </li>
           <li>/</li>
           <li>
-            <Link href={`/${teamSlug}/lineup-templates`} className="hover:text-emerald-400 transition-colors">
+            <Link href={`/${teamSlug}/lineup-templates`} className="hover:text-teal-400 transition-colors">
               Lineup Templates
             </Link>
           </li>
@@ -161,7 +161,7 @@ export function LineupTemplateDetailClient({
                 </button>
                 <button
                   onClick={handleSave}
-                  className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 rounded-lg text-white transition-colors"
+                  className="px-4 py-2 bg-teal-600 hover:bg-teal-500 rounded-lg text-white transition-colors"
                 >
                   Save
                 </button>

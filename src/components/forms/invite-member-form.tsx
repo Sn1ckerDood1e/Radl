@@ -101,7 +101,7 @@ export function InviteMemberForm({ teamSlug, onSuccess }: InviteMemberFormProps)
     }
   };
 
-  const inputClassName = "mt-1 block w-full rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-2 text-zinc-100 placeholder-zinc-500 shadow-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500";
+  const inputClassName = "mt-1 block w-full rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-2 text-zinc-100 placeholder-zinc-500 shadow-sm focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500";
   const labelClassName = "block text-sm font-medium text-zinc-300";
 
   return (
@@ -179,7 +179,7 @@ export function InviteMemberForm({ teamSlug, onSuccess }: InviteMemberFormProps)
         <button
           type="submit"
           disabled={isSubmitting || (selectedRole === 'PARENT' && athletes.length === 0)}
-          className="w-full flex justify-center py-2 px-4 border border-transparent rounded-lg text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-zinc-900 focus:ring-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          className="w-full flex justify-center py-2 px-4 border border-transparent rounded-lg text-sm font-medium text-white bg-teal-600 hover:bg-teal-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-zinc-900 focus:ring-teal-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
         >
           {isSubmitting ? 'Creating Invitation...' : 'Create Invitation'}
         </button>

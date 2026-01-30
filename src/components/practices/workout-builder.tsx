@@ -192,7 +192,7 @@ export function WorkoutBuilder({
           <label className="block text-xs text-zinc-500 mb-1">Workout Type</label>
           <select
             {...register('type')}
-            className="w-full px-3 py-2 text-sm bg-zinc-800 border border-zinc-700 rounded-lg text-zinc-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none"
+            className="w-full px-3 py-2 text-sm bg-zinc-800 border border-zinc-700 rounded-lg text-zinc-200 focus:border-teal-500 focus:ring-1 focus:ring-teal-500 outline-none"
           >
             {workoutTypes.map(wt => (
               <option key={wt.value} value={wt.value}>
@@ -209,7 +209,7 @@ export function WorkoutBuilder({
           className={cn(
             'flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors',
             visibleToAthletes
-              ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
+              ? 'bg-teal-500/20 text-teal-400 border border-teal-500/30'
               : 'bg-zinc-800 text-zinc-400 border border-zinc-700'
           )}
         >
@@ -274,7 +274,7 @@ export function WorkoutBuilder({
           {...register('notes')}
           rows={2}
           placeholder="Workout instructions or notes..."
-          className="w-full px-3 py-2 text-sm bg-zinc-800 border border-zinc-700 rounded-lg text-zinc-200 placeholder-zinc-500 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none resize-none"
+          className="w-full px-3 py-2 text-sm bg-zinc-800 border border-zinc-700 rounded-lg text-zinc-200 placeholder-zinc-500 focus:border-teal-500 focus:ring-1 focus:ring-teal-500 outline-none resize-none"
         />
       </div>
 
@@ -284,7 +284,7 @@ export function WorkoutBuilder({
         <button
           type="submit"
           disabled={isSaving || !isDirty}
-          className="flex-1 py-2 px-4 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg text-sm font-medium text-white transition-colors flex items-center justify-center gap-2"
+          className="flex-1 py-2 px-4 bg-teal-600 hover:bg-teal-500 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg text-sm font-medium text-white transition-colors flex items-center justify-center gap-2"
         >
           <Save className="h-4 w-4" />
           {isSaving ? 'Saving...' : 'Save Workout'}
@@ -325,7 +325,7 @@ export function WorkoutBuilder({
               value={templateName}
               onChange={(e) => setTemplateName(e.target.value)}
               placeholder="Template name..."
-              className="w-full px-3 py-2 text-sm bg-zinc-800 border border-zinc-700 rounded-lg text-zinc-200 placeholder-zinc-500 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none mb-4"
+              className="w-full px-3 py-2 text-sm bg-zinc-800 border border-zinc-700 rounded-lg text-zinc-200 placeholder-zinc-500 focus:border-teal-500 focus:ring-1 focus:ring-teal-500 outline-none mb-4"
               autoFocus
             />
             <div className="flex gap-2">
@@ -340,7 +340,7 @@ export function WorkoutBuilder({
                 type="button"
                 onClick={handleSaveAsTemplate}
                 disabled={!templateName.trim()}
-                className="flex-1 py-2 px-4 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg text-sm font-medium text-white transition-colors"
+                className="flex-1 py-2 px-4 bg-teal-600 hover:bg-teal-500 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg text-sm font-medium text-white transition-colors"
               >
                 Save Template
               </button>

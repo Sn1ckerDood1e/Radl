@@ -33,7 +33,7 @@ export function SeatSlot({ seatId, position, label, side, athlete, onRemove, com
       ref={setNodeRef}
       className={`
         ${compact ? 'p-1.5 rounded border border-l-2 min-h-[48px]' : 'p-2 rounded-lg border-2 border-l-4 min-h-[60px]'}
-        ${isOver ? 'border-emerald-500 bg-emerald-500/10' : 'border-zinc-700 bg-zinc-800/50'}
+        ${isOver ? 'border-teal-500 bg-teal-500/10' : 'border-zinc-700 bg-zinc-800/50'}
         ${sideColor}
         transition-colors
       `}

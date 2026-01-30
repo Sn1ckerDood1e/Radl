@@ -102,7 +102,7 @@ export function InlineBlockEditor({
         'rounded-lg border transition-all',
         typeConfig.bgColor,
         typeConfig.borderColor,
-        isDragging && 'opacity-50 shadow-lg ring-2 ring-emerald-500'
+        isDragging && 'opacity-50 shadow-lg ring-2 ring-teal-500'
       )}
     >
       {/* Header row */}

@@ -118,7 +118,7 @@ export default async function ClubsPage({ params }: ClubsPageProps) {
                     className="h-12 w-12 rounded-lg object-cover"
                   />
                 ) : (
-                  <div className="h-12 w-12 rounded-lg flex items-center justify-center text-white font-bold bg-emerald-600">
+                  <div className="h-12 w-12 rounded-lg flex items-center justify-center text-white font-bold bg-teal-600">
                     {club.name.charAt(0)}
                   </div>
                 )}
