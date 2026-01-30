@@ -8,7 +8,7 @@
 - v2.1 UX Refinement - Phases 18-24 (shipped 2026-01-27)
 - v2.2 Security Audit - Phases 25-27 (shipped 2026-01-29)
 - v2.3 Core Flow Testing - Phases 28-31 (shipped 2026-01-29)
-- v3.0 Production Polish - Phases 32-35 (in progress)
+- v3.0 Production Polish - Phases 32-35 (shipped 2026-01-30)
 
 ## Phases
 
@@ -221,9 +221,9 @@ Plans:
 **Plans:** 3 plans
 
 Plans:
-- [ ] 35-01-PLAN.md — Calendar mobile drawer and touch targets (CALM-01, CALM-02)
-- [ ] 35-02-PLAN.md — Drag-drop touch sensors and visual feedback (DRAG-01, DRAG-02, DRAG-03)
-- [ ] 35-03-PLAN.md — Practice list mobile layout and verification checkpoint (CALM-03)
+- [x] 35-01-PLAN.md — Calendar mobile drawer and touch targets (CALM-01, CALM-02)
+- [x] 35-02-PLAN.md — Drag-drop touch sensors and visual feedback (DRAG-01, DRAG-02, DRAG-03)
+- [x] 35-03-PLAN.md — Practice list mobile layout and verification checkpoint (CALM-03)
 
 **Requirements:**
 - CALM-01: Calendar opens in bottom sheet (Drawer) on mobile viewports
@@ -249,10 +249,10 @@ Plans:
 | 32 | Safe Areas & Branding | 8 | Complete |
 | 33 | Legal Pages | 4 | Complete |
 | 34 | UX Polish | 11 | Complete |
-| 35 | Device-Specific | 6 | Pending |
+| 35 | Device-Specific | 6 | Complete |
 
-**Total:** 29 requirements, 4 phases (23/29 complete)
+**Total:** 29 requirements, 4 phases (29/29 complete)
 
 ---
 
-*Last updated: 2026-01-30 (Phase 35 plans created)*
+*Last updated: 2026-01-30 (Phase 35 complete - v3.0 SHIPPED)*
