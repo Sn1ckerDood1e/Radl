@@ -5,14 +5,10 @@ import {
   DndContext,
   DragOverlay,
   closestCorners,
-  PointerSensor,
-  KeyboardSensor,
-  useSensors,
-  useSensor,
   DragStartEvent,
   DragEndEvent,
 } from '@dnd-kit/core';
-import { sortableKeyboardCoordinates } from '@dnd-kit/sortable';
+import { useDndSensors } from '@/hooks/use-dnd-sensors';
 import { BoatClass } from '@/generated/prisma';
 import { getSeatsForBoatClass } from '@/lib/lineup/position-labels';
 import { AthleteRosterPanel } from './athlete-roster-panel';
@@ -80,13 +76,8 @@ export function WaterLineupBuilder({
     [seats]
   );
 
-  // Sensors for drag
-  const sensors = useSensors(
-    useSensor(PointerSensor),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
-    })
-  );
+  // Sensors for drag (mouse + touch optimized)
+  const sensors = useDndSensors();
 
   function handleDragStart(event: DragStartEvent) {
     setActiveId(event.active.id as string);
@@ -221,10 +212,12 @@ export function WaterLineupBuilder({
         </div>
       </div>
 
-      {/* Drag overlay */}
-      <DragOverlay>
+      {/* Drag overlay with visual feedback */}
+      <DragOverlay dropAnimation={{ duration: 200 }}>
         {activeAthlete ? (
-          <AthleteCard athlete={activeAthlete} isDragging />
+          <div className="transform scale-105 shadow-xl shadow-black/25 ring-2 ring-teal-500 rounded-lg bg-zinc-900">
+            <AthleteCard athlete={activeAthlete} isDragging />
+          </div>
         ) : null}
       </DragOverlay>
     </DndContext>
