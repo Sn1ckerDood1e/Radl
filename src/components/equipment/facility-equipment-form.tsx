@@ -40,6 +40,7 @@ export function FacilityEquipmentForm({ facilitySlug, facilityId }: FacilityEqui
     formState: { errors },
   } = useForm<CreateEquipmentFormInput>({
     resolver: zodResolver(createEquipmentFormSchema),
+    mode: 'onTouched',
     defaultValues: {
       type: 'SHELL',
     },

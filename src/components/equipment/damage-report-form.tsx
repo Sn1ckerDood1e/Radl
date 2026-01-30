@@ -32,6 +32,7 @@ export function DamageReportForm({ equipmentId, teamId }: DamageReportFormProps)
     reset,
   } = useForm<CreateDamageReportInput>({
     resolver: zodResolver(createDamageReportSchema),
+    mode: 'onTouched',
     defaultValues: {
       honeypot: '', // Start empty, bots will fill it
     },

@@ -110,6 +110,7 @@ export function WorkoutBuilder({
     formState: { errors, isDirty },
   } = useForm({
     resolver: zodResolver(createWorkoutSchema),
+    mode: 'onTouched',
     defaultValues,
   }) as ReturnType<typeof useForm<CreateWorkoutInput>>;
 

@@ -54,6 +54,7 @@ export function EquipmentForm({ teamSlug, equipment }: EquipmentFormProps) {
     formState: { errors },
   } = useForm<CreateEquipmentFormInput>({
     resolver: zodResolver(createEquipmentFormSchema),
+    mode: 'onTouched',
     defaultValues: equipment
       ? {
           type: equipment.type,

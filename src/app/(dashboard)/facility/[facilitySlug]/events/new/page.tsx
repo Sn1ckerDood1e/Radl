@@ -41,6 +41,7 @@ export default function NewFacilityEventPage() {
 
   const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(eventSchema),
+    mode: 'onTouched',
     defaultValues: {
       date: format(new Date(), 'yyyy-MM-dd'),
       startTime: '06:00',

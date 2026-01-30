@@ -77,6 +77,7 @@ export function PracticeForm({ teamSlug, seasonId, practice, onSuccess }: Practi
     formState: { errors },
   } = useForm<CreatePracticeFormInput>({
     resolver: zodResolver(createPracticeFormSchema),
+    mode: 'onTouched',
     defaultValues: {
       seasonId,
       name: practice?.name || '',
