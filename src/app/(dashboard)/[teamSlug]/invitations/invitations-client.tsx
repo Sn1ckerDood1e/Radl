@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import { InviteMemberForm } from '@/components/forms/invite-member-form';
 import { CSVImportForm } from '@/components/forms/csv-import-form';
+import { EmptyState } from '@/components/ui/empty-state';
+import { CheckCircle } from 'lucide-react';
 
 interface Invitation {
   id: string;
@@ -164,9 +166,12 @@ export function InvitationsClient({
             </div>
 
             {pendingInvitations.length === 0 ? (
-              <div className="px-6 py-8 text-center text-zinc-500">
-                No pending invitations
-              </div>
+              <EmptyState
+                icon={CheckCircle}
+                title="All invitations handled"
+                description="You've reviewed all pending invitations. Use the Invite Member tab to send new invites."
+                variant="celebration"
+              />
             ) : (
               <div className="divide-y divide-zinc-800">
                 {pendingInvitations.map(invitation => {

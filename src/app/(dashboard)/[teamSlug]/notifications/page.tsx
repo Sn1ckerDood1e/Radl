@@ -150,6 +150,7 @@ export default function NotificationsPage() {
             icon={Bell}
             title="You're all caught up"
             description="When there's team activity like new announcements, practice updates, or damage reports, you'll see notifications here."
+            variant="celebration"
           />
         </div>
       ) : (
