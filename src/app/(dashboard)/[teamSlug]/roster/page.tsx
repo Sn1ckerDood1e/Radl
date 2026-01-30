@@ -202,7 +202,11 @@ export default async function RosterPage({ params }: RosterPageProps) {
           <EmptyState
             icon={Users}
             title="No team members yet"
-            description="Invite your first athlete or coach to get started."
+            description={isCoach
+              ? "Invite your first athlete or coach to get started."
+              : "Your coach hasn't added any team members yet."
+            }
+            action={isCoach ? { label: "Invite Member", href: `/${teamSlug}/invitations` } : undefined}
           />
         </div>
       ) : (

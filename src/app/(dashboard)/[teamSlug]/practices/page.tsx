@@ -188,7 +188,7 @@ export default async function PracticesPage({ params, searchParams }: PracticesP
               icon={Calendar}
               title="No practices yet"
               description={isCoach ? "Create your first practice to get started." : "No practices have been published yet."}
-              action={isCoach && activeSeasons.length > 0 ? { label: "New Practice", href: `/${teamSlug}/practices/new` } : undefined}
+              action={isCoach && activeSeasons.length > 0 ? { label: "Create Practice", href: `/${teamSlug}/practices/new` } : undefined}
             />
           </div>
         )
