@@ -404,7 +404,7 @@ export function UnifiedCalendar({
               today: 'today-day',
             }}
             classNames={{
-              root: 'w-full',
+              root: 'w-full rdp-root',
               months: 'w-full',
               month: 'w-full',
               month_caption: 'hidden',
@@ -421,6 +421,13 @@ export function UnifiedCalendar({
             }}
           />
           <style jsx global>{`
+            /* Touch target sizing via CSS variables (react-day-picker v9) */
+            .rdp-root {
+              --rdp-day_button-height: 44px;
+              --rdp-day_button-width: 44px;
+              --rdp-day-height: 48px;
+              --rdp-day-width: 48px;
+            }
             .calendar-day-btn {
               width: 100%;
               height: 44px;
