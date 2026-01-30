@@ -4,17 +4,17 @@
 
 **Core Value:** Coaches can plan practices with lineups and equipment, and athletes know where to be and what boat they're in.
 
-**Current Focus:** v3.0 Production Polish — Phase 34: UX Polish
+**Current Focus:** v3.0 Production Polish — Phase 35: Device-Specific
 
 ## Current Position
 
 | Field | Value |
 |-------|-------|
 | Milestone | v3.0 Production Polish |
-| Phase | 34 - UX Polish |
-| Plan | 04 of 04 complete (34-04) |
-| Status | Phase 34 COMPLETE |
-| Last activity | 2026-01-30 — Completed 34-04-PLAN.md (Empty State Audit & Polish) |
+| Phase | 35 - Device-Specific |
+| Plan | 01 of 03 complete (35-01) |
+| Status | In progress |
+| Last activity | 2026-01-30 — Completed 35-01-PLAN.md (Calendar Mobile Optimization) |
 
 **Progress:**
 ```
@@ -24,7 +24,7 @@ v2.0: [##########] 100% SHIPPED (2026-01-26) — 34/34 requirements
 v2.1: [##########] 100% SHIPPED (2026-01-27) — 30/30 requirements
 v2.2: [##########] 100% SHIPPED (2026-01-29) — 33/35 requirements
 v2.3: [##########] 100% SHIPPED (2026-01-29) — 20/20 requirements
-v3.0: [########  ] 79% — 23/29 requirements (Phases 32-35)
+v3.0: [########  ] 86% — 25/29 requirements (Phases 32-35)
 ```
 
 **Total shipped:** 6 milestones, 31 phases, 160 requirements
@@ -39,7 +39,7 @@ v3.0: [########  ] 79% — 23/29 requirements (Phases 32-35)
 | 32 | Safe Areas & Branding | 8 | COMPLETE |
 | 33 | Legal Pages | 4 | COMPLETE |
 | 34 | UX Polish | 11 | COMPLETE (11/11) |
-| 35 | Device-Specific | 6 | Pending |
+| 35 | Device-Specific | 6 | In progress (2/6) |
 
 **Parallelization:** Phase 33 (Legal) can run in parallel with Phase 32
 
@@ -92,6 +92,8 @@ v3.0: [########  ] 79% — 23/29 requirements (Phases 32-35)
 | Button loading uses DelayedSpinner | 2026-01-30 | loading prop with 300ms delay, auto-disables |
 | Error toast retry gaps | 2026-01-30 | 12 network errors need showErrorToast migration |
 | Celebration variant pattern | 2026-01-30 | Use for positive zero-states (cleared), informational for first-time empty |
+| Calendar mobile pattern | 2026-01-30 | Drawer on mobile, Dialog on desktop (ResponsiveCalendarWrapper) |
+| CSS variables for touch | 2026-01-30 | Use --rdp-day_button-height: 44px for react-day-picker sizing |
 
 ### Architecture Notes
 
@@ -126,9 +128,9 @@ v3.0: [########  ] 79% — 23/29 requirements (Phases 32-35)
 | Field | Value |
 |-------|-------|
 | Last session | 2026-01-30 |
-| Stopped at | Completed 34-04-PLAN.md (Empty State Audit & Polish) |
-| Resume with | Phase 35 (Device-Specific) |
+| Stopped at | Completed 35-01-PLAN.md (Calendar Mobile Optimization) |
+| Resume with | 35-02-PLAN.md (Lineup Touch Polish) |
 
 ---
 
-*Last updated: 2026-01-30 (Phase 34 complete)*
+*Last updated: 2026-01-30 (Phase 35-01 complete)*
