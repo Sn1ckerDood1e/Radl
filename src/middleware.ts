@@ -1,9 +1,7 @@
 import { createServerClient } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
-import { validateApiKey } from '@/lib/auth/api-key';
 
-// Use Node.js runtime for Prisma compatibility in API key validation
-export const runtime = 'nodejs';
+// Edge runtime - no Prisma here (API key validation moved to API routes)
 
 // Public routes that don't require authentication
 const publicRoutes = [
@@ -83,32 +81,14 @@ export async function middleware(request: NextRequest) {
     return supabaseResponse;
   }
 
-  // API Key authentication for /api/* routes (excluding auth routes)
+  // API Key authentication: Pass through to API routes for validation
+  // (Prisma can't run in middleware, so API routes handle validation)
   if (pathname.startsWith('/api/') && !pathname.startsWith('/api/auth/')) {
     const authHeader = request.headers.get('authorization');
 
-    // Check for API key (Bearer sk_...)
+    // If request has API key header, pass through - API route will validate
     if (authHeader?.startsWith('Bearer sk_')) {
-      const key = authHeader.substring(7); // Remove 'Bearer '
-      const result = await validateApiKey(key);
-
-      if (result.valid) {
-        // Pass club context via headers to downstream handlers
-        const requestHeaders = new Headers(request.headers);
-        requestHeaders.set('x-api-key-club-id', result.clubId!);
-        requestHeaders.set('x-api-key-user-id', result.userId!);
-        requestHeaders.set('x-auth-type', 'api-key');
-
-        return NextResponse.next({
-          request: { headers: requestHeaders },
-        });
-      }
-
-      // Invalid API key
-      return NextResponse.json(
-        { error: 'Invalid or expired API key' },
-        { status: 401 }
-      );
+      return NextResponse.next();
     }
   }
 

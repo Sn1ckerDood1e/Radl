@@ -1,8 +1,10 @@
 import { createClient } from '@/lib/supabase/server';
 import { jwtDecode } from 'jwt-decode';
 import { redirect } from 'next/navigation';
+import { headers } from 'next/headers';
 import { prisma } from '@/lib/prisma';
 import type { CustomJwtPayload } from './claims';
+import { validateApiKey as validateKey } from './api-key';
 
 // Re-export type for consumers that need it
 export type { CustomJwtPayload };
@@ -126,4 +128,70 @@ export function canViewRoster(role: string | null): boolean {
 
 export function canViewLineups(role: string | null): boolean {
   return role === 'COACH' || role === 'ATHLETE';
+}
+
+/**
+ * Result of API authentication check.
+ */
+export interface ApiAuthResult {
+  authenticated: boolean;
+  type: 'session' | 'api-key' | null;
+  userId?: string;
+  clubId?: string;
+  error?: string;
+}
+
+/**
+ * Authenticate API request via session or API key.
+ * Use this at the start of API route handlers.
+ *
+ * @returns Authentication result with user/club context
+ */
+export async function authenticateApiRequest(): Promise<ApiAuthResult> {
+  const headersList = await headers();
+  const authHeader = headersList.get('authorization');
+
+  // Check for API key authentication
+  if (authHeader?.startsWith('Bearer sk_')) {
+    const key = authHeader.substring(7); // Remove 'Bearer '
+    const result = await validateKey(key);
+
+    if (result.valid) {
+      return {
+        authenticated: true,
+        type: 'api-key',
+        userId: result.userId,
+        clubId: result.clubId,
+      };
+    }
+
+    return {
+      authenticated: false,
+      type: null,
+      error: 'Invalid or expired API key',
+    };
+  }
+
+  // Fall back to session authentication
+  const supabase = await createClient();
+  const { data: { user }, error } = await supabase.auth.getUser();
+
+  if (error || !user) {
+    return {
+      authenticated: false,
+      type: null,
+      error: 'Not authenticated',
+    };
+  }
+
+  // Get user's club from JWT claims or database
+  const claims = await getUserClaims();
+  const clubId = claims?.club_id || claims?.team_id;
+
+  return {
+    authenticated: true,
+    type: 'session',
+    userId: user.id,
+    clubId: clubId ?? undefined,
+  };
 }
