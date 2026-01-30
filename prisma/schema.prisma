@@ -628,11 +628,13 @@ model WorkoutInterval {
   targetStrokeRate Int? // SPM for water workouts (16-40)
   restDuration     Int     @default(0) // Rest seconds after interval
   restType         String  @default("time") // 'time' or 'undefined'
+  teamId           String? // Denormalized for RLS (auto-populated by trigger)
 
   workout Workout @relation(fields: [workoutId], references: [id], onDelete: Cascade)
 
   @@unique([workoutId, position])
   @@index([workoutId])
+  @@index([teamId])
 }
 
 // Workout template model for reusable workout definitions
@@ -694,6 +696,7 @@ model SeatAssignment {
   athleteId String
   position  Int // 1-based: 1=Bow, 2-7=Middle, 8=Stroke, 9=Cox
   side      SeatSide
+  teamId    String? // Denormalized for RLS (auto-populated by trigger)
 
   lineup  Lineup         @relation(fields: [lineupId], references: [id], onDelete: Cascade)
   athlete AthleteProfile @relation(fields: [athleteId], references: [id])
@@ -701,6 +704,7 @@ model SeatAssignment {
   @@unique([lineupId, position]) // One athlete per position
   @@unique([lineupId, athleteId]) // Athlete can't be in multiple seats
   @@index([lineupId])
+  @@index([teamId])
 }
 
 // Lineup template for reusable configurations
@@ -845,6 +849,7 @@ model EntrySeat {
   athleteId     String
   position      Int // 1=Bow, etc.
   side          SeatSide
+  teamId        String? // Denormalized for RLS (auto-populated by trigger)
 
   entryLineup EntryLineup    @relation(fields: [entryLineupId], references: [id], onDelete: Cascade)
   athlete     AthleteProfile @relation(fields: [athleteId], references: [id])
@@ -852,6 +857,7 @@ model EntrySeat {
   @@unique([entryLineupId, position])
   @@unique([entryLineupId, athleteId])
   @@index([entryLineupId])
+  @@index([teamId])
 }
 
 // NotificationConfig model for race notification scheduling
