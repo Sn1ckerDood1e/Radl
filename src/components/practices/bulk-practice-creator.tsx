@@ -9,6 +9,8 @@ import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { ProgressIndicator } from '@/components/ui/progress-indicator';
+import { ResponsiveCalendarWrapper } from '@/components/calendar/responsive-calendar-wrapper';
+import { useIsMobile } from '@/hooks/use-media-query';
 
 interface PracticeTemplate {
   id: string;
@@ -55,6 +57,7 @@ export function BulkPracticeCreator({
   initialSeasonId,
 }: BulkPracticeCreatorProps) {
   const router = useRouter();
+  const isMobile = useIsMobile();
 
   // Parse initial date if provided (for single-practice creation from calendar)
   const parsedInitialDate = initialDate ? new Date(initialDate) : undefined;
@@ -264,41 +267,94 @@ export function BulkPracticeCreator({
             Next 8 weeks
           </button>
         </div>
-        <div className="bg-zinc-800 rounded-lg p-4 border border-zinc-700">
-          <DayPicker
-            mode="single"
-            required={false}
-            selected={startDate}
-            onSelect={(day) => day && handleDayClick(day)}
-            disabled={{ before: new Date() }}
-            modifiers={modifiers}
-            modifiersClassNames={{
-              selected: 'bulk-selected-day',
-              rangeStart: 'bulk-range-start',
-              rangeEnd: 'bulk-range-end',
-              inRange: 'bulk-in-range',
-            }}
-            classNames={{
-              root: 'w-full',
-              months: 'w-full',
-              month: 'w-full',
-              month_caption: 'flex justify-center py-2',
-              caption_label: 'text-sm font-medium text-zinc-200',
-              nav: 'flex items-center justify-between',
-              button_previous: 'p-1 hover:bg-zinc-700 rounded text-zinc-400',
-              button_next: 'p-1 hover:bg-zinc-700 rounded text-zinc-400',
-              weekdays: 'grid grid-cols-7 mb-2',
-              weekday: 'text-center text-xs font-medium text-zinc-500 py-2',
-              weeks: 'w-full',
-              week: 'grid grid-cols-7',
-              day: 'p-1 text-center',
-              day_button: 'bulk-day-btn',
-              today: 'bulk-today',
-              outside: 'bulk-outside',
-              disabled: 'bulk-disabled',
-            }}
-          />
-        </div>
+        {isMobile ? (
+          <ResponsiveCalendarWrapper
+            title="Select Dates"
+            trigger={
+              <button
+                type="button"
+                className="w-full px-3 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-left text-zinc-200 hover:bg-zinc-700 transition-colors"
+              >
+                {startDate && endDate
+                  ? `${format(startDate, 'MMM d')} - ${format(endDate, 'MMM d, yyyy')}`
+                  : startDate
+                    ? `${format(startDate, 'MMM d, yyyy')} (select end date)`
+                    : 'Tap to select dates'
+                }
+              </button>
+            }
+          >
+            <DayPicker
+              mode="single"
+              required={false}
+              selected={startDate}
+              onSelect={(day) => day && handleDayClick(day)}
+              disabled={{ before: new Date() }}
+              modifiers={modifiers}
+              modifiersClassNames={{
+                selected: 'bulk-selected-day',
+                rangeStart: 'bulk-range-start',
+                rangeEnd: 'bulk-range-end',
+                inRange: 'bulk-in-range',
+              }}
+              classNames={{
+                root: 'w-full bulk-rdp-root',
+                months: 'w-full',
+                month: 'w-full',
+                month_caption: 'flex justify-center py-2',
+                caption_label: 'text-sm font-medium text-zinc-200',
+                nav: 'flex items-center justify-between',
+                button_previous: 'p-1 hover:bg-zinc-700 rounded text-zinc-400',
+                button_next: 'p-1 hover:bg-zinc-700 rounded text-zinc-400',
+                weekdays: 'grid grid-cols-7 mb-2',
+                weekday: 'text-center text-xs font-medium text-zinc-500 py-2',
+                weeks: 'w-full',
+                week: 'grid grid-cols-7',
+                day: 'p-1 text-center',
+                day_button: 'bulk-day-btn',
+                today: 'bulk-today',
+                outside: 'bulk-outside',
+                disabled: 'bulk-disabled',
+              }}
+            />
+          </ResponsiveCalendarWrapper>
+        ) : (
+          <div className="bg-zinc-800 rounded-lg p-4 border border-zinc-700">
+            <DayPicker
+              mode="single"
+              required={false}
+              selected={startDate}
+              onSelect={(day) => day && handleDayClick(day)}
+              disabled={{ before: new Date() }}
+              modifiers={modifiers}
+              modifiersClassNames={{
+                selected: 'bulk-selected-day',
+                rangeStart: 'bulk-range-start',
+                rangeEnd: 'bulk-range-end',
+                inRange: 'bulk-in-range',
+              }}
+              classNames={{
+                root: 'w-full',
+                months: 'w-full',
+                month: 'w-full',
+                month_caption: 'flex justify-center py-2',
+                caption_label: 'text-sm font-medium text-zinc-200',
+                nav: 'flex items-center justify-between',
+                button_previous: 'p-1 hover:bg-zinc-700 rounded text-zinc-400',
+                button_next: 'p-1 hover:bg-zinc-700 rounded text-zinc-400',
+                weekdays: 'grid grid-cols-7 mb-2',
+                weekday: 'text-center text-xs font-medium text-zinc-500 py-2',
+                weeks: 'w-full',
+                week: 'grid grid-cols-7',
+                day: 'p-1 text-center',
+                day_button: 'bulk-day-btn',
+                today: 'bulk-today',
+                outside: 'bulk-outside',
+                disabled: 'bulk-disabled',
+              }}
+            />
+          </div>
+        )}
         {startDate && (
           <p className="text-sm text-zinc-400 mt-2">
             {format(startDate, 'MMM d, yyyy')}
@@ -433,9 +489,16 @@ export function BulkPracticeCreator({
 
       {/* Custom styles for DayPicker dark theme */}
       <style jsx global>{`
+        /* Touch target sizing via CSS variables (react-day-picker v9) */
+        .bulk-rdp-root {
+          --rdp-day_button-height: 44px;
+          --rdp-day_button-width: 44px;
+          --rdp-day-height: 48px;
+          --rdp-day-width: 48px;
+        }
         .bulk-day-btn {
           width: 100%;
-          height: 40px;
+          height: 44px;
           display: flex;
           align-items: center;
           justify-content: center;
