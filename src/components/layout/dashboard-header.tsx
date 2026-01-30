@@ -63,8 +63,12 @@ export function DashboardHeader({ team, contexts }: DashboardHeaderProps) {
             {/* Brand Name */}
             <Link
               href={currentSlug ? `/${currentSlug}` : '/'}
-              className="flex items-center"
+              className="flex items-center gap-2"
             >
+              {/* Crest placeholder - replace with <img src="/crest/radl-shield-color.svg" /> when available */}
+              <div className="h-8 w-8 rounded bg-teal-600 flex items-center justify-center">
+                <span className="text-white text-sm font-bold">R</span>
+              </div>
               <span className="text-xl font-bold text-[var(--text-primary)]">Radl</span>
             </Link>
 
