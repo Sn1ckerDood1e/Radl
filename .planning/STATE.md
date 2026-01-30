@@ -4,17 +4,17 @@
 
 **Core Value:** Coaches can plan practices with lineups and equipment, and athletes know where to be and what boat they're in.
 
-**Current Focus:** v3.0 Production Polish — Phase 32: Safe Areas & Branding Foundation
+**Current Focus:** v3.0 Production Polish — Phase 33: Legal Pages
 
 ## Current Position
 
 | Field | Value |
 |-------|-------|
 | Milestone | v3.0 Production Polish |
-| Phase | 32 - Safe Areas & Branding Foundation |
-| Plan | 04 of 04 complete (32-01, 32-02, 32-03, 32-04) |
-| Status | Phase complete |
-| Last activity | 2026-01-30 — Completed 32-04-PLAN.md (header branding) |
+| Phase | 33 - Legal Pages |
+| Plan | 01 of 02 complete (33-01) |
+| Status | In progress |
+| Last activity | 2026-01-30 — Completed 33-01-PLAN.md (Terms of Service and Privacy Policy) |
 
 **Progress:**
 ```
@@ -24,10 +24,10 @@ v2.0: [##########] 100% SHIPPED (2026-01-26) — 34/34 requirements
 v2.1: [##########] 100% SHIPPED (2026-01-27) — 30/30 requirements
 v2.2: [##########] 100% SHIPPED (2026-01-29) — 33/35 requirements
 v2.3: [##########] 100% SHIPPED (2026-01-29) — 20/20 requirements
-v3.0: [###       ] 28% — 8/29 requirements (Phases 32-35)
+v3.0: [####      ] 41% — 12/29 requirements (Phases 32-35)
 ```
 
-**Total shipped:** 6 milestones, 31 phases, 157 requirements
+**Total shipped:** 6 milestones, 31 phases, 160 requirements
 
 ## v3.0 Milestone Overview
 
@@ -37,7 +37,7 @@ v3.0: [###       ] 28% — 8/29 requirements (Phases 32-35)
 | Phase | Name | Requirements | Status |
 |-------|------|--------------|--------|
 | 32 | Safe Areas & Branding | 8 | COMPLETE |
-| 33 | Legal Pages | 4 | Pending |
+| 33 | Legal Pages | 4 | In progress (33-01 done) |
 | 34 | UX Polish | 11 | Pending |
 | 35 | Device-Specific | 6 | Pending |
 
@@ -119,9 +119,9 @@ v3.0: [###       ] 28% — 8/29 requirements (Phases 32-35)
 | Field | Value |
 |-------|-------|
 | Last session | 2026-01-30 |
-| Stopped at | Completed 32-04-PLAN.md (header branding) |
-| Resume with | Phase 33 (Legal Pages) or Phase 34 (UX Polish) |
+| Stopped at | Completed 33-01-PLAN.md (Terms of Service and Privacy Policy) |
+| Resume with | 33-02-PLAN.md (Legal Links) |
 
 ---
 
-*Last updated: 2026-01-30 (Phase 32 complete)*
+*Last updated: 2026-01-30 (33-01 complete)*
