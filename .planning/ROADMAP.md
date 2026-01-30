@@ -218,6 +218,13 @@ Plans:
 
 **Dependencies:** Phase 32 (safe areas), Phase 34 (loading states)
 
+**Plans:** 3 plans
+
+Plans:
+- [ ] 35-01-PLAN.md — Calendar mobile drawer and touch targets (CALM-01, CALM-02)
+- [ ] 35-02-PLAN.md — Drag-drop touch sensors and visual feedback (DRAG-01, DRAG-02, DRAG-03)
+- [ ] 35-03-PLAN.md — Practice list mobile layout and verification checkpoint (CALM-03)
+
 **Requirements:**
 - CALM-01: Calendar opens in bottom sheet (Drawer) on mobile viewports
 - CALM-02: Date picker optimized for touch with larger tap targets
@@ -248,4 +255,4 @@ Plans:
 
 ---
 
-*Last updated: 2026-01-30 (Phase 34 complete)*
+*Last updated: 2026-01-30 (Phase 35 plans created)*
