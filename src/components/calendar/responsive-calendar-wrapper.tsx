@@ -72,7 +72,7 @@ export function ResponsiveCalendarWrapper({
       <ResponsiveCalendarContext.Provider value="mobile">
         <Drawer open={open} onOpenChange={onOpenChange}>
           <DrawerTrigger asChild>{trigger}</DrawerTrigger>
-          <DrawerContent className="pb-safe">
+          <DrawerContent className="safe-area-inset-bottom">
             {title && (
               <DrawerHeader>
                 <DrawerTitle>{title}</DrawerTitle>
