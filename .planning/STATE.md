@@ -12,9 +12,9 @@
 |-------|-------|
 | Milestone | v3.0 Production Polish |
 | Phase | 32 - Safe Areas & Branding Foundation |
-| Plan | 02 of 04 complete |
+| Plan | 02 of 04 complete (32-01, 32-02) |
 | Status | In progress |
-| Last activity | 2026-01-30 — Completed 32-02-PLAN.md (color migration) |
+| Last activity | 2026-01-30 — Completed 32-01-PLAN.md (safe area config) |
 
 **Progress:**
 ```
@@ -84,6 +84,7 @@ v3.0: [#         ] 7% — 2/29 requirements (Phases 32-35)
 | Location field workaround | 2026-01-29 | Use notes field for practice location (acceptable for MVP) |
 | Meeting blocks minimal content | 2026-01-29 | Notes-only sufficient for meeting blocks (by design) |
 | onTouched validation mode | 2026-01-29 | Immediate feedback on field blur, better UX |
+| Safe area on wrapper not component | 2026-01-30 | pb-[env(safe-area-inset-bottom)] on nav wrapper keeps component reusable |
 
 ### Architecture Notes
 
@@ -118,9 +119,9 @@ v3.0: [#         ] 7% — 2/29 requirements (Phases 32-35)
 | Field | Value |
 |-------|-------|
 | Last session | 2026-01-30 |
-| Stopped at | Completed 32-02-PLAN.md (color migration) |
-| Resume with | Continue Phase 32 plans (32-03 safe areas, 32-04 logo) |
+| Stopped at | Completed 32-01-PLAN.md (safe area config) |
+| Resume with | Continue Phase 32 plans (32-03 header, 32-04 logo) |
 
 ---
 
-*Last updated: 2026-01-30 (32-02 color migration complete)*
+*Last updated: 2026-01-30 (32-01 safe area config complete)*
