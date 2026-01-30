@@ -6,6 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { signupSchema, type SignupInput } from '@/lib/validations/auth';
+import { Button } from '@/components/ui/button';
 
 // Validate redirect is a relative path to prevent open redirect attacks
 function isValidRedirect(redirect: string | null): redirect is string {
@@ -173,13 +174,13 @@ function SignupForm() {
           )}
         </div>
 
-        <button
+        <Button
           type="submit"
-          disabled={isSubmitting}
-          className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+          loading={isSubmitting}
+          className="w-full"
         >
-          {isSubmitting ? 'Creating account...' : 'Sign up'}
-        </button>
+          Sign up
+        </Button>
       </form>
 
       <p className="mt-4 text-center text-sm text-gray-600">

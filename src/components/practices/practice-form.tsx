@@ -8,6 +8,7 @@ import { BlockEditor } from './block-editor';
 import { EquipmentAvailabilityPanel } from './equipment-availability-panel';
 import { createPracticeFormSchema, type CreatePracticeFormInput, type BlockType } from '@/lib/validations/practice';
 import { formatDateForInput, formatTimeForInput, combineDateAndTime } from '@/lib/utils/date-time-helpers';
+import { Button } from '@/components/ui/button';
 
 interface Block {
   id?: string;
@@ -282,22 +283,21 @@ export function PracticeForm({ teamSlug, seasonId, practice, onSuccess }: Practi
 
       {/* Submit Buttons */}
       <div className="flex gap-3 pt-4 border-t border-zinc-800">
-        <button
+        <Button
           type="button"
+          variant="outline"
           onClick={() => router.back()}
-          className="flex-1 py-2 px-4 border border-zinc-700 rounded-lg text-sm font-medium text-zinc-300 bg-zinc-800 hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-zinc-900 focus:ring-teal-500 transition-colors"
+          className="flex-1"
         >
           Cancel
-        </button>
-        <button
+        </Button>
+        <Button
           type="submit"
-          disabled={isSubmitting}
-          className="flex-1 py-2 px-4 border border-transparent rounded-lg text-sm font-medium text-white bg-teal-600 hover:bg-teal-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-zinc-900 focus:ring-teal-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          loading={isSubmitting}
+          className="flex-1"
         >
-          {isSubmitting
-            ? (isEditMode ? 'Saving...' : 'Creating...')
-            : (isEditMode ? 'Save Changes' : 'Create Practice')}
-        </button>
+          {isEditMode ? 'Save Changes' : 'Create Practice'}
+        </Button>
       </div>
     </form>
   );
