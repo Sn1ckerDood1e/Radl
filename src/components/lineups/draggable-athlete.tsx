@@ -2,6 +2,7 @@
 
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import { GripVertical } from 'lucide-react';
 import { AthleteCard } from './athlete-card';
 
 interface DraggableAthleteProps {
@@ -32,11 +33,31 @@ export function DraggableAthlete({ athlete, disabled = false }: DraggableAthlete
     <div
       ref={setNodeRef}
       style={style}
-      {...attributes}
-      {...listeners}
-      className={disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-grab active:cursor-grabbing'}
+      className={`flex items-center gap-2 ${isDragging ? 'opacity-50' : ''}`}
     >
-      <AthleteCard athlete={athlete} isDragging={isDragging} />
+      {/* Drag handle - only this triggers drag on touch */}
+      <button
+        type="button"
+        {...attributes}
+        {...listeners}
+        disabled={disabled}
+        className={`
+          touch-none p-2 rounded-lg
+          ${disabled
+            ? 'text-zinc-600 cursor-not-allowed'
+            : 'text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800 cursor-grab active:cursor-grabbing'
+          }
+          transition-colors
+        `}
+        aria-label={`Drag ${athlete.displayName || 'athlete'} to reorder`}
+      >
+        <GripVertical className="h-5 w-5" />
+      </button>
+
+      {/* Card content - scrollable, not draggable */}
+      <div className="flex-1 min-w-0">
+        <AthleteCard athlete={athlete} isDragging={isDragging} />
+      </div>
     </div>
   );
 }
