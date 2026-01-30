@@ -9,11 +9,11 @@ Production-ready polish before user launch: branding, UX improvements, device-sp
 
 ### Branding
 
-- [ ] **BRND-01**: App renamed from "Strokeline" to "Radl" throughout all UI text
-- [ ] **BRND-02**: Color palette updated to brand teal (#0d9488) as primary color
-- [ ] **BRND-03**: App icons and favicons updated with brand assets
-- [ ] **BRND-04**: PWA manifest updated with correct name, colors, and icons
-- [ ] **BRND-05**: Crest/logo integrated in header when asset is available
+- [x] **BRND-01**: App renamed from "Strokeline" to "Radl" throughout all UI text
+- [x] **BRND-02**: Color palette updated to brand teal (#0d9488) as primary color
+- [x] **BRND-03**: App icons and favicons updated with brand assets
+- [x] **BRND-04**: PWA manifest updated with correct name, colors, and icons
+- [x] **BRND-05**: Crest/logo integrated in header when asset is available
 
 ### UX Polish - Loading States
 
@@ -49,16 +49,16 @@ Production-ready polish before user launch: branding, UX improvements, device-sp
 
 ### Device-Specific - Safe Areas
 
-- [ ] **SAFE-01**: Viewport uses viewport-fit=cover for edge-to-edge
-- [ ] **SAFE-02**: Content respects safe-area-inset-* for notched devices
-- [ ] **SAFE-03**: Bottom navigation accounts for home indicator
+- [x] **SAFE-01**: Viewport uses viewport-fit=cover for edge-to-edge
+- [x] **SAFE-02**: Content respects safe-area-inset-* for notched devices
+- [x] **SAFE-03**: Bottom navigation accounts for home indicator
 
 ### Legal
 
-- [ ] **LEGL-01**: Terms of Service page with current date and company info
-- [ ] **LEGL-02**: Privacy Policy page with data collection and usage details
-- [ ] **LEGL-03**: Footer links to Terms and Privacy on all pages
-- [ ] **LEGL-04**: Legal pages accessible without authentication
+- [x] **LEGL-01**: Terms of Service page with current date and company info
+- [x] **LEGL-02**: Privacy Policy page with data collection and usage details
+- [x] **LEGL-03**: Footer links to Terms and Privacy on all pages
+- [x] **LEGL-04**: Legal pages accessible without authentication
 
 ## Future Requirements
 
@@ -96,18 +96,18 @@ Deferred to v3.1 or later:
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| BRND-01 | Phase 32 | Pending |
-| BRND-02 | Phase 32 | Pending |
-| BRND-03 | Phase 32 | Pending |
-| BRND-04 | Phase 32 | Pending |
-| BRND-05 | Phase 32 | Pending |
-| SAFE-01 | Phase 32 | Pending |
-| SAFE-02 | Phase 32 | Pending |
-| SAFE-03 | Phase 32 | Pending |
-| LEGL-01 | Phase 33 | Pending |
-| LEGL-02 | Phase 33 | Pending |
-| LEGL-03 | Phase 33 | Pending |
-| LEGL-04 | Phase 33 | Pending |
+| BRND-01 | Phase 32 | Complete |
+| BRND-02 | Phase 32 | Complete |
+| BRND-03 | Phase 32 | Complete |
+| BRND-04 | Phase 32 | Complete |
+| BRND-05 | Phase 32 | Complete |
+| SAFE-01 | Phase 32 | Complete |
+| SAFE-02 | Phase 32 | Complete |
+| SAFE-03 | Phase 32 | Complete |
+| LEGL-01 | Phase 33 | Complete |
+| LEGL-02 | Phase 33 | Complete |
+| LEGL-03 | Phase 33 | Complete |
+| LEGL-04 | Phase 33 | Complete |
 | LOAD-01 | Phase 34 | Pending |
 | LOAD-02 | Phase 34 | Pending |
 | LOAD-03 | Phase 34 | Pending |
@@ -133,4 +133,4 @@ Deferred to v3.1 or later:
 
 ---
 *Requirements defined: 2026-01-29*
-*Last updated: 2026-01-29 — Phase mappings added*
+*Last updated: 2026-01-30 — Phases 32-33 complete (12 requirements)*

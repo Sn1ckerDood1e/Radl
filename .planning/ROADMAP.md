@@ -231,8 +231,8 @@ Plans:
 
 | Phase | Name | Requirements | Status |
 |-------|------|--------------|--------|
-| 32 | Safe Areas & Branding | 8 | Planned |
-| 33 | Legal Pages | 4 | Planned |
+| 32 | Safe Areas & Branding | 8 | Complete |
+| 33 | Legal Pages | 4 | Complete |
 | 34 | UX Polish | 11 | Pending |
 | 35 | Device-Specific | 6 | Pending |
 
