@@ -4,7 +4,7 @@
 
 **Core Value:** Coaches can plan practices with lineups and equipment, and athletes know where to be and what boat they're in.
 
-**Current Focus:** v3.0 Production Polish — Phase 35: Device-Specific
+**Current Focus:** v3.0 Production Polish COMPLETE
 
 ## Current Position
 
@@ -12,9 +12,9 @@
 |-------|-------|
 | Milestone | v3.0 Production Polish |
 | Phase | 35 - Device-Specific |
-| Plan | 02 of 03 complete (35-02) |
-| Status | In progress |
-| Last activity | 2026-01-30 — Completed 35-02-PLAN.md (Touch Drag-Drop Sensors) |
+| Plan | 03 of 03 complete (35-03) |
+| Status | MILESTONE COMPLETE |
+| Last activity | 2026-01-30 — Completed 35-03-PLAN.md (Practice List Responsive Layout) |
 
 **Progress:**
 ```
@@ -24,10 +24,10 @@ v2.0: [##########] 100% SHIPPED (2026-01-26) — 34/34 requirements
 v2.1: [##########] 100% SHIPPED (2026-01-27) — 30/30 requirements
 v2.2: [##########] 100% SHIPPED (2026-01-29) — 33/35 requirements
 v2.3: [##########] 100% SHIPPED (2026-01-29) — 20/20 requirements
-v3.0: [#########-] 90% — 26/29 requirements (Phases 32-35)
+v3.0: [##########] 100% SHIPPED (2026-01-30) — 29/29 requirements
 ```
 
-**Total shipped:** 6 milestones, 31 phases, 160 requirements
+**Total shipped:** 7 milestones, 35 phases, 189 requirements
 
 ## v3.0 Milestone Overview
 
@@ -38,12 +38,16 @@ v3.0: [#########-] 90% — 26/29 requirements (Phases 32-35)
 |-------|------|--------------|--------|
 | 32 | Safe Areas & Branding | 8 | COMPLETE |
 | 33 | Legal Pages | 4 | COMPLETE |
-| 34 | UX Polish | 11 | COMPLETE (11/11) |
-| 35 | Device-Specific | 6 | In progress (4/6) |
+| 34 | UX Polish | 11 | COMPLETE |
+| 35 | Device-Specific | 6 | COMPLETE |
 
-**Parallelization:** Phase 33 (Legal) can run in parallel with Phase 32
+**v3.0 Status:** SHIPPED (29/29 requirements)
 
 ## Shipped Milestones
+
+### v3.0 Production Polish (2026-01-30)
+
+**Delivered:** 29 requirements across 4 phases (32-35)
 
 ### v2.3 Core Flow Testing (2026-01-29)
 
@@ -96,6 +100,7 @@ v3.0: [#########-] 90% — 26/29 requirements (Phases 32-35)
 | CSS variables for touch | 2026-01-30 | Use --rdp-day_button-height: 44px for react-day-picker sizing |
 | 250ms touch drag delay | 2026-01-30 | TouchSensor with 250ms hold prevents accidental drag during scroll |
 | Explicit drag handles | 2026-01-30 | GripVertical button with touch-none for mobile drag-drop |
+| Mobile-first stacking | 2026-01-30 | flex-col sm:flex-row for responsive card layouts |
 
 ### Architecture Notes
 
@@ -130,9 +135,9 @@ v3.0: [#########-] 90% — 26/29 requirements (Phases 32-35)
 | Field | Value |
 |-------|-------|
 | Last session | 2026-01-30 |
-| Stopped at | Completed 35-02-PLAN.md (Touch Drag-Drop Sensors) |
-| Resume with | 35-03-PLAN.md (Practice List Responsive Layout) |
+| Stopped at | Completed v3.0 Production Polish milestone |
+| Resume with | Next milestone planning (v4.0 or production deployment) |
 
 ---
 
-*Last updated: 2026-01-30 (Phase 35-02 complete)*
+*Last updated: 2026-01-30 (v3.0 milestone complete - Phase 35-03)*
