@@ -14,6 +14,8 @@ const publicRoutes = [
   '/api/auth/login',
   '/api/auth/signup',
   '/api/auth/forgot-password',
+  '/terms',
+  '/privacy',
 ];
 
 // Routes that start with these prefixes are public
