@@ -156,6 +156,12 @@ Plans:
 
 **Dependencies:** None (can run parallel with Phase 32)
 
+**Plans:** 2 plans
+
+Plans:
+- [ ] 33-01-PLAN.md — Terms of Service and Privacy Policy pages
+- [ ] 33-02-PLAN.md — Footer component with legal links
+
 **Requirements:**
 - LEGL-01: Terms of Service page with current date and company info
 - LEGL-02: Privacy Policy page with data collection and usage details
@@ -226,7 +232,7 @@ Plans:
 | Phase | Name | Requirements | Status |
 |-------|------|--------------|--------|
 | 32 | Safe Areas & Branding | 8 | Planned |
-| 33 | Legal Pages | 4 | Pending |
+| 33 | Legal Pages | 4 | Planned |
 | 34 | UX Polish | 11 | Pending |
 | 35 | Device-Specific | 6 | Pending |
 
@@ -234,4 +240,4 @@ Plans:
 
 ---
 
-*Last updated: 2026-01-29 (Phase 32 planned)*
+*Last updated: 2026-01-30 (Phase 33 planned)*
