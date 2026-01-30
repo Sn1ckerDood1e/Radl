@@ -179,7 +179,7 @@ export function PracticeListClient({
                 }
               }}
               className={cn(
-                'flex-1 block p-4 bg-zinc-900 border border-zinc-800 rounded-lg transition-colors',
+                'flex-1 block p-4 bg-zinc-900 border border-zinc-800 rounded-lg transition-colors overflow-hidden',
                 selectionMode
                   ? selectedIds.has(practice.id)
                     ? 'border-teal-500/50 bg-teal-500/5'
@@ -187,17 +187,17 @@ export function PracticeListClient({
                   : 'hover:border-zinc-700'
               )}
             >
-              <div className="flex items-start justify-between">
-                <div>
-                  <div className="flex items-center gap-3">
-                    <h3 className="text-lg font-medium text-white">{practice.name}</h3>
+              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
+                <div className="min-w-0">
+                  <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
+                    <h3 className="text-lg font-medium text-white truncate max-w-[200px] sm:max-w-none">{practice.name}</h3>
                     {practice.status === 'DRAFT' && (
-                      <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-zinc-700 text-zinc-300">
+                      <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-zinc-700 text-zinc-300 shrink-0">
                         Draft
                       </span>
                     )}
                     {practice.status === 'PUBLISHED' && (
-                      <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-teal-500/20 text-teal-400">
+                      <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-teal-500/20 text-teal-400 shrink-0">
                         Published
                       </span>
                     )}
@@ -206,10 +206,10 @@ export function PracticeListClient({
                     {formatDate(practice.date)} &middot; {formatTime(practice.startTime)} - {formatTime(practice.endTime)}
                   </p>
                   {practice.season && (
-                    <p className="text-xs text-zinc-500 mt-1">{practice.season.name}</p>
+                    <p className="text-xs text-zinc-500 mt-1 truncate">{practice.season.name}</p>
                   )}
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1.5 flex-wrap shrink-0">
                   {practice.blocks.map((block) => (
                     <span
                       key={block.id}
