@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
 import { DashboardHeader } from '@/components/layout/dashboard-header';
+import { SiteFooter } from '@/components/layout/site-footer';
 import { PWAWrapper } from '@/components/pwa/pwa-wrapper';
 import { Toaster } from 'sonner';
 import { AbilityProvider } from '@/components/permissions/ability-provider';
@@ -118,11 +119,12 @@ export default async function DashboardLayout({
       {/* TODO: Re-enable TeamColorProvider in a future phase */}
       <PWAWrapper>
         <CommandPaletteProvider />
-        <div className="min-h-screen bg-[var(--background)] transition-colors">
+        <div className="min-h-screen bg-[var(--background)] transition-colors flex flex-col">
           <DashboardHeader team={legacyTeam} contexts={contexts} />
           <main className="flex-1">
             {children}
           </main>
+          <SiteFooter />
           <Toaster position="bottom-right" richColors closeButton theme="dark" />
         </div>
       </PWAWrapper>
