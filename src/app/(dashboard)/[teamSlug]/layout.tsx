@@ -93,7 +93,7 @@ export default async function TeamLayout({ children, params }: TeamLayoutProps) 
       </main>
 
       {/* Mobile bottom nav - fixed at bottom, hidden on desktop */}
-      <nav className="fixed bottom-0 left-0 right-0 z-50 md:hidden">
+      <nav className="fixed bottom-0 left-0 right-0 z-50 md:hidden pb-[env(safe-area-inset-bottom)]">
         <BottomNavigation teamSlug={teamSlug} />
       </nav>
     </div>
