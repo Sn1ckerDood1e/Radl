@@ -1,6 +1,6 @@
 import { cookies } from 'next/headers';
 import Link from 'next/link';
-import { ChevronLeft, ChevronRight, Plus } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Plus, Upload } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { UserListTable } from '@/components/admin/users/user-list-table';
 import { UserSearch } from '@/components/admin/users/user-search';
@@ -136,12 +136,20 @@ export default async function AdminUsersPage({ searchParams }: PageProps) {
             {pagination.total} users on the platform
           </p>
         </div>
-        <Link href="/admin/users/new">
-          <Button>
-            <Plus className="h-4 w-4" />
-            Create User
-          </Button>
-        </Link>
+        <div className="flex gap-2">
+          <Link href="/admin/users/bulk">
+            <Button variant="outline">
+              <Upload className="h-4 w-4" />
+              Bulk Upload
+            </Button>
+          </Link>
+          <Link href="/admin/users/new">
+            <Button>
+              <Plus className="h-4 w-4" />
+              Create User
+            </Button>
+          </Link>
+        </div>
       </div>
 
       {/* Search */}
