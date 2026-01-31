@@ -246,6 +246,14 @@ Plans:
 
 **Dependencies:** Phase 37 (user management), Phase 38 (club management)
 
+**Plans:** 4 plans
+
+Plans:
+- [ ] 39-01-PLAN.md — Membership CRUD APIs (create, update roles, delete, list club members)
+- [ ] 39-02-PLAN.md — User detail membership UI (add to club, edit roles, remove)
+- [ ] 39-03-PLAN.md — Club members section (member list with add/edit/remove)
+- [ ] 39-04-PLAN.md — Bulk membership import via CSV
+
 **Requirements:**
 - MEMB-01: Add user to club with role(s) (bypasses invitation flow)
 - MEMB-02: Remove user from club
@@ -293,4 +301,4 @@ Plans:
 
 ---
 
-*Last updated: 2026-01-31 (Phase 38 complete)*
+*Last updated: 2026-01-31 (Phase 39 planned)*
