@@ -74,8 +74,10 @@ export const AUDITABLE_ACTIONS = {
   ADMIN_MEMBERSHIP_REMOVED: 'ADMIN_MEMBERSHIP_REMOVED',   // Super admin removed user from club
   ADMIN_FACILITY_CREATED: 'ADMIN_FACILITY_CREATED',       // Super admin created a facility
   ADMIN_FACILITY_UPDATED: 'ADMIN_FACILITY_UPDATED',       // Super admin updated a facility
+  ADMIN_FACILITY_DELETED: 'ADMIN_FACILITY_DELETED',       // Super admin deleted a facility
   ADMIN_CLUB_CREATED: 'ADMIN_CLUB_CREATED',               // Super admin created a club
   ADMIN_CLUB_UPDATED: 'ADMIN_CLUB_UPDATED',               // Super admin updated a club
+  ADMIN_CLUB_DELETED: 'ADMIN_CLUB_DELETED',               // Super admin deleted a club
   ADMIN_USERS_BULK_CREATED: 'ADMIN_USERS_BULK_CREATED',   // Super admin bulk created users
 } as const;
 
@@ -130,7 +132,9 @@ export const AUDIT_ACTION_DESCRIPTIONS: Record<AuditAction, string> = {
   ADMIN_MEMBERSHIP_REMOVED: 'Super admin removed user from club',
   ADMIN_FACILITY_CREATED: 'Super admin created a facility',
   ADMIN_FACILITY_UPDATED: 'Super admin updated a facility',
+  ADMIN_FACILITY_DELETED: 'Super admin deleted a facility',
   ADMIN_CLUB_CREATED: 'Super admin created a club',
   ADMIN_CLUB_UPDATED: 'Super admin updated a club',
+  ADMIN_CLUB_DELETED: 'Super admin deleted a club',
   ADMIN_USERS_BULK_CREATED: 'Super admin bulk created users',
 };
