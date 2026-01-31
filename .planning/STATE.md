@@ -12,9 +12,9 @@
 |-------|-------|
 | Milestone | v3.1 Admin Panel |
 | Phase | 36 - Admin Foundation & Auth |
-| Plan | 04 of 5 complete |
-| Status | In progress |
-| Last activity | 2026-01-31 - Completed 36-04-PLAN.md |
+| Plan | 05 of 5 complete |
+| Status | Phase complete |
+| Last activity | 2026-01-31 - Completed 36-05-PLAN.md |
 
 **Progress:**
 ```
@@ -25,10 +25,10 @@ v2.1: [##########] 100% SHIPPED (2026-01-27) - 30/30 requirements
 v2.2: [##########] 100% SHIPPED (2026-01-29) - 33/35 requirements
 v2.3: [##########] 100% SHIPPED (2026-01-29) - 20/20 requirements
 v3.0: [##########] 100% SHIPPED (2026-01-30) - 29/29 requirements
-v3.1: [#---------] 6% IN PROGRESS - 2/34 requirements
+v3.1: [##--------] 20% IN PROGRESS - 7/34 requirements
 ```
 
-**Total shipped:** 7 milestones, 35 phases, 189 requirements
+**Total shipped:** 7 milestones, 35 phases, 196 requirements
 
 ## v3.1 Milestone Overview
 
@@ -37,7 +37,7 @@ v3.1: [#---------] 6% IN PROGRESS - 2/34 requirements
 **Phases:**
 | Phase | Name | Requirements | Status |
 |-------|------|--------------|--------|
-| 36 | Admin Foundation & Auth | 7 | Pending |
+| 36 | Admin Foundation & Auth | 7 | Complete |
 | 37 | User Management | 9 | Pending |
 | 38 | Facility & Club Management | 11 | Pending |
 | 39 | Membership Management | 5 | Pending |
@@ -109,6 +109,8 @@ v3.1: [#---------] 6% IN PROGRESS - 2/34 requirements
 | Three-stage MFA enrollment | 2026-01-31 | Initial/scan/done stages for clear UX progression |
 | MFA required for admin access | 2026-01-31 | Redirect to /mfa-setup or /mfa-verify before /admin |
 | User menu in dashboard header | 2026-01-31 | Added for sign out and Admin Panel link |
+| Client-side admin timeout | 2026-01-31 | Admin-only 30-min timeout to not affect regular users |
+| Throttled activity detection | 2026-01-31 | 1-second minimum between timer resets for performance |
 
 ### Architecture Notes
 
@@ -136,9 +138,9 @@ v3.1: [#---------] 6% IN PROGRESS - 2/34 requirements
 | Field | Value |
 |-------|-------|
 | Last session | 2026-01-31 |
-| Stopped at | Completed 36-04-PLAN.md |
-| Resume with | `/gsd:execute-phase 36 plan 05` |
+| Stopped at | Completed Phase 36 (Admin Foundation & Auth) |
+| Resume with | `/gsd:execute-phase 37` |
 
 ---
 
-*Last updated: 2026-01-31 (36-04 completed)*
+*Last updated: 2026-01-31 (Phase 36 complete)*
