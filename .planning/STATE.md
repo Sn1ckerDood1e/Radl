@@ -12,9 +12,9 @@
 |-------|-------|
 | Milestone | v3.1 Admin Panel |
 | Phase | 38 - Facility & Club Management |
-| Plan | 02 of 6 complete |
+| Plan | 04 of 6 complete |
 | Status | In progress |
-| Last activity | 2026-01-31 - Completed 38-02-PLAN.md |
+| Last activity | 2026-01-31 - Completed 38-04-PLAN.md |
 
 **Progress:**
 ```
@@ -25,7 +25,7 @@ v2.1: [##########] 100% SHIPPED (2026-01-27) - 30/30 requirements
 v2.2: [##########] 100% SHIPPED (2026-01-29) - 33/35 requirements
 v2.3: [##########] 100% SHIPPED (2026-01-29) - 20/20 requirements
 v3.0: [##########] 100% SHIPPED (2026-01-30) - 29/29 requirements
-v3.1: [#######---] 68% IN PROGRESS - 23/34 requirements
+v3.1: [########--] 76% IN PROGRESS - 26/34 requirements
 ```
 
 **Total shipped:** 7 milestones, 35 phases, 196 requirements
@@ -39,7 +39,7 @@ v3.1: [#######---] 68% IN PROGRESS - 23/34 requirements
 |-------|------|--------------|--------|
 | 36 | Admin Foundation & Auth | 7 | Complete |
 | 37 | User Management | 9 | Complete |
-| 38 | Facility & Club Management | 11 | In progress (7/11) |
+| 38 | Facility & Club Management | 11 | In progress (9/11) |
 | 39 | Membership Management | 5 | Pending |
 | 40 | Audit Log Viewer & Export | 2 | Pending |
 
@@ -123,6 +123,9 @@ v3.1: [#######---] 68% IN PROGRESS - 23/34 requirements
 | Cascade delete preview | 2026-01-31 | DELETE without confirm returns impact; with confirm performs delete |
 | Club model is Team | 2026-01-31 | Prisma Team model = club in UI; consistent naming |
 | Move endpoint separate | 2026-01-31 | Facility change via /move, not PATCH, for clear audit trail |
+| Type-to-confirm pattern | 2026-01-31 | GitHub-style delete requiring exact name match for safety |
+| Form sections | 2026-01-31 | Three form sections (Basic Info, Location, Contact) for better UX |
+| Auto-slug on blur | 2026-01-31 | Slug auto-generates from name on blur in create mode only |
 
 ### Architecture Notes
 
@@ -150,9 +153,9 @@ v3.1: [#######---] 68% IN PROGRESS - 23/34 requirements
 | Field | Value |
 |-------|-------|
 | Last session | 2026-01-31 |
-| Stopped at | Completed 38-02-PLAN.md (Club Management API) |
-| Resume with | `/gsd:execute-phase 38-03` |
+| Stopped at | Completed 38-04-PLAN.md (Facility Forms & Delete Dialog) |
+| Resume with | `/gsd:execute-phase 38-05` |
 
 ---
 
-*Last updated: 2026-01-31 (Phase 38-02 complete)*
+*Last updated: 2026-01-31 (Phase 38-04 complete)*
