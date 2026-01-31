@@ -8,6 +8,7 @@ import { AbilityProvider } from '@/components/permissions/ability-provider';
 import { getClaimsForApiRoute } from '@/lib/auth/claims';
 import type { UserContext } from '@/lib/permissions/ability';
 import { CommandPaletteProvider } from '@/components/command-palette/command-palette-provider';
+import { createClient } from '@/lib/supabase/server';
 
 // TODO: Re-enable team colors in a future phase
 // import { TeamColorProvider } from '@/components/providers/team-color-provider';
@@ -114,13 +115,27 @@ export default async function DashboardLayout({
     select: { slug: true, name: true, logoUrl: true, primaryColor: true, secondaryColor: true },
   }) : null;
 
+  // Check super admin status from JWT claims for UI display
+  // Note: The actual admin route does database verification
+  const supabase = await createClient();
+  const { data: { session } } = await supabase.auth.getSession();
+  let isSuperAdmin = false;
+  if (session?.access_token) {
+    try {
+      const payload = JSON.parse(atob(session.access_token.split('.')[1]));
+      isSuperAdmin = payload?.is_super_admin === true;
+    } catch {
+      // If token parsing fails, default to false
+    }
+  }
+
   return (
     <AbilityProvider user={userContext}>
       {/* TODO: Re-enable TeamColorProvider in a future phase */}
       <PWAWrapper>
         <CommandPaletteProvider />
         <div className="min-h-screen bg-[var(--background)] transition-colors flex flex-col">
-          <DashboardHeader team={legacyTeam} contexts={contexts} />
+          <DashboardHeader team={legacyTeam} contexts={contexts} isSuperAdmin={isSuperAdmin} />
           <main className="flex-1">
             {children}
           </main>

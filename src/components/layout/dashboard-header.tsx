@@ -4,6 +4,16 @@ import Link from 'next/link';
 import { NotificationBell } from '@/components/notifications/notification-bell';
 import { SyncStatusIndicator } from '@/components/pwa/sync-status-indicator';
 import { ContextSwitcher } from './context-switcher';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { Shield, User, LogOut } from 'lucide-react';
+import { createClient } from '@/lib/supabase/client';
+import { useRouter } from 'next/navigation';
 
 interface Team {
   slug: string;
@@ -44,15 +54,24 @@ interface AvailableContextsResponse {
 interface DashboardHeaderProps {
   team: Team | null;  // Keep for backward compatibility
   contexts?: AvailableContextsResponse;  // New: from layout
+  isSuperAdmin?: boolean;  // Show Admin Panel link for super admins
 }
 
-export function DashboardHeader({ team, contexts }: DashboardHeaderProps) {
+export function DashboardHeader({ team, contexts, isSuperAdmin }: DashboardHeaderProps) {
+  const router = useRouter();
+
   // Determine the current slug for links
   // Priority: contexts (new) > team (legacy)
   const currentSlug = contexts?.currentContext.viewMode === 'facility'
     ? contexts.facility?.slug
     : contexts?.clubs.find(c => c.id === contexts.currentContext.clubId)?.slug
       ?? team?.slug;
+
+  async function handleSignOut() {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    router.push('/login');
+  }
 
   return (
     <header className="bg-[var(--surface-1)] border-b border-[var(--border-subtle)] sticky top-0 z-50">
@@ -109,10 +128,37 @@ export function DashboardHeader({ team, contexts }: DashboardHeaderProps) {
             ) : null}
           </div>
 
-          {/* Right side - Sync Status + Notifications */}
+          {/* Right side - Sync Status + Notifications + User Menu */}
           <div className="flex items-center gap-4">
             <SyncStatusIndicator />
             {currentSlug && <NotificationBell teamSlug={currentSlug} />}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button className="h-8 w-8 rounded-full bg-[var(--surface-2)] flex items-center justify-center hover:bg-[var(--surface-3)] transition-colors">
+                  <User className="h-4 w-4 text-[var(--text-secondary)]" />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-48">
+                {isSuperAdmin && (
+                  <>
+                    <DropdownMenuItem asChild>
+                      <Link href="/admin" className="flex items-center gap-2 cursor-pointer">
+                        <Shield className="h-4 w-4" />
+                        Admin Panel
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                  </>
+                )}
+                <DropdownMenuItem
+                  onClick={handleSignOut}
+                  className="flex items-center gap-2 cursor-pointer"
+                >
+                  <LogOut className="h-4 w-4" />
+                  Sign out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
       </div>
