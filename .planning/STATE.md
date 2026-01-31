@@ -12,9 +12,9 @@
 |-------|-------|
 | Milestone | v3.1 Admin Panel |
 | Phase | 36 - Admin Foundation & Auth |
-| Plan | 03 of 5 complete |
+| Plan | 04 of 5 complete |
 | Status | In progress |
-| Last activity | 2026-01-31 - Completed 36-03-PLAN.md |
+| Last activity | 2026-01-31 - Completed 36-04-PLAN.md |
 
 **Progress:**
 ```
@@ -107,6 +107,8 @@ v3.1: [#---------] 6% IN PROGRESS - 2/34 requirements
 | Supabase pooler port 6543 | 2026-01-30 | Required for serverless environments |
 | Server actions for MFA | 2026-01-31 | 'use server' directive for Supabase MFA API operations |
 | Three-stage MFA enrollment | 2026-01-31 | Initial/scan/done stages for clear UX progression |
+| MFA required for admin access | 2026-01-31 | Redirect to /mfa-setup or /mfa-verify before /admin |
+| User menu in dashboard header | 2026-01-31 | Added for sign out and Admin Panel link |
 
 ### Architecture Notes
 
@@ -134,9 +136,9 @@ v3.1: [#---------] 6% IN PROGRESS - 2/34 requirements
 | Field | Value |
 |-------|-------|
 | Last session | 2026-01-31 |
-| Stopped at | Completed 36-03-PLAN.md |
-| Resume with | `/gsd:execute-phase 36 plan 04` |
+| Stopped at | Completed 36-04-PLAN.md |
+| Resume with | `/gsd:execute-phase 36 plan 05` |
 
 ---
 
-*Last updated: 2026-01-31 (36-03 completed)*
+*Last updated: 2026-01-31 (36-04 completed)*
