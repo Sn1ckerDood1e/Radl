@@ -11,10 +11,10 @@
 | Field | Value |
 |-------|-------|
 | Milestone | v3.1 Admin Panel |
-| Phase | 38 - Facility & Club Management |
-| Plan | 06 of 6 complete |
-| Status | Phase complete |
-| Last activity | 2026-01-31 - Completed 38-06-PLAN.md (Club Forms & Management UI) |
+| Phase | 39 - Membership Management |
+| Plan | 01 of 4 complete |
+| Status | In progress |
+| Last activity | 2026-01-31 - Completed 39-01-PLAN.md (Membership API) |
 
 **Progress:**
 ```
@@ -40,7 +40,7 @@ v3.1: [########--] 79% IN PROGRESS - 27/34 requirements
 | 36 | Admin Foundation & Auth | 7 | Complete |
 | 37 | User Management | 9 | Complete |
 | 38 | Facility & Club Management | 11 | Complete |
-| 39 | Membership Management | 5 | Pending |
+| 39 | Membership Management | 5 | In progress (1/4 plans) |
 | 40 | Audit Log Viewer & Export | 2 | Pending |
 
 **Architecture decisions (from research):**
@@ -129,6 +129,9 @@ v3.1: [########--] 79% IN PROGRESS - 27/34 requirements
 | Actions dropdown callback | 2026-01-31 | Delete triggers callback for parent dialog, not internal handling |
 | Facility read-only in edit | 2026-01-31 | Club edit shows facility read-only; use Move action for changes |
 | ClubEditClient wrapper | 2026-01-31 | Client component wraps server page for dialog state management |
+| Soft delete for memberships | 2026-01-31 | Membership removal sets isActive: false, preserves audit trail |
+| 409 Conflict for existing member | 2026-01-31 | Return membershipId so UI can offer update instead |
+| Reactivate inactive membership | 2026-01-31 | Re-add user with inactive membership reactivates instead of duplicate |
 
 ### Architecture Notes
 
@@ -156,9 +159,9 @@ v3.1: [########--] 79% IN PROGRESS - 27/34 requirements
 | Field | Value |
 |-------|-------|
 | Last session | 2026-01-31 |
-| Stopped at | Completed 38-06-PLAN.md (Club Forms & Management UI) |
-| Resume with | `/gsd:plan-phase 39` |
+| Stopped at | Completed 39-01-PLAN.md (Membership API) |
+| Resume with | `/gsd:execute-phase 39-02` |
 
 ---
 
-*Last updated: 2026-01-31 (Phase 38 complete)*
+*Last updated: 2026-01-31 (Phase 39 plan 01 complete)*
