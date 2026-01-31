@@ -27,6 +27,9 @@ export const ACTIONS = {
 
   // Practice/lineup specific
   publishPractice: 'publish-practice',
+
+  // Admin-specific
+  accessAdminPanel: 'access-admin-panel',
 } as const;
 
 export type Action = typeof ACTIONS[keyof typeof ACTIONS];

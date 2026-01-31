@@ -23,6 +23,11 @@ export type AppAbility = PureAbility<[Action, AppSubjects], PrismaQuery>;
  * - 'facility': Viewing at facility level - broad read access to all clubs' data
  * - 'club': Drilling into specific club - scoped read-only access to that club only
  * - null: No facility context (legacy team-only mode, or non-facility user)
+ *
+ * **isSuperAdmin:**
+ * When true, grants can('manage', 'all') bypassing all other role checks.
+ * Must be verified via database (isSuperAdmin() from admin-authorize.ts),
+ * not trusted from JWT claims alone.
  */
 export interface UserContext {
   userId: string;
@@ -31,6 +36,7 @@ export interface UserContext {
   linkedAthleteIds?: string[];  // For PARENT role - IDs of athletes they can see
   facilityId?: string;  // Current facility ID (optional for backward compatibility)
   viewMode: 'facility' | 'club' | null;  // Determines permission scope for FACILITY_ADMIN
+  isSuperAdmin?: boolean;  // Platform owner with full access (database-verified)
 }
 
 /**
@@ -45,6 +51,13 @@ export interface UserContext {
  */
 export function defineAbilityFor(user: UserContext): AppAbility {
   const { can, build } = new AbilityBuilder<AppAbility>(createPrismaAbility);
+
+  // SUPER ADMIN - platform owner, full access to everything
+  // Database-verified via isSuperAdmin() from admin-authorize.ts
+  if (user.isSuperAdmin) {
+    can('manage', 'all');  // CASL special keyword for full access
+    return build();  // Early return - no need to process other roles
+  }
 
   // FACILITY_ADMIN - manages all clubs in facility, no lineup creation
   if (user.roles.includes('FACILITY_ADMIN')) {

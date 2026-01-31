@@ -22,6 +22,8 @@ export interface CustomJwtPayload {
   team_id: string | null;
   user_role: 'COACH' | 'ATHLETE' | 'PARENT' | null;  // Legacy single role
   user_roles?: string[];       // All roles in current club
+  // Super admin (database is source of truth, not this claim)
+  is_super_admin?: boolean;
 }
 
 /**

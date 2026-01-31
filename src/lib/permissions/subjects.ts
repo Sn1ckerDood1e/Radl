@@ -35,7 +35,8 @@ export type AppSubjects =
       Announcement: Announcement;
     }>
   | 'AuditLog'  // Placeholder until model exists
-  | 'ApiKey';   // Placeholder until model exists
+  | 'ApiKey'    // Placeholder until model exists
+  | 'all';      // CASL special keyword for super admin full access
 
 export const SUBJECTS = [
   'Team',
