@@ -12,9 +12,9 @@
 |-------|-------|
 | Milestone | v3.1 Admin Panel |
 | Phase | 37 - User Management |
-| Plan | 04 of 5 complete |
-| Status | In progress |
-| Last activity | 2026-01-31 - Completed 37-04-PLAN.md |
+| Plan | 05 of 5 complete |
+| Status | Phase complete |
+| Last activity | 2026-01-31 - Completed 37-05-PLAN.md |
 
 **Progress:**
 ```
@@ -25,7 +25,7 @@ v2.1: [##########] 100% SHIPPED (2026-01-27) - 30/30 requirements
 v2.2: [##########] 100% SHIPPED (2026-01-29) - 33/35 requirements
 v2.3: [##########] 100% SHIPPED (2026-01-29) - 20/20 requirements
 v3.0: [##########] 100% SHIPPED (2026-01-30) - 29/29 requirements
-v3.1: [##--------] 20% IN PROGRESS - 7/34 requirements
+v3.1: [####------] 40% IN PROGRESS - 16/34 requirements
 ```
 
 **Total shipped:** 7 milestones, 35 phases, 196 requirements
@@ -38,7 +38,7 @@ v3.1: [##--------] 20% IN PROGRESS - 7/34 requirements
 | Phase | Name | Requirements | Status |
 |-------|------|--------------|--------|
 | 36 | Admin Foundation & Auth | 7 | Complete |
-| 37 | User Management | 9 | In Progress (4/5 plans) |
+| 37 | User Management | 9 | Complete |
 | 38 | Facility & Club Management | 11 | Pending |
 | 39 | Membership Management | 5 | Pending |
 | 40 | Audit Log Viewer & Export | 2 | Pending |
@@ -118,6 +118,8 @@ v3.1: [##--------] 20% IN PROGRESS - 7/34 requirements
 | Server component fetch pattern | 2026-01-31 | Forward cookies via header for internal API auth |
 | Shared UserForm component | 2026-01-31 | Single form handles create/edit modes for DRY code |
 | Email immutability in edit | 2026-01-31 | Supabase auth constraint; email disabled in edit mode |
+| CSV column name flexibility | 2026-01-31 | Support name, displayName, full_name for better CSV import compat |
+| 100-user batch limit | 2026-01-31 | Prevents timeout/memory issues in bulk operations |
 
 ### Architecture Notes
 
@@ -145,9 +147,9 @@ v3.1: [##--------] 20% IN PROGRESS - 7/34 requirements
 | Field | Value |
 |-------|-------|
 | Last session | 2026-01-31 |
-| Stopped at | Completed 37-04-PLAN.md (User Detail & Form UI) |
-| Resume with | `/gsd:execute-plan 37-05` |
+| Stopped at | Completed 37-05-PLAN.md (Bulk User Creation) |
+| Resume with | `/gsd:execute-phase 38` |
 
 ---
 
-*Last updated: 2026-01-31 (Plan 37-04 complete)*
+*Last updated: 2026-01-31 (Phase 37 complete)*
