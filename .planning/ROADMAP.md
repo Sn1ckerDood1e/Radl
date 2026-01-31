@@ -9,6 +9,7 @@
 - v2.2 Security Audit - Phases 25-27 (shipped 2026-01-29)
 - v2.3 Core Flow Testing - Phases 28-31 (shipped 2026-01-29)
 - v3.0 Production Polish - Phases 32-35 (shipped 2026-01-30)
+- v3.1 Admin Panel - Phases 36-40 (in progress)
 
 ## Phases
 
@@ -101,144 +102,152 @@ Navigation redesign, RIM feature parity, practice flow improvements, RC public A
 - Settings page cleanup (removed non-functional Team Colors)
 
 **Verified Flows:**
-- Onboarding: signup → email verify → create team → invite → join
-- Practice: create → add blocks → drag-drop lineup → publish
-- Equipment: add → assign to lineup → QR damage report → resolve
+- Onboarding: signup -> email verify -> create team -> invite -> join
+- Practice: create -> add blocks -> drag-drop lineup -> publish
+- Equipment: add -> assign to lineup -> QR damage report -> resolve
+
+</details>
+
+<details>
+<summary>v3.0 Production Polish (Phases 32-35) - SHIPPED 2026-01-30</summary>
+
+**Milestone Goal:** Production-ready polish before user launch with branding, UX improvements, device-specific fixes, and legal compliance.
+
+**Delivered:** 29 requirements across 4 phases
+
+**Features:**
+- Safe area handling for notched devices (iPhone home indicator)
+- Radl branding (teal color palette, icons, PWA manifest)
+- Legal pages (Terms of Service, Privacy Policy)
+- UX polish (loading skeletons, error states, empty states)
+- Mobile-optimized calendar and drag-drop
 
 </details>
 
 ---
 
-## v3.0 Production Polish (Phases 32-35)
+## v3.1 Admin Panel (Phases 36-40)
 
-**Milestone Goal:** Production-ready polish before user launch with branding, UX improvements, device-specific fixes, and legal compliance.
+**Milestone Goal:** Platform owner can manage all users, clubs, and memberships through a super-admin panel
 
-**Requirements:** 29 total across 8 categories
+**Requirements:** 34 total across 6 categories
 
 ---
 
-### Phase 32: Safe Areas & Branding Foundation
+### Phase 36: Admin Foundation & Authentication
 
-**Goal:** App displays correctly on all devices with consistent Radl branding
+**Goal:** Super admin can securely access a protected admin panel with database-verified permissions
 
 **Dependencies:** None (foundational)
 
-**Plans:** 4 plans
-
-Plans:
-- [ ] 32-01-PLAN.md — Safe area configuration (viewport-fit, bottom nav padding)
-- [ ] 32-02-PLAN.md — Color migration (emerald -> teal)
-- [ ] 32-03-PLAN.md — PWA manifest and icons
-- [ ] 32-04-PLAN.md — Header branding and crest placeholder
-
 **Requirements:**
-- SAFE-01: Viewport uses viewport-fit=cover for edge-to-edge
-- SAFE-02: Content respects safe-area-inset-* for notched devices
-- SAFE-03: Bottom navigation accounts for home indicator
-- BRND-01: App renamed from "Strokeline" to "Radl" throughout all UI text
-- BRND-02: Color palette updated to brand teal (#0d9488) as primary color
-- BRND-03: App icons and favicons updated with brand assets
-- BRND-04: PWA manifest updated with correct name, colors, and icons
-- BRND-05: Crest/logo integrated in header when asset is available
+- AUTH-01: Super admin role stored in database table (not JWT claims only)
+- AUTH-02: Super admin login verified against database on every request
+- AUTH-03: Admin session timeout at 30 minutes of inactivity
+- AUTH-04: Super admin check in CASL abilities (`can('manage', 'all')`)
+- AUTH-05: Separate `(admin)` route group with protected layout
+- AUTH-06: MFA enforcement for super admin accounts
+- AUDT-01: Log all admin actions (actor, action, target, timestamp, before/after)
 
 **Success Criteria:**
-1. User on iPhone 15 Pro sees full content without notch overlap in any orientation
-2. User on any device sees "Radl" branding (never "Strokeline") in header and page titles
-3. User installing PWA sees Radl icon on home screen with brand teal theme color
-4. User with bottom navigation sees content above the home indicator bar
-5. User opening app sees brand teal (#0d9488) as the consistent primary accent color
+1. Super admin can navigate to /admin and see admin dashboard after login
+2. Non-admin user attempting /admin is redirected to home (not shown admin UI)
+3. Super admin session expires after 30 minutes of inactivity requiring re-login
+4. Super admin without MFA enabled is prompted to configure MFA before accessing panel
+5. Every admin action (create, update, delete) creates an audit log entry with before/after state
 
 ---
 
-### Phase 33: Legal Pages
+### Phase 37: User Management
 
-**Goal:** App meets legal compliance requirements with accessible Terms and Privacy pages
+**Goal:** Super admin can fully manage platform users including creation, editing, deactivation, and bulk operations
 
-**Dependencies:** None (can run parallel with Phase 32)
-
-**Plans:** 2 plans
-
-Plans:
-- [ ] 33-01-PLAN.md — Terms of Service and Privacy Policy pages
-- [ ] 33-02-PLAN.md — Footer component with legal links
+**Dependencies:** Phase 36 (admin auth required)
 
 **Requirements:**
-- LEGL-01: Terms of Service page with current date and company info
-- LEGL-02: Privacy Policy page with data collection and usage details
-- LEGL-03: Footer links to Terms and Privacy on all pages
-- LEGL-04: Legal pages accessible without authentication
+- USER-01: List all users with pagination (25 per page)
+- USER-02: Search users by email, name, facility, club
+- USER-03: Create user bypassing signup (admin sets email, generates password link)
+- USER-04: View user details (profile, memberships, created date, last login)
+- USER-05: Edit user profile (name, email, phone)
+- USER-06: Deactivate user (soft disable, blocks login, preserves data)
+- USER-07: Reactivate deactivated user
+- USER-08: Reset user password (generate recovery link via Supabase Admin API)
+- USER-09: Bulk user creation via CSV upload (email, name, optional role)
 
 **Success Criteria:**
-1. User can access /terms and /privacy without logging in
-2. User sees Terms of Service with effective date and company contact information
-3. User sees Privacy Policy explaining what data is collected and how it is used
-4. User can navigate to legal pages from footer on any authenticated page
+1. Super admin can browse paginated user list and search by email/name/facility/club
+2. Super admin can create a new user who receives password setup email without self-signup
+3. Super admin can view user profile showing all memberships across facilities/clubs
+4. Super admin can deactivate user who then cannot log in, and reactivate to restore access
+5. Super admin can upload CSV to create multiple users in one operation with progress feedback
 
 ---
 
-### Phase 34: UX Polish - Loading, Errors, Empty States
+### Phase 38: Facility & Club Management
 
-**Goal:** App provides clear, consistent feedback during all loading, error, and empty conditions
+**Goal:** Super admin can manage all facilities and clubs with full CRUD operations and cross-facility actions
 
-**Dependencies:** Phase 32 (safe areas affect layouts)
-
-**Plans:** 4 plans
-
-Plans:
-- [x] 34-01-PLAN.md — Core UX components (DelayedSpinner, ProgressIndicator, EmptyState variants)
-- [x] 34-02-PLAN.md — Detail page loading states (roster/equipment/practices [id])
-- [x] 34-03-PLAN.md — Error handling standardization (Button loading, ERRR verification)
-- [x] 34-04-PLAN.md — Empty state polish (audit and contextual messaging)
+**Dependencies:** Phase 36 (admin auth required)
 
 **Requirements:**
-- LOAD-01: Skeleton loading states on all list views (roster, equipment, practices)
-- LOAD-02: Skeleton loading states on detail pages during data fetch
-- LOAD-03: 300ms delay before showing spinners (prevent flash)
-- LOAD-04: Progress indicators for operations longer than 10 seconds
-- ERRR-01: Error messages formatted consistently with icon and clear action
-- ERRR-02: Form validation errors shown inline on blur (not submit)
-- ERRR-03: Network error states with retry action
-- ERRR-04: Optimistic UI updates with rollback on failure
-- EMPT-01: Empty state variants implemented (informational, celebration, error)
-- EMPT-02: All major list views have contextual empty states
-- EMPT-03: Empty states include clear call-to-action for next step
+- FCLT-01: List all facilities with club counts and member counts
+- FCLT-02: Create facility (name, slug, location, contact info)
+- FCLT-03: Edit facility details
+- FCLT-04: View facility details with clubs and aggregate stats
+- FCLT-05: Delete facility (soft delete with confirmation, cascade check)
+- CLUB-01: List all clubs with member counts (global and by facility)
+- CLUB-02: Create club (name, facility assignment, colors)
+- CLUB-03: Edit club details
+- CLUB-04: View club details with members and settings
+- CLUB-05: Delete club (soft delete with confirmation, cascade check)
+- CLUB-06: Move club between facilities
 
 **Success Criteria:**
-1. User navigating to roster/equipment/practices sees skeleton placeholders (not blank or spinner) during load
-2. User with slow network does not see spinner flash for fast operations (300ms+ only)
-3. User encountering network error sees message with "Retry" button that re-attempts the request
-4. User with empty roster/equipment/practices sees helpful message explaining what to do next
-5. User filling form sees validation error appear when leaving invalid field (not after submit)
+1. Super admin can browse all facilities with summary stats (club count, member count)
+2. Super admin can create, edit, and soft-delete facilities with cascade warnings
+3. Super admin can browse all clubs globally or filtered by facility
+4. Super admin can create, edit, and soft-delete clubs with membership impact warnings
+5. Super admin can move a club from one facility to another preserving all club data
 
 ---
 
-### Phase 35: Device-Specific Polish - Calendar & Drag-Drop
+### Phase 39: Membership Management
 
-**Goal:** Calendar and drag-drop interactions work optimally on mobile touch devices
+**Goal:** Super admin can directly manage user-club relationships bypassing invitation flows
 
-**Dependencies:** Phase 32 (safe areas), Phase 34 (loading states)
-
-**Plans:** 3 plans
-
-Plans:
-- [x] 35-01-PLAN.md — Calendar mobile drawer and touch targets (CALM-01, CALM-02)
-- [x] 35-02-PLAN.md — Drag-drop touch sensors and visual feedback (DRAG-01, DRAG-02, DRAG-03)
-- [x] 35-03-PLAN.md — Practice list mobile layout and verification checkpoint (CALM-03)
+**Dependencies:** Phase 37 (user management), Phase 38 (club management)
 
 **Requirements:**
-- CALM-01: Calendar opens in bottom sheet (Drawer) on mobile viewports
-- CALM-02: Date picker optimized for touch with larger tap targets
-- CALM-03: Practice list view readable on mobile without horizontal scroll
-- DRAG-01: Touch drag-drop uses 250ms hold delay activation
-- DRAG-02: Explicit drag handles with touch-action: none CSS
-- DRAG-03: Visual feedback during drag (shadow, scale, color change)
+- MEMB-01: Add user to club with role(s) (bypasses invitation flow)
+- MEMB-02: Remove user from club
+- MEMB-03: Change user roles within club
+- MEMB-04: View all memberships for a user (cross-org visibility)
+- MEMB-05: Bulk add users to club via CSV (email + role)
 
 **Success Criteria:**
-1. User on mobile tapping date field sees calendar appear from bottom as a sheet (not modal overlay)
-2. User can tap calendar dates without mis-taps (44px+ touch targets)
-3. User viewing practice list on mobile sees all content without horizontal scrolling
-4. User on touch device can initiate drag by holding for 250ms (accidental scrolls do not trigger drag)
-5. User dragging lineup item sees visual feedback (elevation, color change) confirming the drag is active
+1. Super admin can add any user to any club with specified role(s) immediately (no invitation)
+2. Super admin can remove user from club, ending their access instantly
+3. Super admin can change user's role within a club (e.g., ATHLETE to COACH)
+4. Super admin viewing user detail sees all their memberships across all facilities/clubs
+5. Super admin can upload CSV to add multiple users to a club in one operation
+
+---
+
+### Phase 40: Audit Log Viewer & Export
+
+**Goal:** Super admin can review and export audit history for compliance and debugging
+
+**Dependencies:** Phase 36 (audit logging infrastructure)
+
+**Requirements:**
+- AUDT-02: Audit log viewer in admin panel (filterable by action, actor, date)
+- AUDT-03: Audit log export (CSV download with date range filter)
+
+**Success Criteria:**
+1. Super admin can browse audit log with filters for action type, actor, and date range
+2. Super admin can see before/after state diff for any logged action
+3. Super admin can export filtered audit log as CSV for external analysis or compliance
 
 ---
 
@@ -246,13 +255,14 @@ Plans:
 
 | Phase | Name | Requirements | Status |
 |-------|------|--------------|--------|
-| 32 | Safe Areas & Branding | 8 | Complete |
-| 33 | Legal Pages | 4 | Complete |
-| 34 | UX Polish | 11 | Complete |
-| 35 | Device-Specific | 6 | Complete |
+| 36 | Admin Foundation & Auth | 7 | Pending |
+| 37 | User Management | 9 | Pending |
+| 38 | Facility & Club Management | 11 | Pending |
+| 39 | Membership Management | 5 | Pending |
+| 40 | Audit Log Viewer & Export | 2 | Pending |
 
-**Total:** 29 requirements, 4 phases (29/29 complete)
+**Total:** 34 requirements, 5 phases (0/34 complete)
 
 ---
 
-*Last updated: 2026-01-30 (Phase 35 complete - v3.0 SHIPPED)*
+*Last updated: 2026-01-30 (v3.1 roadmap created)*

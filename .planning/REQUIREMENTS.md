@@ -90,45 +90,46 @@ Deferred to v3.2 or later:
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| AUTH-01 | Pending | - |
-| AUTH-02 | Pending | - |
-| AUTH-03 | Pending | - |
-| AUTH-04 | Pending | - |
-| AUTH-05 | Pending | - |
-| AUTH-06 | Pending | - |
-| USER-01 | Pending | - |
-| USER-02 | Pending | - |
-| USER-03 | Pending | - |
-| USER-04 | Pending | - |
-| USER-05 | Pending | - |
-| USER-06 | Pending | - |
-| USER-07 | Pending | - |
-| USER-08 | Pending | - |
-| USER-09 | Pending | - |
-| FCLT-01 | Pending | - |
-| FCLT-02 | Pending | - |
-| FCLT-03 | Pending | - |
-| FCLT-04 | Pending | - |
-| FCLT-05 | Pending | - |
-| CLUB-01 | Pending | - |
-| CLUB-02 | Pending | - |
-| CLUB-03 | Pending | - |
-| CLUB-04 | Pending | - |
-| CLUB-05 | Pending | - |
-| CLUB-06 | Pending | - |
-| MEMB-01 | Pending | - |
-| MEMB-02 | Pending | - |
-| MEMB-03 | Pending | - |
-| MEMB-04 | Pending | - |
-| MEMB-05 | Pending | - |
-| AUDT-01 | Pending | - |
-| AUDT-02 | Pending | - |
-| AUDT-03 | Pending | - |
+| AUTH-01 | Phase 36 | Pending |
+| AUTH-02 | Phase 36 | Pending |
+| AUTH-03 | Phase 36 | Pending |
+| AUTH-04 | Phase 36 | Pending |
+| AUTH-05 | Phase 36 | Pending |
+| AUTH-06 | Phase 36 | Pending |
+| USER-01 | Phase 37 | Pending |
+| USER-02 | Phase 37 | Pending |
+| USER-03 | Phase 37 | Pending |
+| USER-04 | Phase 37 | Pending |
+| USER-05 | Phase 37 | Pending |
+| USER-06 | Phase 37 | Pending |
+| USER-07 | Phase 37 | Pending |
+| USER-08 | Phase 37 | Pending |
+| USER-09 | Phase 37 | Pending |
+| FCLT-01 | Phase 38 | Pending |
+| FCLT-02 | Phase 38 | Pending |
+| FCLT-03 | Phase 38 | Pending |
+| FCLT-04 | Phase 38 | Pending |
+| FCLT-05 | Phase 38 | Pending |
+| CLUB-01 | Phase 38 | Pending |
+| CLUB-02 | Phase 38 | Pending |
+| CLUB-03 | Phase 38 | Pending |
+| CLUB-04 | Phase 38 | Pending |
+| CLUB-05 | Phase 38 | Pending |
+| CLUB-06 | Phase 38 | Pending |
+| MEMB-01 | Phase 39 | Pending |
+| MEMB-02 | Phase 39 | Pending |
+| MEMB-03 | Phase 39 | Pending |
+| MEMB-04 | Phase 39 | Pending |
+| MEMB-05 | Phase 39 | Pending |
+| AUDT-01 | Phase 36 | Pending |
+| AUDT-02 | Phase 40 | Pending |
+| AUDT-03 | Phase 40 | Pending |
 
 **Coverage:**
 - v3.1 requirements: 34 total
-- Mapped to phases: 0 (pending roadmap)
-- Unmapped: 34
+- Mapped to phases: 34
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-01-30*
+*Roadmap mapped: 2026-01-30*

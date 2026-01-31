@@ -4,28 +4,28 @@
 
 **Core Value:** Coaches can plan practices with lineups and equipment, and athletes know where to be and what boat they're in.
 
-**Current Focus:** v3.1 Admin Panel
+**Current Focus:** v3.1 Admin Panel - Platform owner management
 
 ## Current Position
 
 | Field | Value |
 |-------|-------|
 | Milestone | v3.1 Admin Panel |
-| Phase | Not started |
-| Plan | — |
-| Status | Defining requirements |
-| Last activity | 2026-01-30 — Milestone v3.1 started |
+| Phase | 36 - Admin Foundation & Auth |
+| Plan | Not started |
+| Status | Roadmap complete, ready for planning |
+| Last activity | 2026-01-30 - Roadmap created |
 
 **Progress:**
 ```
 v1.0: [##########] 100% SHIPPED (2026-01-22)
-v1.1: [##########] 100% SHIPPED (2026-01-22) — 9/11 reqs, 2 deferred
-v2.0: [##########] 100% SHIPPED (2026-01-26) — 34/34 requirements
-v2.1: [##########] 100% SHIPPED (2026-01-27) — 30/30 requirements
-v2.2: [##########] 100% SHIPPED (2026-01-29) — 33/35 requirements
-v2.3: [##########] 100% SHIPPED (2026-01-29) — 20/20 requirements
-v3.0: [##########] 100% SHIPPED (2026-01-30) — 29/29 requirements
-v3.1: [░░░░░░░░░░] 0% IN PROGRESS
+v1.1: [##########] 100% SHIPPED (2026-01-22) - 9/11 reqs, 2 deferred
+v2.0: [##########] 100% SHIPPED (2026-01-26) - 34/34 requirements
+v2.1: [##########] 100% SHIPPED (2026-01-27) - 30/30 requirements
+v2.2: [##########] 100% SHIPPED (2026-01-29) - 33/35 requirements
+v2.3: [##########] 100% SHIPPED (2026-01-29) - 20/20 requirements
+v3.0: [##########] 100% SHIPPED (2026-01-30) - 29/29 requirements
+v3.1: [----------] 0% IN PROGRESS - 0/34 requirements
 ```
 
 **Total shipped:** 7 milestones, 35 phases, 189 requirements
@@ -34,13 +34,21 @@ v3.1: [░░░░░░░░░░] 0% IN PROGRESS
 
 **Goal:** Platform owner can manage all users, clubs, and memberships through a super-admin panel
 
-**Target features:**
-- Super admin role (separate from FACILITY_ADMIN)
-- Admin dashboard at `/admin`
-- User management (create, list, update, delete, password reset)
-- Club management (create, list, update, delete)
-- Membership management (add/remove users from clubs, assign roles)
-- Admin creates users (replaces self-signup for initial onboarding)
+**Phases:**
+| Phase | Name | Requirements | Status |
+|-------|------|--------------|--------|
+| 36 | Admin Foundation & Auth | 7 | Pending |
+| 37 | User Management | 9 | Pending |
+| 38 | Facility & Club Management | 11 | Pending |
+| 39 | Membership Management | 5 | Pending |
+| 40 | Audit Log Viewer & Export | 2 | Pending |
+
+**Architecture decisions (from research):**
+- Separate `(admin)` route group from `(dashboard)`
+- Database-verified super admin (not JWT claims only)
+- Use Prisma directly (bypasses RLS) + getSupabaseAdmin() for auth ops
+- No AbilityProvider in admin routes (admin bypasses CASL for tenants)
+- Audit logging for all admin mutations
 
 ## Shipped Milestones
 
@@ -78,6 +86,10 @@ v3.1: [░░░░░░░░░░] 0% IN PROGRESS
 
 | Decision | Date | Outcome |
 |----------|------|---------|
+| Database-verified super admin | 2026-01-30 | Check SuperAdmin table on every request, not JWT claims |
+| Separate (admin) route group | 2026-01-30 | Isolate admin UI from tenant dashboard |
+| Prisma direct for admin | 2026-01-30 | Admin bypasses RLS; Prisma sufficient |
+| 30-min session timeout | 2026-01-30 | Security requirement for admin panel |
 | Dual auth patterns coexist | 2026-01-29 | Both secure; migration is code quality, not security |
 | 404 for cross-tenant access | 2026-01-29 | Prevents resource enumeration attacks |
 | Database lookup per request | 2026-01-29 | Security over performance; immediate role propagation |
@@ -115,9 +127,9 @@ v3.1: [░░░░░░░░░░] 0% IN PROGRESS
 | Field | Value |
 |-------|-------|
 | Last session | 2026-01-30 |
-| Stopped at | Started v3.1 milestone definition |
-| Resume with | Complete requirements definition |
+| Stopped at | v3.1 roadmap created |
+| Resume with | `/gsd:plan-phase 36` |
 
 ---
 
-*Last updated: 2026-01-30 (v3.1 milestone started)*
+*Last updated: 2026-01-30 (v3.1 roadmap created)*
