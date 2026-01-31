@@ -25,7 +25,7 @@ v2.1: [##########] 100% SHIPPED (2026-01-27) - 30/30 requirements
 v2.2: [##########] 100% SHIPPED (2026-01-29) - 33/35 requirements
 v2.3: [##########] 100% SHIPPED (2026-01-29) - 20/20 requirements
 v3.0: [##########] 100% SHIPPED (2026-01-30) - 29/29 requirements
-v3.1: [########--] 82% IN PROGRESS - 28/34 requirements
+v3.1: [########--] 79% IN PROGRESS - 27/34 requirements
 ```
 
 **Total shipped:** 7 milestones, 35 phases, 196 requirements
@@ -157,7 +157,7 @@ v3.1: [########--] 82% IN PROGRESS - 28/34 requirements
 |-------|-------|
 | Last session | 2026-01-31 |
 | Stopped at | Completed 38-06-PLAN.md (Club Forms & Management UI) |
-| Resume with | `/gsd:execute-phase 39-01` |
+| Resume with | `/gsd:plan-phase 39` |
 
 ---
 

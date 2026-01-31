@@ -211,12 +211,12 @@ Plans:
 **Plans:** 6 plans
 
 Plans:
-- [ ] 38-01-PLAN.md — Facility APIs (list, create, detail, update, delete)
-- [ ] 38-02-PLAN.md — Club APIs (list, create, detail, update, delete, move)
-- [ ] 38-03-PLAN.md — Facility list and detail pages
-- [ ] 38-04-PLAN.md — Facility forms and type-to-confirm delete dialog
-- [ ] 38-05-PLAN.md — Club list and detail pages
-- [ ] 38-06-PLAN.md — Club forms and move dialog
+- [x] 38-01-PLAN.md — Facility APIs (list, create, detail, update, delete)
+- [x] 38-02-PLAN.md — Club APIs (list, create, detail, update, delete, move)
+- [x] 38-03-PLAN.md — Facility list and detail pages
+- [x] 38-04-PLAN.md — Facility forms and type-to-confirm delete dialog
+- [x] 38-05-PLAN.md — Club list and detail pages
+- [x] 38-06-PLAN.md — Club forms and move dialog
 
 **Requirements:**
 - FCLT-01: List all facilities with club counts and member counts
@@ -285,12 +285,12 @@ Plans:
 |-------|------|--------------|--------|
 | 36 | Admin Foundation & Auth | 7 | Complete |
 | 37 | User Management | 9 | Complete |
-| 38 | Facility & Club Management | 11 | Planned |
+| 38 | Facility & Club Management | 11 | Complete |
 | 39 | Membership Management | 5 | Pending |
 | 40 | Audit Log Viewer & Export | 2 | Pending |
 
-**Total:** 34 requirements, 5 phases (16/34 complete)
+**Total:** 34 requirements, 5 phases (27/34 complete)
 
 ---
 
-*Last updated: 2026-01-31 (Phase 38 planned)*
+*Last updated: 2026-01-31 (Phase 38 complete)*

@@ -30,20 +30,20 @@ Super-admin panel for platform management with full CRUD operations, admin-creat
 
 ### Facility Management
 
-- [ ] **FCLT-01**: List all facilities with club counts and member counts
-- [ ] **FCLT-02**: Create facility (name, slug, location, contact info)
-- [ ] **FCLT-03**: Edit facility details
-- [ ] **FCLT-04**: View facility details with clubs and aggregate stats
-- [ ] **FCLT-05**: Delete facility (soft delete with confirmation, cascade check)
+- [x] **FCLT-01**: List all facilities with club counts and member counts
+- [x] **FCLT-02**: Create facility (name, slug, location, contact info)
+- [x] **FCLT-03**: Edit facility details
+- [x] **FCLT-04**: View facility details with clubs and aggregate stats
+- [x] **FCLT-05**: Delete facility (soft delete with confirmation, cascade check)
 
 ### Club Management
 
-- [ ] **CLUB-01**: List all clubs with member counts (global and by facility)
-- [ ] **CLUB-02**: Create club (name, facility assignment, colors)
-- [ ] **CLUB-03**: Edit club details
-- [ ] **CLUB-04**: View club details with members and settings
-- [ ] **CLUB-05**: Delete club (soft delete with confirmation, cascade check)
-- [ ] **CLUB-06**: Move club between facilities
+- [x] **CLUB-01**: List all clubs with member counts (global and by facility)
+- [x] **CLUB-02**: Create club (name, facility assignment, colors)
+- [x] **CLUB-03**: Edit club details
+- [x] **CLUB-04**: View club details with members and settings
+- [x] **CLUB-05**: Delete club (soft delete with confirmation, cascade check)
+- [x] **CLUB-06**: Move club between facilities
 
 ### Membership Management
 
@@ -105,17 +105,17 @@ Deferred to v3.2 or later:
 | USER-07 | Phase 37 | Complete |
 | USER-08 | Phase 37 | Complete |
 | USER-09 | Phase 37 | Complete |
-| FCLT-01 | Phase 38 | Pending |
-| FCLT-02 | Phase 38 | Pending |
-| FCLT-03 | Phase 38 | Pending |
-| FCLT-04 | Phase 38 | Pending |
-| FCLT-05 | Phase 38 | Pending |
-| CLUB-01 | Phase 38 | Pending |
-| CLUB-02 | Phase 38 | Pending |
-| CLUB-03 | Phase 38 | Pending |
-| CLUB-04 | Phase 38 | Pending |
-| CLUB-05 | Phase 38 | Pending |
-| CLUB-06 | Phase 38 | Pending |
+| FCLT-01 | Phase 38 | Complete |
+| FCLT-02 | Phase 38 | Complete |
+| FCLT-03 | Phase 38 | Complete |
+| FCLT-04 | Phase 38 | Complete |
+| FCLT-05 | Phase 38 | Complete |
+| CLUB-01 | Phase 38 | Complete |
+| CLUB-02 | Phase 38 | Complete |
+| CLUB-03 | Phase 38 | Complete |
+| CLUB-04 | Phase 38 | Complete |
+| CLUB-05 | Phase 38 | Complete |
+| CLUB-06 | Phase 38 | Complete |
 | MEMB-01 | Phase 39 | Pending |
 | MEMB-02 | Phase 39 | Pending |
 | MEMB-03 | Phase 39 | Pending |
