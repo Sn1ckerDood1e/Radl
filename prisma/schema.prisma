@@ -1036,3 +1036,13 @@ model AnnouncementRead {
   @@index([userId])
   @@index([announcementId])
 }
+
+// Super admin for platform-level access (database-verified, not just JWT)
+model SuperAdmin {
+  id        String   @id @default(uuid())
+  userId    String   @unique // Supabase auth.users ID
+  createdAt DateTime @default(now())
+  createdBy String?  // userId who granted super admin (for audit trail)
+
+  @@index([userId])
+}
