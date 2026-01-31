@@ -4,17 +4,17 @@
 
 **Core Value:** Coaches can plan practices with lineups and equipment, and athletes know where to be and what boat they're in.
 
-**Current Focus:** v3.0 Production Polish COMPLETE
+**Current Focus:** v3.1 Admin Panel
 
 ## Current Position
 
 | Field | Value |
 |-------|-------|
-| Milestone | v3.0 Production Polish |
-| Phase | 35 - Device-Specific |
-| Plan | 03 of 03 complete (35-03) |
-| Status | MILESTONE COMPLETE |
-| Last activity | 2026-01-30 — Completed 35-03-PLAN.md (Practice List Responsive Layout) |
+| Milestone | v3.1 Admin Panel |
+| Phase | Not started |
+| Plan | — |
+| Status | Defining requirements |
+| Last activity | 2026-01-30 — Milestone v3.1 started |
 
 **Progress:**
 ```
@@ -25,23 +25,22 @@ v2.1: [##########] 100% SHIPPED (2026-01-27) — 30/30 requirements
 v2.2: [##########] 100% SHIPPED (2026-01-29) — 33/35 requirements
 v2.3: [##########] 100% SHIPPED (2026-01-29) — 20/20 requirements
 v3.0: [##########] 100% SHIPPED (2026-01-30) — 29/29 requirements
+v3.1: [░░░░░░░░░░] 0% IN PROGRESS
 ```
 
 **Total shipped:** 7 milestones, 35 phases, 189 requirements
 
-## v3.0 Milestone Overview
+## v3.1 Milestone Overview
 
-**Goal:** Production-ready polish before user launch
+**Goal:** Platform owner can manage all users, clubs, and memberships through a super-admin panel
 
-**Phases:**
-| Phase | Name | Requirements | Status |
-|-------|------|--------------|--------|
-| 32 | Safe Areas & Branding | 8 | COMPLETE |
-| 33 | Legal Pages | 4 | COMPLETE |
-| 34 | UX Polish | 11 | COMPLETE |
-| 35 | Device-Specific | 6 | COMPLETE |
-
-**v3.0 Status:** SHIPPED (29/29 requirements)
+**Target features:**
+- Super admin role (separate from FACILITY_ADMIN)
+- Admin dashboard at `/admin`
+- User management (create, list, update, delete, password reset)
+- Club management (create, list, update, delete)
+- Membership management (add/remove users from clubs, assign roles)
+- Admin creates users (replaces self-signup for initial onboarding)
 
 ## Shipped Milestones
 
@@ -85,22 +84,10 @@ v3.0: [##########] 100% SHIPPED (2026-01-30) — 29/29 requirements
 | Defense-in-depth immutability | 2026-01-29 | RLS + trigger to protect AuditLog |
 | Server-side auth mandatory | 2026-01-29 | All auth flows through API routes for rate limiting |
 | Per-action rate limiters | 2026-01-29 | Different auth actions need different limits |
-| Location field workaround | 2026-01-29 | Use notes field for practice location (acceptable for MVP) |
-| Meeting blocks minimal content | 2026-01-29 | Notes-only sufficient for meeting blocks (by design) |
 | onTouched validation mode | 2026-01-29 | Immediate feedback on field blur, better UX |
 | Safe area on wrapper not component | 2026-01-30 | pb-[env(safe-area-inset-bottom)] on nav wrapper keeps component reusable |
-| Sticky footer flex pattern | 2026-01-30 | min-h-screen + flex flex-col + flex-1 main for proper footer placement |
-| SVG spinner pattern | 2026-01-30 | Consistent spinner SVG across all components (notification-settings style) |
-| Variant pattern for styling | 2026-01-30 | variantStyles object for component style variations |
-| Detail skeleton bg colors | 2026-01-30 | Roster uses white bg cards; equipment/practice use zinc-900 |
-| Button loading uses DelayedSpinner | 2026-01-30 | loading prop with 300ms delay, auto-disables |
-| Error toast retry gaps | 2026-01-30 | 12 network errors need showErrorToast migration |
-| Celebration variant pattern | 2026-01-30 | Use for positive zero-states (cleared), informational for first-time empty |
-| Calendar mobile pattern | 2026-01-30 | Drawer on mobile, Dialog on desktop (ResponsiveCalendarWrapper) |
-| CSS variables for touch | 2026-01-30 | Use --rdp-day_button-height: 44px for react-day-picker sizing |
-| 250ms touch drag delay | 2026-01-30 | TouchSensor with 250ms hold prevents accidental drag during scroll |
-| Explicit drag handles | 2026-01-30 | GripVertical button with touch-none for mobile drag-drop |
-| Mobile-first stacking | 2026-01-30 | flex-col sm:flex-row for responsive card layouts |
+| Prisma cached in production | 2026-01-30 | Prevents connection pool exhaustion on Vercel |
+| Supabase pooler port 6543 | 2026-01-30 | Required for serverless environments |
 
 ### Architecture Notes
 
@@ -119,25 +106,18 @@ v3.0: [##########] 100% SHIPPED (2026-01-30) — 29/29 requirements
 
 | Item | Status | Notes |
 |------|--------|-------|
-| Strokeline -> Radl rename | RESOLVED | Phase 32-04 - Verified no Strokeline in UI |
-| Color palette update | RESOLVED | Phase 32-02 - migrated 278 emerald->teal |
-| RC connection testing | DEFERRED | Needs RC_CLIENT_ID and RC_CLIENT_SECRET |
-| QR external scanning | DEFERRED | Needs production deployment |
-| Push notifications | DEFERRED | NOTIF-01, NOTIF-02 for v4.0 |
-| Dynamic team colors | RESOLVED | Using brand teal, not dynamic per-team |
+| RLS security hardening | PENDING | 7 migrations ready (00010-00017) |
+| Middleware Prisma removal | RESOLVED | 2026-01-30 - API key validation moved to routes |
 | CASL migration | IDENTIFIED | 59 routes use legacy getClaimsForApiRoute pattern |
-| Vitest framework | ADDED | 26-02 - Unit test infrastructure |
-| pgTAP RLS tests | CREATED | 26-04 - 20 tests awaiting multi-tenant data |
-| Equipment RLS | RESOLVED | 00004_equipment_rls.sql enables RLS with 4 policies |
 
 ## Session Continuity
 
 | Field | Value |
 |-------|-------|
 | Last session | 2026-01-30 |
-| Stopped at | Completed v3.0 Production Polish milestone |
-| Resume with | Next milestone planning (v4.0 or production deployment) |
+| Stopped at | Started v3.1 milestone definition |
+| Resume with | Complete requirements definition |
 
 ---
 
-*Last updated: 2026-01-30 (v3.0 milestone complete - Phase 35-03)*
+*Last updated: 2026-01-30 (v3.1 milestone started)*

@@ -4,24 +4,35 @@
 
 A multi-tenant SaaS for rowing team operations — practice planning, equipment management, roster coordination, and race-day execution at regattas.
 
-**Current State:** v3.0 in progress. Production polish before user launch.
+**Current State:** v3.1 in progress. Admin panel for platform management.
 
-## Current Milestone: v3.0 Production Polish
+## Current Milestone: v3.1 Admin Panel
 
-**Goal:** Make the app production-ready with consistent branding, polished UX, device-optimized layouts, and legal compliance.
+**Goal:** Platform owner can manage all users, clubs, and memberships through a super-admin panel, with admin-created user onboarding.
 
 **Target features:**
-- Branding implementation (Strokeline → Radl, color palette, typography)
-- UX polish (loading states, error messages, empty states, smooth workflows)
-- Device-specific fixes (calendar on mobile, lineup editor on desktop/mobile)
-- Legal requirements (Terms of Service, Privacy Policy)
-- Native mobile apps (if scope allows)
+- Super admin role (separate from FACILITY_ADMIN)
+- Admin dashboard at `/admin`
+- User management (create, list, update, delete, password reset)
+- Club management (create, list, update, delete)
+- Membership management (add/remove users from clubs, assign roles)
+- Admin creates users (replaces self-signup for initial onboarding)
 
 ## Core Value
 
 **The ONE thing that must work:** Coaches can plan practices with lineups and equipment, and athletes know where to be and what boat they're in.
 
 ## Shipped Capabilities
+
+### v3.0 Production Polish (2026-01-30)
+
+**29 requirements delivered across 4 phases:**
+
+- Branding: Strokeline → Radl rename, teal color palette, PWA manifest
+- Safe areas: viewport-fit=cover, safe-area-inset-* for notched devices
+- Legal: Terms of Service, Privacy Policy, footer links
+- UX polish: loading skeletons, error handling, empty states
+- Device-specific: mobile calendar drawer, touch drag-drop, responsive layouts
 
 ### v2.3 Core Flow Testing (2026-01-29)
 
@@ -114,6 +125,7 @@ A multi-tenant SaaS for rowing team operations — practice planning, equipment 
 
 | Role | Primary Use | Access Level |
 |------|-------------|--------------|
+| **Super Admin** | Platform management, user/club creation | Full platform control |
 | **Facility Admin** | Manage shared equipment, oversee multiple clubs | Facility-level control |
 | **Club Admin** | Manage club settings, invite coaches | Club-level admin |
 | **Coach** | Plan practices, manage equipment, assign lineups | Full operational control |
@@ -152,6 +164,7 @@ A multi-tenant SaaS for rowing team operations — practice planning, equipment 
 | Block-based practices | Flexible structure for varied training sessions | Good — cleaner than monolithic form |
 | @dnd-kit for lineups | React 19 compatible, accessible, performant | Good — smooth drag-drop experience |
 | onTouched validation | Immediate feedback on field blur | Good — better UX than onSubmit |
+| Super admin separate from tenant roles | Platform owner distinct from facility/club admin | — Pending |
 
 ## Future Milestone Goals
 
@@ -183,4 +196,4 @@ v4.0 candidates:
 - Social features
 
 ---
-*Last updated: 2026-01-29 after v3.0 milestone started*
+*Last updated: 2026-01-30 after v3.1 milestone started*
