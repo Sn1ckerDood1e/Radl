@@ -1,4 +1,5 @@
 import { redirect } from 'next/navigation';
+import { Toaster } from 'sonner';
 import { requireSuperAdmin } from '@/lib/auth/admin-authorize';
 import { createClient } from '@/lib/supabase/server';
 import { AdminSidebar } from '@/components/admin/admin-sidebar';
@@ -60,6 +61,7 @@ export default async function AdminLayout({
 
   return (
     <AbilityProvider user={adminContext}>
+      <Toaster position="top-right" richColors />
       <AdminSessionTimeout />
       <div className="min-h-screen bg-[var(--background)]">
         <AdminHeader userEmail={authUser?.email ?? 'Admin'} />
