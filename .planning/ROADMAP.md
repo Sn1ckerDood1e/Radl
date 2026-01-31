@@ -176,11 +176,11 @@ Plans:
 **Plans:** 5 plans
 
 Plans:
-- [ ] 37-01-PLAN.md — Core user APIs (list, search, view, edit)
-- [ ] 37-02-PLAN.md — User operations APIs (create, deactivate, reactivate, password reset)
-- [ ] 37-03-PLAN.md — User list page with table, search, pagination
-- [ ] 37-04-PLAN.md — User detail and create pages
-- [ ] 37-05-PLAN.md — Bulk user creation via CSV upload
+- [x] 37-01-PLAN.md — Core user APIs (list, search, view, edit)
+- [x] 37-02-PLAN.md — User operations APIs (create, deactivate, reactivate, password reset)
+- [x] 37-03-PLAN.md — User list page with table, search, pagination
+- [x] 37-04-PLAN.md — User detail and create pages
+- [x] 37-05-PLAN.md — Bulk user creation via CSV upload
 
 **Requirements:**
 - USER-01: List all users with pagination (25 per page)
@@ -274,13 +274,13 @@ Plans:
 | Phase | Name | Requirements | Status |
 |-------|------|--------------|--------|
 | 36 | Admin Foundation & Auth | 7 | Complete |
-| 37 | User Management | 9 | Planned |
+| 37 | User Management | 9 | Complete |
 | 38 | Facility & Club Management | 11 | Pending |
 | 39 | Membership Management | 5 | Pending |
 | 40 | Audit Log Viewer & Export | 2 | Pending |
 
-**Total:** 34 requirements, 5 phases (7/34 complete)
+**Total:** 34 requirements, 5 phases (16/34 complete)
 
 ---
 
-*Last updated: 2026-01-31 (Phase 37 planned)*
+*Last updated: 2026-01-31 (Phase 37 complete)*

@@ -9,24 +9,24 @@ Super-admin panel for platform management with full CRUD operations, admin-creat
 
 ### Authentication & Foundation
 
-- [ ] **AUTH-01**: Super admin role stored in database table (not JWT claims only)
-- [ ] **AUTH-02**: Super admin login verified against database on every request
-- [ ] **AUTH-03**: Admin session timeout at 30 minutes of inactivity
-- [ ] **AUTH-04**: Super admin check in CASL abilities (`can('manage', 'all')`)
-- [ ] **AUTH-05**: Separate `(admin)` route group with protected layout
-- [ ] **AUTH-06**: MFA enforcement for super admin accounts
+- [x] **AUTH-01**: Super admin role stored in database table (not JWT claims only)
+- [x] **AUTH-02**: Super admin login verified against database on every request
+- [x] **AUTH-03**: Admin session timeout at 30 minutes of inactivity
+- [x] **AUTH-04**: Super admin check in CASL abilities (`can('manage', 'all')`)
+- [x] **AUTH-05**: Separate `(admin)` route group with protected layout
+- [x] **AUTH-06**: MFA enforcement for super admin accounts
 
 ### User Management
 
-- [ ] **USER-01**: List all users with pagination (25 per page)
-- [ ] **USER-02**: Search users by email, name, facility, club
-- [ ] **USER-03**: Create user bypassing signup (admin sets email, generates password link)
-- [ ] **USER-04**: View user details (profile, memberships, created date, last login)
-- [ ] **USER-05**: Edit user profile (name, email, phone)
-- [ ] **USER-06**: Deactivate user (soft disable, blocks login, preserves data)
-- [ ] **USER-07**: Reactivate deactivated user
-- [ ] **USER-08**: Reset user password (generate recovery link via Supabase Admin API)
-- [ ] **USER-09**: Bulk user creation via CSV upload (email, name, optional role)
+- [x] **USER-01**: List all users with pagination (25 per page)
+- [x] **USER-02**: Search users by email, name, facility, club
+- [x] **USER-03**: Create user bypassing signup (admin sets email, generates password link)
+- [x] **USER-04**: View user details (profile, memberships, created date, last login)
+- [x] **USER-05**: Edit user profile (name, email, phone)
+- [x] **USER-06**: Deactivate user (soft disable, blocks login, preserves data)
+- [x] **USER-07**: Reactivate deactivated user
+- [x] **USER-08**: Reset user password (generate recovery link via Supabase Admin API)
+- [x] **USER-09**: Bulk user creation via CSV upload (email, name, optional role)
 
 ### Facility Management
 
@@ -55,7 +55,7 @@ Super-admin panel for platform management with full CRUD operations, admin-creat
 
 ### Audit Logging
 
-- [ ] **AUDT-01**: Log all admin actions (actor, action, target, timestamp, before/after)
+- [x] **AUDT-01**: Log all admin actions (actor, action, target, timestamp, before/after)
 - [ ] **AUDT-02**: Audit log viewer in admin panel (filterable by action, actor, date)
 - [ ] **AUDT-03**: Audit log export (CSV download with date range filter)
 
@@ -90,21 +90,21 @@ Deferred to v3.2 or later:
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| AUTH-01 | Phase 36 | Pending |
-| AUTH-02 | Phase 36 | Pending |
-| AUTH-03 | Phase 36 | Pending |
-| AUTH-04 | Phase 36 | Pending |
-| AUTH-05 | Phase 36 | Pending |
-| AUTH-06 | Phase 36 | Pending |
-| USER-01 | Phase 37 | Pending |
-| USER-02 | Phase 37 | Pending |
-| USER-03 | Phase 37 | Pending |
-| USER-04 | Phase 37 | Pending |
-| USER-05 | Phase 37 | Pending |
-| USER-06 | Phase 37 | Pending |
-| USER-07 | Phase 37 | Pending |
-| USER-08 | Phase 37 | Pending |
-| USER-09 | Phase 37 | Pending |
+| AUTH-01 | Phase 36 | Complete |
+| AUTH-02 | Phase 36 | Complete |
+| AUTH-03 | Phase 36 | Complete |
+| AUTH-04 | Phase 36 | Complete |
+| AUTH-05 | Phase 36 | Complete |
+| AUTH-06 | Phase 36 | Complete |
+| USER-01 | Phase 37 | Complete |
+| USER-02 | Phase 37 | Complete |
+| USER-03 | Phase 37 | Complete |
+| USER-04 | Phase 37 | Complete |
+| USER-05 | Phase 37 | Complete |
+| USER-06 | Phase 37 | Complete |
+| USER-07 | Phase 37 | Complete |
+| USER-08 | Phase 37 | Complete |
+| USER-09 | Phase 37 | Complete |
 | FCLT-01 | Phase 38 | Pending |
 | FCLT-02 | Phase 38 | Pending |
 | FCLT-03 | Phase 38 | Pending |
@@ -121,7 +121,7 @@ Deferred to v3.2 or later:
 | MEMB-03 | Phase 39 | Pending |
 | MEMB-04 | Phase 39 | Pending |
 | MEMB-05 | Phase 39 | Pending |
-| AUDT-01 | Phase 36 | Pending |
+| AUDT-01 | Phase 36 | Complete |
 | AUDT-02 | Phase 40 | Pending |
 | AUDT-03 | Phase 40 | Pending |
 
