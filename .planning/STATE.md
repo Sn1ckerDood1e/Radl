@@ -12,9 +12,9 @@
 |-------|-------|
 | Milestone | v3.1 Admin Panel |
 | Phase | 36 - Admin Foundation & Auth |
-| Plan | Not started |
-| Status | Roadmap complete, ready for planning |
-| Last activity | 2026-01-30 - Roadmap created |
+| Plan | 01 of 7 complete |
+| Status | In progress |
+| Last activity | 2026-01-31 - Completed 36-01-PLAN.md |
 
 **Progress:**
 ```
@@ -25,7 +25,7 @@ v2.1: [##########] 100% SHIPPED (2026-01-27) - 30/30 requirements
 v2.2: [##########] 100% SHIPPED (2026-01-29) - 33/35 requirements
 v2.3: [##########] 100% SHIPPED (2026-01-29) - 20/20 requirements
 v3.0: [##########] 100% SHIPPED (2026-01-30) - 29/29 requirements
-v3.1: [----------] 0% IN PROGRESS - 0/34 requirements
+v3.1: [#---------] 3% IN PROGRESS - 1/34 requirements
 ```
 
 **Total shipped:** 7 milestones, 35 phases, 189 requirements
@@ -87,6 +87,8 @@ v3.1: [----------] 0% IN PROGRESS - 0/34 requirements
 | Decision | Date | Outcome |
 |----------|------|---------|
 | Database-verified super admin | 2026-01-30 | Check SuperAdmin table on every request, not JWT claims |
+| SuperAdmin RLS blocks all writes | 2026-01-31 | Super admins created via seed script only, not API |
+| is_super_admin JWT claim | 2026-01-31 | Fast middleware check; database remains source of truth |
 | Separate (admin) route group | 2026-01-30 | Isolate admin UI from tenant dashboard |
 | Prisma direct for admin | 2026-01-30 | Admin bypasses RLS; Prisma sufficient |
 | 30-min session timeout | 2026-01-30 | Security requirement for admin panel |
@@ -126,10 +128,10 @@ v3.1: [----------] 0% IN PROGRESS - 0/34 requirements
 
 | Field | Value |
 |-------|-------|
-| Last session | 2026-01-30 |
-| Stopped at | v3.1 roadmap created |
-| Resume with | `/gsd:plan-phase 36` |
+| Last session | 2026-01-31 |
+| Stopped at | Completed 36-01-PLAN.md |
+| Resume with | `/gsd:execute-phase 36 plan 02` |
 
 ---
 
-*Last updated: 2026-01-30 (v3.1 roadmap created)*
+*Last updated: 2026-01-31 (36-01 completed)*
