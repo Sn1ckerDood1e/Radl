@@ -224,8 +224,9 @@ export async function POST(request: NextRequest) {
 
     const parseResult = createUserSchema.safeParse(body);
     if (!parseResult.success) {
+      const firstError = parseResult.error.issues[0];
       return NextResponse.json(
-        { error: parseResult.error.errors[0]?.message || 'Invalid request body' },
+        { error: firstError?.message || 'Invalid request body' },
         { status: 400 }
       );
     }
