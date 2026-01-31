@@ -12,9 +12,9 @@
 |-------|-------|
 | Milestone | v3.1 Admin Panel |
 | Phase | 38 - Facility & Club Management |
-| Plan | 01 of 5 complete |
+| Plan | 02 of 6 complete |
 | Status | In progress |
-| Last activity | 2026-01-31 - Completed 38-01-PLAN.md |
+| Last activity | 2026-01-31 - Completed 38-02-PLAN.md |
 
 **Progress:**
 ```
@@ -25,7 +25,7 @@ v2.1: [##########] 100% SHIPPED (2026-01-27) - 30/30 requirements
 v2.2: [##########] 100% SHIPPED (2026-01-29) - 33/35 requirements
 v2.3: [##########] 100% SHIPPED (2026-01-29) - 20/20 requirements
 v3.0: [##########] 100% SHIPPED (2026-01-30) - 29/29 requirements
-v3.1: [######----] 62% IN PROGRESS - 21/34 requirements
+v3.1: [#######---] 68% IN PROGRESS - 23/34 requirements
 ```
 
 **Total shipped:** 7 milestones, 35 phases, 196 requirements
@@ -39,7 +39,7 @@ v3.1: [######----] 62% IN PROGRESS - 21/34 requirements
 |-------|------|--------------|--------|
 | 36 | Admin Foundation & Auth | 7 | Complete |
 | 37 | User Management | 9 | Complete |
-| 38 | Facility & Club Management | 11 | In progress (5/11) |
+| 38 | Facility & Club Management | 11 | In progress (7/11) |
 | 39 | Membership Management | 5 | Pending |
 | 40 | Audit Log Viewer & Export | 2 | Pending |
 
@@ -121,6 +121,8 @@ v3.1: [######----] 62% IN PROGRESS - 21/34 requirements
 | CSV column name flexibility | 2026-01-31 | Support name, displayName, full_name for better CSV import compat |
 | 100-user batch limit | 2026-01-31 | Prevents timeout/memory issues in bulk operations |
 | Cascade delete preview | 2026-01-31 | DELETE without confirm returns impact; with confirm performs delete |
+| Club model is Team | 2026-01-31 | Prisma Team model = club in UI; consistent naming |
+| Move endpoint separate | 2026-01-31 | Facility change via /move, not PATCH, for clear audit trail |
 
 ### Architecture Notes
 
@@ -148,9 +150,9 @@ v3.1: [######----] 62% IN PROGRESS - 21/34 requirements
 | Field | Value |
 |-------|-------|
 | Last session | 2026-01-31 |
-| Stopped at | Completed 38-01-PLAN.md (Facility Management API) |
-| Resume with | `/gsd:execute-phase 38-02` |
+| Stopped at | Completed 38-02-PLAN.md (Club Management API) |
+| Resume with | `/gsd:execute-phase 38-03` |
 
 ---
 
-*Last updated: 2026-01-31 (Phase 38-01 complete)*
+*Last updated: 2026-01-31 (Phase 38-02 complete)*
