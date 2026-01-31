@@ -12,9 +12,9 @@
 |-------|-------|
 | Milestone | v3.1 Admin Panel |
 | Phase | 37 - User Management |
-| Plan | 03 of 5 complete |
+| Plan | 04 of 5 complete |
 | Status | In progress |
-| Last activity | 2026-01-31 - Completed 37-03-PLAN.md |
+| Last activity | 2026-01-31 - Completed 37-04-PLAN.md |
 
 **Progress:**
 ```
@@ -38,7 +38,7 @@ v3.1: [##--------] 20% IN PROGRESS - 7/34 requirements
 | Phase | Name | Requirements | Status |
 |-------|------|--------------|--------|
 | 36 | Admin Foundation & Auth | 7 | Complete |
-| 37 | User Management | 9 | In Progress (3/5 plans) |
+| 37 | User Management | 9 | In Progress (4/5 plans) |
 | 38 | Facility & Club Management | 11 | Pending |
 | 39 | Membership Management | 5 | Pending |
 | 40 | Audit Log Viewer & Export | 2 | Pending |
@@ -116,6 +116,8 @@ v3.1: [##--------] 20% IN PROGRESS - 7/34 requirements
 | Block password reset for banned | 2026-01-31 | Security measure - must reactivate before password reset |
 | URL-based pagination/search | 2026-01-31 | Enables bookmarkable search results and browser nav |
 | Server component fetch pattern | 2026-01-31 | Forward cookies via header for internal API auth |
+| Shared UserForm component | 2026-01-31 | Single form handles create/edit modes for DRY code |
+| Email immutability in edit | 2026-01-31 | Supabase auth constraint; email disabled in edit mode |
 
 ### Architecture Notes
 
@@ -143,9 +145,9 @@ v3.1: [##--------] 20% IN PROGRESS - 7/34 requirements
 | Field | Value |
 |-------|-------|
 | Last session | 2026-01-31 |
-| Stopped at | Completed 37-03-PLAN.md (Admin Users List UI) |
-| Resume with | `/gsd:execute-plan 37-04` |
+| Stopped at | Completed 37-04-PLAN.md (User Detail & Form UI) |
+| Resume with | `/gsd:execute-plan 37-05` |
 
 ---
 
-*Last updated: 2026-01-31 (Plan 37-03 complete)*
+*Last updated: 2026-01-31 (Plan 37-04 complete)*
