@@ -140,6 +140,15 @@ Navigation redesign, RIM feature parity, practice flow improvements, RC public A
 
 **Dependencies:** None (foundational)
 
+**Plans:** 5 plans
+
+Plans:
+- [ ] 36-01-PLAN.md — Database foundation (SuperAdmin model, migration, seed script)
+- [ ] 36-02-PLAN.md — Auth & CASL (admin-authorize.ts, ability.ts extension, audit logger extension)
+- [ ] 36-03-PLAN.md — MFA setup (enrollment and verification pages)
+- [ ] 36-04-PLAN.md — Admin route group (layout, dashboard, sidebar, header)
+- [ ] 36-05-PLAN.md — Session timeout and verification checkpoint
+
 **Requirements:**
 - AUTH-01: Super admin role stored in database table (not JWT claims only)
 - AUTH-02: Super admin login verified against database on every request
@@ -255,7 +264,7 @@ Navigation redesign, RIM feature parity, practice flow improvements, RC public A
 
 | Phase | Name | Requirements | Status |
 |-------|------|--------------|--------|
-| 36 | Admin Foundation & Auth | 7 | Pending |
+| 36 | Admin Foundation & Auth | 7 | Planned (5 plans) |
 | 37 | User Management | 9 | Pending |
 | 38 | Facility & Club Management | 11 | Pending |
 | 39 | Membership Management | 5 | Pending |
@@ -265,4 +274,4 @@ Navigation redesign, RIM feature parity, practice flow improvements, RC public A
 
 ---
 
-*Last updated: 2026-01-30 (v3.1 roadmap created)*
+*Last updated: 2026-01-30 (Phase 36 planned)*
