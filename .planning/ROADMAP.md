@@ -173,6 +173,15 @@ Plans:
 
 **Dependencies:** Phase 36 (admin auth required)
 
+**Plans:** 5 plans
+
+Plans:
+- [ ] 37-01-PLAN.md — Core user APIs (list, search, view, edit)
+- [ ] 37-02-PLAN.md — User operations APIs (create, deactivate, reactivate, password reset)
+- [ ] 37-03-PLAN.md — User list page with table, search, pagination
+- [ ] 37-04-PLAN.md — User detail and create pages
+- [ ] 37-05-PLAN.md — Bulk user creation via CSV upload
+
 **Requirements:**
 - USER-01: List all users with pagination (25 per page)
 - USER-02: Search users by email, name, facility, club
@@ -265,7 +274,7 @@ Plans:
 | Phase | Name | Requirements | Status |
 |-------|------|--------------|--------|
 | 36 | Admin Foundation & Auth | 7 | Complete |
-| 37 | User Management | 9 | Pending |
+| 37 | User Management | 9 | Planned |
 | 38 | Facility & Club Management | 11 | Pending |
 | 39 | Membership Management | 5 | Pending |
 | 40 | Audit Log Viewer & Export | 2 | Pending |
@@ -274,4 +283,4 @@ Plans:
 
 ---
 
-*Last updated: 2026-01-31 (Phase 36 complete)*
+*Last updated: 2026-01-31 (Phase 37 planned)*
