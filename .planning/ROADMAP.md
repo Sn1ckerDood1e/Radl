@@ -143,11 +143,11 @@ Navigation redesign, RIM feature parity, practice flow improvements, RC public A
 **Plans:** 5 plans
 
 Plans:
-- [ ] 36-01-PLAN.md — Database foundation (SuperAdmin model, migration, seed script)
-- [ ] 36-02-PLAN.md — Auth & CASL (admin-authorize.ts, ability.ts extension, audit logger extension)
-- [ ] 36-03-PLAN.md — MFA setup (enrollment and verification pages)
-- [ ] 36-04-PLAN.md — Admin route group (layout, dashboard, sidebar, header)
-- [ ] 36-05-PLAN.md — Session timeout and verification checkpoint
+- [x] 36-01-PLAN.md — Database foundation (SuperAdmin model, migration, seed script)
+- [x] 36-02-PLAN.md — Auth & CASL (admin-authorize.ts, ability.ts extension, audit logger extension)
+- [x] 36-03-PLAN.md — MFA setup (enrollment and verification pages)
+- [x] 36-04-PLAN.md — Admin route group (layout, dashboard, sidebar, header)
+- [x] 36-05-PLAN.md — Session timeout and verification checkpoint
 
 **Requirements:**
 - AUTH-01: Super admin role stored in database table (not JWT claims only)
@@ -264,14 +264,14 @@ Plans:
 
 | Phase | Name | Requirements | Status |
 |-------|------|--------------|--------|
-| 36 | Admin Foundation & Auth | 7 | Planned (5 plans) |
+| 36 | Admin Foundation & Auth | 7 | Complete |
 | 37 | User Management | 9 | Pending |
 | 38 | Facility & Club Management | 11 | Pending |
 | 39 | Membership Management | 5 | Pending |
 | 40 | Audit Log Viewer & Export | 2 | Pending |
 
-**Total:** 34 requirements, 5 phases (0/34 complete)
+**Total:** 34 requirements, 5 phases (7/34 complete)
 
 ---
 
-*Last updated: 2026-01-30 (Phase 36 planned)*
+*Last updated: 2026-01-31 (Phase 36 complete)*
