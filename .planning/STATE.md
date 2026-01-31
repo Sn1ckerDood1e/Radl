@@ -14,7 +14,7 @@
 | Phase | 38 - Facility & Club Management |
 | Plan | 05 of 6 complete |
 | Status | In progress |
-| Last activity | 2026-01-31 - Completed 38-05-PLAN.md |
+| Last activity | 2026-01-31 - Completed 38-03-PLAN.md (Facility List & Detail UI) |
 
 **Progress:**
 ```
@@ -126,6 +126,7 @@ v3.1: [########--] 79% IN PROGRESS - 27/34 requirements
 | Type-to-confirm pattern | 2026-01-31 | GitHub-style delete requiring exact name match for safety |
 | Form sections | 2026-01-31 | Three form sections (Basic Info, Location, Contact) for better UX |
 | Auto-slug on blur | 2026-01-31 | Slug auto-generates from name on blur in create mode only |
+| Actions dropdown callback | 2026-01-31 | Delete triggers callback for parent dialog, not internal handling |
 
 ### Architecture Notes
 
@@ -153,9 +154,9 @@ v3.1: [########--] 79% IN PROGRESS - 27/34 requirements
 | Field | Value |
 |-------|-------|
 | Last session | 2026-01-31 |
-| Stopped at | Completed 38-05-PLAN.md (Club List & Detail Pages) |
+| Stopped at | Completed 38-03-PLAN.md (Facility List & Detail UI) |
 | Resume with | `/gsd:execute-phase 38-06` |
 
 ---
 
-*Last updated: 2026-01-31 (Phase 38-05 complete)*
+*Last updated: 2026-01-31 (Phase 38-03 complete)*
