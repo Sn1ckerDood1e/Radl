@@ -12,9 +12,9 @@
 |-------|-------|
 | Milestone | v3.1 Admin Panel |
 | Phase | 38 - Facility & Club Management |
-| Plan | 05 of 6 complete |
-| Status | In progress |
-| Last activity | 2026-01-31 - Completed 38-03-PLAN.md (Facility List & Detail UI) |
+| Plan | 06 of 6 complete |
+| Status | Phase complete |
+| Last activity | 2026-01-31 - Completed 38-06-PLAN.md (Club Forms & Management UI) |
 
 **Progress:**
 ```
@@ -25,7 +25,7 @@ v2.1: [##########] 100% SHIPPED (2026-01-27) - 30/30 requirements
 v2.2: [##########] 100% SHIPPED (2026-01-29) - 33/35 requirements
 v2.3: [##########] 100% SHIPPED (2026-01-29) - 20/20 requirements
 v3.0: [##########] 100% SHIPPED (2026-01-30) - 29/29 requirements
-v3.1: [########--] 79% IN PROGRESS - 27/34 requirements
+v3.1: [########--] 82% IN PROGRESS - 28/34 requirements
 ```
 
 **Total shipped:** 7 milestones, 35 phases, 196 requirements
@@ -39,7 +39,7 @@ v3.1: [########--] 79% IN PROGRESS - 27/34 requirements
 |-------|------|--------------|--------|
 | 36 | Admin Foundation & Auth | 7 | Complete |
 | 37 | User Management | 9 | Complete |
-| 38 | Facility & Club Management | 11 | In progress (10/11) |
+| 38 | Facility & Club Management | 11 | Complete |
 | 39 | Membership Management | 5 | Pending |
 | 40 | Audit Log Viewer & Export | 2 | Pending |
 
@@ -127,6 +127,8 @@ v3.1: [########--] 79% IN PROGRESS - 27/34 requirements
 | Form sections | 2026-01-31 | Three form sections (Basic Info, Location, Contact) for better UX |
 | Auto-slug on blur | 2026-01-31 | Slug auto-generates from name on blur in create mode only |
 | Actions dropdown callback | 2026-01-31 | Delete triggers callback for parent dialog, not internal handling |
+| Facility read-only in edit | 2026-01-31 | Club edit shows facility read-only; use Move action for changes |
+| ClubEditClient wrapper | 2026-01-31 | Client component wraps server page for dialog state management |
 
 ### Architecture Notes
 
@@ -154,9 +156,9 @@ v3.1: [########--] 79% IN PROGRESS - 27/34 requirements
 | Field | Value |
 |-------|-------|
 | Last session | 2026-01-31 |
-| Stopped at | Completed 38-03-PLAN.md (Facility List & Detail UI) |
-| Resume with | `/gsd:execute-phase 38-06` |
+| Stopped at | Completed 38-06-PLAN.md (Club Forms & Management UI) |
+| Resume with | `/gsd:execute-phase 39-01` |
 
 ---
 
-*Last updated: 2026-01-31 (Phase 38-03 complete)*
+*Last updated: 2026-01-31 (Phase 38 complete)*
