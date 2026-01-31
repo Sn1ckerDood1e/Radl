@@ -12,9 +12,9 @@
 |-------|-------|
 | Milestone | v3.1 Admin Panel |
 | Phase | 37 - User Management |
-| Plan | 02 of 5 complete |
+| Plan | 03 of 5 complete |
 | Status | In progress |
-| Last activity | 2026-01-31 - Completed 37-02-PLAN.md |
+| Last activity | 2026-01-31 - Completed 37-03-PLAN.md |
 
 **Progress:**
 ```
@@ -38,7 +38,7 @@ v3.1: [##--------] 20% IN PROGRESS - 7/34 requirements
 | Phase | Name | Requirements | Status |
 |-------|------|--------------|--------|
 | 36 | Admin Foundation & Auth | 7 | Complete |
-| 37 | User Management | 9 | In Progress (2/5 plans) |
+| 37 | User Management | 9 | In Progress (3/5 plans) |
 | 38 | Facility & Club Management | 11 | Pending |
 | 39 | Membership Management | 5 | Pending |
 | 40 | Audit Log Viewer & Export | 2 | Pending |
@@ -114,6 +114,8 @@ v3.1: [##--------] 20% IN PROGRESS - 7/34 requirements
 | Client-side search filtering | 2026-01-31 | Supabase Admin API lacks server-side search; filter after fetch |
 | 100-year ban for deactivation | 2026-01-31 | 876000h provides permanent-ish ban while remaining reversible |
 | Block password reset for banned | 2026-01-31 | Security measure - must reactivate before password reset |
+| URL-based pagination/search | 2026-01-31 | Enables bookmarkable search results and browser nav |
+| Server component fetch pattern | 2026-01-31 | Forward cookies via header for internal API auth |
 
 ### Architecture Notes
 
@@ -141,9 +143,9 @@ v3.1: [##--------] 20% IN PROGRESS - 7/34 requirements
 | Field | Value |
 |-------|-------|
 | Last session | 2026-01-31 |
-| Stopped at | Completed 37-02-PLAN.md (User Lifecycle Management) |
-| Resume with | `/gsd:execute-plan 37-03` |
+| Stopped at | Completed 37-03-PLAN.md (Admin Users List UI) |
+| Resume with | `/gsd:execute-plan 37-04` |
 
 ---
 
-*Last updated: 2026-01-31 (Plan 37-02 complete)*
+*Last updated: 2026-01-31 (Plan 37-03 complete)*
