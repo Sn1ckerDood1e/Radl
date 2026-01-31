@@ -65,6 +65,7 @@ export const AUDITABLE_ACTIONS = {
 
   // Admin panel actions (super admin operations)
   ADMIN_USER_CREATED: 'ADMIN_USER_CREATED',               // Super admin created a new user
+  ADMIN_USER_UPDATED: 'ADMIN_USER_UPDATED',               // Super admin updated user profile
   ADMIN_USER_DEACTIVATED: 'ADMIN_USER_DEACTIVATED',       // Super admin deactivated a user
   ADMIN_USER_REACTIVATED: 'ADMIN_USER_REACTIVATED',       // Super admin reactivated a user
   ADMIN_PASSWORD_RESET: 'ADMIN_PASSWORD_RESET',           // Super admin reset a user's password
@@ -119,6 +120,7 @@ export const AUDIT_ACTION_DESCRIPTIONS: Record<AuditAction, string> = {
   SSO_DISABLED: 'SSO was disabled for facility',
   SSO_ROLE_MAPPING_CHANGED: 'SSO role mappings were modified',
   ADMIN_USER_CREATED: 'Super admin created a new user',
+  ADMIN_USER_UPDATED: 'Super admin updated user profile',
   ADMIN_USER_DEACTIVATED: 'Super admin deactivated a user',
   ADMIN_USER_REACTIVATED: 'Super admin reactivated a user',
   ADMIN_PASSWORD_RESET: 'Super admin reset a user password',
