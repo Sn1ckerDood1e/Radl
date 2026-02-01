@@ -9,7 +9,7 @@
 - v2.2 Security Audit - Phases 25-27 (shipped 2026-01-29)
 - v2.3 Core Flow Testing - Phases 28-31 (shipped 2026-01-29)
 - v3.0 Production Polish - Phases 32-35 (shipped 2026-01-30)
-- v3.1 Admin Panel - Phases 36-40 (in progress)
+- v3.1 Admin Panel - Phases 36-40 (shipped 2026-01-31)
 
 ## Phases
 
@@ -279,7 +279,7 @@ Plans:
 **Plans:** 1 plan
 
 Plans:
-- [ ] 40-01-PLAN.md — Audit log viewer with filters, state diff display, and CSV export
+- [x] 40-01-PLAN.md — Audit log viewer with filters, state diff display, and CSV export
 
 **Requirements:**
 - AUDT-02: Audit log viewer in admin panel (filterable by action, actor, date)
@@ -300,10 +300,10 @@ Plans:
 | 37 | User Management | 9 | Complete |
 | 38 | Facility & Club Management | 11 | Complete |
 | 39 | Membership Management | 5 | Complete |
-| 40 | Audit Log Viewer & Export | 2 | Pending |
+| 40 | Audit Log Viewer & Export | 2 | Complete |
 
-**Total:** 34 requirements, 5 phases (32/34 complete)
+**Total:** 34 requirements, 5 phases (34/34 complete)
 
 ---
 
-*Last updated: 2026-01-31 (Phase 40 planned)*
+*Last updated: 2026-01-31 (v3.1 Admin Panel complete)*
