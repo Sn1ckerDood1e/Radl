@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { Plus, MoreHorizontal, Loader2 } from 'lucide-react';
+import Link from 'next/link';
+import { Plus, MoreHorizontal, Loader2, Upload } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { Button } from '@/components/ui/button';
 import {
@@ -113,10 +114,18 @@ export function ClubMembersSection({ clubId, clubName }: ClubMembersSectionProps
         <h2 className="text-sm font-medium text-[var(--text-primary)]">
           Members ({members.length})
         </h2>
-        <Button size="sm" onClick={() => setAddDialogOpen(true)}>
-          <Plus className="h-4 w-4 mr-1" />
-          Add Member
-        </Button>
+        <div className="flex items-center gap-2">
+          <Link href={`/admin/clubs/${clubId}/members/bulk`}>
+            <Button size="sm" variant="outline">
+              <Upload className="h-4 w-4 mr-1" />
+              Bulk Import
+            </Button>
+          </Link>
+          <Button size="sm" onClick={() => setAddDialogOpen(true)}>
+            <Plus className="h-4 w-4 mr-1" />
+            Add Member
+          </Button>
+        </div>
       </div>
 
       {/* Content */}
