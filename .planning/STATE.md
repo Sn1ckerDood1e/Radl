@@ -11,10 +11,10 @@
 | Field | Value |
 |-------|-------|
 | Milestone | v3.1 Admin Panel |
-| Phase | 39 - Membership Management |
-| Plan | 04 of 4 complete |
-| Status | Phase complete |
-| Last activity | 2026-01-31 - Completed 39-04-PLAN.md (Bulk Membership Import) |
+| Phase | 40 - Audit Log Viewer & Export |
+| Plan | 01 of 1 complete |
+| Status | Milestone complete |
+| Last activity | 2026-01-31 - Completed 40-01-PLAN.md (Audit Log Viewer & Export) |
 
 **Progress:**
 ```
@@ -25,10 +25,10 @@ v2.1: [##########] 100% SHIPPED (2026-01-27) - 30/30 requirements
 v2.2: [##########] 100% SHIPPED (2026-01-29) - 33/35 requirements
 v2.3: [##########] 100% SHIPPED (2026-01-29) - 20/20 requirements
 v3.0: [##########] 100% SHIPPED (2026-01-30) - 29/29 requirements
-v3.1: [#########-] 94% IN PROGRESS - 32/34 requirements
+v3.1: [##########] 100% SHIPPED (2026-01-31) - 34/34 requirements
 ```
 
-**Total shipped:** 7 milestones, 35 phases, 196 requirements
+**Total shipped:** 8 milestones, 40 phases, 230 requirements
 
 ## v3.1 Milestone Overview
 
@@ -41,7 +41,7 @@ v3.1: [#########-] 94% IN PROGRESS - 32/34 requirements
 | 37 | User Management | 9 | Complete |
 | 38 | Facility & Club Management | 11 | Complete |
 | 39 | Membership Management | 5 | Complete |
-| 40 | Audit Log Viewer & Export | 2 | Pending |
+| 40 | Audit Log Viewer & Export | 2 | Complete |
 
 **Architecture decisions (from research):**
 - Separate `(admin)` route group from `(dashboard)`
@@ -137,6 +137,10 @@ v3.1: [#########-] 94% IN PROGRESS - 32/34 requirements
 | UserDetailClient wrapper | 2026-01-31 | Client wrapper for user detail page manages all dialog states |
 | ClubDetailClient wrapper | 2026-01-31 | Client wrapper for club detail page, same pattern as user detail |
 | Dialog for confirmation | 2026-01-31 | Use Dialog component for remove confirmation (no AlertDialog in project) |
+| URL-based audit filtering | 2026-01-31 | Filters persist in URL for bookmarkable audit log views |
+| Date range popover | 2026-01-31 | react-day-picker in Popover with explicit Apply button |
+| Expand for state diff | 2026-01-31 | Audit state diff shown in expandable rows, not separate modal |
+| Self-auditing export | 2026-01-31 | CSV export logs DATA_EXPORTED with filter params and record count |
 
 ### Architecture Notes
 
@@ -164,9 +168,9 @@ v3.1: [#########-] 94% IN PROGRESS - 32/34 requirements
 | Field | Value |
 |-------|-------|
 | Last session | 2026-01-31 |
-| Stopped at | Completed 39-04-PLAN.md (Bulk Membership Import) |
-| Resume with | Phase 40 (Audit Log Viewer & Export) |
+| Stopped at | Completed 40-01-PLAN.md (Audit Log Viewer & Export) |
+| Resume with | v3.2 planning or next milestone |
 
 ---
 
-*Last updated: 2026-01-31 (Phase 39 complete)*
+*Last updated: 2026-01-31 (v3.1 Admin Panel complete)*
