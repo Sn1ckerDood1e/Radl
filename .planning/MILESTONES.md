@@ -1,5 +1,50 @@
 # Project Milestones: Radl
 
+## v3.1 Admin Panel (Shipped: 2026-01-31)
+
+**Delivered:** Super admin panel for platform-level management of users, facilities, clubs, and memberships with full audit trail.
+
+**Phases completed:** 36-40 (5 phases, 21 plans)
+
+**Key accomplishments:**
+- Super admin authentication with database verification, MFA enforcement, and 30-minute session timeout
+- User management: list, search, create, edit, deactivate, reactivate, password reset, bulk CSV import
+- Facility & club management: full CRUD with cascade-safe delete and cross-facility club moves
+- Membership management: direct user-club assignment bypassing invitations, role editing, bulk CSV import
+- Audit log viewer with action/actor/date filters, before/after state diff, and CSV export
+
+**Stats:**
+- ~27,500 lines added
+- 159 files created/modified
+- 5 phases, 21 plans
+- 34/34 requirements shipped
+- 11 days from start to ship (2026-01-20 → 2026-01-31)
+
+**Git range:** Phase 36 → Phase 40
+
+---
+
+## v3.0 Production Polish (Shipped: 2026-01-30)
+
+**Delivered:** Production-ready polish with branding, safe area handling, legal pages, and device-specific optimizations.
+
+**Phases completed:** 32-35 (4 phases)
+
+**Key accomplishments:**
+- Radl branding with teal color palette, icons, and PWA manifest
+- Safe area handling for notched devices (iPhone home indicator)
+- Legal pages (Terms of Service, Privacy Policy)
+- UX polish with loading skeletons, error states, and empty states
+- Mobile-optimized calendar and drag-drop
+
+**Stats:**
+- 29/29 requirements shipped
+- 4 phases
+
+**Git range:** Phase 32 → Phase 35
+
+---
+
 ## v2.3 Core Flow Testing (Shipped: 2026-01-29)
 
 **Delivered:** End-to-end verification of all major user journeys with bug fixes and UX polish before beta release.

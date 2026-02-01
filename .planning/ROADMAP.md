@@ -124,186 +124,24 @@ Navigation redesign, RIM feature parity, practice flow improvements, RC public A
 
 </details>
 
----
-
-## v3.1 Admin Panel (Phases 36-40)
+<details>
+<summary>v3.1 Admin Panel (Phases 36-40) - SHIPPED 2026-01-31</summary>
 
 **Milestone Goal:** Platform owner can manage all users, clubs, and memberships through a super-admin panel
 
-**Requirements:** 34 total across 6 categories
+**Delivered:** 34 requirements across 5 phases, 21 plans
+
+**Features:**
+- Super admin authentication with database verification, MFA enforcement, 30-min session timeout
+- User management: list, search, create, edit, deactivate, reactivate, password reset, bulk CSV
+- Facility & club management: full CRUD, cascade-safe delete, cross-facility club moves
+- Membership management: direct assignment bypassing invitations, role editing, bulk CSV
+- Audit log viewer with filters, before/after state diff, and CSV export
+
+**Archive:** [milestones/v3.1-ROADMAP.md](milestones/v3.1-ROADMAP.md)
+
+</details>
 
 ---
 
-### Phase 36: Admin Foundation & Authentication
-
-**Goal:** Super admin can securely access a protected admin panel with database-verified permissions
-
-**Dependencies:** None (foundational)
-
-**Plans:** 5 plans
-
-Plans:
-- [x] 36-01-PLAN.md — Database foundation (SuperAdmin model, migration, seed script)
-- [x] 36-02-PLAN.md — Auth & CASL (admin-authorize.ts, ability.ts extension, audit logger extension)
-- [x] 36-03-PLAN.md — MFA setup (enrollment and verification pages)
-- [x] 36-04-PLAN.md — Admin route group (layout, dashboard, sidebar, header)
-- [x] 36-05-PLAN.md — Session timeout and verification checkpoint
-
-**Requirements:**
-- AUTH-01: Super admin role stored in database table (not JWT claims only)
-- AUTH-02: Super admin login verified against database on every request
-- AUTH-03: Admin session timeout at 30 minutes of inactivity
-- AUTH-04: Super admin check in CASL abilities (`can('manage', 'all')`)
-- AUTH-05: Separate `(admin)` route group with protected layout
-- AUTH-06: MFA enforcement for super admin accounts
-- AUDT-01: Log all admin actions (actor, action, target, timestamp, before/after)
-
-**Success Criteria:**
-1. Super admin can navigate to /admin and see admin dashboard after login
-2. Non-admin user attempting /admin is redirected to home (not shown admin UI)
-3. Super admin session expires after 30 minutes of inactivity requiring re-login
-4. Super admin without MFA enabled is prompted to configure MFA before accessing panel
-5. Every admin action (create, update, delete) creates an audit log entry with before/after state
-
----
-
-### Phase 37: User Management
-
-**Goal:** Super admin can fully manage platform users including creation, editing, deactivation, and bulk operations
-
-**Dependencies:** Phase 36 (admin auth required)
-
-**Plans:** 5 plans
-
-Plans:
-- [x] 37-01-PLAN.md — Core user APIs (list, search, view, edit)
-- [x] 37-02-PLAN.md — User operations APIs (create, deactivate, reactivate, password reset)
-- [x] 37-03-PLAN.md — User list page with table, search, pagination
-- [x] 37-04-PLAN.md — User detail and create pages
-- [x] 37-05-PLAN.md — Bulk user creation via CSV upload
-
-**Requirements:**
-- USER-01: List all users with pagination (25 per page)
-- USER-02: Search users by email, name, facility, club
-- USER-03: Create user bypassing signup (admin sets email, generates password link)
-- USER-04: View user details (profile, memberships, created date, last login)
-- USER-05: Edit user profile (name, email, phone)
-- USER-06: Deactivate user (soft disable, blocks login, preserves data)
-- USER-07: Reactivate deactivated user
-- USER-08: Reset user password (generate recovery link via Supabase Admin API)
-- USER-09: Bulk user creation via CSV upload (email, name, optional role)
-
-**Success Criteria:**
-1. Super admin can browse paginated user list and search by email/name/facility/club
-2. Super admin can create a new user who receives password setup email without self-signup
-3. Super admin can view user profile showing all memberships across facilities/clubs
-4. Super admin can deactivate user who then cannot log in, and reactivate to restore access
-5. Super admin can upload CSV to create multiple users in one operation with progress feedback
-
----
-
-### Phase 38: Facility & Club Management
-
-**Goal:** Super admin can manage all facilities and clubs with full CRUD operations and cross-facility actions
-
-**Dependencies:** Phase 36 (admin auth required)
-
-**Plans:** 6 plans
-
-Plans:
-- [x] 38-01-PLAN.md — Facility APIs (list, create, detail, update, delete)
-- [x] 38-02-PLAN.md — Club APIs (list, create, detail, update, delete, move)
-- [x] 38-03-PLAN.md — Facility list and detail pages
-- [x] 38-04-PLAN.md — Facility forms and type-to-confirm delete dialog
-- [x] 38-05-PLAN.md — Club list and detail pages
-- [x] 38-06-PLAN.md — Club forms and move dialog
-
-**Requirements:**
-- FCLT-01: List all facilities with club counts and member counts
-- FCLT-02: Create facility (name, slug, location, contact info)
-- FCLT-03: Edit facility details
-- FCLT-04: View facility details with clubs and aggregate stats
-- FCLT-05: Delete facility (soft delete with confirmation, cascade check)
-- CLUB-01: List all clubs with member counts (global and by facility)
-- CLUB-02: Create club (name, facility assignment, colors)
-- CLUB-03: Edit club details
-- CLUB-04: View club details with members and settings
-- CLUB-05: Delete club (soft delete with confirmation, cascade check)
-- CLUB-06: Move club between facilities
-
-**Success Criteria:**
-1. Super admin can browse all facilities with summary stats (club count, member count)
-2. Super admin can create, edit, and soft-delete facilities with cascade warnings
-3. Super admin can browse all clubs globally or filtered by facility
-4. Super admin can create, edit, and soft-delete clubs with membership impact warnings
-5. Super admin can move a club from one facility to another preserving all club data
-
----
-
-### Phase 39: Membership Management
-
-**Goal:** Super admin can directly manage user-club relationships bypassing invitation flows
-
-**Dependencies:** Phase 37 (user management), Phase 38 (club management)
-
-**Plans:** 4 plans
-
-Plans:
-- [x] 39-01-PLAN.md — Membership CRUD APIs (create, update roles, delete, list club members)
-- [x] 39-02-PLAN.md — User detail membership UI (add to club, edit roles, remove)
-- [x] 39-03-PLAN.md — Club members section (member list with add/edit/remove)
-- [x] 39-04-PLAN.md — Bulk membership import via CSV
-
-**Requirements:**
-- MEMB-01: Add user to club with role(s) (bypasses invitation flow)
-- MEMB-02: Remove user from club
-- MEMB-03: Change user roles within club
-- MEMB-04: View all memberships for a user (cross-org visibility)
-- MEMB-05: Bulk add users to club via CSV (email + role)
-
-**Success Criteria:**
-1. Super admin can add any user to any club with specified role(s) immediately (no invitation)
-2. Super admin can remove user from club, ending their access instantly
-3. Super admin can change user's role within a club (e.g., ATHLETE to COACH)
-4. Super admin viewing user detail sees all their memberships across all facilities/clubs
-5. Super admin can upload CSV to add multiple users to a club in one operation
-
----
-
-### Phase 40: Audit Log Viewer & Export
-
-**Goal:** Super admin can review and export audit history for compliance and debugging
-
-**Dependencies:** Phase 36 (audit logging infrastructure)
-
-**Plans:** 1 plan
-
-Plans:
-- [x] 40-01-PLAN.md — Audit log viewer with filters, state diff display, and CSV export
-
-**Requirements:**
-- AUDT-02: Audit log viewer in admin panel (filterable by action, actor, date)
-- AUDT-03: Audit log export (CSV download with date range filter)
-
-**Success Criteria:**
-1. Super admin can browse audit log with filters for action type, actor, and date range
-2. Super admin can see before/after state diff for any logged action
-3. Super admin can export filtered audit log as CSV for external analysis or compliance
-
----
-
-## Progress
-
-| Phase | Name | Requirements | Status |
-|-------|------|--------------|--------|
-| 36 | Admin Foundation & Auth | 7 | Complete |
-| 37 | User Management | 9 | Complete |
-| 38 | Facility & Club Management | 11 | Complete |
-| 39 | Membership Management | 5 | Complete |
-| 40 | Audit Log Viewer & Export | 2 | Complete |
-
-**Total:** 34 requirements, 5 phases (34/34 complete)
-
----
-
-*Last updated: 2026-01-31 (v3.1 Admin Panel complete)*
+*Last updated: 2026-01-31 (v3.1 Admin Panel shipped)*

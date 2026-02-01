@@ -4,25 +4,23 @@
 
 A multi-tenant SaaS for rowing team operations — practice planning, equipment management, roster coordination, and race-day execution at regattas.
 
-**Current State:** v3.1 in progress. Admin panel for platform management.
-
-## Current Milestone: v3.1 Admin Panel
-
-**Goal:** Platform owner can manage all users, clubs, and memberships through a super-admin panel, with admin-created user onboarding.
-
-**Target features:**
-- Super admin role (separate from FACILITY_ADMIN)
-- Admin dashboard at `/admin`
-- User management (create, list, update, delete, password reset)
-- Club management (create, list, update, delete)
-- Membership management (add/remove users from clubs, assign roles)
-- Admin creates users (replaces self-signup for initial onboarding)
+**Current State:** v3.1 shipped. Full platform with admin panel for owner management.
 
 ## Core Value
 
 **The ONE thing that must work:** Coaches can plan practices with lineups and equipment, and athletes know where to be and what boat they're in.
 
 ## Shipped Capabilities
+
+### v3.1 Admin Panel (2026-01-31)
+
+**34 requirements delivered across 5 phases:**
+
+- Super admin authentication with database verification, MFA enforcement, 30-min session timeout
+- User management: list, search, create, edit, deactivate, reactivate, password reset, bulk CSV
+- Facility & club management: full CRUD, cascade-safe delete, cross-facility club moves
+- Membership management: direct assignment bypassing invitations, role editing, bulk CSV
+- Audit log viewer with filters, before/after state diff, and CSV export
 
 ### v3.0 Production Polish (2026-01-30)
 
@@ -143,7 +141,7 @@ A multi-tenant SaaS for rowing team operations — practice planning, equipment 
 - @use-gesture/react + vaul (mobile interactions)
 - @dnd-kit (drag-drop lineups)
 
-**LOC:** ~136,000 TypeScript
+**LOC:** ~163,500 TypeScript (27,500 added in v3.1)
 
 **Architecture:**
 - Multi-tenant: Facility → Club → Team hierarchy
@@ -164,7 +162,9 @@ A multi-tenant SaaS for rowing team operations — practice planning, equipment 
 | Block-based practices | Flexible structure for varied training sessions | Good — cleaner than monolithic form |
 | @dnd-kit for lineups | React 19 compatible, accessible, performant | Good — smooth drag-drop experience |
 | onTouched validation | Immediate feedback on field blur | Good — better UX than onSubmit |
-| Super admin separate from tenant roles | Platform owner distinct from facility/club admin | — Pending |
+| Super admin separate from tenant roles | Platform owner distinct from facility/club admin | Good — v3.1 shipped |
+| Database-verified super admin | Check SuperAdmin table, not JWT claims | Good — security over performance |
+| Self-auditing export | CSV export logs DATA_EXPORTED action | Good — compliance ready |
 
 ## Future Milestone Goals
 
@@ -196,4 +196,4 @@ v4.0 candidates:
 - Social features
 
 ---
-*Last updated: 2026-01-30 after v3.1 milestone started*
+*Last updated: 2026-01-31 after v3.1 milestone shipped*
