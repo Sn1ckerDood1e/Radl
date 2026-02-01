@@ -37,6 +37,7 @@ interface ClubWithStats {
  *
  * Query params:
  * - facilityId: Filter clubs by facility (optional)
+ * - search: Search term for club name (optional)
  * - page: Page number (1-indexed, default 1)
  * - perPage: Clubs per page (default 25, max 100)
  */
@@ -51,12 +52,19 @@ export async function GET(request: NextRequest) {
     // Parse query params
     const { searchParams } = new URL(request.url);
     const facilityId = searchParams.get('facilityId');
+    const search = searchParams.get('search')?.trim() || '';
     const page = Math.max(1, parseInt(searchParams.get('page') || '1', 10));
     const perPage = Math.min(100, Math.max(1, parseInt(searchParams.get('perPage') || '25', 10)));
     const skip = (page - 1) * perPage;
 
     // Build where clause
-    const where = facilityId ? { facilityId } : {};
+    const where: { facilityId?: string; name?: { contains: string; mode: 'insensitive' } } = {};
+    if (facilityId) {
+      where.facilityId = facilityId;
+    }
+    if (search) {
+      where.name = { contains: search, mode: 'insensitive' };
+    }
 
     // Fetch total count
     const total = await prisma.team.count({ where });
