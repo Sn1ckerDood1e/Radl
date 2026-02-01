@@ -12,9 +12,9 @@
 |-------|-------|
 | Milestone | v3.1 Admin Panel |
 | Phase | 39 - Membership Management |
-| Plan | 01 of 4 complete |
+| Plan | 02 of 4 complete |
 | Status | In progress |
-| Last activity | 2026-01-31 - Completed 39-01-PLAN.md (Membership API) |
+| Last activity | 2026-01-31 - Completed 39-02-PLAN.md (User Detail Membership UI) |
 
 **Progress:**
 ```
@@ -40,7 +40,7 @@ v3.1: [########--] 79% IN PROGRESS - 27/34 requirements
 | 36 | Admin Foundation & Auth | 7 | Complete |
 | 37 | User Management | 9 | Complete |
 | 38 | Facility & Club Management | 11 | Complete |
-| 39 | Membership Management | 5 | In progress (1/4 plans) |
+| 39 | Membership Management | 5 | In progress (2/4 plans) |
 | 40 | Audit Log Viewer & Export | 2 | Pending |
 
 **Architecture decisions (from research):**
@@ -132,6 +132,9 @@ v3.1: [########--] 79% IN PROGRESS - 27/34 requirements
 | Soft delete for memberships | 2026-01-31 | Membership removal sets isActive: false, preserves audit trail |
 | 409 Conflict for existing member | 2026-01-31 | Return membershipId so UI can offer update instead |
 | Reactivate inactive membership | 2026-01-31 | Re-add user with inactive membership reactivates instead of duplicate |
+| Popover component added | 2026-01-31 | @radix-ui/react-popover for combobox pattern in membership dialogs |
+| Clubs API search param | 2026-01-31 | Added ?search= to /api/admin/clubs for combobox filtering |
+| UserDetailClient wrapper | 2026-01-31 | Client wrapper for user detail page manages all dialog states |
 
 ### Architecture Notes
 
@@ -159,9 +162,9 @@ v3.1: [########--] 79% IN PROGRESS - 27/34 requirements
 | Field | Value |
 |-------|-------|
 | Last session | 2026-01-31 |
-| Stopped at | Completed 39-01-PLAN.md (Membership API) |
-| Resume with | `/gsd:execute-phase 39-02` |
+| Stopped at | Completed 39-02-PLAN.md (User Detail Membership UI) |
+| Resume with | `/gsd:execute-phase 39-03` |
 
 ---
 
-*Last updated: 2026-01-31 (Phase 39 plan 01 complete)*
+*Last updated: 2026-01-31 (Phase 39 plan 02 complete)*
