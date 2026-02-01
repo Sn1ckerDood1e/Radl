@@ -79,6 +79,7 @@ export const AUDITABLE_ACTIONS = {
   ADMIN_CLUB_UPDATED: 'ADMIN_CLUB_UPDATED',               // Super admin updated a club
   ADMIN_CLUB_DELETED: 'ADMIN_CLUB_DELETED',               // Super admin deleted a club
   ADMIN_USERS_BULK_CREATED: 'ADMIN_USERS_BULK_CREATED',   // Super admin bulk created users
+  ADMIN_MEMBERSHIPS_BULK_ADDED: 'ADMIN_MEMBERSHIPS_BULK_ADDED', // Super admin bulk added members to club
 } as const;
 
 export type AuditAction = keyof typeof AUDITABLE_ACTIONS;
@@ -137,4 +138,5 @@ export const AUDIT_ACTION_DESCRIPTIONS: Record<AuditAction, string> = {
   ADMIN_CLUB_UPDATED: 'Super admin updated a club',
   ADMIN_CLUB_DELETED: 'Super admin deleted a club',
   ADMIN_USERS_BULK_CREATED: 'Super admin bulk created users',
+  ADMIN_MEMBERSHIPS_BULK_ADDED: 'Super admin bulk added members to club',
 };
