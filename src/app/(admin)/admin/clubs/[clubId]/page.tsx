@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { ChevronRight, Pencil, Building2, Users, Package, Calendar, Hash, Link as LinkIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { ClubDetailClient } from './club-detail-client';
 
 /**
  * Club detail response from API.
@@ -289,6 +290,9 @@ export default async function AdminClubDetailPage({ params }: PageProps) {
           </div>
         </div>
       )}
+
+      {/* Members section */}
+      <ClubDetailClient clubId={club.id} clubName={club.name} />
     </div>
   );
 }
