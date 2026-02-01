@@ -47,17 +47,17 @@ Super-admin panel for platform management with full CRUD operations, admin-creat
 
 ### Membership Management
 
-- [ ] **MEMB-01**: Add user to club with role(s) (bypasses invitation flow)
-- [ ] **MEMB-02**: Remove user from club
-- [ ] **MEMB-03**: Change user roles within club
-- [ ] **MEMB-04**: View all memberships for a user (cross-org visibility)
-- [ ] **MEMB-05**: Bulk add users to club via CSV (email + role)
+- [x] **MEMB-01**: Add user to club with role(s) (bypasses invitation flow)
+- [x] **MEMB-02**: Remove user from club
+- [x] **MEMB-03**: Change user roles within club
+- [x] **MEMB-04**: View all memberships for a user (cross-org visibility)
+- [x] **MEMB-05**: Bulk add users to club via CSV (email + role)
 
 ### Audit Logging
 
 - [x] **AUDT-01**: Log all admin actions (actor, action, target, timestamp, before/after)
-- [ ] **AUDT-02**: Audit log viewer in admin panel (filterable by action, actor, date)
-- [ ] **AUDT-03**: Audit log export (CSV download with date range filter)
+- [x] **AUDT-02**: Audit log viewer in admin panel (filterable by action, actor, date)
+- [x] **AUDT-03**: Audit log export (CSV download with date range filter)
 
 ## Future Requirements
 
@@ -116,14 +116,14 @@ Deferred to v3.2 or later:
 | CLUB-04 | Phase 38 | Complete |
 | CLUB-05 | Phase 38 | Complete |
 | CLUB-06 | Phase 38 | Complete |
-| MEMB-01 | Phase 39 | Pending |
-| MEMB-02 | Phase 39 | Pending |
-| MEMB-03 | Phase 39 | Pending |
-| MEMB-04 | Phase 39 | Pending |
-| MEMB-05 | Phase 39 | Pending |
+| MEMB-01 | Phase 39 | Complete |
+| MEMB-02 | Phase 39 | Complete |
+| MEMB-03 | Phase 39 | Complete |
+| MEMB-04 | Phase 39 | Complete |
+| MEMB-05 | Phase 39 | Complete |
 | AUDT-01 | Phase 36 | Complete |
-| AUDT-02 | Phase 40 | Pending |
-| AUDT-03 | Phase 40 | Pending |
+| AUDT-02 | Phase 40 | Complete |
+| AUDT-03 | Phase 40 | Complete |
 
 **Coverage:**
 - v3.1 requirements: 34 total
