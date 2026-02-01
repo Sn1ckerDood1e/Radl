@@ -249,10 +249,10 @@ Plans:
 **Plans:** 4 plans
 
 Plans:
-- [ ] 39-01-PLAN.md — Membership CRUD APIs (create, update roles, delete, list club members)
-- [ ] 39-02-PLAN.md — User detail membership UI (add to club, edit roles, remove)
-- [ ] 39-03-PLAN.md — Club members section (member list with add/edit/remove)
-- [ ] 39-04-PLAN.md — Bulk membership import via CSV
+- [x] 39-01-PLAN.md — Membership CRUD APIs (create, update roles, delete, list club members)
+- [x] 39-02-PLAN.md — User detail membership UI (add to club, edit roles, remove)
+- [x] 39-03-PLAN.md — Club members section (member list with add/edit/remove)
+- [x] 39-04-PLAN.md — Bulk membership import via CSV
 
 **Requirements:**
 - MEMB-01: Add user to club with role(s) (bypasses invitation flow)
@@ -275,6 +275,11 @@ Plans:
 **Goal:** Super admin can review and export audit history for compliance and debugging
 
 **Dependencies:** Phase 36 (audit logging infrastructure)
+
+**Plans:** 1 plan
+
+Plans:
+- [ ] 40-01-PLAN.md — Audit log viewer with filters, state diff display, and CSV export
 
 **Requirements:**
 - AUDT-02: Audit log viewer in admin panel (filterable by action, actor, date)
@@ -301,4 +306,4 @@ Plans:
 
 ---
 
-*Last updated: 2026-01-31 (Phase 39 complete)*
+*Last updated: 2026-01-31 (Phase 40 planned)*
