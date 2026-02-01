@@ -12,9 +12,9 @@
 |-------|-------|
 | Milestone | v3.1 Admin Panel |
 | Phase | 39 - Membership Management |
-| Plan | 02 of 4 complete |
+| Plan | 03 of 4 complete |
 | Status | In progress |
-| Last activity | 2026-01-31 - Completed 39-02-PLAN.md (User Detail Membership UI) |
+| Last activity | 2026-01-31 - Completed 39-03-PLAN.md (Club Detail Members Section) |
 
 **Progress:**
 ```
@@ -25,7 +25,7 @@ v2.1: [##########] 100% SHIPPED (2026-01-27) - 30/30 requirements
 v2.2: [##########] 100% SHIPPED (2026-01-29) - 33/35 requirements
 v2.3: [##########] 100% SHIPPED (2026-01-29) - 20/20 requirements
 v3.0: [##########] 100% SHIPPED (2026-01-30) - 29/29 requirements
-v3.1: [########--] 79% IN PROGRESS - 27/34 requirements
+v3.1: [########--] 82% IN PROGRESS - 28/34 requirements
 ```
 
 **Total shipped:** 7 milestones, 35 phases, 196 requirements
@@ -40,7 +40,7 @@ v3.1: [########--] 79% IN PROGRESS - 27/34 requirements
 | 36 | Admin Foundation & Auth | 7 | Complete |
 | 37 | User Management | 9 | Complete |
 | 38 | Facility & Club Management | 11 | Complete |
-| 39 | Membership Management | 5 | In progress (2/4 plans) |
+| 39 | Membership Management | 5 | In progress (3/4 plans) |
 | 40 | Audit Log Viewer & Export | 2 | Pending |
 
 **Architecture decisions (from research):**
@@ -135,6 +135,8 @@ v3.1: [########--] 79% IN PROGRESS - 27/34 requirements
 | Popover component added | 2026-01-31 | @radix-ui/react-popover for combobox pattern in membership dialogs |
 | Clubs API search param | 2026-01-31 | Added ?search= to /api/admin/clubs for combobox filtering |
 | UserDetailClient wrapper | 2026-01-31 | Client wrapper for user detail page manages all dialog states |
+| ClubDetailClient wrapper | 2026-01-31 | Client wrapper for club detail page, same pattern as user detail |
+| Dialog for confirmation | 2026-01-31 | Use Dialog component for remove confirmation (no AlertDialog in project) |
 
 ### Architecture Notes
 
@@ -162,9 +164,9 @@ v3.1: [########--] 79% IN PROGRESS - 27/34 requirements
 | Field | Value |
 |-------|-------|
 | Last session | 2026-01-31 |
-| Stopped at | Completed 39-02-PLAN.md (User Detail Membership UI) |
-| Resume with | `/gsd:execute-phase 39-03` |
+| Stopped at | Completed 39-03-PLAN.md (Club Detail Members Section) |
+| Resume with | `/gsd:execute-phase 39-04` |
 
 ---
 
-*Last updated: 2026-01-31 (Phase 39 plan 02 complete)*
+*Last updated: 2026-01-31 (Phase 39 plan 03 complete)*
